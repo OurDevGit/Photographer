@@ -43,7 +43,7 @@ class HomeHeader extends React.Component {
   render() {
     const { mobileMenuOpen } = this.state
     let menuItems;
-    if(this.props.currentUser) {
+    if(!this.props.currentUser) {
       menuItems = [
         <Menu.Item as={NavLink} to="/addContent">
         <StarIcon className="star-icon" />

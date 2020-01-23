@@ -76,11 +76,11 @@ class Home extends Component {
         <MetaTags>
           <title>Photographer - Image Platform</title>
         </MetaTags>
-        <HomeHeader 
+        {/* <HomeHeader 
           isAuthenticated={this.state.isAuthenticated} 
           currentUser={this.state.currentUser} 
           onLogout={this.handleLogout}
-        />
+        /> */}
         
         <Grid className="pages page-index">
           <Grid.Row>

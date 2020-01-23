@@ -6,6 +6,7 @@ import { ACCESS_TOKEN } from '../../constants';
 import { HomeHeader} from '../../components'
 import UploadPhoto from './UploadPhoto'
 import Footer from './Footer'
+import MultiUploadPhotos from './MultiUploadPhotos'
 import './style.less'
 import {notification} from 'antd'
 
@@ -74,11 +75,11 @@ class AddContent extends Component {
         <MetaTags>
           <title>Photographer - Image Platform</title>
         </MetaTags>
-        <HomeHeader 
+        {/* <HomeHeader 
           isAuthenticated={this.state.isAuthenticated} 
           currentUser={this.state.currentUser} 
           onLogout={this.handleLogout}
-        />
+        /> */}
         
         <Grid className="pages page-index content_page">
         
@@ -91,7 +92,7 @@ class AddContent extends Component {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column width={16}>              
-                <UploadPhoto />
+                <MultiUploadPhotos />
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
