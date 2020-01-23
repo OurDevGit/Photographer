@@ -1,0 +1,15 @@
+/*******************************
+    User Variable Overrides
+*******************************/
+
+@hoverItemBackground: transparent;
+@borderRadius: 8px;
+@itemTextColor: #3F3F3F;
+@itemFontWeight: 600;
+@boxShadow: 4px 8px 24px rgba(179, 179, 179, 0.06), 12px 8px 16px rgba(228, 228, 228, 0.2);
+@border: none;
+
+// Active Item Variable
+
+@activeItemBackground: transparent;
+@activeItemFontWeight: 600;

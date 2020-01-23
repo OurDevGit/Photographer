@@ -1,0 +1,223 @@
+.home-header {
+  // position: absolute;
+  // top: 10px;
+  left: 0;
+  width: 100%;
+  z-index: 101;
+  background: black;
+
+  .ui.menu {
+    .right.item {
+      a {
+        margin: 0 0.5em;
+        &.item {
+          font-size: 16px;
+          line-height: 24px;
+          font-weight: 500;
+          text-shadow: 0 0 0 #3f3f3f;
+        }
+      }
+    }
+    .item {
+      font-weight: 600;
+      font-size: 14px;
+      padding: 0.8em;
+      // color: #3F3F3F;
+      color: white;
+      svg {
+        width: 18px;
+        margin-right: 0.3em;
+        margin-bottom: 0em;
+        path {
+          // stroke: #3f3f3f;
+          stroke: white;
+        }
+        &.star-icon {
+          path {
+            stroke-width: 1.5;
+          }
+        }
+        &.paper-plane-icon {
+          path {
+            stroke-width: 0.4;
+          }
+        }
+      }
+    }
+  }
+  .column {
+    padding: 0 0.6em !important;
+  }
+  .login-btn.ui.basic.primary.button {
+    box-shadow: none !important;
+    padding: 0.8em 1em !important;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 600;
+  }
+  .desktop-menu-style {
+    padding: 4px 0px;
+    background: transparent;
+    box-shadow: none;
+
+    .logo.image.ui {  
+      width: 180px;
+    }
+  }
+  .verticalMenuItemSvgStyle {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.5em;  
+  }
+  .investBtnStyle.ui.primary.button {
+    font-size: 1em;
+    margin: 0 0.8em;
+    font-weight: 600;
+    display: -webkit-box;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    line-height: 20px;
+    padding: 12px 20px;
+  }
+
+  /* Small Width Computer Menu */
+  @media (min-width: 993px) and (max-width: 1220px) {
+    .ui.borderless.menu {
+      padding: 1em 0 !important;
+      .item {
+        font-size: 14px;
+        padding: 0.5em 0.6em;
+        border-radius: 4px;
+      }
+      .right.item {
+        a {
+          margin: 0 0.5em;
+          font-size: 14px;
+        }
+      }
+      .ui.primary.button {
+        margin: 0 0.8em !important;
+      }
+    }
+    .desktop-menu-style {
+      padding: 4px 0;
+      background: transparent;
+      box-shadow: none;
+      .logo.image.ui {
+        width: 140px;
+      }
+    }
+    .verticalMenuItemSvgStyle {
+      width: 20px;
+      height: 20px;
+      margin-right: 0.5em;  
+    }
+    .investBtnStyle.ui.primary.button {
+      font-size: 1em;
+      margin: 0 0.8em;
+      font-weight: 600;
+      display: -webkit-box;
+      display: flex;
+      align-items: center;
+      line-height: 18px;
+    }
+  }
+
+  /* Tablet Menu */
+  @media (min-width: 600px) and (max-width: 992px) {
+    
+  }
+
+  /* Mobile Menu */
+  .ui.menu.mobile-navmenu .header.item {
+    padding: 0.2em;
+    border-radius: 0;
+  }
+
+  .ui.menu.mobile-navmenu .right.item .item {
+    padding: 0.2em;
+  }
+
+  .mobile-navbar {
+    margin-top: 114px;
+    padding: 0 6px !important;
+
+    &.open {
+      margin-top: 0;
+      height: 100vh;
+      display: block !important;
+      z-index: 1000;
+      background: white;
+      position: fixed !important;
+      left: 0;
+      top: 0;
+      padding: 20px !important;
+
+      .ui.menu.mobile-navmenu {
+        box-shadow: none;
+      }
+    }
+
+    .vertical.menu {
+      .column {
+        text-align: center;
+      }
+      a.item {
+        display: -webkit-box;
+        display: flex !important;
+        align-items: center;
+        width: 100%;
+        margin: 0.5em 0;
+
+        svg {
+          margin-right: 0.6em;
+        }
+
+      }
+
+      .login-btn {
+        font-weight: 700;
+        margin: 0.5em 0;
+      }
+      .invest-btn {
+        width: 100%;
+        padding: 1em;
+        margin: 0.5em 0;
+      }
+    }
+
+    .profile {
+      display: -webkit-box;
+      display: flex !important;
+      align-items: center;
+      padding: 1em 5px !important;
+      margin-left: 5px;
+
+      .details {
+        flex: 1;
+        margin-left: 0.6em;
+
+        .top {
+          font-size: 14px;
+          display: block;
+          line-height: 20px;
+          color: #7E7E7E;
+        }
+        .bottom {
+          display: block;
+          font-size: 18px;
+          line-height: 24px;
+          letter-spacing: 0.5px;
+          color: #3F3F3F;
+        }
+      }
+    }
+  }
+  @media (max-width: 600px) {
+    .ui.menu.mobile-navmenu .right.item .item {
+      padding: 0;
+      margin: 0;
+    }
+  }
+}

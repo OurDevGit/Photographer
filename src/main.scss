@@ -1,0 +1,115 @@
+@import 'node_modules/react-modal-video/scss/modal-video.scss';
+
+// Global scss variables (not page specific) should be defined here
+@font-face {
+  font-family: 'SF Pro Text';
+  font-weight: 800;
+  src: url('./assets/fonts/SFProText-Bold.ttf')  format('truetype')
+}
+@font-face {
+  font-family: 'SF Pro Text';
+  font-weight: 900;
+  src: url('./assets/fonts/SFProText-Heavy.ttf')  format('truetype')
+}
+@font-face {
+  font-family: 'SF Pro Text';
+  font-weight: 400;
+  src: url('./assets/fonts/SFProText-Light.ttf')  format('truetype')
+}
+@font-face {
+  font-family: 'SF Pro Text';
+  font-weight: 700;
+  src: url('./assets/fonts/SFProText-Medium.ttf')  format('truetype')
+}
+@font-face {
+  font-family: 'SF Pro Text';
+  font-weight: 500;
+  src: url('./assets/fonts/SFProText-Regular.ttf')  format('truetype')
+}
+@font-face {
+  font-family: 'SF Pro Text';
+  font-weight: normal;
+  src: url('./assets/fonts/SFProText-Regular.ttf')  format('truetype')
+}
+@font-face {
+  font-family: 'SF Pro Text';
+  font-weight: bold;
+  src: url('./assets/fonts/SFProText-Semibold.ttf')  format('truetype')
+}
+@font-face {
+  font-family: 'SF Pro Text';
+  font-weight: 600;
+  src: url('./assets/fonts/SFProText-Semibold.ttf')  format('truetype')
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'SF Pro Text';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  font-family: 'SF Pro Text' !important;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #202020;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.ui.card > .content {
+  border-top-color: #d7d7d7;
+}
+
+a:visited {
+  color: inherit
+}
+.pages.ui.grid > .row {
+  padding: 0;
+}
+.pages.ui.grid > .row > .column {
+  margin-top: 0.6em;
+  margin-bottom: 0.6em;
+  padding: 0 0.6em;
+}
+
+@media only screen and (min-width: 1220px) {
+  .ui.grid.container {
+    width: 1210px !important;
+  }
+}
+
+@media (min-width: 993px) and (max-width: 1220px) {
+  h2.ui.header {
+    font-size: 32px;
+  }
+  .page.ui.grid > .row > .column  {
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+    margin-top: 0.8em;
+    margin-bottom: 0.8em;
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    background: #fff;
+  }
+  .ui.stackable.grid > .row > .column, .ui.stackable.grid > .row > .wide.column {
+    padding:  20px !important;
+  }
+  main {
+    width: 100%;
+    overflow: hidden;
+  }
+}

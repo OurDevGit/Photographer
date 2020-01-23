@@ -1,0 +1,20 @@
+/*******************************
+    User Variable Overrides
+*******************************/
+
+@checkboxCheckFontSize: 12px;
+
+/* Pressed */
+@checkboxPressedBackground: #00D1C1;
+@checkboxPressedBorderColor: #00D1C1;
+@checkboxPressedColor: #fff;
+
+/* Active */
+@checkboxActiveBackground: #00D1C1;
+@checkboxActiveBorderColor: #00D1C1;
+@checkboxActiveCheckColor: #fff;
+@checkboxActiveCheckOpacity: 1;
+
+@checkboxActiveFocusBackground: #00D1C1;
+@checkboxActiveFocusBorderColor: #00D1C1;
+@checkboxActiveFocusCheckColor: #fff;

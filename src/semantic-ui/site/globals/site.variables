@@ -1,0 +1,13 @@
+/*******************************
+     User Global Variables
+*******************************/
+
+@primaryColor: #00D1C1;
+@pageBackground: #F7F7F7;
+@emSize: 14px;
+
+@largeMonitorBreakpoint: 1220px;
+
+
+// Page Title
+@h2: 36px;

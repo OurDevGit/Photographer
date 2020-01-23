@@ -1,0 +1,71 @@
+{
+  "name": "photographer",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "animejs": "^3.1.0",
+    "antd": "^3.26.7",
+    "connected-react-router": "^6.5.2",
+    "history": "^4.9.0",
+    "is-mobile": "^2.1.0",
+    "jsqr": "^1.2.0",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "node-sass": "^4.12.0",
+    "numeral": "^2.0.6",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-bootstrap": "^1.0.0-beta.12",
+    "react-dom": "^16.8.6",
+    "react-ga": "^2.7.0",
+    "react-hot-loader": "^4.12.8",
+    "react-intercom": "^1.0.15",
+    "react-jotform-embed": "^1.0.4",
+    "react-meta-tags": "^0.7.4",
+    "react-modal-video": "^1.2.3",
+    "react-notifications": "^1.4.3",
+    "react-redux": "^7.1.0",
+    "react-router-dom": "^5.0.1",
+    "react-router-redux": "^4.0.8",
+    "react-scripts": "3.1.1",
+    "react-slick": "^0.25.2",
+    "redux": "^4.0.4",
+    "redux-saga": "^1.0.5",
+    "reduxsauce": "^1.1.0",
+    "semantic-ui-react": "^0.88.0",
+    "slick-carousel": "^1.8.1",
+    "svg-arc-corners": "^1.0.4",
+    "svg-react-loader": "^0.4.6"
+  },
+  "scripts": {
+    "start": "PORT=8000 craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "craco eject",
+    "deploy-production": "git pull --rebase; git checkout production; git pull --rebase; git merge master; git push origin production; git checkout master;"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@craco/craco": "^5.4.0",
+    "@semantic-ui-react/craco-less": "^1.1.0",
+    "eslint-config-airbnb": "^17.1.1",
+    "mime-types": "^2.1.24",
+    "semantic-ui-less": "^2.4.1",
+    "walkdir": "^0.4.0",
+    "yarn": "^1.16.0"
+  }
+}

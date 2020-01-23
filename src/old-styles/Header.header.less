@@ -1,0 +1,139 @@
+.ui.menu a.item:hover, .ui.menu a.item.active {
+  color: #00D1C1 !important;
+}
+.ui.menu a.item svg rect, .ui.menu a.item svg path {
+  stroke-width: 1.2px;
+}
+.ui.menu a.item:hover svg rect, .ui.menu a.item:hover svg path, .ui.menu a.item.active svg rect, .ui.menu a.item.active svg path {
+  stroke: #00D1C1 !important;
+}
+.ui.menu.mobile-navmenu {
+  margin: 0;
+  position: fixed;
+  z-index: 1000;
+  padding: 1.5em 14px;
+  top: -1px;
+  width: 100%;
+  left: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.ui.menu.vertical {
+  box-shadow: none;
+  margin: 1.5em -1.2em;
+  margin-top: 50px;
+  width: auto;
+}
+
+.app-header {
+  .ui.menu {
+    .item {
+      font-weight: 600;
+      font-size: 14px;
+      padding: 0.8em;
+      svg {
+        width: 18px;
+        margin-right: 0.3em;
+        margin-bottom: 0em;
+      }
+    }
+    .header.item {
+      padding: 0.4em;
+    }
+  }
+  .column {
+    padding: 0 0.6em !important;
+  }
+}
+
+.ui.floating.dropdown > .menu {
+  right: -10px;
+  left: auto;
+  top: 30px;
+}
+
+/* Small Width Computer Menu */
+@media (min-width: 993px) and (max-width: 1220px) {
+  .ui.borderless.menu {
+    padding: 0.2em 0.5em !important;
+    .item {
+      font-size: 14px;
+      padding: 0.5em 0.6em;
+      border-radius: 4px;
+    }
+    .ui.primary.button {
+      margin: 0 0.8em !important;
+    }
+  }
+}
+
+/* Tablet Menu */
+@media (min-width: 600px) and (max-width: 992px) {
+  
+}
+
+/* Mobile Menu */
+.ui.menu.mobile-navmenu .header.item {
+  padding: 0.2em;
+  border-radius: 0;
+}
+
+.ui.menu.mobile-navmenu .right.item .item {
+  padding: 0.2em;
+}
+
+.mobile-navbar {
+  margin-top: 84px;
+  padding: 0 6px !important;
+
+  &.open {
+    margin-top: 0;
+    height: 100vh;
+    display: block !important;
+    z-index: 1000;
+    background: white;
+    position: fixed !important;
+    left: 0;
+    top: 0;
+    padding: 20px !important;
+
+    .ui.menu.mobile-navmenu {
+      box-shadow: none;
+    }
+  }
+
+  .profile {
+    display: -webkit-box;
+    display: flex !important;
+    align-items: center;
+    padding: 1em 5px !important;
+    margin-left: 5px;
+
+    .details {
+      flex: 1;
+      margin-left: 0.6em;
+
+      .top {
+        font-size: 14px;
+        display: block;
+        line-height: 20px;
+        color: #7E7E7E;
+      }
+      .bottom {
+        display: block;
+        font-size: 18px;
+        line-height: 24px;
+        letter-spacing: 0.5px;
+        color: #3F3F3F;
+      }
+    }
+  }
+  .more-actions-column {
+    text-align: center;
+    .ui.button {
+      background: transparent;
+      box-shadow: none !important;
+    }
+  }
+}

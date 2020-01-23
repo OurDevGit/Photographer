@@ -1,0 +1,7 @@
+export { default as Frame5 } from './Frame 5.png'
+export { default as Frame7 } from './Frame 7.png'
+export { default as Frame9 } from './Frame 9.png'
+export { default as Frame10 } from './Frame 10.png'
+export { default as Frame11 } from './Frame 11.png'
+export { default as Frame12 } from './Frame 12.png'
+export { default as Frame13 } from './Frame 13.png'

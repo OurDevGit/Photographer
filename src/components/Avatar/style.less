@@ -1,0 +1,80 @@
+.avatar {
+  display: -webkit-box;
+  display: flex;
+  align-items: center;
+  margin: -10px -6px;
+
+  .avatar-main {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #FF875F;
+    display: -webkit-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 4px 8px 10px rgba(190, 190, 190, 0.118171), 1px 2px 2px #EFEFEF;
+
+    .short-username {
+      font-size: 18px;
+      line-height: 26px;
+      text-align: center;
+      letter-spacing: 0.5px;
+      color: #fff;
+      font-weight: 600;
+    }
+    .badge {
+      position: absolute;
+      top: -3px;
+      right: 0px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: rgba(59, 232, 218, 0.4);
+      border: 4px solid transparent;
+      .badge-inner {
+        width: 8px;
+        height: 8px;
+        background: #00D1c1;
+        border-radius: 50%;
+        box-sizing: border-box;
+      }
+    }
+  }
+  .avatar-details {
+    display: -webkit-box;
+    display: flex;
+    flex-direction: column;
+    margin-left: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    .top {
+      color: #7E7E7E;
+    }
+    .bottom {
+      font-size: 20px;
+      line-height: 28px;
+      letter-spacing: 0.5px;
+      color: #3F3F3F;
+    }
+  }
+
+  @media (min-width: 993px) and (max-width: 1220px) {
+    .avatar-main {
+      width: 42px;
+      height: 42px;
+      .short-username {
+        font-size: 18px;
+      }
+    }
+    .avatar-details {
+      margin-left: 8px;
+      font-size: 14px;
+      .bottom {
+        font-size: 18px;
+        line-height: 24px;
+      }
+    }
+  }
+}

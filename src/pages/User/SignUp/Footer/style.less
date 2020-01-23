@@ -1,0 +1,123 @@
+footer {
+  background: #00D1C1;
+  position: relative;
+  .contact-us {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    display: -webkit-box;
+    display: flex;
+    flex-direction: column;
+    padding: 90px 0 0;
+    color: #fff;
+    align-items: center;
+    width: 600px;
+    margin: auto;
+    .sub-title {
+      font-size: 12px;
+      line-height: 16px;
+      text-align: center;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #fff;
+      font-weight: 600;
+    }
+    .title {
+      font-size: 36px;
+      line-height: 48px;
+      margin: 15px 0 40px;
+      font-weight: 600;
+    }
+    .desc {
+      font-size: 16px;
+      line-height: 28px;
+      color: #fff;
+    }
+    .ui.button.basic.primary {
+      font-size: 16px;
+      line-height: 20px;
+      background: #F5F7FA !important;
+      padding: 1em;
+      width: 250px;
+      font-weight: 600;
+      margin: 30px 0;
+      &:hover, &:focus {
+        background: #fff !important;
+      }
+    }
+  }
+  .footer-bg-1.ui.image {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    z-index: 0;
+  }
+  .footer-bg-2.ui.image {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 55%;
+    z-index: 0;
+  }
+
+  @media (min-width: 993px) and (max-width: 1220px) {
+    .contact-us {
+      .title {
+        font-size: 32px;
+        line-height: 44px;
+        margin: 15px 0 40px;
+        font-weight: 600;
+      }
+      .desc {
+        font-size: 15px;
+        line-height: 26px;
+      }
+      .ui.button.basic.primary {
+        font-size: 15px;
+        line-height: 20px;
+        background: #fff !important;
+        width: 250px;
+        font-weight: 600;
+        margin: 30px 0;
+        &:hover, &:focus {
+          background: #fff !important;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 600px) {
+    background: url(../../../assets/images/homepage/footer-bg.jpg);
+    background-repeat: no-repeat;
+    background-position: bottom center;
+    background-size: 100% auto;
+
+    .contact-us {
+      width: 100%;
+      padding: 70px 1em 0;
+      .sub-title {
+        font-size: 10px;
+        line-height: 16px;
+      }
+      .title {
+        font-size: 26px;
+        line-height: 36px;
+      }
+      .desc {
+        font-size: 14px;
+        line-height: 26px;
+      }
+      .ui.button.basic.primary {
+        font-size: 14px;
+        line-height: 20px;
+      }
+    }
+    .footer-bg-1.ui.image {
+      display: none;
+    }
+    .footer-bg-2.ui.image {
+      display: none;
+    }
+  }
+}
