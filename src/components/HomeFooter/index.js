@@ -10,34 +10,35 @@ const HomeFooter = () => (
     <Grid container>
       <Grid.Row>
         <div>
-          <Image src={WhiteLogo} className="logo" />
+          {/* <Image src={WhiteLogo} className="logo" /> */}
+          <h2 className="logo">Picktur</h2>
         </div>
         <div>
           <Menu borderless>
-            <Menu.Item as="a" href="https://blog.fairmint.co" target="_blank">
+            <Menu.Item as="a" href="#" target="_blank">
               Blog
             </Menu.Item>
-            <Menu.Item as="a" href="https://github.com/fairmint/legal" target="_blank">
+            <Menu.Item as="a" href="#" target="_blank">
               Legal
             </Menu.Item>
-            <Menu.Item onClick={() => window.Intercom('showNewMessage')}>
+            <Menu.Item as="a" href="#">
               <PaperPlaneIcon className="paper-plane-icon" />
               Contact us
             </Menu.Item>
-            <Menu.Item as="a" href="http://help.fairmint.co/en" target="_blank">
+            <Menu.Item as="a" href="#" target="_blank">
               <QuestionIcon className="question-icon" />
               Help
             </Menu.Item>
           </Menu>
         </div>
         <div className="social-icons">
-          <Menu.Item as="a" href="//twitter.com/fairmintCO" target="_blank">
+          <Menu.Item as="a" href="W" target="_blank">
             <TwitterIcon />
           </Menu.Item>
-          <Menu.Item as="a" href="//www.linkedin.com/company/fairmint/" target="_blank">
+          <Menu.Item as="a" href="W" target="_blank">
             <LinkedinIcon />
           </Menu.Item>
-          <Menu.Item as="a" href="https://github.com/fairmint/" target="_blank">
+          <Menu.Item as="a" href="#" target="_blank">
             <GithubIcon />
           </Menu.Item>
         </div>

@@ -41,9 +41,10 @@ class HomeHeader extends React.Component {
   }
 
   render() {
+    console.log("user",this.props.currentUser)
     const { mobileMenuOpen } = this.state
     let menuItems;
-    if(!this.props.currentUser) {
+    if(this.props.currentUser) {
       menuItems = [
         <Menu.Item as={NavLink} to="/addContent">
         <StarIcon className="star-icon" />
@@ -54,11 +55,11 @@ class HomeHeader extends React.Component {
         Photos
       </Menu.Item>,
       <Menu.Item >
-        <Avatar fullname="Tatyana" status="online" />
+        <Avatar fullname={this.props.currentUser.name} status="online" />
           <Dropdown item >
             <Dropdown.Menu>
               <Dropdown.Item as={NavLink} to='/user/profile'>My account</Dropdown.Item>
-              <Dropdown.Item as={NavLink} onClick={this.props.onLogout}>Logout</Dropdown.Item>
+              <Dropdown.Item><a onClick={()=>this.props.onLogout}>Logout</a></Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
       </Menu.Item>
@@ -82,7 +83,8 @@ class HomeHeader extends React.Component {
           <Grid.Row only="computer">
             <Grid.Column>
               <Menu borderless className="desktop-menu-style">
-                <NavLink to="/"><Image src={logoPng} className="logo" /></NavLink>
+                {/* <NavLink to="/"><Image src={logoPng} className="logo" /></NavLink> */}
+                <NavLink to="/"><h2 className="header">Picktur</h2></NavLink> 
                 <Menu.Item position="right" style={style.noPaddingStyle}>
                     {menuItems}
                   
@@ -117,7 +119,7 @@ class HomeHeader extends React.Component {
                         <PaperPlaneIcon className="paper-plane-icon" />
                         Contact us
                       </Menu.Item>
-                      <Menu.Item as="a" href="http://help.fairmint.co/en" target="_blank">
+                      <Menu.Item as="a" href="#" target="_blank">
                         <QuestionSVG className="verticalMenuItemSvgStyle" />
                         Help
                       </Menu.Item>
@@ -125,7 +127,7 @@ class HomeHeader extends React.Component {
                     <Grid.Column width={16}>
                       <Button
                         as="a"
-                        href="https://preview.fairmint.co/signin"
+                        href="#"
                         primary
                         basic
                         className="login-btn"

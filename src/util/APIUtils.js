@@ -117,3 +117,11 @@ export function getUserVotedPhotos(username, page, size) {
         method: 'GET'
     });
 }
+
+
+export function getAllCategories() {
+    return request({
+        url: API_BASE_URL + "/public/categories/getAll" ,
+        method: 'GET'
+    });
+}

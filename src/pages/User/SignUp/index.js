@@ -56,15 +56,13 @@ class SignUp extends Component {
           username: this.state.username.value,
           password: this.state.password.value
       };
-      console.log("ddd", signupRequest)
       signup(signupRequest)
       .then(response => {
-          console.log(response);
           notification.success({
               message: 'Photoing App',
               description: "Thank you! You're successfully registered. Please Login to continue!",
-          });          
-          this.props.history.push("/login");
+          });
+          this.props.history.push("/user/login");
       }).catch(error => {
           notification.error({
               message: 'Photoing App',

@@ -1,27 +1,26 @@
 import React, { Component } from 'react'
 import { Grid, GridColumn, Image, Divider } from 'semantic-ui-react'
 import MetaTags from 'react-meta-tags'
-import { getCurrentUser } from '../../util/APIUtils';
+import { getCurrentUser, getAllCategories } from '../../util/APIUtils';
 import { ACCESS_TOKEN } from '../../constants';
 import { HomeHeader, SearchBar, PhotoList } from '../../components'
 import Footer from './Footer'
 import CategoryCarousel from  './CategoryCarousel'
 import './style.less'
 import {notification} from 'antd'
-import SlidesJSON from './data/slides.json'
-import src from '../../assets/images/logo.PNG'
-import src1 from '../../assets/images/logo.jpg'
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
       currentUser: null,
       isAuthenticated: false,
-      isLoading: false
+      isLoading: false,
+      categories: []
     }
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
-    this.handleLogin = this.handleLogin.bind(this);   
+    this.loadAllCategories = this.loadAllCategories.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
   }
 
   loadCurrentUser() {
@@ -42,13 +41,28 @@ class Home extends Component {
     });
   }
 
+  loadAllCategories() {
+    getAllCategories()
+    .then(response => {
+      this.setState({
+        categories: response.categories,
+      });
+      console.log("categories",this.state.categories);
+    }).catch(error => {
+      this.setState({
+        isLoading: false
+      });  
+    });
+  }
+
   componentDidMount() {
     this.loadCurrentUser();
+    this.loadAllCategories();
   }
 
   handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
     localStorage.removeItem(ACCESS_TOKEN);
-
+    console.log("aaa");
     this.setState({
       currentUser: null,
       isAuthenticated: false
@@ -76,19 +90,18 @@ class Home extends Component {
         <MetaTags>
           <title>Photographer - Image Platform</title>
         </MetaTags>
-        {/* <HomeHeader 
+        <HomeHeader 
           isAuthenticated={this.state.isAuthenticated} 
           currentUser={this.state.currentUser} 
           onLogout={this.handleLogout}
-        /> */}
-        
+        />
         <Grid className="pages page-index">
           <Grid.Row>
             <Grid.Column width={16}>
             <SearchBar />
             </Grid.Column>
             <Grid.Column width={16}>              
-              <CategoryCarousel />
+              <CategoryCarousel categories={this.state.categories} />
               <PhotoList />
               <Footer />
             </Grid.Column>
@@ -98,5 +111,4 @@ class Home extends Component {
     )
   }
 }
-
 export default Home

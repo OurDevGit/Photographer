@@ -1,8 +1,9 @@
 /* eslint-disable react/no-this-in-sfc */
 /* eslint-disable no-return-assign */
 import React, { Component } from 'react'
-import { Image, Header, Grid } from 'semantic-ui-react'
+import { Image, Header, Grid, Icon } from 'semantic-ui-react'
 import Slider from 'react-slick'
+import { getCurrentUser, getAllCategories } from '../../../util/APIUtils';
 
 import {
   S1, S2, S3, S4, S5, SupportBg
@@ -58,7 +59,16 @@ const slides = [
   },
 ]
 
-class CategoryCarousel extends Component {
+class CategoryCarousel extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: false,
+      categories:[]
+    }
+  }
+
   componentDidMount() {
     setTimeout(() => {
       document.querySelector('.category-carousel-section').classList.add('animation')
@@ -74,10 +84,11 @@ class CategoryCarousel extends Component {
   }
 
   render() {
+    console.log(this.props.categories)
     const settings = {
-      dots           :false,
-      infinite       : false,
-      speed          : 1500,
+      dots           : false,
+      infinite       : true,
+      speed          : 500,
       slidesToShow   : 5,
       slidesToScroll : 1,
       autoplay       : true,
@@ -91,10 +102,10 @@ class CategoryCarousel extends Component {
           <Grid.Row>
             <Grid.Column width={16}>
               <Slider {...settings} ref={c => (this.slider = c)}>
-                {slides.map((slide, index) => (
+                {this.props.categories.map((slide, index) => (
                   <div key={index}>
                     <div className="category_content">
-                      <a href='/'>{slide.title}</a>
+                      <a href='/'>{slide.value}</a>
                     </div>
                   </div>
                 ))}

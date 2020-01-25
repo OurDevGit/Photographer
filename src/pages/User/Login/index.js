@@ -41,13 +41,11 @@ class Login extends Component{
         usernameOrEmail: this.state.usernameOrEmail.value,
         password: this.state.password.value
     };
-    console.log(loginRequest);
+
     login(loginRequest)
     .then(response => {
-      console.log(response);
         localStorage.setItem(ACCESS_TOKEN, response.accessToken);
         this.setState({flag: true});
-        console.log(this.state.flag);
     }).catch(error => {
         if(error.status === 401) {
             notification.error({
@@ -74,7 +72,6 @@ class Login extends Component{
           <Grid.Column width="16" style={{ maxWidth: 450 }}>
             <Header as='h2' color='teal' textAlign='center'>
             Log-in to your account
-              {/* <Image src='/logo.png' /> Log-in to your account */}
             </Header>
             <Form size='large' onSubmit={this.handleSubmit} className='login_form'>
               <Segment stacked>

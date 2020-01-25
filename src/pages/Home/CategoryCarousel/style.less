@@ -125,9 +125,11 @@
   }
 
   .slick-arrow {
-    display: none !important;
+    // display: none !important;
   }
-
+  .slick-prev:before, .slick-next:before{
+    color: black !important;
+  }
   .header {
     text-align: center;
     .title {
@@ -149,6 +151,7 @@
   .slick-list {
     .slick-track {
       .slick-slide {
+        min-width: 200px;;
         &  * {
           outline: none;
         }

@@ -209,11 +209,12 @@ class UploadPhoto extends Component {
                     file: info.file.originFileObj
                 }),
             );
+            
         }
     };
 
     uploadFileData = (event) => {
-
+        console.log("dddddddddddddddddddddddddddddd",this.state.file);
         event.preventDefault();
         this.setState({msg: ''});
 

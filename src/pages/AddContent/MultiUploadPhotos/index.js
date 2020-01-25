@@ -1,4 +1,6 @@
 import React, { Component, Input } from 'react';
+import UploadPhoto from '../UploadPhoto'
+import  { Redirect } from 'react-router-dom'
 import './style.less'
 export default class MultipleImageUploadComponent extends Component {
 
@@ -9,7 +11,8 @@ export default class MultipleImageUploadComponent extends Component {
         super(props)
         this.state = {
             file: [null],
-            disabled: true
+            disabled: true,
+            uploadStatus: false
         }
         this.uploadMultipleFiles = this.uploadMultipleFiles.bind(this)
         this.uploadFiles = this.uploadFiles.bind(this)
@@ -27,10 +30,23 @@ export default class MultipleImageUploadComponent extends Component {
     }
 
     uploadFiles(e) {
-
+        this.setState({
+            uploadStatus: true
+        });
     }
 
     render() {
+    if(this.state.uploadStatus){
+        // this.setState({
+        //     uploadStatus: false
+        // });
+        return(
+            // <Redirect to='/submitContent' />
+            <div>
+            <UploadPhoto />
+            </div>
+          )
+    }else{
         return (
             <form>
                 <div className="form-group multi-preview">
@@ -45,5 +61,7 @@ export default class MultipleImageUploadComponent extends Component {
                 <button type="button" disabled={this.state.disabled} className="btn btn-danger btn-block upload_button" onClick={this.uploadFiles}>Next</button>
             </form >
         )
+    }
+        
     }
 }

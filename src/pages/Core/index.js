@@ -37,7 +37,7 @@ class View extends Component {
           { routes }
         </main>
         <NotificationContainer />
-        <Intercom appID={config.intercomAppId} />
+        {/* <Intercom appID={config.intercomAppId} /> */}
       </div>
     )
   }
