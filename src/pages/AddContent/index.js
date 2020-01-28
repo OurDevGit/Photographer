@@ -47,7 +47,7 @@ class AddContent extends Component {
 
   handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
     localStorage.removeItem(ACCESS_TOKEN);
-
+    
     this.setState({
       currentUser: null,
       isAuthenticated: false
@@ -82,7 +82,6 @@ class AddContent extends Component {
         />
         
         <Grid className="pages page-index content_page">
-        
           <Grid.Row>
             <Grid.Column width={16}>
               <div className = "page_title">              

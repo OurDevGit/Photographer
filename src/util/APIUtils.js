@@ -33,9 +33,24 @@ export function getAllPhotos(page, size) {
     });
 }
 
+export function getPhotoLists() {
+    return request({
+        url: API_BASE_URL + "/public/lists/homepage",
+        method: 'GET'
+    });
+}
+
 export function createPhoto(photoData) {
     return request({
         url: API_BASE_URL + "/photos",
+        method: 'POST',
+        body: JSON.stringify(photoData)
+    });
+}
+
+export function uploadPhotos(photoData) {
+    return request({
+        url: API_BASE_URL + "/photo_submit/uploadMultipleFiles",
         method: 'POST',
         body: JSON.stringify(photoData)
     });

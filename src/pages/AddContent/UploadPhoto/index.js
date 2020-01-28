@@ -214,14 +214,15 @@ class UploadPhoto extends Component {
     };
 
     uploadFileData = (event) => {
-        console.log("dddddddddddddddddddddddddddddd",this.state.file);
+        
         event.preventDefault();
         this.setState({msg: ''});
-
+        
         let data = new FormData();
+        data.append('user', 'name');
         data.append('file', this.state.file);
-
-        fetch(API_BASE_URL + '/photos/uploadFile/', {
+        console.log("dddddddddddddddddddddddddddddd", data);
+        fetch(API_BASE_URL + '/photos/uploadMultipleFiles/', {
             method: 'POST',
             body: data,
             //file: this.state.file
@@ -231,6 +232,7 @@ class UploadPhoto extends Component {
                 redirect: true,
                 address: response.valueOf("fileName")
             });
+            console.log(response);
         }).catch(err => {
             this.setState({error: err});
         });

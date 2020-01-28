@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getAllPhotos, getUserCreatedPhotos, getUserVotedPhotos } from '../../../util/APIUtils';
+import { getAllPhotos, getUserCreatedPhotos, getUserVotedPhotos, getPhotoLists } from '../../../util/APIUtils';
 import Photo from '../Photo';
 import { castVote } from '../../../util/APIUtils';
 import LoadingIndicator  from '../../../common/LoadingIndicator';
@@ -18,6 +18,7 @@ class PhotoList extends Component {
         super(props);
         this.state = {
             photos: [],
+            photo_list: [],
             page: 0,
             size: 10,
             totalElements: 0,
@@ -39,7 +40,7 @@ class PhotoList extends Component {
                 promise = getUserVotedPhotos(this.props.username, page, size);
             }
         } else {
-            promise = getAllPhotos(page, size);
+            promise = getPhotoLists(page, size);
         }
 
         if(!promise) {
@@ -54,9 +55,9 @@ class PhotoList extends Component {
         .then(response => {
             const photos = this.state.photos.slice();
             const currentVotes = this.state.currentVotes.slice();
-
             this.setState({
                 photos: photos.concat(response.content),
+                photo_list: photos.concat(response.content).slice(0, 30),
                 page: response.page,
                 size: response.size,
                 totalElements: response.totalElements,
@@ -65,6 +66,7 @@ class PhotoList extends Component {
                 currentVotes: currentVotes.concat(Array(response.content.length).fill(null)),
                 isLoading: false
             })
+            console.log("photo lists",this.state.photos)
         }).catch(error => {
             this.setState({
                 isLoading: false
@@ -148,13 +150,16 @@ class PhotoList extends Component {
 
     render() {
         const photoViews = [];
-        this.state.photos.forEach((photo, photoIndex) => {
+        console.log("dddd",this.state.photo_list)
+        this.state.photo_list.forEach((photo, photoIndex) => {
+            console.log("aaaaaaaaaaaaaaaaa", photo)
             photoViews.push(<Photo
-                key={photo.id}
+                // key={photo.id}
                 photo={photo}
-                currentVote={this.state.currentVotes[photoIndex]}
-                handleVoteChange={(event) => this.handleVoteChange(event, photoIndex)}
-                handleVoteSubmit={(event) => this.handleVoteSubmit(event, photoIndex)} />)
+                // currentVote={this.state.currentVotes[photoIndex]}
+                // handleVoteChange={(event) => this.handleVoteChange(event, photoIndex)}
+                // handleVoteSubmit={(event) => this.handleVoteSubmit(event, photoIndex)} 
+                />)
         });
 
         return (

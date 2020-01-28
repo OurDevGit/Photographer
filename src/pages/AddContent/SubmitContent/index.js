@@ -52,8 +52,15 @@ class SubmitContent extends Component {
   loadAllCategories() {
     getAllCategories()
     .then(response => {
+      let categorylist = response.categories.map((category)=>{
+        return{
+          key: category.id,
+          value: category.id,
+          text: category.value
+        }
+      });
       this.setState({
-        categories: response.categories,
+        categories: categorylist,
       });
       console.log("categories",this.state.categories);
     }).catch(error => {
@@ -188,13 +195,13 @@ class SubmitContent extends Component {
                   <div class="column">
                     <Form.Field>
                     <div class="label">Category 1</div>
-                      <Select placeholder='Category 1'  />
+                      <Select placeholder='Category 1' options={this.state.categories} />
                     </Form.Field>
                   </div>
                   <div class="column">
                     <Form.Field>
                     <div class="label">Category 2(optional)</div>
-                      <Select placeholder='Category 2(optional)'  />
+                      <Select placeholder='Category 2(optional)' options={this.state.categories} />
                     </Form.Field>
                   </div>
                   <div class="column">
