@@ -2,6 +2,20 @@
 @import "~slick-carousel/slick/slick-theme.css";
 .submit_page{
   margin-top: 20px !important;
+  .photo-content img{
+    height: 100px;
+  }
+  .visible{
+    display: block
+  }
+  .unvisible{
+    display: none;
+  }
+  .imageOption_Blank{
+    border-left: 1px solid hsl(210, 3%, 89%);
+    text-align: center;
+    margin-top: 40%;
+  }
 }
 .page-index.ui.grid {
   background: #fff;
@@ -79,6 +93,10 @@
         }
         button{
           width: 48%;
+        }
+        button#activate{
+          color:white;
+          background: skyblue;
         }
         .Releases{
           border: 1px solid rgba(34, 36, 38, 0.15);

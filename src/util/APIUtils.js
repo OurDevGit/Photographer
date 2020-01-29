@@ -3,6 +3,7 @@ import { API_BASE_URL, PHOTO_LIST_SIZE, ACCESS_TOKEN } from '../constants';
 const request = (options) => {
     const headers = new Headers({
         'Content-Type': 'application/json',
+        // 'Content-Type': 'multipart/form-data',
     })
     
     if(localStorage.getItem(ACCESS_TOKEN)) {
@@ -11,7 +12,6 @@ const request = (options) => {
 
     const defaults = {headers: headers};
     options = Object.assign({}, defaults, options);
-
     return fetch(options.url, options)
     .then(response => 
         response.json().then(json => {
@@ -23,6 +23,29 @@ const request = (options) => {
     );
 };
 
+const request1 = (options) => {
+    const headers = new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'multipart/form-data',
+    })
+    
+    if(localStorage.getItem(ACCESS_TOKEN)) {
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
+    }
+
+    const defaults = {headers: headers};
+    options = Object.assign({}, defaults, options);
+    console.log(options)
+    return fetch(options.url, options)
+    .then(response => 
+        response.json().then(json => {
+            if(!response.ok) {
+                return Promise.reject(json);
+            }
+            return json;
+        })
+    );
+};
 export function getAllPhotos(page, size) {
     page = page || 0;
     size = size || PHOTO_LIST_SIZE;
@@ -49,10 +72,10 @@ export function createPhoto(photoData) {
 }
 
 export function uploadPhotos(photoData) {
-    return request({
+    return request1({
         url: API_BASE_URL + "/photo_submit/uploadMultipleFiles",
         method: 'POST',
-        body: JSON.stringify(photoData)
+        body: photoData
     });
 }
 
@@ -137,6 +160,13 @@ export function getUserVotedPhotos(username, page, size) {
 export function getAllCategories() {
     return request({
         url: API_BASE_URL + "/public/categories/getAll" ,
+        method: 'GET'
+    });
+}
+
+export function getAllTags() {
+    return request({
+        url: API_BASE_URL + "/public/tags/getAll" ,
         method: 'GET'
     });
 }

@@ -59,7 +59,7 @@ class HomeHeader extends React.Component {
           <Dropdown item >
             <Dropdown.Menu>
               <Dropdown.Item as={NavLink} to='/user/profile'>My account</Dropdown.Item>
-              <Dropdown.Item><a onClick={()=>this.props.onLogout}>Logout</a></Dropdown.Item>
+              <Dropdown.Item><a onClick={this.props.onLogout}>Logout</a></Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
       </Menu.Item>

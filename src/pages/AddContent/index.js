@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import  { Redirect } from 'react-router-dom'
 import { Grid, GridColumn, Image, Divider } from 'semantic-ui-react'
 import MetaTags from 'react-meta-tags'
 import { getCurrentUser } from '../../util/APIUtils';
@@ -9,6 +10,7 @@ import Footer from './Footer'
 import MultiUploadPhotos from './MultiUploadPhotos'
 import './style.less'
 import {notification} from 'antd'
+import LoadingIndicator  from '../../common/LoadingIndicator';
 
 class AddContent extends Component {
   constructor(props) {
@@ -16,11 +18,10 @@ class AddContent extends Component {
     this.state = {
       currentUser: null,
       isAuthenticated: false,
-      isLoading: false
+      isLoading: true
     }
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
-    this.handleLogin = this.handleLogin.bind(this);   
   }
 
   loadCurrentUser() {
@@ -61,15 +62,19 @@ class AddContent extends Component {
     });
   }
 
-  handleLogin() {
-    notification.success({
-      message: 'Photoing App',
-      description: "You're successfully logged in.",
-    });
-    this.loadCurrentUser();
-    this.props.history.push("/");
-  }
   render() {
+    if(this.state.isLoading){
+      return(
+          <LoadingIndicator /> 
+      )
+    }else{
+      if(!this.state.currentUser)
+      {
+        return(
+            <Redirect to='/' />
+        )
+      }
+    }
     return (
       <>
         <MetaTags>

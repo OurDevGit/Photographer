@@ -1,3 +1,5 @@
+import MultiSelect from './MultiSelect';
+
 /* eslint-disable import/no-cycle */
 export { default as LoadingSpinner } from './LoadingSpinner';
 export { default as HomeFooter } from './HomeFooter';
@@ -8,3 +10,4 @@ export { default as Avatar } from './Avatar';
 export { default as AvatarImage } from './AvatarImage';
 export { default as PhotoList } from './Photo/PhotoList';
 export { default as Photo } from './Photo/Photo';
+export { default as MultiSelect } from './MultiSelect';

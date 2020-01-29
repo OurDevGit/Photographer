@@ -57,7 +57,7 @@ class PhotoList extends Component {
             const currentVotes = this.state.currentVotes.slice();
             this.setState({
                 photos: photos.concat(response.content),
-                photo_list: photos.concat(response.content).slice(0, 30),
+                photo_list: photos.concat(response.content).slice(0, 5),
                 page: response.page,
                 size: response.size,
                 totalElements: response.totalElements,
@@ -148,14 +148,15 @@ class PhotoList extends Component {
         });
     }
 
+
     render() {
         const photoViews = [];
-        console.log("dddd",this.state.photo_list)
         this.state.photo_list.forEach((photo, photoIndex) => {
-            console.log("aaaaaaaaaaaaaaaaa", photo)
             photoViews.push(<Photo
-                // key={photo.id}
+                index={photo.id}
                 photo={photo}
+                onClick = {this.props.onClickImage}
+                active = {this.props.active}
                 // currentVote={this.state.currentVotes[photoIndex]}
                 // handleVoteChange={(event) => this.handleVoteChange(event, photoIndex)}
                 // handleVoteSubmit={(event) => this.handleVoteSubmit(event, photoIndex)} 

@@ -46,6 +46,7 @@ class Login extends Component{
     .then(response => {
         localStorage.setItem(ACCESS_TOKEN, response.accessToken);
         this.setState({flag: true});
+        console.log("access", response.accessToken)
     }).catch(error => {
         if(error.status === 401) {
             notification.error({

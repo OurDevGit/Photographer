@@ -12,14 +12,14 @@ class Photo extends Component {
     }
 
     render() {
-
+        console.log(this.props)
         return (
-            <div className="photo-content">
+            <div className={this.props.active == this.props.index ? 'photo-content active': 'photo-content'}>
                 <div className="photo-header">
                     {/* link: {this.props.address} */}
                     
                 </div>
-                <img src={this.props.photo.url_lr}/>
+                <img onClick={this.props.onClick} src={this.props.photo.url_lr} id={this.props.index}  />
             </div>
 
         );
