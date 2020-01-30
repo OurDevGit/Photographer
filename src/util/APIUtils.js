@@ -3,7 +3,6 @@ import { API_BASE_URL, PHOTO_LIST_SIZE, ACCESS_TOKEN } from '../constants';
 const request = (options) => {
     const headers = new Headers({
         'Content-Type': 'application/json',
-        // 'Content-Type': 'multipart/form-data',
     })
     
     if(localStorage.getItem(ACCESS_TOKEN)) {
@@ -23,29 +22,6 @@ const request = (options) => {
     );
 };
 
-const request1 = (options) => {
-    const headers = new Headers({
-        'Accept': 'application/json',
-        'Content-Type': 'multipart/form-data',
-    })
-    
-    if(localStorage.getItem(ACCESS_TOKEN)) {
-        headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
-    }
-
-    const defaults = {headers: headers};
-    options = Object.assign({}, defaults, options);
-    console.log(options)
-    return fetch(options.url, options)
-    .then(response => 
-        response.json().then(json => {
-            if(!response.ok) {
-                return Promise.reject(json);
-            }
-            return json;
-        })
-    );
-};
 export function getAllPhotos(page, size) {
     page = page || 0;
     size = size || PHOTO_LIST_SIZE;
@@ -63,19 +39,32 @@ export function getPhotoLists() {
     });
 }
 
+export function getSubmitPhotos() {
+    return request({
+        url: API_BASE_URL + "/photo_submit/submitOperations",
+        method: 'GET'
+    });
+}
+
+export function getNumberOfPhotos() {
+    return request({
+        url: API_BASE_URL + "/photo_submit/numberOfPhotosUploaded",
+        method: 'GET'
+    });
+}
+
+export function updateMultiplePhoto() {
+    return request({
+        url: API_BASE_URL + "/photo_submit/updateMultiplePhoto",
+        method: 'POST'
+    });
+}
+
 export function createPhoto(photoData) {
     return request({
         url: API_BASE_URL + "/photos",
         method: 'POST',
         body: JSON.stringify(photoData)
-    });
-}
-
-export function uploadPhotos(photoData) {
-    return request1({
-        url: API_BASE_URL + "/photo_submit/uploadMultipleFiles",
-        method: 'POST',
-        body: photoData
     });
 }
 

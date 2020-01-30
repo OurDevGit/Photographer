@@ -2,7 +2,7 @@ import React, { Component, a } from 'react'
 import { Grid, GridColumn, Image, Divider, Menu, Dropdown, Icon, Message, Form, Button, TextArea, Select , Accordion, Checkbox, Popup} from 'semantic-ui-react'
 import { NavLink, Redirect } from 'react-router-dom'
 import MetaTags from 'react-meta-tags'
-import { getCurrentUser, getAllCategories, getAllTags } from '../../../util/APIUtils';
+import { getCurrentUser, getAllCategories, getAllTags, getNumberOfPhotos ,updateMultiplePhoto} from '../../../util/APIUtils';
 import { ACCESS_TOKEN } from '../../../constants';
 import { HomeHeader, PhotoList, AvatarImage, MultiSelect } from '../../../components'
 import Footer from '../Footer'
@@ -14,7 +14,7 @@ const style = {
     padding: 0,
   },
 }
-const arr_options = [];
+const arr_options = {};
 const isChecked = false;
 
 class SubmitContent extends Component {
@@ -30,15 +30,22 @@ class SubmitContent extends Component {
       showOptions: ["unvisible", "visible"],
       selImage: [],
       pageStatus: '',
-      photoOptions:[],
+      photoOptions:{"idd":1},
+      submit_status: 'TO_BE_SUBMITTED',
+      activeMenuItem: "TO_BE_SUBMITTED",
+      total: {},
+      currentTagValues: [],
       loginStatus: true
     }
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
     this.loadAllCategories = this.loadAllCategories.bind(this);
+    this.loadAllTags = this.loadAllTags.bind(this);
+    this.getTotalNumberOfPhotos = this.getTotalNumberOfPhotos.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
     this.handleImageClick =  this.handleImageClick.bind(this)
     this.handleSetPhotoOption = this.handleSetPhotoOption.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   loadCurrentUser() {
@@ -65,7 +72,7 @@ class SubmitContent extends Component {
       let categorylist = response.categories.map((category)=>{
         return{
           key: category.id,
-          value: category.id,
+          value: category.value,
           text: category.value
         }
       });
@@ -86,7 +93,7 @@ class SubmitContent extends Component {
       let taglist = response.tags.map((tag)=>{
         return{
           key: tag.id,
-          value: tag.id,
+          value: tag.value,
           text: tag.value
         }
       });
@@ -101,10 +108,24 @@ class SubmitContent extends Component {
     });
   }
 
+  getTotalNumberOfPhotos() {
+    getNumberOfPhotos()
+    .then(response => {
+      this.setState({
+        total: response,
+      });
+    }).catch(error => {
+      this.setState({
+        isLoading: false
+      });  
+    });
+  }
+
   componentDidMount() {
     this.loadCurrentUser();
     this.loadAllCategories();
     this.loadAllTags();
+    this.getTotalNumberOfPhotos();
   }
 
   handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
@@ -149,26 +170,25 @@ class SubmitContent extends Component {
   handleMultiSelectChange = (e, { value }) => this.setState({ currentTagValues: value })
 
   handleImageClick(e){
-    this.state.selImage['link'] = e.target.src;
-    this.state.selImage['index'] = e.target.id;
+    console.log(e)
     this.setState({
       showOptions: ["visible", "unvisible"],
     })
-    this.setState({selImage: this.state.selImage})
-    console.log(" afafefaewfewafewfwefwefew",this.state.selImage)
+    this.setState({
+      selImage: e.photo
+    })
   }
 
   handleMenuItemClick = (e, { name }) => {
-    this.setState({ activeMenuItem: name });
+    this.setState({ activeMenuItem: name }); 
   }
 
   handleSetPhotoOption = (e, { name, value }) => {
-    this.state.photoOptions[name] = value; 
     this.arr_options = this.state.photoOptions;
+    this.arr_options[name] = value; 
     this.setState({ 
-      photoOptions : arr_options,
+      photoOptions : this.arr_options,
     })
-
   }
 
   handleCheck = (e, {name, value}) => {
@@ -176,12 +196,37 @@ class SubmitContent extends Component {
     this.state.photoOptions[name] = this.isChecked; 
     this.arr_options = this.state.photoOptions;
     this.setState({ 
-      photoOptions : arr_options,
+      photoOptions : this.arr_options,
     })
   }
 
+  handleSubmit(){
+    const updateRequest = {"photos": []};
+    const temp_options = this.state.selImage;
+    temp_options.submitStatus = "Submitted";
+    temp_options.description = this.state.photoOptions['Description'];
+    temp_options.categories = [];
+    temp_options.categories.push(this.state.photoOptions['Category1']);
+    temp_options.categories.push(this.state.photoOptions['Category2']);
+    temp_options.tags = this.state.currentTagValues;
+    this.setState({selImage: temp_options})
+    updateRequest.photos.push(temp_options);
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",updateRequest)
+
+    updateMultiplePhoto(updateRequest)
+      .then(response => {
+        console.log("....................................................",response);
+      }).catch(error => {
+        this.setState({
+          isLoading: false
+        });  
+      });
+
+  }
+
   render() {
-    const { activeIndex, currentTagValues =[], activeMenuItem= "toSubmit", activeItem } = this.state
+    const { activeIndex, activeItem } = this.state
+    console.log("aaaa",this.state.activeMenuItem)
     if(this.state.isLoading){
       return(
           <LoadingIndicator /> 
@@ -214,14 +259,17 @@ class SubmitContent extends Component {
                 <Grid.Column>
                   <Menu borderless className="desktop-menu-style">
                     <Menu.Item position="left" style={style.noPaddingStyle}>
-                      <Menu.Item name='toSubmit' active={activeMenuItem === 'toSubmit'} onClick={this.handleMenuItemClick}>
-                        To submit(2)
+                      <Menu.Item name='TO_BE_SUBMITTED' active={this.state.activeMenuItem === 'TO_BE_SUBMITTED'} onClick={this.handleMenuItemClick}>
+                        To submit({this.state.total.toBeSubmitted})
                       </Menu.Item>
-                      <Menu.Item name='pending' active={activeMenuItem === 'pending'} onClick={this.handleMenuItemClick}>
-                        Pending(0)
+                      <Menu.Item name='SUBMITTED' active={this.state.activeMenuItem === 'SUBMITTED'} onClick={this.handleMenuItemClick}>
+                        Pending({this.state.total.submitted})
                       </Menu.Item>
-                      <Menu.Item className='ReviewedMenu' name='review' active={activeMenuItem === 'review'} onClick={this.handleMenuItemClick}>
-                        Reviewed(0)
+                      <Menu.Item className='' name='ACCEPTED' active={this.state.activeMenuItem === 'ACCEPTED'} onClick={this.handleMenuItemClick}>
+                        Accepted({this.state.total.accepted})
+                      </Menu.Item>
+                      <Menu.Item className='ReviewedMenu' name='REJECTED' active={this.state.activeMenuItem === 'REJECTED'} onClick={this.handleMenuItemClick}>
+                        Rejected({this.state.total.rejected})
                       </Menu.Item>
                       <Dropdown item text="Images">
                         <Dropdown.Menu>
@@ -249,7 +297,14 @@ class SubmitContent extends Component {
                 <div ></div>
               </Grid.Row>
               <Grid.Row>
-                <PhotoList onClickImage={this.handleImageClick} active={this.state.selImage['index']}  />
+                <PhotoList 
+                    onClickImage={this.handleImageClick} 
+                    active={this.state.selImage.id} 
+                    username ={this.state.currentUser.username} 
+                    type="Submit_operation" 
+                    status={this.state.activeMenuItem} 
+                    subfun = {() => this.subfun()}
+                    />
               </Grid.Row>                   
             </Grid.Column>
             <Grid.Column width={6} className="image_options">
@@ -258,8 +313,8 @@ class SubmitContent extends Component {
                   <Form>              
                   <Grid.Column className="image_option" width={3}>
                     <div class="column avatarImage">
-                      <AvatarImage url={this.state.selImage['link']} name="Image.jpg"/>
-                      <a target="blank" href={this.state.selImage['link']}><Icon name='search plus' className="center" size="large"/></a>
+                      <AvatarImage url={this.state.selImage.url_fr} name="Image.jpg"/>
+                      <a target="blank" href={this.state.selImage.url_fr}><Icon name='search plus' className="center" size="large"/></a>
                     </div>
                     <div class="column">
                       <Form.Field>
@@ -366,7 +421,7 @@ class SubmitContent extends Component {
                     fluid
                     multiple
                     allowAdditions
-                    value={currentTagValues}
+                    value={this.state.currentTagValues}
                     onAddItem={this.handleMultiSelectAddition}
                     onChange={this.handleMultiSelectChange}
                   />
@@ -374,7 +429,7 @@ class SubmitContent extends Component {
                   </Form>
                 </Grid.Row>
                 <Grid.Column>
-                <Button className="submitButton" fluid negative>Submit</Button>
+                <Button className="submitButton" onClick={this.handleSubmit} fluid negative>Submit</Button>
               </Grid.Column>
               </div>
               <div className={this.state.showOptions[1]}>

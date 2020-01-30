@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getAllPhotos, getUserCreatedPhotos, getUserVotedPhotos, getPhotoLists } from '../../../util/APIUtils';
+import { getAllPhotos, getUserCreatedPhotos, getUserVotedPhotos, getPhotoLists, getSubmitPhotos } from '../../../util/APIUtils';
 import Photo from '../Photo';
 import { castVote } from '../../../util/APIUtils';
 import LoadingIndicator  from '../../../common/LoadingIndicator';
@@ -38,6 +38,8 @@ class PhotoList extends Component {
                 promise = getUserCreatedPhotos(this.props.username, page, size);
             } else if (this.props.type === 'USER_VOTED_PHOTOS') {
                 promise = getUserVotedPhotos(this.props.username, page, size);
+            } else if(this.props.type == 'Submit_operation'){
+                promise = getSubmitPhotos()
             }
         } else {
             promise = getPhotoLists(page, size);
@@ -50,28 +52,54 @@ class PhotoList extends Component {
         this.setState({
             isLoading: true
         });
-
-        promise            
-        .then(response => {
-            const photos = this.state.photos.slice();
-            const currentVotes = this.state.currentVotes.slice();
-            this.setState({
-                photos: photos.concat(response.content),
-                photo_list: photos.concat(response.content).slice(0, 5),
-                page: response.page,
-                size: response.size,
-                totalElements: response.totalElements,
-                totalPages: response.totalPages,
-                last: response.last,
-                currentVotes: currentVotes.concat(Array(response.content.length).fill(null)),
-                isLoading: false
-            })
-            console.log("photo lists",this.state.photos)
-        }).catch(error => {
-            this.setState({
-                isLoading: false
-            })
-        });  
+        if(this.props.type == 'Submit_operation')
+        {
+            promise            
+            .then(response => {
+                
+                const photos = this.state.photos.slice();
+                for (let i=0; i<response.photos.length; i++){
+                    
+                    if(response.photos[i].submitStatus == this.props.status)
+                    {                       
+                        photos.push(response.photos[i]);
+                    }
+                }
+                this.setState({
+                    photos: photos,
+                    photo_list: photos,
+                    isLoading: false
+                })
+                console.log("photo lists",this.props.status)
+            }).catch(error => {
+                this.setState({
+                    isLoading: false
+                })
+            });  
+        }else{
+            promise            
+            .then(response => {
+                const photos = this.state.photos.slice();
+                const currentVotes = this.state.currentVotes.slice();
+                this.setState({
+                    photos: photos.concat(response.content),
+                    photo_list: photos.concat(response.content).slice(0, 5),
+                    page: response.page,
+                    size: response.size,
+                    totalElements: response.totalElements,
+                    totalPages: response.totalPages,
+                    last: response.last,
+                    currentVotes: currentVotes.concat(Array(response.content.length).fill(null)),
+                    isLoading: false
+                })
+                console.log("photo lists23423",this.state.photos)
+            }).catch(error => {
+                this.setState({
+                    isLoading: false
+                })
+            });  
+        }
+        
         
     }
 
@@ -79,8 +107,8 @@ class PhotoList extends Component {
         this.loadPhotoList();
     }
 
-    componentDidUpdate(nextProps) {
-        if(this.props.isAuthenticated !== nextProps.isAuthenticated) {
+    componentDidUpdate(prevProps) {
+        if(this.props.isAuthenticated !== prevProps.isAuthenticated) {
             // Reset State
             this.setState({
                 photos: [],
@@ -93,6 +121,24 @@ class PhotoList extends Component {
                 isLoading: false
             });    
             this.loadPhotoList();
+        }
+        if(this.props.status !== prevProps.status)
+        {
+            this.setState({
+                photos: [],
+                photo_list: [],
+                page: 0,
+                size: 10,
+                totalElements: 0,
+                totalPages: 0,
+                last: true,
+                currentVotes: [],
+                isLoading: false
+            });
+            this.loadPhotoList();
+            console.log("refresh",this.props.username);
+            console.log("afsadfs",prevProps.status);
+            
         }
     }
 
@@ -147,7 +193,9 @@ class PhotoList extends Component {
             }
         });
     }
-
+    subfun(value){
+        console.log("asdfsdfsadf",value)
+    }
 
     render() {
         const photoViews = [];
@@ -157,12 +205,13 @@ class PhotoList extends Component {
                 photo={photo}
                 onClick = {this.props.onClickImage}
                 active = {this.props.active}
+                total = {this.state.photo_list.length}
                 // currentVote={this.state.currentVotes[photoIndex]}
                 // handleVoteChange={(event) => this.handleVoteChange(event, photoIndex)}
                 // handleVoteSubmit={(event) => this.handleVoteSubmit(event, photoIndex)} 
                 />)
         });
-
+        console.log("ddd")
         return (
             <div className="photos-container">
                 {photoViews}
