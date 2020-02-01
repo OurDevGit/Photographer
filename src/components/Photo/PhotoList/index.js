@@ -193,9 +193,6 @@ class PhotoList extends Component {
             }
         });
     }
-    subfun(value){
-        console.log("asdfsdfsadf",value)
-    }
 
     render() {
         const photoViews = [];
@@ -206,6 +203,7 @@ class PhotoList extends Component {
                 onClick = {this.props.onClickImage}
                 active = {this.props.active}
                 total = {this.state.photo_list.length}
+                type = {this.props.type}
                 // currentVote={this.state.currentVotes[photoIndex]}
                 // handleVoteChange={(event) => this.handleVoteChange(event, photoIndex)}
                 // handleVoteSubmit={(event) => this.handleVoteSubmit(event, photoIndex)} 

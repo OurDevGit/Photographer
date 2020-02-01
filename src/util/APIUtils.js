@@ -8,7 +8,7 @@ const request = (options) => {
     if(localStorage.getItem(ACCESS_TOKEN)) {
         headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
     }
-
+    console.log("OPTIONSzzz",localStorage.getItem(ACCESS_TOKEN))
     const defaults = {headers: headers};
     options = Object.assign({}, defaults, options);
     return fetch(options.url, options)
@@ -53,10 +53,19 @@ export function getNumberOfPhotos() {
     });
 }
 
-export function updateMultiplePhoto() {
+export function updateMultiplePhoto(updateRequest) {
     return request({
         url: API_BASE_URL + "/photo_submit/updateMultiplePhoto",
-        method: 'POST'
+        method: 'POST',
+        body: JSON.stringify(updateRequest)
+    });
+}
+
+export function submitMultiplePhoto(submitRequest) {
+    return request({
+        url: API_BASE_URL + "/photo_submit/submitMultiplePhoto",
+        method: 'POST',
+        body: JSON.stringify(submitRequest)
     });
 }
 

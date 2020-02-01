@@ -1,11 +1,10 @@
-import React, { Component, a } from 'react'
-import { Grid, GridColumn, Image, Divider, Menu, Dropdown, Icon, Message, Form, Button, TextArea, Select , Accordion, Checkbox, Popup} from 'semantic-ui-react'
+import React, { Component } from 'react'
+import { Grid, GridColumn , Menu, Dropdown, Icon, Message, Form, Button, TextArea, Select , Accordion, Checkbox, Popup, Header, Modal, Input, Radio} from 'semantic-ui-react'
 import { NavLink, Redirect } from 'react-router-dom'
 import MetaTags from 'react-meta-tags'
-import { getCurrentUser, getAllCategories, getAllTags, getNumberOfPhotos ,updateMultiplePhoto} from '../../../util/APIUtils';
-import { ACCESS_TOKEN } from '../../../constants';
-import { HomeHeader, PhotoList, AvatarImage, MultiSelect } from '../../../components'
-import Footer from '../Footer'
+import { getCurrentUser, getAllCategories, getAllTags, getNumberOfPhotos ,updateMultiplePhoto, submitMultiplePhoto} from '../../../util/APIUtils';
+import { API_BASE_URL, PHOTO_LIST_SIZE, ACCESS_TOKEN, releaseOptions, sortOptions, age, gender, ethnicity } from '../../../constants';
+import { HomeHeader, PhotoList, AvatarImage, MultiSelect, ListComponent } from '../../../components'
 import './style.less'
 import {notification} from 'antd'
 import LoadingIndicator  from '../../../common/LoadingIndicator';
@@ -14,6 +13,7 @@ const style = {
     padding: 0,
   },
 }
+
 const arr_options = {};
 const isChecked = false;
 
@@ -28,14 +28,23 @@ class SubmitContent extends Component {
       tags: [],
       activeIndex: 1,
       showOptions: ["unvisible", "visible"],
-      selImage: [],
+      selImage: {},
+      selImageIDs:[],
       pageStatus: '',
       photoOptions:{"idd":1},
       submit_status: 'TO_BE_SUBMITTED',
       activeMenuItem: "TO_BE_SUBMITTED",
       total: {},
       currentTagValues: [],
-      loginStatus: true
+      loginStatus: true,
+      errorMessage:[],
+      // common_tag: [],
+      DisplayImageUrl: '',
+      ReleaseModalOpen:false,
+      NewReleaseModalOpen: false,
+      authorization:{},
+      releaseFile:{},
+      releaseName:""
     }
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -46,6 +55,14 @@ class SubmitContent extends Component {
     this.handleImageClick =  this.handleImageClick.bind(this)
     this.handleSetPhotoOption = this.handleSetPhotoOption.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.updatePhotoOptions =  this.updatePhotoOptions.bind(this)
+    this.openReleaseModal = this.openReleaseModal.bind(this)
+    this.onChangeFIle =  this.onChangeFIle.bind(this)
+    this.handleRadioChange =  this.handleRadioChange.bind(this)
+    this.handleChangeReleasename = this.handleChangeReleasename.bind(this)
+    this.newReleaseUpload = this.newReleaseUpload.bind(this)
+    this.uploadAndJoinAuthorization =  this.uploadAndJoinAuthorization.bind(this)
+    this.onCloseModal = this.onCloseModal.bind(this);
   }
 
   loadCurrentUser() {
@@ -79,7 +96,6 @@ class SubmitContent extends Component {
       this.setState({
         categories: categorylist,
       });
-      console.log("categories",this.state.categories);
     }).catch(error => {
       this.setState({
         isLoading: false
@@ -100,7 +116,6 @@ class SubmitContent extends Component {
       this.setState({
         tags: taglist,
       });
-      console.log("tags",this.state.tags);
     }).catch(error => {
       this.setState({
         isLoading: false
@@ -167,31 +182,185 @@ class SubmitContent extends Component {
     }))
   }
 
-  handleMultiSelectChange = (e, { value }) => this.setState({ currentTagValues: value })
-
-  handleImageClick(e){
-    console.log(e)
-    this.setState({
-      showOptions: ["visible", "unvisible"],
+  handleMultiSelectChange = (e, { value }) => {
+    if(value.length < 7){
+      // this.state.errorMessage['tags'] = "Please add at least 7 keywords"
+    }else{
+      this.state.errorMessage['tags'] = "";
+    }
+    this.state.currentTagValues = value;
+    this.setState({ 
+      currentTagValues: value,
+      errorMessage: this.state.errorMessage
     })
-    this.setState({
-      selImage: e.photo
-    })
+    this.updatePhotoOptions();
   }
+
+  //Multiple Image click event
+
+  handleImageClick(e, flag){
+    if(!this.state.selImage[e.photo.id]){
+      this.state.selImage[e.photo.id] = e.photo
+      this.setState({
+        selImage: this.state.selImage
+      })
+    }
+// flag: check imgae or uncheck image when click Image
+    if(flag)
+    {
+      this.state.selImageIDs.push(e.photo.id);
+      this.setState({
+        selImageIDs: this.state.selImageIDs
+      })
+
+    }else{
+      this.state.selImageIDs = this.state.selImageIDs.filter(item=> item != e.photo.id);
+      this.setState({
+        selImageIDs: this.state.selImageIDs
+      })
+    }
+
+// DisplayImageurl when click Image
+
+    if(this.state.selImageIDs.length == 1)
+    {
+      this.setState({
+        DisplayImageUrl : this.state.selImage[this.state.selImageIDs[0]].url_fr
+      })
+    }else if(this.state.selImageIDs.length > 1){
+      this.setState({
+        DisplayImageUrl : this.state.selImage[this.state.selImageIDs[0]].url_fr
+      })
+    }
+
+// get common category and tags of checked images
+    if(this.state.selImageIDs.length > 0){  // when there is images which checked
+      this.setState({
+        showOptions: ["visible", "unvisible"],
+      })
+      if(this.state.selImageIDs.length  == 1)
+      {
+        var temp_image = this.state.selImage[this.state.selImageIDs[0]];
+        
+        this.state.photoOptions['Description'] = temp_image.description ? temp_image.description :  "";
+        this.state.photoOptions['Category1'] = temp_image.categories ? temp_image.categories[0] : null;
+        this.state.photoOptions['Category2'] = temp_image.categories ? temp_image.categories[1] : null;
+        this.state.currentTagValues = temp_image.tags;
+        console.log("$$$$$$$$$$$$$$", this.state.currentTagValues)
+        this.setState({
+          photoOptions: this.state.photoOptions,
+          currentTagValues: this.state.currentTagValues
+        })
+      }else{
+        var tag_flag = [];
+        var category_flag1 = [];
+        var category_flag2 = [];
+        var common_tags=[];
+        var common_category=[null, null];
+        for(var i=0; i<this.state.selImageIDs.length; i++)
+        {
+// common tags
+          var temp_tag = this.state.selImage[this.state.selImageIDs[i]].tags;
+          if(temp_tag)
+          {
+            for(var j=0; j<temp_tag.length; j++)
+            {
+              if(tag_flag[temp_tag[j]] == i-1){
+                tag_flag[temp_tag[j]] = i;
+              }else{
+                tag_flag[temp_tag[j]] = 0
+              }
+              if(tag_flag[temp_tag[j]] == this.state.selImageIDs.length -1)
+              {
+                common_tags.push(temp_tag[j]);
+              }
+            }
+          }
+// common categories
+          var temp_category = this.state.selImage[this.state.selImageIDs[i]].categories;
+          if(temp_category){
+            if(temp_category[0])
+            {
+              if(category_flag1[temp_category[0]] == i-1)
+              {
+                category_flag1[temp_category[0]] = i;
+              }else{
+                category_flag1[temp_category[0]] = 0;
+              }
+              if(category_flag1[temp_category[0]] == this.state.selImageIDs.length - 1)
+              {
+                common_category[0] = temp_category[0]
+              }
+            }
+
+            if(temp_category[1])
+            {
+              if(category_flag2[temp_category[1]] == i-1)
+              {
+                category_flag2[temp_category[1]] = i;
+              }else{
+                category_flag2[temp_category[1]] = 0;
+              }
+              if(category_flag2[temp_category[1]] == this.state.selImageIDs.length - 1)
+              {
+                common_category[1] = temp_category[1]
+              }
+            }
+          }
+        }
+        if(common_category.length == 2)
+        {
+          this.state.photoOptions['Category1'] = common_category[0];
+          this.state.photoOptions['Category2'] = common_category[1];
+        }else if(common_category.length == 1){
+          this.state.photoOptions['Category1'] = common_category[0];
+          this.state.photoOptions['Category2'] = null;
+        }else{
+          this.state.photoOptions['Category1'] = null;
+          this.state.photoOptions['Category2'] = null;
+        }
+// set state common category and tags
+        this.setState({
+          currentTagValues: common_tags,
+          common_tag: common_tags,
+          photoOptions: this.state.photoOptions
+        })
+      }
+    }else{                  // when there is not images which checked
+      this.setState({
+        showOptions: ["unvisible", "visible"],
+      })
+    }
+  
+  }
+
+  // Menu click 
 
   handleMenuItemClick = (e, { name }) => {
-    this.setState({ activeMenuItem: name }); 
+    this.setState({ 
+      activeMenuItem: name,
+      selImage: [],
+      selImageIDs: [],
+      common_tag:[],
+      showOptions: ["unvisible", "visible"],
+    }); 
   }
 
-  handleSetPhotoOption = (e, { name, value }) => {
+// when change some photoptions
+  
+handleSetPhotoOption = (e, { name, value }) => {
     this.arr_options = this.state.photoOptions;
     this.arr_options[name] = value; 
+    this.state.errorMessage[name] = "";
     this.setState({ 
       photoOptions : this.arr_options,
+      errorMessage: this.state.errorMessage
     })
+    this.updatePhotoOptions();
   }
 
-  handleCheck = (e, {name, value}) => {
+
+handleCheck = (e, {name, value}) => {
     this.isChecked =  !this.isChecked;
     this.state.photoOptions[name] = this.isChecked; 
     this.arr_options = this.state.photoOptions;
@@ -199,34 +368,223 @@ class SubmitContent extends Component {
       photoOptions : this.arr_options,
     })
   }
+handleRadioChange = (e, {value}) => {
+  this.setState({
+    ReleaseTypevalue : value
+  })
+}
+handleChangeReleasename = (e, {value}) => {
+  this.setState({
+    releaseName: value
+  })
+}
+// when click submit button
 
   handleSubmit(){
-    const updateRequest = {"photos": []};
-    const temp_options = this.state.selImage;
-    temp_options.submitStatus = "Submitted";
-    temp_options.description = this.state.photoOptions['Description'];
-    temp_options.categories = [];
-    temp_options.categories.push(this.state.photoOptions['Category1']);
-    temp_options.categories.push(this.state.photoOptions['Category2']);
-    temp_options.tags = this.state.currentTagValues;
-    this.setState({selImage: temp_options})
-    updateRequest.photos.push(temp_options);
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",updateRequest)
 
-    updateMultiplePhoto(updateRequest)
+    // if(!this.state.photoOptions['Description']){
+    //   this.state.errorMessage['Description'] = "Please write a description"
+    //   this.setState({
+    //     errorMessage: this.state.errorMessage
+    //   })
+    // }
+    // if(!this.state.photoOptions['Category1']){
+    //   this.state.errorMessage['Category1'] = "Please select a category"
+    //   this.setState({
+    //     errorMessage: this.state.errorMessage
+    //   })
+    // }
+    // if(this.state.currentTagValues.length <7)
+    // {
+    //   this.state.errorMessage['tags'] = "Please add at least 7 keywords"
+    //   this.setState({
+    //     errorMessage: this.state.errorMessage
+    //   })
+    // }
+    // if(this.state.photoOptions['Description'] && this.state.photoOptions['Description'] && this.state.currentTagValues.length > 6){
+    //   const updateRequest = {"photos": []};
+    //   const temp_options = this.state.selImage;
+    //   temp_options.description = this.state.photoOptions['Description'];
+    //   temp_options.categories = [];
+    //   temp_options.categories.push(this.state.photoOptions['Category1']);
+    //   // temp_options.categories.push(this.state.photoOptions['Category2']);
+    //   temp_options.tags = this.state.currentTagValues;
+    //   this.setState({selImage: temp_options})
+    //   updateRequest.photos.push(temp_options);
+      // }
+    submitMultiplePhoto(this.state.selImageIDs)
+        .then(response => {
+          console.log("ddd",response);
+          this.getTotalNumberOfPhotos();
+          this.setState({
+            activeMenuItem : "SUBMITTED"
+          })
+        }).catch(error => {
+          this.setState({
+            isLoading: false
+          });  
+        });
+        this.getTotalNumberOfPhotos();
+        this.setState({
+          activeMenuItem : "SUBMITTED"
+        })
+    console.log("asdfsadf", this.state.selImageIDs)
+
+  }
+
+// update photo options
+
+  updatePhotoOptions(){
+      this.setState({
+        common_tag: this.state.currentTagValues
+      })
+      const updateRequest = {"photos": []};
+      for(let i=0; i<this.state.selImageIDs.length; i++)
+      {
+// update categories
+        var temp_options = this.state.selImage[this.state.selImageIDs[i]];
+        if(!temp_options.categories){
+          temp_options.categories = [];
+          temp_options.categories.push(this.state.photoOptions['Category1']);
+          temp_options.categories.push(this.state.photoOptions['Category2']);
+        }else{
+          if(!temp_options.categories[1]){
+             temp_options.categories[1] = null;
+          }
+          temp_options.categories[0] = this.state.photoOptions['Category1'] ? this.state.photoOptions['Category1'] : temp_options.categories[0];
+          temp_options.categories[1] = this.state.photoOptions['Category2'] ? this.state.photoOptions['Category2'] : temp_options.categories[1];
+        }
+
+        temp_options.categories = temp_options.categories.filter(item=> item != null);
+//update tags
+        var temp_flags =[];
+        var tem_tag = this.state.common_tag;
+        if(!tem_tag){
+          temp_options.tags= this.state.currentTagValues
+        }else{
+          if(tem_tag.length>0)
+          {
+            for(let j=0; j<tem_tag.length; j++)
+            {
+              temp_flags[tem_tag[j]] = 1;
+            }
+            
+            for(let k=0; k<this.state.currentTagValues.length; k++)
+            {
+              if(temp_flags[this.state.currentTagValues[k]] != 1)
+              {
+                temp_options.tags.push(this.state.currentTagValues[k]);
+              }else{
+                tem_tag = tem_tag.filter(item=> item != this.state.currentTagValues[k]);
+              }
+            }
+            for(let h=0; h<tem_tag.length; h++)
+            {
+              temp_options.tags = temp_options.tags.filter(item=> item != tem_tag[h]);
+            }
+          }else{
+            if(!temp_options.tags){
+              temp_options.tags =[];
+            }
+            console.log(this.state.currentTagValues)
+            for(let index=0; index<this.state.currentTagValues.length; index++)
+            {
+              temp_options.tags.push(this.state.currentTagValues[index]);
+            }
+            
+          }
+        }
+        updateRequest.photos.push(temp_options);
+        this.state.selImage[this.state.selImageIDs[i]] = temp_options;
+      }
+
+      this.setState({selImage: this.state.selImage})
+      updateMultiplePhoto(updateRequest)
       .then(response => {
-        console.log("....................................................",response);
+        console.log(response);
       }).catch(error => {
         this.setState({
           isLoading: false
         });  
       });
+  }
 
+  newReleaseUpload(){
+    this.state.authorization.caption = this.state.releaseName;
+    this.state.authorization.authorizedPhotosld = this.state.selImageIDs;
+    this.state.authorization.authorizationKind = "SUBJECT"
+    this.setState({
+      authorization: this.state.authorization
+    })
+
+    // var authorization = {};
+    // authorization = this.state.authorization;
+    // authorization.files = this.state.releaseFile;
+    // console.log("authorization", authorization)
+    this.uploadAndJoinAuthorization(this.state.authorization);
+  }
+
+  uploadAndJoinAuthorization(authorization){
+    var myHeaders = new Headers({})
+
+    if(localStorage.getItem(ACCESS_TOKEN)) {
+        myHeaders.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
+    }
+
+    const formData = new FormData();
+    formData.append('caption', authorization.caption);
+    formData.append('authorizationKind', 'Model');
+    formData.append('files', this.state.releaseFile);
+
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: formData,
+        redirect: 'follow'
+      };
+      fetch(API_BASE_URL + "/authorization_controller/upload_authorization", requestOptions)
+      .then(response => {
+        console.log(response)
+          if(response.ok){
+              this.setState({
+                  uploadStatus: true,
+                  isLoading: false
+              })
+          }
+      })
+      .catch(error => {
+          console.log('error', error)
+          this.setState({
+            isLoading: false
+          });
+        });    
+  }
+
+
+  onChangeFIle(e){
+    this.setState({
+      ReleaseModalOpen: false,
+      NewReleaseModalOpen: true,
+      releaseFile: e.target.files[0],
+      releaseName: e.target.files[0].name.split(".")[0]
+    })
+    console.log(e.target.files)
+  }
+  openReleaseModal(){
+    this.setState({
+      ReleaseModalOpen: true
+    })
+  }
+  onCloseModal(){
+    this.setState({
+      ReleaseModalOpen: false,
+      NewReleaseModalOpen: false
+    })
   }
 
   render() {
     const { activeIndex, activeItem } = this.state
-    console.log("aaaa",this.state.activeMenuItem)
+    console.log("%%%%%%%%%%%%%%%%%%%%%",this.state.releaseName)
     if(this.state.isLoading){
       return(
           <LoadingIndicator /> 
@@ -299,11 +657,9 @@ class SubmitContent extends Component {
               <Grid.Row>
                 <PhotoList 
                     onClickImage={this.handleImageClick} 
-                    active={this.state.selImage.id} 
                     username ={this.state.currentUser.username} 
                     type="Submit_operation" 
-                    status={this.state.activeMenuItem} 
-                    subfun = {() => this.subfun()}
+                    status={this.state.activeMenuItem}
                     />
               </Grid.Row>                   
             </Grid.Column>
@@ -313,8 +669,8 @@ class SubmitContent extends Component {
                   <Form>              
                   <Grid.Column className="image_option" width={3}>
                     <div class="column avatarImage">
-                      <AvatarImage url={this.state.selImage.url_fr} name="Image.jpg"/>
-                      <a target="blank" href={this.state.selImage.url_fr}><Icon name='search plus' className="center" size="large"/></a>
+                      <AvatarImage url={this.state.DisplayImageUrl} name="Image.jpg"/>
+                      <a target="blank" href={this.state.DisplayImageUrl}><Icon name='search plus' className="center" size="large"/></a>
                     </div>
                     <div class="column">
                       <Form.Field>
@@ -345,25 +701,27 @@ class SubmitContent extends Component {
                     </div>
                     <div class="column">
                       <Form.Field>
-                        <TextArea rows={1} placeholder="Descriptions" name='Description' value={this.state.photoOptions['Description']} onChange={this.handleSetPhotoOption} />
+                        <TextArea rows={1} placeholder="Descriptions" name='Description' value={this.state.photoOptions['Description']} required onChange={this.handleSetPhotoOption} />
+                          <div class='label error'>{this.state.errorMessage['Description']}</div>
                       </Form.Field>
                     </div>
                     <div class="column">
                       <Form.Field>
                       <div class="label">Category 1</div>
                         <Select placeholder='Category 1' options={this.state.categories} name="Category1" value={this.state.photoOptions['Category1']} onChange={this.handleSetPhotoOption}/>
+                        <div class='label error'>{this.state.errorMessage['Category1']}</div>
                       </Form.Field>
                     </div>
                     <div class="column">
                       <Form.Field>
                       <div class="label">Category 2(optional)</div>
-                        <Select placeholder='Category 2(optional)' options={this.state.categories} name="Category2" value={this.state.photoOptions['Category2']} onChange={this.handleSetPhotoOption}/>
+                        <Select placeholder='Category 2(optional)' options={this.state.categories} name="Category2" value={this.state.photoOptions['Category2']} onChange={this.handleSetPhotoOption} disabled={this.state.photoOptions['Category1'] ? false : true}/>
                       </Form.Field>
                     </div>
                     <div class="column">
-                      <Form.Field>
+                      <Form.Field required>
                       <div class="label">Location(optional)</div>
-                        <input type="text" placeholder='Location(optional)' name="Location" value={this.state.photoOptions['Location']} onChange={this.handleSetPhotoOption}  />
+                        <input type="text" placeholder='Location(optional)' name="Location" value={this.state.photoOptions['Location']} required onChange={this.handleSetPhotoOption}  />
                         <Popup
                           trigger={<Icon name='question circle' className="bottom" size="large"/>}
                           content={<span>Select the geographic location shown in your photo. Be specific: select neighborhoods, towns, or cities. In the future, location data will power new search and filtering options for customers. <a href="#">Learn more</a></span>}
@@ -401,7 +759,116 @@ class SubmitContent extends Component {
                     <div class="column">
                       <Form.Field>
                         <div class="Releases left">
-                          <h5>Releases<Icon name="plus" /></h5>
+                          <h5>Releases
+                            <Modal open={this.state.ReleaseModalOpen} onOpen={this.openReleaseModal} size='tiny' className="Modalcenter" trigger={<Icon name="plus" />}>
+                              <Modal.Content image>
+                                <Modal.Description>
+                                  <Icon className="ModalClose" name='close' size="large" onClick={this.onCloseModal}/>
+                                  <Header>Attach releases</Header>
+                                  <div class="column">
+                                    <Form.Field>
+                                    <div class="label">Release Type</div>
+                                      <Select fluid placeholder='Release Type' options={releaseOptions} name="release"/>
+                                    </Form.Field>
+                                  </div>
+                                  <div class="column">
+                                    <Form.Field>
+                                    <div class="label">Sort order</div>
+                                      <Select fluid placeholder='Sort Order' options={sortOptions} name="sort"/>
+                                    </Form.Field>
+                                  </div>
+                                  <div class="column">
+                                    <Form.Field>
+                                      <Input fluid loading icon='user' placeholder='Search...' />                                 
+                                    </Form.Field>
+                                  </div>
+                                  {/* <div class="releases column">
+                                    You don't have any active releases
+                                  </div> */}
+                                  <div class="column">
+                                    <ListComponent />
+                                  </div>
+                                  <div className="column">
+                                    <Button className="" fluid negative>Done</Button>
+                                  </div>
+                                  <div className="column">
+                                    <input accept='image/*' type="file" class='hide_file' onChange={this.onChangeFIle} />
+                                    <Button type="submit" className="" fluid>Upload a new relesase</Button>
+                                  </div>
+                                </Modal.Description>
+                              </Modal.Content>
+                            </Modal>
+                            
+                            <Modal open={this.state.NewReleaseModalOpen} size='tiny' className="Modalcenter">
+                              <Modal.Content image>
+                                <Modal.Description>
+                                  <Header>New releases</Header>
+                                  <div className="column newReleaseFile">
+                                    <label>{this.state.releaseFile.name}</label>
+                                    <Icon name='pencil' size="large"/>
+                                    <input accept='image/*' type="file" class='hide_file' onChange={this.onChangeFIle} />
+                                    
+                                  </div>
+                                  <div class="column">
+                                    <Form.Field>
+                                      <label>Releasse name</label>
+                                      <Input fluid value={this.state.releaseName} placeholder='' onChange={this.handleChangeReleasename}/>                                 
+                                    </Form.Field>
+                                  </div>
+                                  <div class="column">
+                                    <Form.Field>
+                                      <Radio
+                                        label='Model release'
+                                        name='radioGroup'
+                                        value='model'
+                                        checked={this.state.ReleaseTypevalue === 'model'}
+                                        onChange={this.handleRadioChange}
+                                      />
+                                    </Form.Field>
+                                    <Form.Field>
+                                      <Radio
+                                        label='Property release'
+                                        name='radioGroup'
+                                        value='property'
+                                        checked={this.state.ReleaseTypevalue === 'property'}
+                                        onChange={this.handleRadioChange}
+                                      />
+                                    </Form.Field>
+                                  </div>
+                                  <div id="ReleaseDetail" class={this.state.ReleaseTypevalue}>
+                                    <div class='column'>
+                                      <h3>Model details(optional)</h3>
+                                      <label>Add model dtails to help customers discover your work</label>
+                                    </div>
+                                    <div class="column">
+                                      <Form.Field>
+                                      <div class="label">Model echnicity</div>
+                                        <Select fluid placeholder='Model echnicity' options={ethnicity} name="modelEthnicity"/>
+                                      </Form.Field>
+                                    </div>
+                                    <div class="column">
+                                      <Form.Field>
+                                      <div class="label">Model age</div>
+                                        <Select fluid placeholder='Model age' options={age} name="modelAge"/>
+                                      </Form.Field>
+                                    </div>
+                                    <div class="column">
+                                      <Form.Field>
+                                      <div class="label">Model gender</div>
+                                        <Select fluid placeholder='Model gender' options={gender} name="modelGender"/>
+                                      </Form.Field>
+                                    </div>
+                                  </div>
+                                  <div className="column">
+                                    <Button className="" fluid negative onClick={this.newReleaseUpload}>Save</Button>
+                                  </div>
+                                  <div className="column">
+                                    <Button className="" fluid onClick={this.onCloseModal}>cancel</Button>
+                                  </div>
+                                </Modal.Description>
+                              </Modal.Content>
+                            </Modal>
+                          </h5>
                           <p>For recognizable people or property.</p>
                           <a href="#">Download a release form</a>
                         </div>
@@ -425,6 +892,9 @@ class SubmitContent extends Component {
                     onAddItem={this.handleMultiSelectAddition}
                     onChange={this.handleMultiSelectChange}
                   />
+                  <div class='column'>
+                    <div class='label error'>{this.state.errorMessage['tags']}</div>
+                  </div>
                   </Grid.Column>
                   </Form>
                 </Grid.Row>

@@ -16,3 +16,46 @@ export const EMAIL_MAX_LENGTH = 40;
 
 export const PASSWORD_MIN_LENGTH = 6;
 export const PASSWORD_MAX_LENGTH = 20;
+
+export const releaseOptions = [ 
+    { key: 'all', value: 'Allreleases', text: 'All releases' },
+    { key: 'model', value: 'Modelreleases', text: 'Model releases' },
+    { key: 'property', value: 'Propertyreleases', text: 'Property releases' },
+  ];
+export  const sortOptions = [
+    { key: 'oldest', value: 'Oldest', text: 'Oldest' },
+    { key: 'newest', value: 'Newest', text: 'Newest' },
+    { key: 'az', value: 'az', text: 'A-Z' },
+    { key: 'za', value: 'za', text: 'Z-A' },
+  ];
+export const ethnicity = [ 
+    { key: 'af', value: 'African', text: 'African' },
+    { key: 'afam', value: 'African American', text: 'African American' },
+    { key: 'bl', value: 'Black', text: 'Black' },
+    { key: 'br', value: 'Brazilian', text: 'Brazilian' },
+    { key: 'ch', value: 'Chinese', text: 'Chinese' },
+    { key: 'ca', value: 'Caucasian', text: 'Caucasian' },
+    { key: 'es', value: 'East Asian', text: 'East Asian' },
+    { key: 'hi', value: 'Hispanic(Latin)', text: 'Hispanic(Latin)' },
+    { key: 'jp', value: 'Japanese', text: 'Japanese' },
+    { key: 'me', value: 'Middle Eastern', text: 'Middle Eastern' },
+    { key: 'na', value: 'Native American', text: 'Native American' },
+    { key: 'pi', value: 'Pacific Islander', text: 'Pacific Islander' },
+    { key: 'sa', value: 'South Asian', text: 'South Asian' },
+    { key: 'sea', value: 'Southeast Asian', text: 'Southeast Asian' },
+  ];
+export  const age = [
+    { key: 'in', value: 'Infant', text: 'Infant' },
+    { key: 'child', value: 'Child', text: 'Child' },
+    { key: 'ten', value: 'Teenager', text: 'Teenager' },
+    { key: 'twenty', value: 'twenty', text: '20-29' },
+    { key: 'thirty', value: 'thirty', text: '30-39' },
+    { key: 'fourty', value: 'fourty', text: '40-49' },
+    { key: 'fifty', value: 'fifty', text: '50-59' },
+    { key: 'sixty', value: 'sixty', text: '60-69' },
+    { key: 'seventyplus', value: 'seventyplus', text: '70+' },
+  ];
+export  const gender = [
+    { key: 'male', value: 'male', text: 'Male' },
+    { key: 'femaile', value: 'female', text: 'Female' },
+  ];
