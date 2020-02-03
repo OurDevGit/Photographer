@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import  { Redirect } from 'react-router-dom'
-import { Grid, GridColumn, Image, Divider } from 'semantic-ui-react'
+import { Grid, GridColumn, Image, Divider, Button } from 'semantic-ui-react'
 import MetaTags from 'react-meta-tags'
 import { getCurrentUser } from '../../util/APIUtils';
 import { ACCESS_TOKEN } from '../../constants';

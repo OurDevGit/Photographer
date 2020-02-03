@@ -20,6 +20,7 @@ export default class MultipleImageUploadComponent extends Component {
         }
         this.uploadMultipleFiles = this.uploadMultipleFiles.bind(this)
         this.uploadFiles = this.uploadFiles.bind(this)
+        this.goSubmitContent = this.goSubmitContent.bind(this)
     }
 
     getBase64 = file => {
@@ -86,6 +87,12 @@ export default class MultipleImageUploadComponent extends Component {
             });
     }
 
+    goSubmitContent(){
+        this.setState({
+            uploadStatus: true
+        })
+    }
+
     render() {
         if(this.state.isLoading){
             return (
@@ -109,8 +116,11 @@ export default class MultipleImageUploadComponent extends Component {
                         <div className="form-group">
                             <input type="file" accept="image/*" className="form-control select_files" name="file" onChange={this.uploadMultipleFiles} multiple />
                         </div>
-                        <button type="submit">Sum</button>
                         <button type="button" disabled={this.state.disabled} className="btn btn-danger btn-block upload_button" onClick={this.uploadFiles}>Next</button>
+                        <button class="ui icon right labeled button goSubmitButton" onClick={this.goSubmitContent}>
+                            <i aria-hidden="true" class="right arrow icon"></i>
+                            Go submitContent
+                        </button>
                     </form >
                 )
             }
