@@ -8,7 +8,7 @@ import QuestionSVG from '-!svg-react-loader!../../assets/images/question.svg'
 import logoPng from '../../assets/images/logo.PNG'
 import mobileMenuPng from '../../assets/images/mobile-menu.png'
 import mobileCloseMenuPng from '../../assets/images/cross.png'
-import { PaperPlaneIcon, StarIcon } from '../../assets/icons'
+import { PaperPlaneIcon, StarIcon, HeartIcon } from '../../assets/icons'
 import './header.less'
 
 const style = {

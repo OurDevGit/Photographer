@@ -9,6 +9,7 @@
 }
 
 .photo-content {
+    position: relative;
     float: left;
     margin-bottom: 30px;
     margin-left: 10px;
@@ -19,6 +20,60 @@
         height: 300px;
         width: auto;
         cursor: pointer;
+    }
+    img:hover{
+        // opacity: 0.5;
+    }
+    .detail_Icon{
+        position: absolute;
+        right: 30px;
+        width: 30px;
+        cursor: pointer;
+        background: black;
+        border-radius: 50%;
+        border: 1px solid white;
+        padding: 5px;
+        opacity: 0;
+    }
+    .detail_Icon:hover{
+        color: skyblue;
+        opacity: 0.5;
+    }
+    .Zoom-icon{
+        top: 40px;
+        color: white;
+    }
+    .Heart-icon{
+        top: 80px;
+    }
+    .Plus-icon{
+        top: 120px;
+        color: white;
+    }
+    .owner_content{
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+        color: blue;
+        text-align: center;
+        width: 100%;
+        background: white;
+        opacity: 0;
+        font-size: 16px;
+        padding: 5px;
+        cursor: pointer;
+    }
+}
+.photo-content:hover{
+    .detail_Icon{
+        opacity: 0.7;
+    }
+    .detail_Icon:hover{
+        color: skyblue;
+        opacity: 0.5;
+    }
+    .owner_content{
+        opacity: 0.7;
     }
 }
 
