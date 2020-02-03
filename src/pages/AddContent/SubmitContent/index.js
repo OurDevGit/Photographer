@@ -510,30 +510,33 @@ handleChangeReleasename = (e, {value}) => {
   }
 
   newReleaseUpload(){
-    this.state.authorization.caption = this.state.releaseName;
-    this.state.authorization.authorizedPhotosld = this.state.selImageIDs;
-    this.state.authorization.authorizationKind = "SUBJECT"
-    this.setState({
-      authorization: this.state.authorization
-    })
-
-    // var authorization = {};
-    // authorization = this.state.authorization;
-    // authorization.files = this.state.releaseFile;
-    // console.log("authorization", authorization)
-    this.uploadAndJoinAuthorization(this.state.authorization);
+    if(this.state.releaseName == ""){
+      alert("Put Release caption")
+    }
+    else if(!this.state.ReleaseTypevalue){
+      alert("select Release Type")
+    }
+    else{
+      this.state.authorization.caption = this.state.releaseName;
+      this.state.authorization.authorizedPhotosld = this.state.selImageIDs;
+      this.state.authorization.authorizationKind = this.state.ReleaseTypevalue;
+      this.setState({
+        authorization: this.state.authorization
+      })
+      this.uploadAndJoinAuthorization(this.state.authorization);
+    }
+    
   }
 
   uploadAndJoinAuthorization(authorization){
     var myHeaders = new Headers({})
-
     if(localStorage.getItem(ACCESS_TOKEN)) {
         myHeaders.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
     }
 
     const formData = new FormData();
     formData.append('caption', authorization.caption);
-    formData.append('authorizationKind', 'Model');
+    formData.append('authorizationKind', 'SUBJECT');
     formData.append('files', this.state.releaseFile);
 
     var requestOptions = {
@@ -547,7 +550,7 @@ handleChangeReleasename = (e, {value}) => {
         console.log(response)
           if(response.ok){
               this.setState({
-                  uploadStatus: true,
+                  NewReleaseModalOpen: false,
                   isLoading: false
               })
           }
@@ -820,8 +823,8 @@ handleChangeReleasename = (e, {value}) => {
                                       <Radio
                                         label='Model release'
                                         name='radioGroup'
-                                        value='model'
-                                        checked={this.state.ReleaseTypevalue === 'model'}
+                                        value='SUBJECT'
+                                        checked={this.state.ReleaseTypevalue === 'SUBJECT'}
                                         onChange={this.handleRadioChange}
                                       />
                                     </Form.Field>
@@ -829,8 +832,8 @@ handleChangeReleasename = (e, {value}) => {
                                       <Radio
                                         label='Property release'
                                         name='radioGroup'
-                                        value='property'
-                                        checked={this.state.ReleaseTypevalue === 'property'}
+                                        value='PROPERTY'
+                                        checked={this.state.ReleaseTypevalue === 'PROPERTY'}
                                         onChange={this.handleRadioChange}
                                       />
                                     </Form.Field>

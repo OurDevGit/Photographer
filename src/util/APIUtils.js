@@ -53,6 +53,53 @@ export function getNumberOfPhotos() {
     });
 }
 
+export function getListAuthorizationForUser() {
+    return request({
+        url: API_BASE_URL + "/authorization_controller/list_authorization_for_user",
+        method: 'POST'
+    });
+}
+
+export function JoinAuthorization(JoinRequest) {
+    return request({
+        url: API_BASE_URL + "/authorization_controller/_join_authorization",
+        method: 'POST',
+        body: JSON.stringify(JoinRequest)
+    });
+}
+
+export function getListPhotoForAuthorizationIDs(authorizationIDs) {
+    return request({
+        url: API_BASE_URL + "/authorization_controller/list_photo_for_authorization_ids",
+        method: 'POST',
+        body: JSON.stringify(authorizationIDs)
+    });
+}
+
+export function getListAuthorizationForPhotoIDs(photoIDs) {
+    return request({
+        url: API_BASE_URL + "/authorization_controller/list_authorization_for_photo_ids",
+        method: 'POST',
+        body: JSON.stringify(photoIDs)
+    });
+}
+
+export function addAuthorizationToPhotoIDs(addRequest) {
+    return request({
+        url: API_BASE_URL + "/authorization_controller/add_authorization_to_photo_ids",
+        method: 'POST',
+        body: JSON.stringify(addRequest)
+    });
+}
+
+export function removeAuthorizationToPhotoIDs(removeRequest) {
+    return request({
+        url: API_BASE_URL + "/authorization_controller/remove_authorization_to_photo_ids",
+        method: 'POST',
+        body: JSON.stringify(removeRequest)
+    });
+}
+
 export function updateMultiplePhoto(updateRequest) {
     return request({
         url: API_BASE_URL + "/photo_submit/updateMultiplePhoto",
