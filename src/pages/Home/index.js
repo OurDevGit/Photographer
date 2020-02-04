@@ -6,6 +6,8 @@ import { ACCESS_TOKEN } from '../../constants';
 import { HomeHeader, SearchBar, PhotoList } from '../../components'
 import Footer from './Footer'
 import CategoryCarousel from  './CategoryCarousel'
+import PhotoDetails from './PhotoDetails'
+import Bucket from './Bucket'
 import './style.less'
 import {notification} from 'antd'
 class Home extends Component {
@@ -15,12 +17,19 @@ class Home extends Component {
       currentUser: null,
       isAuthenticated: false,
       isLoading: false,
-      categories: []
+      categories: [],
+      ImageShow: false,
+      selImage:{},
+      BucketShow: false
     }
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
     this.loadAllCategories = this.loadAllCategories.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
+    this.handleImageClick = this.handleImageClick.bind(this);
+    this.CloseImageModal = this.CloseImageModal.bind(this);
+    this.CloseBucketModal = this.CloseBucketModal.bind(this);
+    this.addToBucket = this.addToBucket.bind(this);
   }
 
   loadCurrentUser() {
@@ -84,7 +93,36 @@ class Home extends Component {
     this.loadCurrentUser();
     this.props.history.push("/");
   }
+
+  handleImageClick(e){
+    console.log("Image", e);
+    this.setState({
+      ImageShow: true,
+      selImage: e
+    })
+  }
+
+  CloseImageModal(flag){
+    this.setState({
+      ImageShow: flag
+    })
+  }
+
+  CloseBucketModal(flag){
+    this.setState({
+      BucketShow: flag
+    })
+  }
+
+  addToBucket(e, flag){
+    this.setState({
+      selImage: e,
+      BucketShow: true
+    })
+  }
+
   render() {
+    console.log("~!!~~!~!~!~!~!", this.state.selImage)
     return (
       <>
         <MetaTags>
@@ -102,7 +140,21 @@ class Home extends Component {
             </Grid.Column>
             <Grid.Column width={16}>              
               <CategoryCarousel categories={this.state.categories} />
-              <PhotoList />
+              <PhotoList 
+                type="home_list" 
+                onClickImage = {this.handleImageClick}
+              />
+              <PhotoDetails 
+                show={this.state.ImageShow}
+                photo = {this.state.selImage}
+                handleClose={this.CloseImageModal}
+                addToBucket = {this.addToBucket}
+              />
+              <Bucket 
+                show={this.state.BucketShow}
+                photo = {this.state.selImage}
+                handleClose={this.CloseBucketModal}
+              />
               <Footer />
             </Grid.Column>
           </Grid.Row>
