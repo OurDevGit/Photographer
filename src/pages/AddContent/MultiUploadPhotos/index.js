@@ -77,6 +77,11 @@ export default class MultipleImageUploadComponent extends Component {
                       uploadStatus: true,
                       isLoading: false
                   })
+              }else{
+                  this.setState({
+                      isLoading: false,
+                  })
+                  console.log("error_resp", response)
               }
           })
           .catch(error => {

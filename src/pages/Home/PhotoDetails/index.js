@@ -36,6 +36,7 @@ class PhotoDetails extends Component {
       tags.forEach((tag, tagIndex) => {
         keywords.push(<button>{tag}</button>)
       });
+      var url = photo.url_fr + ''
       return(
         <Modal open={show} className='PhotoDetailModal'>
           <Modal.Header>
@@ -65,7 +66,7 @@ class PhotoDetails extends Component {
                 This Content is created by <a href=""><b>{photo.owner}</b></a>.
               </p>
               <p>
-                Image# <a href=""><b>{photo.url_fr}</b></a>.
+                Image# <a href=""><b>{url.split('/')[url.split('/').length-1]}</b></a>.
               </p>
               <p>
                 uploaded: <b> June 18, 2018 11:14 AM</b>

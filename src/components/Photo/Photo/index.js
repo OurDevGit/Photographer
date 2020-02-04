@@ -31,20 +31,18 @@ class Photo extends Component {
             this.props.onClick(this.props, this.state.isChecked)
         }else if(this.props.type == 'home_list'){
             this.props.onClick(this.props.photo);
-            console.log("*************************************",this.props.photo)
         }
 
     }
 
     render() {
-        console.log("~~~~~~~~~~", this.props.type)
         const {active, index, photo, type} = this.props;
         return (
             <div className={(this.state.isChecked )? 'photo-content active': 'photo-content'}>
                 <div className="photo-header">
                     {
                         type == 'Submit_operation' ? (
-                            <Checkbox value={this.state.isChecked} className="ddd"  checked={this.state.isChecked}  />  
+                            <Checkbox value={this.state.isChecked} className="ddd" onClick={this.handleCheck}  checked={this.state.isChecked}  />  
                         ) : null
                     }
                     {

@@ -68,6 +68,13 @@ class SubmitContent extends Component {
     this.addFromContainedTags =  this.addFromContainedTags.bind(this)
   }
 
+  componentDidMount() {
+    this.loadCurrentUser();
+    this.loadAllCategories();
+    this.loadAllTags();
+    this.getTotalNumberOfPhotos();
+  }
+
   loadCurrentUser() {
     this.setState({
       isLoading: true
@@ -139,13 +146,6 @@ class SubmitContent extends Component {
     });
   }
 
-  componentDidMount() {
-    this.loadCurrentUser();
-    this.loadAllCategories();
-    this.loadAllTags();
-    this.getTotalNumberOfPhotos();
-  }
-
   handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
     localStorage.removeItem(ACCESS_TOKEN);
 
@@ -195,7 +195,7 @@ class SubmitContent extends Component {
       currentTagValues: this.state.currentTagValues,
       currentContainTags: this.state.currentContainTags
     })
-    console.log(this.state.currentTagValues)
+    this.updatePhotoOptions();
   }
 
   handleMultiSelectChange = (e, { value }) => {
@@ -214,18 +214,17 @@ class SubmitContent extends Component {
       {
         RemoveItem  = RemoveItem.filter(item=> item != value[i]);
       }
-      for(let j=0; j<this.state.currentContainTags.length; j++)
+      for(let j=0; j<this.state.containTags.length; j++)
       {
-        if(RemoveItem[0] == this.state.currentContainTags[j])
+        if(RemoveItem[0] == this.state.containTags[j])
         {
           this.state.currentContainTags.push(RemoveItem);
           this.setState({
             currentContainTags: this.state.currentContainTags
           })
-          console.log(this.state.currentContainTags)
+          j = this.state.containTags.length;
         }
       }
-      
     }
     this.state.currentTagValues = value;
     this.setState({ 
@@ -265,7 +264,6 @@ class SubmitContent extends Component {
     }
 
 // DisplayImageurl when click Image
-
     if(this.state.selImageIDs.length == 1)
     {
       this.setState({
@@ -290,11 +288,12 @@ class SubmitContent extends Component {
         this.state.photoOptions['Category1'] = temp_image.categories ? temp_image.categories[0] : null;
         this.state.photoOptions['Category2'] = temp_image.categories ? temp_image.categories[1] : null;
         this.state.currentTagValues = temp_image.tags;
-        console.log("$$$$$$$$$$$$$$", this.state.currentTagValues)
         this.setState({
           photoOptions: this.state.photoOptions,
-          currentTagValues: this.state.currentTagValues
+          currentTagValues: this.state.currentTagValues,
         })
+        console.log("@!@!@!@!@!@!", this.state.photoOptions);
+        console.log("#$#$#$#####$#", this.state.currentTagValues)
       }else{
         var tag_flag = [];
         var category_flag1 = [];
@@ -425,37 +424,6 @@ handleChangeReleasename = (e, {value}) => {
 // when click submit button
 
   handleSubmit(){
-
-    // if(!this.state.photoOptions['Description']){
-    //   this.state.errorMessage['Description'] = "Please write a description"
-    //   this.setState({
-    //     errorMessage: this.state.errorMessage
-    //   })
-    // }
-    // if(!this.state.photoOptions['Category1']){
-    //   this.state.errorMessage['Category1'] = "Please select a category"
-    //   this.setState({
-    //     errorMessage: this.state.errorMessage
-    //   })
-    // }
-    // if(this.state.currentTagValues.length <7)
-    // {
-    //   this.state.errorMessage['tags'] = "Please add at least 7 keywords"
-    //   this.setState({
-    //     errorMessage: this.state.errorMessage
-    //   })
-    // }
-    // if(this.state.photoOptions['Description'] && this.state.photoOptions['Description'] && this.state.currentTagValues.length > 6){
-    //   const updateRequest = {"photos": []};
-    //   const temp_options = this.state.selImage;
-    //   temp_options.description = this.state.photoOptions['Description'];
-    //   temp_options.categories = [];
-    //   temp_options.categories.push(this.state.photoOptions['Category1']);
-    //   // temp_options.categories.push(this.state.photoOptions['Category2']);
-    //   temp_options.tags = this.state.currentTagValues;
-    //   this.setState({selImage: temp_options})
-    //   updateRequest.photos.push(temp_options);
-      // }
     submitMultiplePhoto(this.state.selImageIDs)
         .then(response => {
           console.log("ddd",response);
@@ -472,8 +440,6 @@ handleChangeReleasename = (e, {value}) => {
         this.setState({
           activeMenuItem : "SUBMITTED"
         })
-    console.log("asdfsadf", this.state.selImageIDs)
-
   }
 
 // update photo options
@@ -483,6 +449,7 @@ handleChangeReleasename = (e, {value}) => {
         common_tag: this.state.currentTagValues
       })
       const updateRequest = {"photos": []};
+      console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",this.state.common_tag)
       for(let i=0; i<this.state.selImageIDs.length; i++)
       {
 // update categories
@@ -530,12 +497,20 @@ handleChangeReleasename = (e, {value}) => {
             if(!temp_options.tags){
               temp_options.tags =[];
             }
-            console.log(this.state.currentTagValues)
+            if(!this.state.currentTagValues)
+            {
+              this.state.currentTagValues = [];
+            }
+            if(this.state.selImageIDs.length == 1)
+            {
+              temp_options.tags = [];
+            }
+            console.log("opopopopop",temp_options.tags)
             for(let index=0; index<this.state.currentTagValues.length; index++)
             {
               temp_options.tags.push(this.state.currentTagValues[index]);
             }
-            
+            console.log(this.state.currentTagValues)
           }
         }
         updateRequest.photos.push(temp_options);
@@ -543,6 +518,7 @@ handleChangeReleasename = (e, {value}) => {
       }
 
       this.setState({selImage: this.state.selImage})
+
       updateMultiplePhoto(updateRequest)
       .then(response => {
         console.log(response);
@@ -631,9 +607,7 @@ handleChangeReleasename = (e, {value}) => {
 
   render() {
     const { activeIndex, activeItem } = this.state
-    console.log("%%%%%%%%%%%%%%%%%%%%%",this.state.releaseName)
     const keywords = [];
-    const tags = ["people", "paper", "paper", "paper", "paper", "paper", "paper", "paper", "paper", "paper", "paper", "paper", "paper"];
     this.state.currentContainTags.forEach((tag, tagIndex) => {
       keywords.push(
         <Button 
