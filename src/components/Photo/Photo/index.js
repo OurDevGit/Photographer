@@ -16,6 +16,7 @@ class Photo extends Component {
             isChecked: false
         }
         this.handleCheck = this.handleCheck.bind(this);
+        this.addToBucket =  this.addToBucket.bind(this);
     }
 
     onClickImage = () => {
@@ -32,7 +33,10 @@ class Photo extends Component {
         }else if(this.props.type == 'home_list'){
             this.props.onClick(this.props.photo);
         }
+    }
 
+    addToBucket(){
+        this.props.addToBucket(this.props.photo, true)
     }
 
     render() {
@@ -50,7 +54,7 @@ class Photo extends Component {
                             <div>
                                 <a target='blank' href={photo.url_fr}><Zoom_Icon className="detail_Icon Zoom-icon" /></a>
                                 <Heart_Icon className="detail_Icon Heart-icon" />
-                                <Plus_Icon className="detail_Icon Plus-icon" />   
+                                <a onClick={this.addToBucket}><Plus_Icon className="detail_Icon Plus-icon" /></a>
                                 <p className="owner_content">{photo.owner}</p>    
                             </div>    
                         ) : null

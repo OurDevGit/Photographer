@@ -18,9 +18,9 @@ export const PASSWORD_MIN_LENGTH = 6;
 export const PASSWORD_MAX_LENGTH = 20;
 
 export const releaseOptions = [ 
-    { key: 'all', value: 'Allreleases', text: 'All releases' },
-    { key: 'model', value: 'Modelreleases', text: 'Model releases' },
-    { key: 'property', value: 'Propertyreleases', text: 'Property releases' },
+    { key: 'all', value: 'all', text: 'All releases' },
+    { key: 'model', value: 'SUBJECT', text: 'Model releases' },
+    { key: 'property', value: 'PROPERTY', text: 'Property releases' },
   ];
 export  const sortOptions = [
     { key: 'oldest', value: 'Oldest', text: 'Oldest' },

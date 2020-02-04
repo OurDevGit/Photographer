@@ -1,21 +1,12 @@
 import React, { Component } from 'react'
-import {
-    Button,
-    Checkbox,
-    Grid,
-    Header,
-    Icon,
-    Image,
-    Menu,
-    Segment,
-    Sidebar,
-  } from 'semantic-ui-react'
+import { Grid } from 'semantic-ui-react'
 import MetaTags from 'react-meta-tags'
 import { getCurrentUser, getAllCategories } from '../../util/APIUtils';
 import { ACCESS_TOKEN } from '../../constants';
 import { HomeHeader, SearchBar, PhotoList } from '../../components'
 import './style.less'
 import VerticalSidebar from './VerticalSidebar'
+import CategoriesAndTags from './CategoriesAndTags'
 import Users from './Users'
 import {notification} from 'antd'
 class Admin extends Component {
@@ -127,9 +118,13 @@ class Admin extends Component {
                 </Grid.Column>
                 <Grid.Column width='13'>
                     <div className='admin_content'>
+                    <CategoriesAndTags 
+                      visible = {this.state.visible == 'CategoriesAndTags'}
+                    />
                     <Users 
                         visible = {this.state.visible == 'Users'}
                     />
+                    
                     </div>
                 </Grid.Column>
 

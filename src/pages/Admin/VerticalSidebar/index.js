@@ -60,6 +60,10 @@ export default class VerticalSidebar extends Component{
                 <Icon name='id card' />
                 Authorizations
                 </Menu.Item>
+                <Menu.Item as='a' value='CategoriesAndTags' className={this.state.activeMentItem == 'CategoriesAndTags' ? 'active' : ''} onClick={this.handleMenuClick}>
+                <Icon name='grid layout' />
+                Categories and Tags
+                </Menu.Item>
                 <Menu.Item as='a' value='Users' className={this.state.activeMentItem == 'Users' ? 'active' : ''} onClick={this.handleMenuClick}>
                 <Icon name='users' />
                 Users

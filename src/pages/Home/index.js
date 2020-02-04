@@ -143,6 +143,7 @@ class Home extends Component {
               <PhotoList 
                 type="home_list" 
                 onClickImage = {this.handleImageClick}
+                addToBucket = {this.addToBucket}
               />
               <PhotoDetails 
                 show={this.state.ImageShow}

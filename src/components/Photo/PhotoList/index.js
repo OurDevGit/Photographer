@@ -204,12 +204,12 @@ class PhotoList extends Component {
                 active = {this.props.active}
                 total = {this.state.photo_list.length}
                 type = {this.props.type}
+                addToBucket = {this.props.addToBucket}
                 // currentVote={this.state.currentVotes[photoIndex]}
                 // handleVoteChange={(event) => this.handleVoteChange(event, photoIndex)}
                 // handleVoteSubmit={(event) => this.handleVoteSubmit(event, photoIndex)} 
                 />)
         });
-        console.log("ddd")
         return (
             <div className="photos-container">
                 {photoViews}

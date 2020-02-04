@@ -66,6 +66,8 @@ class SubmitContent extends Component {
     this.uploadAndJoinAuthorization =  this.uploadAndJoinAuthorization.bind(this)
     this.onCloseModal = this.onCloseModal.bind(this);
     this.addFromContainedTags =  this.addFromContainedTags.bind(this)
+    this.handleReleaseTypeChange = this.handleReleaseTypeChange.bind(this)
+    this.handleSearchReleaseKeyChange = this.handleSearchReleaseKeyChange.bind(this)
   }
 
   componentDidMount() {
@@ -553,10 +555,11 @@ handleChangeReleasename = (e, {value}) => {
     if(localStorage.getItem(ACCESS_TOKEN)) {
         myHeaders.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
     }
-
+    console.log("caption", authorization.caption)
+    console.log("kind", authorization.authorizationKind)
     const formData = new FormData();
     formData.append('caption', authorization.caption);
-    formData.append('authorizationKind', 'SUBJECT');
+    formData.append('authorizationKind', authorization.authorizationKind);
     formData.append('files', this.state.releaseFile);
 
     var requestOptions = {
@@ -583,6 +586,17 @@ handleChangeReleasename = (e, {value}) => {
         });    
   }
 
+  handleReleaseTypeChange(e, {name, value}){
+    this.setState({
+      ReleaseType : value
+    })
+  }
+
+  handleSearchReleaseKeyChange(e, {value}){
+    this.setState({
+      searchReleaseKey: value
+    })
+  }
 
   onChangeFIle(e){
     this.setState({
@@ -802,7 +816,7 @@ handleChangeReleasename = (e, {value}) => {
                                   <div class="column">
                                     <Form.Field>
                                     <div class="label">Release Type</div>
-                                      <Select fluid placeholder='Release Type' options={releaseOptions} name="release"/>
+                                      <Select fluid placeholder='Release Type' options={releaseOptions} name="release" value={this.state.ReleaseType} onChange={this.handleReleaseTypeChange}/>
                                     </Form.Field>
                                   </div>
                                   <div class="column">
@@ -813,14 +827,17 @@ handleChangeReleasename = (e, {value}) => {
                                   </div>
                                   <div class="column">
                                     <Form.Field>
-                                      <Input fluid loading icon='user' placeholder='Search...' />                                 
+                                      <Input fluid loading icon='user' placeholder='Search...' name="search" value={this.state.searchReleaseKey} onChange={this.handleSearchReleaseKeyChange}/>                                 
                                     </Form.Field>
                                   </div>
                                   {/* <div class="releases column">
                                     You don't have any active releases
                                   </div> */}
                                   <div class="column">
-                                    <ListComponent />
+                                    <ListComponent 
+                                      type = {this.state.ReleaseType}
+                                      searchKey = {this.state.searchReleaseKey}
+                                    />
                                   </div>
                                   <div className="column">
                                     <Button className="" fluid negative>Done</Button>
