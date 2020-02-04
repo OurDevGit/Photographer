@@ -59,7 +59,7 @@ export default class MultipleImageUploadComponent extends Component {
         console.log("headers",myHeaders)
 
         const formData = new FormData();
-        formData.append('collection', 'Prova_123');
+        formData.append('collection', 'Prova_2345');
         for (let i = 0; i < this.state.files.length; i++) {
             formData.append('files', this.state.files[i]);
             console.log("afdfsadfsdafsadfsdf",this.state.files[i]);

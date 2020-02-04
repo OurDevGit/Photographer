@@ -26,6 +26,7 @@ class SubmitContent extends Component {
       isLoading: true,
       categories: [],
       tags: [],
+      containTags: [],
       activeIndex: 1,
       showOptions: ["unvisible", "visible"],
       selImage: {},
@@ -36,6 +37,7 @@ class SubmitContent extends Component {
       activeMenuItem: "TO_BE_SUBMITTED",
       total: {},
       currentTagValues: [],
+      currentContainTags: [],
       loginStatus: true,
       errorMessage:[],
       // common_tag: [],
@@ -63,6 +65,7 @@ class SubmitContent extends Component {
     this.newReleaseUpload = this.newReleaseUpload.bind(this)
     this.uploadAndJoinAuthorization =  this.uploadAndJoinAuthorization.bind(this)
     this.onCloseModal = this.onCloseModal.bind(this);
+    this.addFromContainedTags =  this.addFromContainedTags.bind(this)
   }
 
   loadCurrentUser() {
@@ -182,11 +185,47 @@ class SubmitContent extends Component {
     }))
   }
 
+  addFromContainedTags(e, {content}){
+    if(this.state.currentTagValues == null){
+      this.state.currentTagValues = [];
+    }
+    this.state.currentTagValues.push(content);
+    this.state.currentContainTags = this.state.currentContainTags.filter(item=> item != content);
+    this.setState({
+      currentTagValues: this.state.currentTagValues,
+      currentContainTags: this.state.currentContainTags
+    })
+    console.log(this.state.currentTagValues)
+  }
+
   handleMultiSelectChange = (e, { value }) => {
     if(value.length < 7){
       // this.state.errorMessage['tags'] = "Please add at least 7 keywords"
     }else{
       this.state.errorMessage['tags'] = "";
+    }
+    if(this.state.currentTagValues ==  null){
+      this.state.currentTagValues = [];
+    }
+    if(this.state.currentTagValues.length > value.length)
+    {
+      var RemoveItem = this.state.currentTagValues;
+      for(let i=0; i<value.length; i++)
+      {
+        RemoveItem  = RemoveItem.filter(item=> item != value[i]);
+      }
+      for(let j=0; j<this.state.currentContainTags.length; j++)
+      {
+        if(RemoveItem[0] == this.state.currentContainTags[j])
+        {
+          this.state.currentContainTags.push(RemoveItem);
+          this.setState({
+            currentContainTags: this.state.currentContainTags
+          })
+          console.log(this.state.currentContainTags)
+        }
+      }
+      
     }
     this.state.currentTagValues = value;
     this.setState({ 
@@ -199,6 +238,11 @@ class SubmitContent extends Component {
   //Multiple Image click event
 
   handleImageClick(e, flag){
+    console.log(e)
+    this.setState({
+      containTags: e.photo.containedTags,
+      currentContainTags: e.photo.containedTags
+    })
     if(!this.state.selImage[e.photo.id]){
       this.state.selImage[e.photo.id] = e.photo
       this.setState({
@@ -588,6 +632,19 @@ handleChangeReleasename = (e, {value}) => {
   render() {
     const { activeIndex, activeItem } = this.state
     console.log("%%%%%%%%%%%%%%%%%%%%%",this.state.releaseName)
+    const keywords = [];
+    const tags = ["people", "paper", "paper", "paper", "paper", "paper", "paper", "paper", "paper", "paper", "paper", "paper", "paper"];
+    this.state.currentContainTags.forEach((tag, tagIndex) => {
+      keywords.push(
+        <Button 
+          type='button' 
+          size='mini' 
+          content={tag} 
+          icon='plus' 
+          labelPosition='right' 
+          onClick={this.addFromContainedTags}
+        />)
+    });
     if(this.state.isLoading){
       return(
           <LoadingIndicator /> 
@@ -880,24 +937,31 @@ handleChangeReleasename = (e, {value}) => {
                   </Grid.Column>
                   <Grid.Column className="image_option" width={3}>
                   <Form.Field>
-                      <div class="label">Keywords</div>
-                      
+                    <div class="label">Keywords</div>
+                    <div>
+                      <Dropdown
+                        options={this.state.tags}
+                        placeholder='Choose Keywords'
+                        search
+                        selection
+                        fluid
+                        multiple
+                        allowAdditions
+                        value={this.state.currentTagValues}
+                        onAddItem={this.handleMultiSelectAddition}
+                        onChange={this.handleMultiSelectChange}
+                      />
+                      <div class='column'>
+                        <div class='label error'>{this.state.errorMessage['tags']}</div>
+                      </div>
+                    </div>
                   </Form.Field>
-                  <Dropdown
-                    options={this.state.tags}
-                    placeholder='Choose Keywords'
-                    search
-                    selection
-                    fluid
-                    multiple
-                    allowAdditions
-                    value={this.state.currentTagValues}
-                    onAddItem={this.handleMultiSelectAddition}
-                    onChange={this.handleMultiSelectChange}
-                  />
-                  <div class='column'>
-                    <div class='label error'>{this.state.errorMessage['tags']}</div>
-                  </div>
+                  <Form.Field>
+                    <div class="label">Keyword Suggestions</div>
+                    <div className='suggestKeywords'>
+                      {keywords}
+                    </div>
+                  </Form.Field>
                   </Grid.Column>
                   </Form>
                 </Grid.Row>
