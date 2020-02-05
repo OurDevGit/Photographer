@@ -50,9 +50,9 @@ class HomeHeader extends React.Component {
         <StarIcon className="star-icon" />
         AddContent
       </Menu.Item>, 
-      <Menu.Item as={NavLink} to='/dd'>
+      <Menu.Item as={NavLink} to='/submitContent'>
         <PaperPlaneIcon className="paper-plane-icon" />
-        Photos
+        My Photos
       </Menu.Item>,
       <Menu.Item >
         <Avatar fullname={this.props.currentUser.name} status="online" />

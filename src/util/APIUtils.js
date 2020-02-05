@@ -11,6 +11,7 @@ const request = (options) => {
     console.log("OPTIONSzzz",localStorage.getItem(ACCESS_TOKEN))
     const defaults = {headers: headers};
     options = Object.assign({}, defaults, options);
+    console.log(options)
     return fetch(options.url, options)
     .then(response => 
         response.json().then(json => {
@@ -19,6 +20,25 @@ const request = (options) => {
             }
             return json;
         })
+    );
+};
+
+const request1 = (options) => {
+    const headers = new Headers({
+        'Content-Type': 'application/json',
+    })
+    
+    if(localStorage.getItem(ACCESS_TOKEN)) {
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
+    }
+    console.log("OPTIONSzzz",localStorage.getItem(ACCESS_TOKEN))
+    const defaults = {headers: headers};
+    options = Object.assign({}, defaults, options);
+    console.log(options)
+    return fetch(options.url, options)
+    .then(response => {
+        return response
+    }
     );
 };
 
@@ -85,7 +105,7 @@ export function getListAuthorizationForPhotoIDs(photoIDs) {
 }
 
 export function addAuthorizationToPhotoIDs(addRequest) {
-    return request({
+    return request1({
         url: API_BASE_URL + "/authorization_controller/add_authorization_to_photo_ids",
         method: 'POST',
         body: JSON.stringify(addRequest)
@@ -93,7 +113,7 @@ export function addAuthorizationToPhotoIDs(addRequest) {
 }
 
 export function removeAuthorizationToPhotoIDs(removeRequest) {
-    return request({
+    return request1({
         url: API_BASE_URL + "/authorization_controller/remove_authorization_to_photo_ids",
         method: 'POST',
         body: JSON.stringify(removeRequest)

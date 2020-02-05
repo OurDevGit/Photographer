@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Dropdown } from 'semantic-ui-react'
+import { Dropdown, Input, Button } from 'semantic-ui-react'
 import { getCurrentUser, getAllCategories, getAllTags, getNumberOfPhotos ,updateMultiplePhoto, submitMultiplePhoto} from '../../../util/APIUtils';
 import './style.less'
 class CategoriesAndTags extends Component 
@@ -64,25 +64,41 @@ class CategoriesAndTags extends Component
 
     render(){
         const {visible} =  this.props;
-        console.log("fasfsadfsdafsdf", this.state.categories)
+        console.log("fasfsadfsdafsdf", this.state.tags)
+        const keywords = [];
+        this.state.tags.forEach((tag, tagIndex) => {
+          keywords.push(<button className='value'>{tag.value}</button>)
+        });
         return(
-            <div className={visible ? 'visible': 'disable'}>
-                <div className='existingBuckets'>
-                    <p>Existing Catetgories:</p>
+            <div className={visible ? 'visible': 'disable'} id='CategoryAndTag'>
+              <div className='column Category'>
+                <div className='AddCategory'>
+                    <h3>Add New Category : 
+                    <Input type='text' placeholder='New Category...' action>
+                      <input />
+                      <Button type='button'>Add</Button>
+                    </Input>
+                    </h3>
+                </div>
+                <div className='existingCategories'>
+                    <h3>Existing Catetgories:</h3>
                     {/* {keywords} */}
                 </div>
-                <div className='AddBucket'>
-                    <p>Add New Category</p>
+              </div>
+              <div className='column Tag'>
+                <div className='AddTag'>
+                  <h3>Add New Tag : 
+                    <Input type='text' placeholder='New Tag...' action>
+                      <input />
+                      <Button type='button'>Add</Button>
+                    </Input>
+                  </h3>
                 </div>
-
-                <div className='existingBuckets'>
-                    <p>Existing Tags:</p>
-                    {/* {keywords} */}
+                <div className='existingTags'>
+                    <h3>Existing Tags:</h3>
+                    {keywords}
                 </div>
-                <div className='AddBucket'>
-                    <p>Add New Tag</p>
-                    
-                </div>
+              </div>
             </div>
         )
     }

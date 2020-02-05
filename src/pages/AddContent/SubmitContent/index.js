@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Grid, GridColumn , Menu, Dropdown, Icon, Message, Form, Button, TextArea, Select , Accordion, Checkbox, Popup, Header, Modal, Input, Radio} from 'semantic-ui-react'
 import { NavLink, Redirect } from 'react-router-dom'
 import MetaTags from 'react-meta-tags'
-import { getCurrentUser, getAllCategories, getAllTags, getNumberOfPhotos ,updateMultiplePhoto, submitMultiplePhoto} from '../../../util/APIUtils';
+import { getCurrentUser, getAllCategories, getAllTags, getNumberOfPhotos ,updateMultiplePhoto, submitMultiplePhoto, addAuthorizationToPhotoIDs, removeAuthorizationToPhotoIDs} from '../../../util/APIUtils';
 import { API_BASE_URL, PHOTO_LIST_SIZE, ACCESS_TOKEN, releaseOptions, sortOptions, age, gender, ethnicity } from '../../../constants';
 import { HomeHeader, PhotoList, AvatarImage, MultiSelect, ListComponent } from '../../../components'
 import './style.less'
@@ -46,7 +46,9 @@ class SubmitContent extends Component {
       NewReleaseModalOpen: false,
       authorization:{},
       releaseFile:{},
-      releaseName:""
+      releaseName:"",
+      selRelease: [],
+      ReleaseScore: []
     }
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -68,6 +70,8 @@ class SubmitContent extends Component {
     this.addFromContainedTags =  this.addFromContainedTags.bind(this)
     this.handleReleaseTypeChange = this.handleReleaseTypeChange.bind(this)
     this.handleSearchReleaseKeyChange = this.handleSearchReleaseKeyChange.bind(this)
+    this.getCommonRelease =  this.getCommonRelease.bind(this)
+    this.handleClickAttach = this.handleClickAttach.bind(this)
   }
 
   componentDidMount() {
@@ -236,6 +240,82 @@ class SubmitContent extends Component {
     this.updatePhotoOptions();
   }
 
+  handleClickAttach(name, value){
+    console.log(name, value)
+    const Request = {
+      authorizationId: value + '',
+      authorizedPhotos: this.state.selImageIDs
+    };
+    console.log(Request)
+    if(name == 'attachAll' || name == 'attach')
+    {
+      addAuthorizationToPhotoIDs(Request)
+      .then(response => {
+        console.log("dddd",response) 
+          this.state.ReleaseScore[value] = 1;
+          this.setState({
+            ReleaseScore: this.state.ReleaseScore
+          })
+      }).catch(error => {
+          console.log("error", error)
+      });
+    }else if(name == 'removeAll' || name == 'attached'){
+      removeAuthorizationToPhotoIDs(Request)
+      .then(response => {
+        console.log(response)
+        if(response.ok)
+        {
+          this.state.ReleaseScore[value] = null;
+          this.setState({
+            ReleaseScore: this.state.ReleaseScore
+          })
+        }
+      }).catch(error => {
+          console.log("error", error)
+      });
+    }
+  }
+
+  getCommonRelease(images, IDs){
+    var ReleaseScore = [];
+    var ReleaseNameArray = [];
+    if(IDs.length == 1){
+      var authorizations = images[IDs[0]].authorizations;
+        for(let j=0; j<authorizations.length; j++)
+        {
+            ReleaseScore[authorizations[j].id] = 1;
+            ReleaseNameArray[authorizations[j].id] = authorizations[j].caption;
+        }
+    }else{
+      for(let i=0; i<IDs.length; i++)
+      {
+        var authorizations = images[IDs[i]].authorizations;
+        if(authorizations.length == 0){
+          for(let k=0; k<ReleaseScore.length; k++){
+            if(ReleaseScore[k] == i-1)
+            {
+              ReleaseScore[k] = 0;
+            }
+          }
+        }
+        for(let j=0; j<authorizations.length; j++)
+        {
+          if(ReleaseScore[authorizations[j].id] == i-1)
+          {
+            ReleaseScore[authorizations[j].id] = i;
+            ReleaseNameArray[authorizations[j].id] = authorizations[j].caption;
+          }else{
+            ReleaseScore[authorizations[j].id] = 0;
+            ReleaseNameArray[authorizations[j].id] = authorizations[j].caption;
+          }
+        }
+      }
+    }
+    this.setState({
+      ReleaseScore, ReleaseNameArray
+    })
+  }
+
   //Multiple Image click event
 
   handleImageClick(e, flag){
@@ -249,6 +329,7 @@ class SubmitContent extends Component {
       this.setState({
         selImage: this.state.selImage
       })
+      console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", this.state.selImage)
     }
 // flag: check imgae or uncheck image when click Image
     if(flag)
@@ -371,6 +452,7 @@ class SubmitContent extends Component {
           photoOptions: this.state.photoOptions
         })
       }
+      this.getCommonRelease(this.state.selImage, this.state.selImageIDs);
     }else{                  // when there is not images which checked
       this.setState({
         showOptions: ["unvisible", "visible"],
@@ -543,7 +625,7 @@ handleChangeReleasename = (e, {value}) => {
       this.state.authorization.authorizedPhotosld = this.state.selImageIDs;
       this.state.authorization.authorizationKind = this.state.ReleaseTypevalue;
       this.setState({
-        authorization: this.state.authorization
+        authorization: this.state.authorization,
       })
       this.uploadAndJoinAuthorization(this.state.authorization);
     }
@@ -570,7 +652,7 @@ handleChangeReleasename = (e, {value}) => {
       };
       fetch(API_BASE_URL + "/authorization_controller/upload_authorization", requestOptions)
       .then(response => {
-        console.log(response)
+        console.log("afsafsfsd",response.body)
           if(response.ok){
               this.setState({
                   NewReleaseModalOpen: false,
@@ -620,8 +702,24 @@ handleChangeReleasename = (e, {value}) => {
   }
 
   render() {
+    console.log("!@!@!@!@", this.state.ReleaseScore)
+    console.log("++++++++++++++++++++++++++", this.state.ReleaseNameArray)
     const { activeIndex, activeItem } = this.state
     const keywords = [];
+    const commonReleases = [];
+    this.state.ReleaseScore.forEach((Release, ReleaseIndex) => {
+      if(Release > 0){
+        commonReleases.push(
+          <Button
+            className='releaseIcons' 
+            type='button' 
+            size='mini' 
+            content={this.state.ReleaseNameArray[ReleaseIndex]}
+            icon='id card' 
+            labelPosition='left' 
+          />)
+      }
+    });
     this.state.currentContainTags.forEach((tag, tagIndex) => {
       keywords.push(
         <Button 
@@ -808,7 +906,7 @@ handleChangeReleasename = (e, {value}) => {
                       <Form.Field>
                         <div class="Releases left">
                           <h5>Releases
-                            <Modal open={this.state.ReleaseModalOpen} onOpen={this.openReleaseModal} size='tiny' className="Modalcenter" trigger={<Icon name="plus" />}>
+                            <Modal open={this.state.ReleaseModalOpen} onOpen={this.openReleaseModal} size='small' className="Modalcenter" trigger={<Icon name="plus" />}>
                               <Modal.Content image>
                                 <Modal.Description>
                                   <Icon className="ModalClose" name='close' size="large" onClick={this.onCloseModal}/>
@@ -837,6 +935,10 @@ handleChangeReleasename = (e, {value}) => {
                                     <ListComponent 
                                       type = {this.state.ReleaseType}
                                       searchKey = {this.state.searchReleaseKey}
+                                      selImage = {this.state.selImage}
+                                      selImageIDs = {this.state.selImageIDs}
+                                      ReleaseScore = {this.state.ReleaseScore}
+                                      handleClickAttach = {this.handleClickAttach}
                                     />
                                   </div>
                                   <div className="column">
@@ -921,7 +1023,8 @@ handleChangeReleasename = (e, {value}) => {
                             </Modal>
                           </h5>
                           <p>For recognizable people or property.</p>
-                          <a href="#">Download a release form</a>
+                          <a href="#">Download a release form</a><br />
+                          {commonReleases}
                         </div>
                       </Form.Field>
                     </div>
