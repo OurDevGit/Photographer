@@ -17,7 +17,7 @@ class Admin extends Component {
       currentUser: null,
       isAuthenticated: false,
       isLoading: false,
-      visible: 'SUBMITTED'
+      visible: 'list_submitted_photos'
     }
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -120,8 +120,9 @@ class Admin extends Component {
                 <Grid.Column width='13'>
                     <div className='admin_content'>
                     <PhotoContent
-                      visible = {this.state.visible == 'SUBMITTED' || this.state.visible == 'ACCEPTED' || this.state.visible == 'REJECTED' }
+                      visible = {this.state.visible == 'list_submitted_photos' || this.state.visible == 'list_accepted_photos' || this.state.visible == 'list_rejected_photos' }
                       currentUser = {this.state.currentUser}
+                      status = {this.state.visible}
                     />
                     <CategoriesAndTags
                       visible = {this.state.visible == 'CategoriesAndTags'}

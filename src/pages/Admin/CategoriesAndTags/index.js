@@ -84,7 +84,9 @@ class CategoriesAndTags extends Component
                     </h3>
                 </div>
                 <div className='existingCategories'>
-                    <h3>Existing Catetgories:</h3>
+                    <h3>Existing Catetgories:
+                    <Input size='small' icon='search' placeholder='Search...' />
+                    </h3>
                     {categories}
                 </div>
               </div>
@@ -98,7 +100,9 @@ class CategoriesAndTags extends Component
                   </h3>
                 </div>
                 <div className='existingTags'>
-                    <h3>Existing Tags:</h3>
+                    <h3>Existing Tags:
+                    <Input size='small' icon='search' placeholder='Search...' />
+                    </h3>
                     {keywords}
                 </div>
               </div>

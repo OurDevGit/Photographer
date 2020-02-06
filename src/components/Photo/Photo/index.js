@@ -13,13 +13,35 @@ class Photo extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isChecked: false
+            isChecked: false,
         }
         this.handleCheck = this.handleCheck.bind(this);
         this.addToBucket =  this.addToBucket.bind(this);
     }
 
+    componentDidUpdate(prevProps) {
+        console.log(this.props.action, prevProps.action)
+        if(this.props.action != prevProps.action)
+        {
+            if(this.props.active == this.props.index){
+                this.props.onClick(this.props, this.props.index, this.props.total);
+            }
+        }
+        if(this.props.publish != prevProps.publish)
+        {
+            console.log(this.props.active, this.props.total)
+            if(this.props.active + 1  == this.props.index){
+                this.props.onClick(this.props, this.props.active, this.props.total -1);
+            }
+            if(this.props.total ==  this.props.active  + 1 && this.props.index == 0)
+            {
+                this.props.onClick(this.props, this.props.index, this.props.total -1);
+            }
+            
+        }
+    }
     onClickImage = () => {
+
         this.props.onClick(this.props)
     }
 
@@ -32,6 +54,9 @@ class Photo extends Component {
             this.props.onClick(this.props, this.state.isChecked)
         }else if(this.props.type == 'home_list'){
             this.props.onClick(this.props.photo);
+        }else if(this.props.type == 'admin_photolist')
+        {
+            this.props.onClick(this.props, this.props.index, this.props.total);
         }
     }
 
@@ -42,28 +67,27 @@ class Photo extends Component {
     render() {
         const {active, index, photo, type} = this.props;
         return (
-            <div className={(this.state.isChecked )? 'photo-content active': 'photo-content'}>
-                <div className="photo-header">
-                    {
-                        type == 'Submit_operation' ? (
-                            <Checkbox value={this.state.isChecked} className="ddd" onClick={this.handleCheck}  checked={this.state.isChecked}  />  
-                        ) : null
-                    }
-                    {
-                        type == 'home_list' ? (
-                            <div>
-                                <a target='blank' href={photo.url_fr}><Zoom_Icon className="detail_Icon Zoom-icon" /></a>
-                                <Heart_Icon className="detail_Icon Heart-icon" />
-                                <a onClick={this.addToBucket}><Plus_Icon className="detail_Icon Plus-icon" /></a>
-                                <p className="owner_content">{photo.owner}</p>    
-                            </div>    
-                        ) : null
-                    }
-                     
+                <div className={(this.state.isChecked )? 'photo-content active': 'photo-content'}  id={index == active ? 'active' : ''}>
+                    <div className="photo-header">
+                        {
+                            type == 'Submit_operation' ? (
+                                <Checkbox value={this.state.isChecked} className="ddd" onClick={this.handleCheck}  checked={this.state.isChecked}  />  
+                            ) : null
+                        }
+                        {
+                            type == 'home_list' ? (
+                                <div>
+                                    <a target='blank' href={photo.url_fr}><Zoom_Icon className="detail_Icon Zoom-icon" /></a>
+                                    <Heart_Icon className="detail_Icon Heart-icon" />
+                                    <a onClick={this.addToBucket}><Plus_Icon className="detail_Icon Plus-icon" /></a>
+                                    <p className="owner_content">{photo.owner}</p>    
+                                </div>    
+                            ) : null
+                        }
+                        
+                    </div>
+                    <img onClick={this.handleCheck} src={photo.url_fr} id={index}  value={photo} />
                 </div>
-                <img onClick={this.handleCheck} src={photo.url_fr} id={index}  value={photo} />
-            </div>
-
         );
     }
 }

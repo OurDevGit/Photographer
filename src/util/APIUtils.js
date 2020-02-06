@@ -66,6 +66,20 @@ export function getSubmitPhotos() {
     });
 }
 
+export function getAdminPublicationPhotoList(param) {
+    return request({
+        url: API_BASE_URL + "/admin/publication_controller/" + param,
+        method: 'GET'
+    });
+}
+
+export function getRejectingMotives() {
+    return request({
+        url: API_BASE_URL + "/admin/publication_controller/list_rejecting_motives" ,
+        method: 'GET'
+    });
+}
+
 export function getNumberOfPhotos() {
     return request({
         url: API_BASE_URL + "/photo_submit/numberOfPhotosUploaded",
@@ -133,6 +147,22 @@ export function submitMultiplePhoto(submitRequest) {
         url: API_BASE_URL + "/photo_submit/submitMultiplePhoto",
         method: 'POST',
         body: JSON.stringify(submitRequest)
+    });
+}
+
+export function adminAcceptPhoto(Request) {
+    return request1({
+        url: API_BASE_URL + "/admin/publication_controller/accept_and_rate_photo",
+        method: 'POST',
+        body: JSON.stringify(Request)
+    });
+}
+
+export function adminRejectPhoto(Request) {
+    return request1({
+        url: API_BASE_URL + "/admin/publication_controller/reject_Photo",
+        method: 'POST',
+        body: JSON.stringify(Request)
     });
 }
 

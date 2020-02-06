@@ -19,7 +19,7 @@ export default class VerticalSidebar extends Component{
             files: [],
             disabled: true,
             isLoading: false,
-            activeMentItem: 'SUBMITTED'
+            activeMentItem: 'list_submitted_photos'
         }
         this.handleMenuClick = this.handleMenuClick.bind(this)
     }
@@ -44,15 +44,15 @@ export default class VerticalSidebar extends Component{
                 // width='thin'
                 className = 'VerticalSidebar'
             >
-                <Menu.Item as='a' value='SUBMITTED' className={this.state.activeMentItem == 'SUBMITTED' ? 'active' : ''} onClick={this.handleMenuClick}>
+                <Menu.Item as='a' value='list_submitted_photos' className={this.state.activeMentItem == 'list_submitted_photos' ? 'active' : ''} onClick={this.handleMenuClick}>
                 <Icon name='cloud upload' />
                 Submitted Content
                 </Menu.Item>
-                <Menu.Item as='a' value='ACCEPTED' className={this.state.activeMentItem == 'ACCEPTED' ? 'active' : ''} onClick={this.handleMenuClick}>
+                <Menu.Item as='a' value='list_accepted_photos' className={this.state.activeMentItem == 'list_accepted_photos' ? 'active' : ''} onClick={this.handleMenuClick}>
                 <Icon name='check' />
                 Accepted Content
                 </Menu.Item>
-                <Menu.Item as='a' value='REJECTED' className={this.state.activeMentItem == 'REJECTED' ? 'active' : ''} onClick={this.handleMenuClick}>
+                <Menu.Item as='a' value='list_rejected_photos' className={this.state.activeMentItem == 'list_rejected_photos' ? 'active' : ''} onClick={this.handleMenuClick}>
                 <Icon name='exclamation triangle' />
                 Rejected Content
                 </Menu.Item>

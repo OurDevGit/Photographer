@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import { Dropdown, Input, Button, Grid, Modal, List, Checkbox } from 'semantic-ui-react'
-import { getCurrentUser, getAllCategories, getAllTags, getNumberOfPhotos ,updateMultiplePhoto, submitMultiplePhoto} from '../../../util/APIUtils';
+import { Dropdown, Input, Button, Grid, Modal, List, Checkbox, Rating } from 'semantic-ui-react'
+import { getCurrentUser,getRejectingMotives, adminAcceptPhoto, adminRejectPhoto} from '../../../util/APIUtils';
 import { HomeHeader, PhotoList, AvatarImage, MultiSelect, ListComponent } from '../../../components'
 import PanAndZoomImage from '../../../PanAndZoomImage';
 import './style.less'
@@ -14,13 +14,37 @@ class PhotoContent extends Component
           visible: '',
           categories: [],
           tags: [],
+          rating: 0,
+          selMotives:[],
+          action: false,
+          photoActive:null,
+          publish: false
+          // motives:[]
           // photo: {}
         }
         this.loadCurrentUser =  this.loadCurrentUser.bind(this);
         this.handleImageClick =  this.handleImageClick.bind(this);
+        this.handleRate =  this.handleRate.bind(this);
+        this.loadRjectingMotives = this.loadRjectingMotives.bind(this)
+        this.handleMotiveCheck =  this.handleMotiveCheck.bind(this)
+        this.handleAcceptClick =  this.handleAcceptClick.bind(this)
+        this.handleRejectClick =  this.handleRejectClick.bind(this)
+        this.handlePrevPhoto = this.handlePrevPhoto.bind(this)
+        this.handleNextPhoto = this.handleNextPhoto.bind(this)
       }
     componentDidMount(){
       this.loadCurrentUser();
+      this.loadRjectingMotives()
+    }
+
+    componentDidUpdate(prevProps) {
+      if(this.props.status !== prevProps.status)
+      {
+          this.setState({
+            photo: null,
+            photoActive: null,
+          });
+      }
     }
 
     loadCurrentUser() {
@@ -41,18 +65,144 @@ class PhotoContent extends Component
       });
     }
 
-    handleImageClick(e, flag){
-      var zoomImage = [<div className="zoomImage"><PanAndZoomImage src={e.photo.url_fr} /></div>]
+    loadRjectingMotives() {
       this.setState({
-        photo : e.photo,
-        zoomImage
+        isLoading: true
+      });
+      getRejectingMotives()
+      .then(response => {
+        console.log("motives",response)
+        this.setState({
+          motives: response,
+          isLoading: false
+        });
+      }).catch(error => {
+        this.setState({
+          isLoading: false
+        });  
+      });
+    }
+
+    handleImageClick(e, index, total){
+      
+      if(total >0){
+        var zoomImage = [<div className="zoomImage"><PanAndZoomImage src={e.photo.url_fr} /></div>]
+        this.setState({
+          photo : e.photo,
+          photoActive: index,
+          rating: e.photo.rating,
+          total: total,
+          zoomImage
+        })
+      }else{
+        this.setState({
+          photo: null
+        })
+      }
+     
+    }
+
+    handleRate(e, {rating}){
+      this.setState({
+        rating: rating
       })
     }
 
+    handleMotiveCheck(e,{label, checked, value}){
+      console.log("check", value)
+      if(checked)
+      {
+        this.state.selMotives.push(value);
+      }else{
+        this.state.selMotives = this.state.selMotives.filter(item=> item != value);
+      }
+      this.setState({
+        selMotives: this.state.selMotives
+      })
+    }
+
+    handleNextPhoto(){
+      this.setState({
+        photoActive: this.state.photoActive + 1,
+        action: !this.state.action
+      })
+    }
+
+    handlePrevPhoto(){
+      this.setState({
+        photoActive: this.state.photoActive - 1,
+        action: !this.state.action
+      })
+    }
+    handleAcceptClick(){
+      
+      var acceptRequest = {
+              "photoToManage": this.state.photo.id,
+              "rating": this.state.rating
+          }
+
+      adminAcceptPhoto(acceptRequest)
+      .then(response => {
+        this.setState({
+          publish: !this.state.publish,
+        })
+      }).catch(error => {
+          console.log("error", error)
+      });
+
+    }
+
+    handleRejectClick(){
+      if(this.state.selMotives.length == 0){
+        alert("select some rejecting motives")
+      }else{
+        var rejectRequest = {
+          "photoToManage": this.state.photo.id,
+          "motivesForRejectingIds":this.state.selMotives,
+          "rating": this.state.rating
+        }
+        adminRejectPhoto(rejectRequest)
+        .then(response => {
+          this.setState({
+            publish: !this.state.publish,
+          })
+        }).catch(error => {
+            console.log("error", error)
+        });
+      }
+
+
+    }
+
     render(){
+      console.log("total", this.state.total)
         const {visible} =  this.props;
         const keywords = [];
         const releases = [];
+        const list_motives = [];
+        const buttonGroup = [];
+        if(this.state.motives)
+        {
+          this.state.motives.forEach((motive, motiveIndex) => {
+            list_motives.push(
+              <List.Item>
+                <Checkbox label={motive.value} value={motive.id} onChange={this.handleMotiveCheck}/>
+              </List.Item>
+            )
+          });
+        }
+
+        if(this.state.status == 'list_submitted_photos')
+        {
+          buttonGroup = [
+            <Button.Group>
+              <Button positive onClick={this.handleAcceptClick}>Accept</Button>
+              <Button.Or />
+              <Button negative onClick={this.handleRejectClick}>Reject</Button>
+            </Button.Group>
+          ]
+        }
+
         if(this.state.photo)
         {
           console.log(this.state.photo.authorizations)
@@ -95,6 +245,8 @@ class PhotoContent extends Component
               )
           });
         }
+
+        console.log("**********************",this.props.status)
       
         return(
             <div className={visible ? 'visible': 'disable'} id='PhotoContent'>
@@ -107,8 +259,11 @@ class PhotoContent extends Component
                           <PhotoList 
                             onClickImage={this.handleImageClick} 
                             username ={this.state.currentUser.username} 
-                            type="Submit_operation" 
-                            status="TO_BE_SUBMITTED"
+                            type="admin_photolist" 
+                            status= {this.props.status}
+                            active= {this.state.photoActive}
+                            action= {this.state.action}
+                            publish = {this.state.publish}
                           />
                         </div>
                       : null
@@ -118,7 +273,7 @@ class PhotoContent extends Component
                     {
                       this.state.photo ?
                         <Grid verticalAlign='middle'>
-                          <Grid.Row className='GridRow'>
+                          <Grid.Row className=''>
                             <Grid.Column width='10'>
                               {/* <PanAndZoomImage
                                 src={url}
@@ -155,24 +310,24 @@ class PhotoContent extends Component
                               </div>
                             </Grid.Column>
                           </Grid.Row>
-                          <Grid.Row className='GirdRow'>
+                          <Grid.Row className='GridRow'>
                             <Grid.Column  width='5'>
                               <List className='rejectingMotivesList'>
-                                <List.Item><Checkbox label='Make my profile visible' /></List.Item>
-                                <List.Item><Checkbox label='Make my profile visible' /></List.Item>
-                                <List.Item><Checkbox label='Make my profile visible' /></List.Item>
+                                {list_motives}
                               </List>
                             </Grid.Column>
                             <Grid.Column className='actionButtonGroup buttonGroup' width='5'>
+                            Rating:<Rating maxRating={10} rating={this.state.rating} icon='star' size='tiny' onRate={this.handleRate} /><br /><br />
                               <Button.Group>
-                                <Button positive>Accept</Button>
+                                <Button positive onClick={this.handleAcceptClick}>Accept</Button>
                                 <Button.Or />
-                                <Button negative>Reject</Button>
+                                <Button negative onClick={this.handleRejectClick}>Reject</Button>
                               </Button.Group>
+                              {buttonGroup}
                             </Grid.Column>
                             <Grid.Column className='next_prevButtonGroup buttonGroup' width='6'>
-                                <Button content='Prev' icon='left arrow' labelPosition='left' />
-                                <Button content='Next' icon='right arrow' labelPosition='right' />
+                                <Button content='Prev' icon='left arrow' labelPosition='left' onClick={this.handlePrevPhoto} disabled={this.state.photoActive == 0}/>
+                                <Button content='Next' icon='right arrow' labelPosition='right' onClick={this.handleNextPhoto} disabled={this.state.total == this.state.photoActive + 1}/>
                             </Grid.Column>
                           </Grid.Row>
                         </Grid>

@@ -572,6 +572,7 @@ handleChangeReleasename = (e, {value}) => {
 
 //update tags
         else if(name == 'Tag'){
+          console.log("tag^^^^^^^^^^^^^^^^^^^^^^^^^^^")
           var temp_flags =[];
           var tem_tag = this.state.common_tag;
           if(!tem_tag){

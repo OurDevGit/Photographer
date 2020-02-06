@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getAllPhotos, getUserCreatedPhotos, getUserVotedPhotos, getPhotoLists, getSubmitPhotos } from '../../../util/APIUtils';
+import { getAllPhotos, getUserCreatedPhotos, getUserVotedPhotos, getPhotoLists, getSubmitPhotos, getAdminPublicationPhotoList } from '../../../util/APIUtils';
 import Photo from '../Photo';
 import { castVote } from '../../../util/APIUtils';
 import LoadingIndicator  from '../../../common/LoadingIndicator';
@@ -13,6 +13,7 @@ const photos = [
         
     }
 ];
+var action
 class PhotoList extends Component {
     constructor(props) {
         super(props);
@@ -40,6 +41,9 @@ class PhotoList extends Component {
                 promise = getUserVotedPhotos(this.props.username, page, size);
             } else if(this.props.type == 'Submit_operation'){
                 promise = getSubmitPhotos()
+            } else if(this.props.type == 'admin_photolist'){
+                promise = getAdminPublicationPhotoList(this.props.status)
+                console.log("################", this.props.status)
             }
         } else {
             promise = getPhotoLists(page, size);
@@ -76,9 +80,26 @@ class PhotoList extends Component {
                     isLoading: false
                 })
             });  
-        }else{
+        }else if(this.props.type == 'admin_photolist'){
+            promise
+            .then(response => {
+                console.log("@@@@@@@@@@@@", response)
+                this.setState({
+                    photos: response,
+                    photo_list: response,
+                    isLoading: false
+                })
+            })
+            .catch(error => {
+                this.setState({
+                    isLoading: false
+                })
+            });  
+        }
+        else{
             promise            
             .then(response => {
+                
                 const photos = this.state.photos.slice();
                 const currentVotes = this.state.currentVotes.slice();
                 this.setState({
@@ -108,6 +129,7 @@ class PhotoList extends Component {
     }
 
     componentDidUpdate(prevProps) {
+        // console.log(this.props.publish, prevProps.publish)
         if(this.props.isAuthenticated !== prevProps.isAuthenticated) {
             // Reset State
             this.setState({
@@ -138,6 +160,16 @@ class PhotoList extends Component {
             this.loadPhotoList();
             console.log("refresh",this.props.username);
             console.log("afsadfs",prevProps.status);
+            
+        }
+        if(this.props.publish != prevProps.publish)
+        {   
+            console.log("1321321")
+            this.state.photo_list.splice(this.props.active,1)
+            
+            this.setState({
+                photo_list: this.state.photo_list
+            })
             
         }
     }
@@ -195,16 +227,19 @@ class PhotoList extends Component {
     }
 
     render() {
+        console.log("!@!@!@!@@!!@!@!@!@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         const photoViews = [];
         this.state.photo_list.forEach((photo, photoIndex) => {
             photoViews.push(<Photo
-                index={photo.id}
+                index={photoIndex}
                 photo={photo}
                 onClick = {this.props.onClickImage}
                 active = {this.props.active}
                 total = {this.state.photo_list.length}
                 type = {this.props.type}
                 addToBucket = {this.props.addToBucket}
+                action = {this.props.action}
+                publish = {this.props.publish}
                 // currentVote={this.state.currentVotes[photoIndex]}
                 // handleVoteChange={(event) => this.handleVoteChange(event, photoIndex)}
                 // handleVoteSubmit={(event) => this.handleVoteSubmit(event, photoIndex)} 
