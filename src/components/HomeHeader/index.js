@@ -43,27 +43,76 @@ class HomeHeader extends React.Component {
   render() {
     console.log("user",this.props.currentUser)
     const { mobileMenuOpen } = this.state
+    const {currentUser} = this.props
     let menuItems;
-    if(this.props.currentUser) {
-      menuItems = [
-        <Menu.Item as={NavLink} to="/addContent">
-        <StarIcon className="star-icon" />
-        AddContent
-      </Menu.Item>, 
-      <Menu.Item as={NavLink} to='/submitContent'>
-        <PaperPlaneIcon className="paper-plane-icon" />
-        My Photos
-      </Menu.Item>,
-      <Menu.Item >
-        <Avatar fullname={this.props.currentUser.name} status="online" />
-          <Dropdown item >
-            <Dropdown.Menu>
-              <Dropdown.Item as={NavLink} to='/user/profile'>My account</Dropdown.Item>
-              <Dropdown.Item><a onClick={this.props.onLogout}>Logout</a></Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-      </Menu.Item>
-      ]; 
+    if(currentUser) {
+      if(currentUser.authorities.length == 2)
+      {
+        menuItems = [
+          <Menu.Item as={NavLink} to="/admin">
+            <StarIcon className="star-icon" />
+            AdminDashboard
+          </Menu.Item>,
+          <Menu.Item as={NavLink} to="/addContent">
+            <StarIcon className="star-icon" />
+            AddContent
+          </Menu.Item>,  
+          <Menu.Item as={NavLink} to='/submitContent'>
+            <PaperPlaneIcon className="paper-plane-icon" />
+            My Photos
+          </Menu.Item>,
+          <Menu.Item >
+            <Avatar fullname={currentUser.name} status="online" />
+              <Dropdown item >
+                <Dropdown.Menu>
+                  <Dropdown.Item as={NavLink} to='/user/profile'>My account</Dropdown.Item>
+                  <Dropdown.Item><a onClick={this.props.onLogout}>Logout</a></Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+          </Menu.Item>
+        ]; 
+      }else{
+        if(currentUser.authorities[0].authority == 'ROLE_USER')
+        {
+          menuItems = [
+            <Menu.Item as={NavLink} to="/addContent">
+              <StarIcon className="star-icon" />
+              AddContent
+            </Menu.Item>,  
+            <Menu.Item as={NavLink} to='/submitContent'>
+              <PaperPlaneIcon className="paper-plane-icon" />
+              My Photos
+            </Menu.Item>,
+            <Menu.Item >
+              <Avatar fullname={currentUser.name} status="online" />
+                <Dropdown item >
+                  <Dropdown.Menu>
+                    <Dropdown.Item as={NavLink} to='/user/profile'>My account</Dropdown.Item>
+                    <Dropdown.Item><a onClick={this.props.onLogout}>Logout</a></Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+            </Menu.Item>
+          ]; 
+        }else if(currentUser.authorities[0].authority == 'ROLE_ADMIN')
+        {
+          menuItems = [
+            <Menu.Item as={NavLink} to="/admin">
+              <StarIcon className="star-icon" />
+              AdminDashboard
+            </Menu.Item>,
+            <Menu.Item >
+              <Avatar fullname={currentUser.name} status="online" />
+                <Dropdown item >
+                  <Dropdown.Menu>
+                    <Dropdown.Item as={NavLink} to='/user/profile'>My account</Dropdown.Item>
+                    <Dropdown.Item><a onClick={this.props.onLogout}>Logout</a></Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+            </Menu.Item>
+          ]; 
+        }
+      }
+      
     } else {
       menuItems = [
         <Button

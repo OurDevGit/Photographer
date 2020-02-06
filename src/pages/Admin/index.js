@@ -6,6 +6,7 @@ import { ACCESS_TOKEN } from '../../constants';
 import { HomeHeader, SearchBar, PhotoList } from '../../components'
 import './style.less'
 import VerticalSidebar from './VerticalSidebar'
+import PhotoContent from './PhotoContent'
 import CategoriesAndTags from './CategoriesAndTags'
 import Users from './Users'
 import {notification} from 'antd'
@@ -16,7 +17,7 @@ class Admin extends Component {
       currentUser: null,
       isAuthenticated: false,
       isLoading: false,
-      visible: ''
+      visible: 'SUBMITTED'
     }
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -94,7 +95,7 @@ class Admin extends Component {
   }
 
   render() {
-    console.log("~!!~~!~!~!~!~!", this.state.selImage)
+    console.log("~!!~~!~!~!~!~!", this.state.currentUser)
     return (
       <>
         <MetaTags>
@@ -118,13 +119,16 @@ class Admin extends Component {
                 </Grid.Column>
                 <Grid.Column width='13'>
                     <div className='admin_content'>
-                    <CategoriesAndTags 
+                    <PhotoContent
+                      visible = {this.state.visible == 'SUBMITTED' || this.state.visible == 'ACCEPTED' || this.state.visible == 'REJECTED' }
+                      currentUser = {this.state.currentUser}
+                    />
+                    <CategoriesAndTags
                       visible = {this.state.visible == 'CategoriesAndTags'}
                     />
                     <Users 
                         visible = {this.state.visible == 'Users'}
                     />
-                    
                     </div>
                 </Grid.Column>
 

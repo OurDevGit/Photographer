@@ -201,7 +201,7 @@ class SubmitContent extends Component {
       currentTagValues: this.state.currentTagValues,
       currentContainTags: this.state.currentContainTags
     })
-    this.updatePhotoOptions();
+    this.updatePhotoOptions('Tag');
   }
 
   handleMultiSelectChange = (e, { value }) => {
@@ -237,7 +237,7 @@ class SubmitContent extends Component {
       currentTagValues: value,
       errorMessage: this.state.errorMessage
     })
-    this.updatePhotoOptions();
+    this.updatePhotoOptions('Tag');
   }
 
   handleClickAttach(name, value){
@@ -383,8 +383,14 @@ class SubmitContent extends Component {
         var category_flag2 = [];
         var common_tags=[];
         var common_category=[null, null];
+        var desScore = 0;
         for(var i=0; i<this.state.selImageIDs.length; i++)
         {
+// common descriptions
+          if(i>0 && this.state.selImage[this.state.selImageIDs[i-1]].description == this.state.selImage[this.state.selImageIDs[i]].description)
+          {
+              desScore ++;
+          }
 // common tags
           var temp_tag = this.state.selImage[this.state.selImageIDs[i]].tags;
           if(temp_tag)
@@ -445,6 +451,12 @@ class SubmitContent extends Component {
           this.state.photoOptions['Category1'] = null;
           this.state.photoOptions['Category2'] = null;
         }
+        if(desScore == this.state.selImageIDs.length -1)
+        {
+          this.state.photoOptions['Description'] = this.state.selImage[this.state.selImageIDs[0]].description
+        }else{
+          this.state.photoOptions['Description'] = ''
+        }
 // set state common category and tags
         this.setState({
           currentTagValues: common_tags,
@@ -483,7 +495,7 @@ handleSetPhotoOption = (e, { name, value }) => {
       photoOptions : this.arr_options,
       errorMessage: this.state.errorMessage
     })
-    this.updatePhotoOptions();
+    this.updatePhotoOptions(name);
   }
 
 
@@ -528,7 +540,7 @@ handleChangeReleasename = (e, {value}) => {
 
 // update photo options
 
-  updatePhotoOptions(){
+  updatePhotoOptions(name){
       this.setState({
         common_tag: this.state.currentTagValues
       })
@@ -536,67 +548,77 @@ handleChangeReleasename = (e, {value}) => {
       console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",this.state.common_tag)
       for(let i=0; i<this.state.selImageIDs.length; i++)
       {
-// update categories
         var temp_options = this.state.selImage[this.state.selImageIDs[i]];
-        if(!temp_options.categories){
-          temp_options.categories = [];
-          temp_options.categories.push(this.state.photoOptions['Category1']);
-          temp_options.categories.push(this.state.photoOptions['Category2']);
-        }else{
-          if(!temp_options.categories[1]){
-             temp_options.categories[1] = null;
+        if(name == 'Description'){
+          temp_options.description = this.state.photoOptions['Description']
+        }
+// update categories
+        else if(name == 'Category1' || name == 'Category2')
+        {
+          if(!temp_options.categories){
+            temp_options.categories = [];
+            temp_options.categories.push(this.state.photoOptions['Category1']);
+            temp_options.categories.push(this.state.photoOptions['Category2']);
+          }else{
+            if(!temp_options.categories[1]){
+               temp_options.categories[1] = null;
+            }
+            temp_options.categories[0] = this.state.photoOptions['Category1'] ? this.state.photoOptions['Category1'] : temp_options.categories[0];
+            temp_options.categories[1] = this.state.photoOptions['Category2'] ? this.state.photoOptions['Category2'] : temp_options.categories[1];
           }
-          temp_options.categories[0] = this.state.photoOptions['Category1'] ? this.state.photoOptions['Category1'] : temp_options.categories[0];
-          temp_options.categories[1] = this.state.photoOptions['Category2'] ? this.state.photoOptions['Category2'] : temp_options.categories[1];
+  
+          temp_options.categories = temp_options.categories.filter(item=> item != null);
         }
 
-        temp_options.categories = temp_options.categories.filter(item=> item != null);
 //update tags
-        var temp_flags =[];
-        var tem_tag = this.state.common_tag;
-        if(!tem_tag){
-          temp_options.tags= this.state.currentTagValues
-        }else{
-          if(tem_tag.length>0)
-          {
-            for(let j=0; j<tem_tag.length; j++)
-            {
-              temp_flags[tem_tag[j]] = 1;
-            }
-            
-            for(let k=0; k<this.state.currentTagValues.length; k++)
-            {
-              if(temp_flags[this.state.currentTagValues[k]] != 1)
-              {
-                temp_options.tags.push(this.state.currentTagValues[k]);
-              }else{
-                tem_tag = tem_tag.filter(item=> item != this.state.currentTagValues[k]);
-              }
-            }
-            for(let h=0; h<tem_tag.length; h++)
-            {
-              temp_options.tags = temp_options.tags.filter(item=> item != tem_tag[h]);
-            }
+        else if(name == 'Tag'){
+          var temp_flags =[];
+          var tem_tag = this.state.common_tag;
+          if(!tem_tag){
+            temp_options.tags= this.state.currentTagValues
           }else{
-            if(!temp_options.tags){
-              temp_options.tags =[];
-            }
-            if(!this.state.currentTagValues)
+            if(tem_tag.length>0)
             {
-              this.state.currentTagValues = [];
+              for(let j=0; j<tem_tag.length; j++)
+              {
+                temp_flags[tem_tag[j]] = 1;
+              }
+              
+              for(let k=0; k<this.state.currentTagValues.length; k++)
+              {
+                if(temp_flags[this.state.currentTagValues[k]] != 1)
+                {
+                  temp_options.tags.push(this.state.currentTagValues[k]);
+                }else{
+                  tem_tag = tem_tag.filter(item=> item != this.state.currentTagValues[k]);
+                }
+              }
+              for(let h=0; h<tem_tag.length; h++)
+              {
+                temp_options.tags = temp_options.tags.filter(item=> item != tem_tag[h]);
+              }
+            }else{
+              if(!temp_options.tags){
+                temp_options.tags =[];
+              }
+              if(!this.state.currentTagValues)
+              {
+                this.state.currentTagValues = [];
+              }
+              if(this.state.selImageIDs.length == 1)
+              {
+                temp_options.tags = [];
+              }
+              console.log("opopopopop",temp_options.tags)
+              for(let index=0; index<this.state.currentTagValues.length; index++)
+              {
+                temp_options.tags.push(this.state.currentTagValues[index]);
+              }
+              console.log(this.state.currentTagValues)
             }
-            if(this.state.selImageIDs.length == 1)
-            {
-              temp_options.tags = [];
-            }
-            console.log("opopopopop",temp_options.tags)
-            for(let index=0; index<this.state.currentTagValues.length; index++)
-            {
-              temp_options.tags.push(this.state.currentTagValues[index]);
-            }
-            console.log(this.state.currentTagValues)
           }
         }
+        
         updateRequest.photos.push(temp_options);
         this.state.selImage[this.state.selImageIDs[i]] = temp_options;
       }

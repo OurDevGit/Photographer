@@ -1,0 +1,9 @@
+.PanAndZoomImage-container {
+  overflow: hidden;
+  /* width: 50%; */
+}
+
+.PanAndZoomImage-image {
+  min-width: 100%;
+  max-width: 100%;
+}

@@ -17,7 +17,6 @@ class CategoriesAndTags extends Component
         this.loadAllCategories = this.loadAllCategories.bind(this);
         this.loadAllTags = this.loadAllTags.bind(this);
       }
-
     componentDidMount(){
         this.loadAllTags();
         this.loadAllCategories();
@@ -69,6 +68,10 @@ class CategoriesAndTags extends Component
         this.state.tags.forEach((tag, tagIndex) => {
           keywords.push(<button className='value'>{tag.value}</button>)
         });
+        const categories = [];
+        this.state.categories.forEach((category, categoryIndex) => {
+          categories.push(<button className='value'>{category.value}</button>)
+        });
         return(
             <div className={visible ? 'visible': 'disable'} id='CategoryAndTag'>
               <div className='column Category'>
@@ -82,7 +85,7 @@ class CategoriesAndTags extends Component
                 </div>
                 <div className='existingCategories'>
                     <h3>Existing Catetgories:</h3>
-                    {/* {keywords} */}
+                    {categories}
                 </div>
               </div>
               <div className='column Tag'>
