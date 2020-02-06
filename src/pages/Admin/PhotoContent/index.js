@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Dropdown, Input, Button, Grid, Modal, List } from 'semantic-ui-react'
+import { Dropdown, Input, Button, Grid, Modal, List, Checkbox } from 'semantic-ui-react'
 import { getCurrentUser, getAllCategories, getAllTags, getNumberOfPhotos ,updateMultiplePhoto, submitMultiplePhoto} from '../../../util/APIUtils';
 import { HomeHeader, PhotoList, AvatarImage, MultiSelect, ListComponent } from '../../../components'
 import PanAndZoomImage from '../../../PanAndZoomImage';
@@ -42,8 +42,10 @@ class PhotoContent extends Component
     }
 
     handleImageClick(e, flag){
+      var zoomImage = [<div className="zoomImage"><PanAndZoomImage src={e.photo.url_fr} /></div>]
       this.setState({
-        photo : e.photo
+        photo : e.photo,
+        zoomImage
       })
     }
 
@@ -116,36 +118,61 @@ class PhotoContent extends Component
                     {
                       this.state.photo ?
                         <Grid verticalAlign='middle'>
-                          <Grid.Row>
+                          <Grid.Row className='GridRow'>
                             <Grid.Column width='10'>
-                              <PanAndZoomImage
+                              {/* <PanAndZoomImage
                                 src={url}
-                              />
+                              /> */}
+                              {this.state.zoomImage}
                             </Grid.Column>
                             <Grid.Column width='6'>
-                              <p>
-                                This Content is created by <a href=""><b>{this.state.photo.owner}</b></a>.
-                              </p>
-                              <p>
-                                Image# <a href=""><b>{url.split('/')[url.split('/').length-1]}</b></a>.
-                              </p>
-                              <p>
-                                uploaded: <b> June 18, 2018 11:14 AM</b>
-                              </p>
-                              <p>
-                                Releases: <b> Has {this.state.photo.authorizations.length} model release</b>
-                              </p>
-                              <p>
-                                Descriptions: <b> {this.state.photo.description}</b>
-                              </p>
-                              <div className='keywords'>
-                                <p>Keywords</p>
-                                {keywords}
+                              <div className='photoDetail'>
+                                <p>
+                                  This Content is created by <a href=""><b>{this.state.photo.owner}</b></a>.
+                                </p>
+                                <p>
+                                  Image# <a href=""><b>{url.split('/')[url.split('/').length-1]}</b></a>.
+                                </p>
+                                <p>
+                                  uploaded: <b> June 18, 2018 11:14 AM</b>
+                                </p>
+                                <p>
+                                  Releases: <b> Has {this.state.photo.authorizations.length} model release</b>
+                                </p>
+                                <p>
+                                  Descriptions: <b> {this.state.photo.description}</b>
+                                </p>
+                                <div className='keywords'>
+                                  <p>Keywords</p>
+                                  {keywords}
+                                </div>
                               </div>
-                              <div className='keywords'>
-                                <p>Releases</p>
-                                {releases}
+                              <div className='photoReleases'>
+                                <div className='keywords'>
+                                  <p>Releases</p>
+                                  {releases}
+                                </div>
                               </div>
+                            </Grid.Column>
+                          </Grid.Row>
+                          <Grid.Row className='GirdRow'>
+                            <Grid.Column  width='5'>
+                              <List className='rejectingMotivesList'>
+                                <List.Item><Checkbox label='Make my profile visible' /></List.Item>
+                                <List.Item><Checkbox label='Make my profile visible' /></List.Item>
+                                <List.Item><Checkbox label='Make my profile visible' /></List.Item>
+                              </List>
+                            </Grid.Column>
+                            <Grid.Column className='actionButtonGroup buttonGroup' width='5'>
+                              <Button.Group>
+                                <Button positive>Accept</Button>
+                                <Button.Or />
+                                <Button negative>Reject</Button>
+                              </Button.Group>
+                            </Grid.Column>
+                            <Grid.Column className='next_prevButtonGroup buttonGroup' width='6'>
+                                <Button content='Prev' icon='left arrow' labelPosition='left' />
+                                <Button content='Next' icon='right arrow' labelPosition='right' />
                             </Grid.Column>
                           </Grid.Row>
                         </Grid>

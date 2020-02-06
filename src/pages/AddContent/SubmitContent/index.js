@@ -678,7 +678,8 @@ handleChangeReleasename = (e, {value}) => {
           if(response.ok){
               this.setState({
                   NewReleaseModalOpen: false,
-                  isLoading: false
+                  isLoading: false,
+                  ReleaseModalOpen: true
               })
           }
       })

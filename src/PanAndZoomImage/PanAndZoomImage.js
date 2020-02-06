@@ -19,6 +19,13 @@ const PanAndZoomImage = ({ src }) => {
       width: e.target.naturalWidth,
       height: e.target.naturalHeight,
     });
+    setPosition({
+      oldX: 0,
+      oldY: 0,
+      x: 0,
+      y: 0,
+      z: 1,
+    })
   };
 
   const onMouseDown = (e) => {
