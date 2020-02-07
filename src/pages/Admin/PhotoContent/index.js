@@ -275,7 +275,7 @@ class PhotoContent extends Component
         console.log("**********************",this.props.status)
       
         return(
-            <div className={visible ? 'visible': 'disable'} id='PhotoContent'>
+            <div className={visible ? 'admin_photo visible': 'admin_photo disable'} id='PhotoContent'>
               <Grid>
                 <Grid.Row>
                   <Grid.Column className='admin_photolist' width='3'>

@@ -544,22 +544,22 @@ handleChangeReleasename = (e, {value}) => {
 // when click submit button
 
   handleSubmit(){
+
     submitMultiplePhoto(this.state.selImageIDs)
         .then(response => {
-          console.log("ddd",response);
+          console.log("OPOPOP",response)
+          // this.state.total.toBeSubmitted = this.state.total.toBeSubmitted - this.state.selImageIDs.length;
+          // this.state.total.submitted = this.state.total.submitted + this.state.selImageIDs.length
           this.getTotalNumberOfPhotos();
           this.setState({
-            activeMenuItem : "SUBMITTED"
+            activeMenuItem : "SUBMITTED",
+            // total: this.state.total
           })
         }).catch(error => {
           this.setState({
             isLoading: false
           });  
         });
-        this.getTotalNumberOfPhotos();
-        this.setState({
-          activeMenuItem : "SUBMITTED"
-        })
   }
 
 // update photo options

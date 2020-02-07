@@ -143,7 +143,7 @@ export function updateMultiplePhoto(updateRequest) {
 }
 
 export function submitMultiplePhoto(submitRequest) {
-    return request({
+    return request1({
         url: API_BASE_URL + "/photo_submit/submitMultiplePhoto",
         method: 'POST',
         body: JSON.stringify(submitRequest)
