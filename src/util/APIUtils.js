@@ -166,6 +166,14 @@ export function adminRejectPhoto(Request) {
     });
 }
 
+export function adminRedeemPhoto(Request) {
+    return request1({
+        url: API_BASE_URL + "/admin/publication_controller/redeem_photos",
+        method: 'POST',
+        body: JSON.stringify(Request)
+    });
+}
+
 export function createPhoto(photoData) {
     return request({
         url: API_BASE_URL + "/photos",

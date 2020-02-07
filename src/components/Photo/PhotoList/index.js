@@ -43,7 +43,6 @@ class PhotoList extends Component {
                 promise = getSubmitPhotos()
             } else if(this.props.type == 'admin_photolist'){
                 promise = getAdminPublicationPhotoList(this.props.status)
-                console.log("################", this.props.status)
             }
         } else {
             promise = getPhotoLists(page, size);
@@ -74,7 +73,6 @@ class PhotoList extends Component {
                     photo_list: photos,
                     isLoading: false
                 })
-                console.log("photo lists",this.props.status)
             }).catch(error => {
                 this.setState({
                     isLoading: false
@@ -83,7 +81,6 @@ class PhotoList extends Component {
         }else if(this.props.type == 'admin_photolist'){
             promise
             .then(response => {
-                console.log("@@@@@@@@@@@@", response)
                 this.setState({
                     photos: response,
                     photo_list: response,
@@ -113,7 +110,6 @@ class PhotoList extends Component {
                     currentVotes: currentVotes.concat(Array(response.content.length).fill(null)),
                     isLoading: false
                 })
-                console.log("photo lists23423",this.state.photos)
             }).catch(error => {
                 this.setState({
                     isLoading: false
@@ -158,13 +154,10 @@ class PhotoList extends Component {
                 isLoading: false
             });
             this.loadPhotoList();
-            console.log("refresh",this.props.username);
-            console.log("afsadfs",prevProps.status);
             
         }
         if(this.props.publish != prevProps.publish)
         {   
-            console.log("1321321")
             this.state.photo_list.splice(this.props.active,1)
             
             this.setState({
@@ -227,7 +220,6 @@ class PhotoList extends Component {
     }
 
     render() {
-        console.log("!@!@!@!@@!!@!@!@!@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         const photoViews = [];
         this.state.photo_list.forEach((photo, photoIndex) => {
             photoViews.push(<Photo

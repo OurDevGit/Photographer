@@ -213,6 +213,7 @@ class SubmitContent extends Component {
     if(this.state.currentTagValues ==  null){
       this.state.currentTagValues = [];
     }
+    console.log(this.state.currentTagValues, value)
     if(this.state.currentTagValues.length > value.length)
     {
       var RemoveItem = this.state.currentTagValues;
@@ -231,9 +232,19 @@ class SubmitContent extends Component {
           j = this.state.containTags.length;
         }
       }
+    }else{
+      console.log("&&&&&&&&&&&&&&&&&&&&", value[value.length-1])
+      for(let k=0; k<this.state.currentContainTags.length; k++)
+      {
+        if(this.state.currentContainTags[k] == value[value.length-1])
+        {
+          this.state.currentContainTags = this.state.currentContainTags.filter(item=> item != value[value.length-1]);
+        }
+      }
     }
     this.state.currentTagValues = value;
     this.setState({ 
+      currentContainTags: this.state.currentContainTags,
       currentTagValues: value,
       errorMessage: this.state.errorMessage
     })
@@ -458,6 +469,7 @@ class SubmitContent extends Component {
           this.state.photoOptions['Description'] = ''
         }
 // set state common category and tags
+        this.state.currentTagValues = common_tags;
         this.setState({
           currentTagValues: common_tags,
           common_tag: common_tags,
@@ -465,6 +477,18 @@ class SubmitContent extends Component {
         })
       }
       this.getCommonRelease(this.state.selImage, this.state.selImageIDs);
+      console.log("__________________________________", this.state.currentTagValues)
+      for(let t=0; t<this.state.currentTagValues.length; t++)
+      {
+        if(e.photo.containedTags.includes(this.state.currentTagValues[t]))
+        {
+          console.log("++++++++++++++@@@@@@@@@", this.state.currentTagValues[t])
+          e.photo.containedTags = e.photo.containedTags.filter(item=> item != this.state.currentTagValues[t]);
+        }
+      }
+      this.setState({
+        currentContainTags: e.photo.containedTags
+      })
     }else{                  // when there is not images which checked
       this.setState({
         showOptions: ["unvisible", "visible"],

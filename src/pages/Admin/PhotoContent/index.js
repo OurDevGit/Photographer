@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import { Dropdown, Input, Button, Grid, Modal, List, Checkbox, Rating } from 'semantic-ui-react'
-import { getCurrentUser,getRejectingMotives, adminAcceptPhoto, adminRejectPhoto} from '../../../util/APIUtils';
+import { getCurrentUser,getRejectingMotives, adminAcceptPhoto, adminRejectPhoto, adminRedeemPhoto} from '../../../util/APIUtils';
 import { HomeHeader, PhotoList, AvatarImage, MultiSelect, ListComponent } from '../../../components'
 import PanAndZoomImage from '../../../PanAndZoomImage';
 import './style.less'
@@ -29,6 +29,7 @@ class PhotoContent extends Component
         this.handleMotiveCheck =  this.handleMotiveCheck.bind(this)
         this.handleAcceptClick =  this.handleAcceptClick.bind(this)
         this.handleRejectClick =  this.handleRejectClick.bind(this)
+        this.handleRedeemClick =  this.handleRedeemClick.bind(this)
         this.handlePrevPhoto = this.handlePrevPhoto.bind(this)
         this.handleNextPhoto = this.handleNextPhoto.bind(this)
       }
@@ -109,7 +110,6 @@ class PhotoContent extends Component
     }
 
     handleMotiveCheck(e,{label, checked, value}){
-      console.log("check", value)
       if(checked)
       {
         this.state.selMotives.push(value);
@@ -140,7 +140,6 @@ class PhotoContent extends Component
               "photoToManage": this.state.photo.id,
               "rating": this.state.rating
           }
-
       adminAcceptPhoto(acceptRequest)
       .then(response => {
         this.setState({
@@ -170,17 +169,28 @@ class PhotoContent extends Component
             console.log("error", error)
         });
       }
-
+    }
+    handleRedeemClick(){
+      var redeemRequest = [];
+      redeemRequest.push(this.state.photo.id)
+      adminRedeemPhoto(redeemRequest)
+      .then(response => {
+        this.setState({
+          publish: !this.state.publish,
+        })
+      }).catch(error => {
+          console.log("error", error)
+      });
 
     }
 
     render(){
-      console.log("total", this.state.total)
+      console.log("total", this.state.photo)
         const {visible} =  this.props;
         const keywords = [];
         const releases = [];
         const list_motives = [];
-        const buttonGroup = [];
+        var buttonGroup = []; 
         if(this.state.motives)
         {
           this.state.motives.forEach((motive, motiveIndex) => {
@@ -192,13 +202,29 @@ class PhotoContent extends Component
           });
         }
 
-        if(this.state.status == 'list_submitted_photos')
+        if(this.props.status == 'list_submitted_photos')
         {
           buttonGroup = [
             <Button.Group>
               <Button positive onClick={this.handleAcceptClick}>Accept</Button>
               <Button.Or />
               <Button negative onClick={this.handleRejectClick}>Reject</Button>
+            </Button.Group>
+          ]
+        }else if(this.props.status == 'list_accepted_photos'){
+          buttonGroup = [
+            <Button.Group>
+              <Button positive onClick={this.handleRedeemClick}>Redeem</Button>
+              <Button.Or />
+              <Button negative onClick={this.handleRejectClick}>Reject</Button>
+            </Button.Group>
+          ]
+        }else if(this.props.status == 'list_rejected_photos'){
+          buttonGroup = [
+            <Button.Group>
+              <Button positive onClick={this.handleAcceptClick}>Accept</Button>
+              <Button.Or />
+              <Button negative onClick={this.handleRedeemClick}>Redeem</Button>
             </Button.Group>
           ]
         }
@@ -318,11 +344,6 @@ class PhotoContent extends Component
                             </Grid.Column>
                             <Grid.Column className='actionButtonGroup buttonGroup' width='5'>
                             Rating:<Rating maxRating={10} rating={this.state.rating} icon='star' size='tiny' onRate={this.handleRate} /><br /><br />
-                              <Button.Group>
-                                <Button positive onClick={this.handleAcceptClick}>Accept</Button>
-                                <Button.Or />
-                                <Button negative onClick={this.handleRejectClick}>Reject</Button>
-                              </Button.Group>
                               {buttonGroup}
                             </Grid.Column>
                             <Grid.Column className='next_prevButtonGroup buttonGroup' width='6'>

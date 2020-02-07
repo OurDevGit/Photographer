@@ -20,7 +20,6 @@ class Photo extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        console.log(this.props.action, prevProps.action)
         if(this.props.action != prevProps.action)
         {
             if(this.props.active == this.props.index){
@@ -29,7 +28,6 @@ class Photo extends Component {
         }
         if(this.props.publish != prevProps.publish)
         {
-            console.log(this.props.active, this.props.total)
             if(this.props.active + 1  == this.props.index){
                 this.props.onClick(this.props, this.props.active, this.props.total -1);
             }
