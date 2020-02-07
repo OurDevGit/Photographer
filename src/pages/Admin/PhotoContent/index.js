@@ -191,14 +191,30 @@ class PhotoContent extends Component
         const releases = [];
         const list_motives = [];
         var buttonGroup = []; 
-        if(this.state.motives)
+        if(this.state.motives && this.state.photo)
         {
+          if(!this.state.photo.rejectingMotives)
+          {
+            this.state.photo.rejectingMotives = [];
+          }
+          var motiveFlag = [];
+          for(let i=0; i<this.state.photo.rejectingMotives.length; i++)
+          {
+            motiveFlag[this.state.photo.rejectingMotives[i].id] = 1;
+          }
           this.state.motives.forEach((motive, motiveIndex) => {
             list_motives.push(
               <List.Item>
-                <Checkbox label={motive.value} value={motive.id} onChange={this.handleMotiveCheck}/>
+                {
+                  this.props.status == 'list_rejected_photos' ?
+                    <Checkbox label={motive.value} value={motive.id} onClick={this.handleMotiveCheck} checked={motiveFlag[motive.id] == 1} disabled/>
+
+                  : <Checkbox label={motive.value} value={motive.id} onClick={this.handleMotiveCheck}/>
+                }
+                
               </List.Item>
-            )
+            );
+            // console.log(motive, this.state.photo.rejectingMotives.includes({id: "1048675", value: "Wrong exposition on main subject"}))
           });
         }
 

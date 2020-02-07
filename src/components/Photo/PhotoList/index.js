@@ -232,6 +232,7 @@ class PhotoList extends Component {
                 addToBucket = {this.props.addToBucket}
                 action = {this.props.action}
                 publish = {this.props.publish}
+                status = {this.props.status}
                 // currentVote={this.state.currentVotes[photoIndex]}
                 // handleVoteChange={(event) => this.handleVoteChange(event, photoIndex)}
                 // handleVoteSubmit={(event) => this.handleVoteSubmit(event, photoIndex)} 

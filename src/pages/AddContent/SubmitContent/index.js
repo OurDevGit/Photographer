@@ -478,6 +478,7 @@ class SubmitContent extends Component {
       }
       this.getCommonRelease(this.state.selImage, this.state.selImageIDs);
       console.log("__________________________________", this.state.currentTagValues)
+      this.state.currentTagValues = this.state.currentTagValues ? this.state.currentTagValues : []
       for(let t=0; t<this.state.currentTagValues.length; t++)
       {
         if(e.photo.containedTags.includes(this.state.currentTagValues[t]))
@@ -842,10 +843,15 @@ handleChangeReleasename = (e, {value}) => {
                 </Grid.Column>
               </Grid.Row>
               <Grid.Row>
-                <Message attached='top' className='welcomeMessage' positive >
-                  <Icon name='check circle' />
-                    Welcome! Let's get your content approved. Select an item to add details and submit for review&nbsp;<a href='#'>Learn more</a>&nbsp;
-                </Message>
+                {
+                  this.state.activeMenuItem == 'TO_BE_SUBMITTED' ? 
+                    <Message attached='top' className='welcomeMessage' positive >
+                      <Icon name='check circle' />
+                        Welcome! Let's get your content approved. Select an item to add details and submit for review&nbsp;<a href='#'>Learn more</a>&nbsp;
+                    </Message>
+                  : null
+                }
+                
                 <div ></div>
               </Grid.Row>
               <Grid.Row>
@@ -875,8 +881,8 @@ handleChangeReleasename = (e, {value}) => {
                             position='bottom center'
                           />
                         </label>
-                        <Button id={this.state.photoOptions['ImageType'] == 'Photo' ? 'activate' : ''} type='button' name='ImageType' value="Photo" onClick={this.handleSetPhotoOption} >Photo</Button>
-                        <Button id={this.state.photoOptions['ImageType'] == 'Illustration' ? 'activate' : ''} type='button' name='ImageType' value='Illustration' onClick={this.handleSetPhotoOption}>Illustration</Button>
+                        <Button id={this.state.photoOptions['ImageType'] == 'Photo' ? 'activate' : ''} type='button' name='ImageType' value="Photo" onClick={this.handleSetPhotoOption} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'}>Photo</Button>
+                        <Button id={this.state.photoOptions['ImageType'] == 'Illustration' ? 'activate' : ''} type='button' name='ImageType' value='Illustration' onClick={this.handleSetPhotoOption} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'}>Illustration</Button>
                       </Form.Field>
                     </div>
                     <div class="column">
@@ -888,34 +894,34 @@ handleChangeReleasename = (e, {value}) => {
                             position='bottom center'
                           />
                         </label>
-                        <Button id={this.state.photoOptions['Usage'] == 'Commercial' ? 'activate' : ''} type='button' name='Usage' value="Commercial" onClick={this.handleSetPhotoOption} >Commercial</Button>
-                        <Button id={this.state.photoOptions['Usage'] == 'Editorial' ? 'activate' : ''} type='button' name='Usage' value='Editorial' onClick={this.handleSetPhotoOption}>Editorial</Button>
+                        <Button id={this.state.photoOptions['Usage'] == 'Commercial' ? 'activate' : ''} type='button' name='Usage' value="Commercial" onClick={this.handleSetPhotoOption} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'} >Commercial</Button>
+                        <Button id={this.state.photoOptions['Usage'] == 'Editorial' ? 'activate' : ''} type='button' name='Usage' value='Editorial' onClick={this.handleSetPhotoOption} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'}>Editorial</Button>
 
                       </Form.Field>
                     </div>
                     <div class="column">
                       <Form.Field>
-                        <TextArea rows={1} placeholder="Descriptions" name='Description' value={this.state.photoOptions['Description']} required onChange={this.handleSetPhotoOption} />
+                        <TextArea rows={1} placeholder="Descriptions" name='Description' value={this.state.photoOptions['Description']} required onChange={this.handleSetPhotoOption} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'} />
                           <div class='label error'>{this.state.errorMessage['Description']}</div>
                       </Form.Field>
                     </div>
                     <div class="column">
                       <Form.Field>
                       <div class="label">Category 1</div>
-                        <Select placeholder='Category 1' options={this.state.categories} name="Category1" value={this.state.photoOptions['Category1']} onChange={this.handleSetPhotoOption}/>
+                        <Select placeholder='Category 1' options={this.state.categories} name="Category1" value={this.state.photoOptions['Category1']} onChange={this.handleSetPhotoOption} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'}/>
                         <div class='label error'>{this.state.errorMessage['Category1']}</div>
                       </Form.Field>
                     </div>
                     <div class="column">
                       <Form.Field>
                       <div class="label">Category 2(optional)</div>
-                        <Select placeholder='Category 2(optional)' options={this.state.categories} name="Category2" value={this.state.photoOptions['Category2']} onChange={this.handleSetPhotoOption} disabled={this.state.photoOptions['Category1'] ? false : true}/>
+                        <Select placeholder='Category 2(optional)' options={this.state.categories} name="Category2" value={this.state.photoOptions['Category2']} onChange={this.handleSetPhotoOption} disabled={(this.state.photoOptions['Category1'] &&  this.state.activeMenuItem == 'TO_BE_SUBMITTED') ? false : true}/>
                       </Form.Field>
                     </div>
                     <div class="column">
                       <Form.Field required>
                       <div class="label">Location(optional)</div>
-                        <input type="text" placeholder='Location(optional)' name="Location" value={this.state.photoOptions['Location']} required onChange={this.handleSetPhotoOption}  />
+                        <input type="text" placeholder='Location(optional)' name="Location" value={this.state.photoOptions['Location']} required onChange={this.handleSetPhotoOption}  disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'}/>
                         <Popup
                           trigger={<Icon name='question circle' className="bottom" size="large"/>}
                           content={<span>Select the geographic location shown in your photo. Be specific: select neighborhoods, towns, or cities. In the future, location data will power new search and filtering options for customers. <a href="#">Learn more</a></span>}
@@ -927,7 +933,7 @@ handleChangeReleasename = (e, {value}) => {
                     </div>
                     <div class="column">
                       <Form.Field>
-                      <Accordion fluid styled>
+                      <Accordion fluid styled >
                         <Accordion.Title
                           className="label"
                           active={activeIndex === 0}
@@ -937,9 +943,9 @@ handleChangeReleasename = (e, {value}) => {
                           <Icon name='angle down' />
                         </Accordion.Title>
                         <Accordion.Content active={activeIndex === 0}>
-                          <Select placeholder='Notes for reviewer' className="left fullwidth" name="NotesForReviewer" value={this.state.photoOptions['NotesForReviewer']} onChange={this.handleSetPhotoOption} />
+                          <Select placeholder='Notes for reviewer' className="left fullwidth" name="NotesForReviewer" value={this.state.photoOptions['NotesForReviewer']} onChange={this.handleSetPhotoOption} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'} />
                           <div class="check">
-                            <Checkbox className="left fullwidth" label="Mature content" name="MatureContent" value={this.state.photoOptions['MatureContent']} onChange={this.handleCheck}/>
+                            <Checkbox className="left fullwidth" label="Mature content" name="MatureContent" value={this.state.photoOptions['MatureContent']} onChange={this.handleCheck} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'}/>
                             <Popup
                               trigger={<Icon name='question circle' className="center" size="large"/>}
                               content='Mature content contains nudity. sexual or suggestive content, or offensive language.'
@@ -954,7 +960,7 @@ handleChangeReleasename = (e, {value}) => {
                       <Form.Field>
                         <div class="Releases left">
                           <h5>Releases
-                            <Modal open={this.state.ReleaseModalOpen} onOpen={this.openReleaseModal} size='small' className="Modalcenter" trigger={<Icon name="plus" />}>
+                            <Modal open={this.state.ReleaseModalOpen} onOpen={this.openReleaseModal} size='small' className="Modalcenter" trigger={this.state.activeMenuItem == 'TO_BE_SUBMITTED' ? <Icon name="plus" /> : null} >
                               <Modal.Content image>
                                 <Modal.Description>
                                   <Icon className="ModalClose" name='close' size="large" onClick={this.onCloseModal}/>
@@ -1092,6 +1098,7 @@ handleChangeReleasename = (e, {value}) => {
                         value={this.state.currentTagValues}
                         onAddItem={this.handleMultiSelectAddition}
                         onChange={this.handleMultiSelectChange}
+                        disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'}
                       />
                       <div class='column'>
                         <div class='label error'>{this.state.errorMessage['tags']}</div>
@@ -1101,14 +1108,19 @@ handleChangeReleasename = (e, {value}) => {
                   <Form.Field>
                     <div class="label">Keyword Suggestions</div>
                     <div className='suggestKeywords'>
-                      {keywords}
+                      {this.state.activeMenuItem == 'TO_BE_SUBMITTED' ? keywords : null}
                     </div>
                   </Form.Field>
                   </Grid.Column>
                   </Form>
                 </Grid.Row>
                 <Grid.Column>
-                <Button className="submitButton" onClick={this.handleSubmit} fluid negative>Submit</Button>
+                  {
+                    this.state.activeMenuItem == 'TO_BE_SUBMITTED' ? 
+                      <Button className="submitButton" onClick={this.handleSubmit} fluid negative>Submit</Button>
+                    : null
+                  }
+                
               </Grid.Column>
               </div>
               <div className={this.state.showOptions[1]}>

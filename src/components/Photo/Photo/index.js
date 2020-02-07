@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './style.less';
-import {Image , Grid, Checkbox} from 'semantic-ui-react'
+import {Image , Grid, Checkbox, List} from 'semantic-ui-react'
 import {Radio, Button} from 'antd';
 import { PaperPlaneIcon, StarIcon, Heart_Icon, Plus_Icon, Zoom_Icon} from '../../../assets/icons'
 
@@ -63,8 +63,18 @@ class Photo extends Component {
     }
 
     render() {
-        const {active, index, photo, type} = this.props;
+        const {active, index, photo, type, status} = this.props;
+        const rejectingMotives = [];
+        if(photo.rejectingMotives){
+            photo.rejectingMotives.forEach((motive, motiveIndex) => {
+                rejectingMotives.push(
+                    <List.Item>{motive.value}</List.Item>
+                  )
+              });
+        }
+
         return (
+            <div className={status == 'REJECTED' ? 'rejectedPhoto' : ''}>
                 <div className={(this.state.isChecked )? 'photo-content active': 'photo-content'}  id={index == active ? 'active' : ''}>
                     <div className="photo-header">
                         {
@@ -85,7 +95,11 @@ class Photo extends Component {
                         
                     </div>
                     <img onClick={this.handleCheck} src={photo.url_fr} id={index}  value={photo} />
+                    <List className='rejectingMotives'>
+                        {rejectingMotives}
+                    </List>
                 </div>
+            </div>
         );
     }
 }

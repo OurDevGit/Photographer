@@ -13,6 +13,12 @@
 .photo-content#active{
     border: 1px solid skyblue;
 }
+.rejectedPhoto .photo-content{
+    float: none !important;
+    .rejectingMotives{
+        display: block !important;
+    }
+}
 .photo-content {
     position: relative;
     float: left;
@@ -68,6 +74,11 @@
         padding: 5px;
         cursor: pointer;
     }
+    .rejectingMotives{
+        position: absolute;
+        top: 40px;
+        left: 200px;
+    }
 }
 .photo-content:hover{
     .detail_Icon{
@@ -81,7 +92,9 @@
         opacity: 0.7;
     }
 }
-
+.rejectingMotives{
+    display: none;
+}
 .photo-question {
     font-weight: 500;
     font-size: 21px;
