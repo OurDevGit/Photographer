@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import { Dropdown, Input, Button } from 'semantic-ui-react'
-import { getCurrentUser, getAllCategories, getAllTags, getNumberOfPhotos ,updateMultiplePhoto, submitMultiplePhoto} from '../../../util/APIUtils';
+import { getCurrentUser, getAllCategories, getAllTags, addNewTag} from '../../../util/APIUtils';
 import './style.less'
 class CategoriesAndTags extends Component 
 {
@@ -12,10 +12,13 @@ class CategoriesAndTags extends Component
           isLoading: false,
           visible: '',
           categories: [],
-          tags: []
+          tags: [],
+          inputValue:[]
         }
         this.loadAllCategories = this.loadAllCategories.bind(this);
         this.loadAllTags = this.loadAllTags.bind(this);
+        this.handleAddTag = this.handleAddTag.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this)
       }
     componentDidMount(){
         this.loadAllTags();
@@ -61,6 +64,28 @@ class CategoriesAndTags extends Component
         });
     }
 
+    handleAddTag(e){
+      if(!this.state.inputValue['newTag'] || this.state.inputValue['newTag'] == '')
+      {
+        alert('Put Tag name please')
+      }else{
+        addNewTag(this.state.inputValue['newTag'])
+        .then(response =>{
+          console.log(response)
+        })
+        .catch(error=>{
+          console.log(error)
+        })
+      }
+    }
+    handleInputChange(e, {name, value}){
+      
+      this.state.inputValue[name] = value
+      this.setState({
+        inputValue: this.state.inputValue
+      })
+    }
+
     render(){
         const {visible} =  this.props;
         console.log("fasfsadfsdafsdf", this.state.tags)
@@ -77,7 +102,7 @@ class CategoriesAndTags extends Component
               <div className='column Category'>
                 <div className='AddCategory'>
                     <h3>Add New Category : 
-                    <Input type='text' placeholder='New Category...' action>
+                    <Input type='text' placeholder='New Category...' action onChange={this.handleInputChange}>
                       <input />
                       <Button type='button'>Add</Button>
                     </Input>
@@ -85,7 +110,7 @@ class CategoriesAndTags extends Component
                 </div>
                 <div className='existingCategories'>
                     <h3>Existing Catetgories:
-                    <Input size='small' icon='search' placeholder='Search...' />
+                    <Input size='small' icon='search' placeholder='Search...' onChange={this.handleInputChange}/>
                     </h3>
                     {categories}
                 </div>
@@ -93,15 +118,15 @@ class CategoriesAndTags extends Component
               <div className='column Tag'>
                 <div className='AddTag'>
                   <h3>Add New Tag : 
-                    <Input type='text' placeholder='New Tag...' action>
+                    <Input type='text' name='newTag' placeholder='New Tag...' action onChange={this.handleInputChange}>
                       <input />
-                      <Button type='button'>Add</Button>
+                      <Button type='button' onClick={this.handleAddTag}>Add</Button>
                     </Input>
                   </h3>
                 </div>
                 <div className='existingTags'>
                     <h3>Existing Tags:
-                    <Input size='small' icon='search' placeholder='Search...' />
+                    <Input size='small' icon='search' placeholder='Search...' onChange={this.handleInputChange}/>
                     </h3>
                     {keywords}
                 </div>

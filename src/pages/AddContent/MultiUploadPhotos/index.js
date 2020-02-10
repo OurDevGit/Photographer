@@ -47,9 +47,7 @@ export default class MultipleImageUploadComponent extends Component {
     
 
     uploadFiles(e) {
-        this.setState({
-            isLoading: true
-          });
+
         var myHeaders = new Headers({})
 
         if(localStorage.getItem(ACCESS_TOKEN)) {
@@ -70,12 +68,15 @@ export default class MultipleImageUploadComponent extends Component {
             body: formData,
             redirect: 'follow'
           };
+          this.setState({
+            isLoading: true
+          });
           fetch(API_BASE_URL + "/photo_submit/uploadMultipleFiles", requestOptions)
           .then(response => {
               if(response.ok){
                   this.setState({
-                      uploadStatus: true,
-                      isLoading: false
+                    isLoading: false,
+                      uploadStatus: true
                   })
               }else{
                   this.setState({
@@ -132,11 +133,3 @@ export default class MultipleImageUploadComponent extends Component {
         }
     }
 }
-
-// files: [
-//     {
-//         name: "1.png",
-//         size: 1392192,
-//         type: "image/png"
-//     }
-// ]

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Grid, GridColumn , Menu, Dropdown, Icon, Message, Form, Button, TextArea, Select , Accordion, Checkbox, Popup, Header, Modal, Input, Radio} from 'semantic-ui-react'
 import { NavLink, Redirect } from 'react-router-dom'
 import MetaTags from 'react-meta-tags'
-import { getCurrentUser, getAllCategories, getAllTags, getNumberOfPhotos ,updateMultiplePhoto, submitMultiplePhoto, addAuthorizationToPhotoIDs, removeAuthorizationToPhotoIDs} from '../../../util/APIUtils';
+import { getCurrentUser, getAllCategories, getAllTags, getNumberOfPhotos ,updateMultiplePhoto, submitMultiplePhoto, addAuthorizationToPhotoIDs, removeAuthorizationToPhotoIDs, addNewTag} from '../../../util/APIUtils';
 import { API_BASE_URL, PHOTO_LIST_SIZE, ACCESS_TOKEN, releaseOptions, sortOptions, age, gender, ethnicity } from '../../../constants';
 import { HomeHeader, PhotoList, AvatarImage, MultiSelect, ListComponent } from '../../../components'
 import './style.less'
@@ -241,6 +241,29 @@ class SubmitContent extends Component {
           this.state.currentContainTags = this.state.currentContainTags.filter(item=> item != value[value.length-1]);
         }
       }
+      var TagScore = 0;
+      this.state.tags.forEach((tag, tagindex) =>{
+        if(tag.value == value[value.length-1])
+        {
+          TagScore = 1;
+        }
+      })
+      if(TagScore == 0){
+        console.log(value[value.length-1])
+        // addNewTag(value[value.length-1])
+        // .then(response=>{
+        //   console.log(response)
+        //   this.state.tags.push({
+        //     key:'',
+        //     value:value[value.length-1],
+        //     text: value[value.length-1]
+        //   })
+        // })
+        // .catch(error=>{
+        //   console.log(error)
+        // })
+      }
+      console.log(this.state.tags)
     }
     this.state.currentTagValues = value;
     this.setState({ 
@@ -685,8 +708,6 @@ handleChangeReleasename = (e, {value}) => {
     if(localStorage.getItem(ACCESS_TOKEN)) {
         myHeaders.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
     }
-    console.log("caption", authorization.caption)
-    console.log("kind", authorization.authorizationKind)
     const formData = new FormData();
     formData.append('caption', authorization.caption);
     formData.append('authorizationKind', authorization.authorizationKind);
@@ -700,7 +721,7 @@ handleChangeReleasename = (e, {value}) => {
       };
       fetch(API_BASE_URL + "/authorization_controller/upload_authorization", requestOptions)
       .then(response => {
-        console.log("afsafsfsd",response.body)
+        console.log("upload Release response",response.body)
           if(response.ok){
               this.setState({
                   NewReleaseModalOpen: false,
@@ -751,8 +772,6 @@ handleChangeReleasename = (e, {value}) => {
   }
 
   render() {
-    console.log("!@!@!@!@", this.state.ReleaseScore)
-    console.log("++++++++++++++++++++++++++", this.state.ReleaseNameArray)
     const { activeIndex, activeItem } = this.state
     const keywords = [];
     const commonReleases = [];

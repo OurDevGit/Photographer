@@ -150,6 +150,14 @@ export function submitMultiplePhoto(submitRequest) {
     });
 }
 
+export function addNewTag(Request) {
+    return request1({
+        url: API_BASE_URL + "/photo_submit/add_new_tag",
+        method: 'POST',
+        body: Request
+    });
+}
+
 export function adminAcceptPhoto(Request) {
     return request1({
         url: API_BASE_URL + "/admin/publication_controller/accept_and_rate_photo",
