@@ -85,7 +85,7 @@ class PhotoDetails extends Component {
           </Modal.Content>
           <Modal.Actions>
             <Button primary>
-              <a href='/'>
+              <a href='/Photo_details/4324'>
                 View Details <Icon name='chevron right' />
               </a>
             </Button>

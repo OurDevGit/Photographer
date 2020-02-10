@@ -93,6 +93,7 @@ class PhotoContent extends Component
           photoActive: index,
           rating: e.photo.rating,
           total: total,
+          selMotives: [],
           zoomImage
         })
       }else{
@@ -209,7 +210,7 @@ class PhotoContent extends Component
                   this.props.status == 'list_rejected_photos' ?
                     <Checkbox label={motive.value} value={motive.id} onClick={this.handleMotiveCheck} checked={motiveFlag[motive.id] == 1} disabled/>
 
-                  : <Checkbox label={motive.value} value={motive.id} onClick={this.handleMotiveCheck}/>
+                  : <Checkbox label={motive.value} value={motive.id} onClick={this.handleMotiveCheck} />
                 }
                 
               </List.Item>
@@ -217,7 +218,6 @@ class PhotoContent extends Component
             // console.log(motive, this.state.photo.rejectingMotives.includes({id: "1048675", value: "Wrong exposition on main subject"}))
           });
         }
-
         if(this.props.status == 'list_submitted_photos')
         {
           buttonGroup = [

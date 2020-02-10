@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import './PanAndZoomImage.css';
-
+import './PanAndZoomImage.less';
+import { Heart_Icon, Plus_Icon, Zoom_Icon, CloseIcon} from '../assets/icons'
 const PanAndZoomImage = ({ src }) => {
   const [isPanning, setPanning] = useState(false);
   const [image, setImage] = useState();
@@ -77,7 +77,6 @@ const PanAndZoomImage = ({ src }) => {
       window.removeEventListener('mousemove', mousemove);
     };
   });
-
   return (
     <div
       className="PanAndZoomImage-container"
@@ -86,18 +85,19 @@ const PanAndZoomImage = ({ src }) => {
       onWheel={onWheel}
     >
       <div
+        
         style={{
           transform: `translate(${position.x}px, ${position.y}px) scale(${position.z})`,
         }}
       >
-        <img
-          className="PanAndZoomImage-image"
-          alt="floorplan"
-          src={src}
-          onLoad={onLoad}
-        />
+          <img
+            className="PanAndZoomImage-image"
+            alt="floorplan"
+            src={src}
+            onLoad={onLoad}
+          />
+        </div>
       </div>
-    </div>
   );
 };
 

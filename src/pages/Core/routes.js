@@ -8,6 +8,7 @@ import Profile from '../User/Profile'
 import AddContent from '../AddContent'
 import SubmitContent from '../AddContent/SubmitContent'
 import Admin from '../Admin'
+import Photo_details from '../Photo_details'
 const routes = (
   <Switch>
     <Route path="/" exact component={Home} />
@@ -17,6 +18,7 @@ const routes = (
     <Route path="/addcontent" exact component={AddContent} />
     <Route path="/submitcontent" exact component={SubmitContent} />
     <Route path="/admin" exact component={Admin} />
+    <Route path="/Photo_details/:id" exact component={Photo_details}/>
     <Redirect path="*" to="/" />
   </Switch>
 )

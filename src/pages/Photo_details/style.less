@@ -1,0 +1,84 @@
+@import "~slick-carousel/slick/slick.css"; 
+@import "~slick-carousel/slick/slick-theme.css";
+
+.page-index.ui.grid {
+  background: #fff;
+
+  & > .row > .column {
+    margin: 0 !important;
+  }
+  .our-partners-section {
+    .main .title {
+      display: none;
+    }
+  }
+
+
+  @media (max-width: 600px) {
+    overflow: hidden;
+  }
+}
+
+.photo_details{
+  .photo_details_row{
+    margin: 30px;
+    .zoomImage{
+      background: #383838;
+      border: 1px solid gray;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      img{
+          max-height: 750px;
+          min-width: 0px !important;
+      }
+    }
+    .zoomImage{
+        position: relative;
+        .loveImageButton{
+            position: absolute;
+            bottom: 20px;
+            right: 0;
+        }
+        .detail_Icon{
+            position: absolute;
+            right: 30px;
+            width: 40px;
+            cursor: pointer;
+            background: black;
+            border-radius: 50%;
+            border: 1px solid white;
+            padding: 10px;
+            opacity: 0;
+            z-index: 100;
+        }
+        .detail_Icon:hover{
+            color: skyblue;
+            opacity: 0.5;
+        }
+        .Zoom-icon{
+            top: 40px;
+            color: white;
+        }
+        .Heart-icon{
+            top: 90px;
+        }
+        .Plus-icon{
+            top: 140px;
+            color: white;
+        }
+    }
+    .zoomImage:hover{
+        .detail_Icon{
+            opacity: 0.7;
+        }
+        .detail_Icon:hover{
+            color: skyblue;
+            opacity: 0.5;
+        }
+        .owner_content{
+            opacity: 0.7;
+        }
+    }
+  }
+}

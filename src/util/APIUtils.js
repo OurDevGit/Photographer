@@ -150,6 +150,14 @@ export function submitMultiplePhoto(submitRequest) {
     });
 }
 
+export function redeemMultiplePhoto(Request) {
+    return request1({
+        url: API_BASE_URL + "/photo_submit/retrieve_submit_multiplePhoto",
+        method: 'POST',
+        body: JSON.stringify(Request)
+    });
+}
+
 export function addNewTag(Request) {
     return request1({
         url: API_BASE_URL + "/photo_submit/add_new_tag",

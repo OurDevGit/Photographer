@@ -2,7 +2,18 @@ import React, { Component } from 'react'
 import { Grid, GridColumn , Menu, Dropdown, Icon, Message, Form, Button, TextArea, Select , Accordion, Checkbox, Popup, Header, Modal, Input, Radio} from 'semantic-ui-react'
 import { NavLink, Redirect } from 'react-router-dom'
 import MetaTags from 'react-meta-tags'
-import { getCurrentUser, getAllCategories, getAllTags, getNumberOfPhotos ,updateMultiplePhoto, submitMultiplePhoto, addAuthorizationToPhotoIDs, removeAuthorizationToPhotoIDs, addNewTag} from '../../../util/APIUtils';
+import { 
+  getCurrentUser, 
+  getAllCategories, 
+  getAllTags, 
+  getNumberOfPhotos,
+  updateMultiplePhoto, 
+  submitMultiplePhoto, 
+  addAuthorizationToPhotoIDs, 
+  removeAuthorizationToPhotoIDs, 
+  addNewTag, 
+  redeemMultiplePhoto} 
+from '../../../util/APIUtils';
 import { API_BASE_URL, PHOTO_LIST_SIZE, ACCESS_TOKEN, releaseOptions, sortOptions, age, gender, ethnicity } from '../../../constants';
 import { HomeHeader, PhotoList, AvatarImage, MultiSelect, ListComponent } from '../../../components'
 import './style.less'
@@ -72,6 +83,7 @@ class SubmitContent extends Component {
     this.handleSearchReleaseKeyChange = this.handleSearchReleaseKeyChange.bind(this)
     this.getCommonRelease =  this.getCommonRelease.bind(this)
     this.handleClickAttach = this.handleClickAttach.bind(this)
+    this.handleRedeem = this.handleRedeem.bind(this)
   }
 
   componentDidMount() {
@@ -584,6 +596,21 @@ handleChangeReleasename = (e, {value}) => {
             isLoading: false
           });  
         });
+  }
+
+  handleRedeem(){
+    redeemMultiplePhoto(this.state.selImageIDs)
+      .then(response=>{
+        console.log(response);
+        this.getTotalNumberOfPhotos();
+        this.setState({
+          activeMenuItem : "TO_BE_SUBMITTED",
+          // total: this.state.total
+        })
+      })
+      .catch(error=>{
+        console.log(error)
+      })
   }
 
 // update photo options
@@ -1137,6 +1164,11 @@ handleChangeReleasename = (e, {value}) => {
                   {
                     this.state.activeMenuItem == 'TO_BE_SUBMITTED' ? 
                       <Button className="submitButton" onClick={this.handleSubmit} fluid negative>Submit</Button>
+                    : null
+                  }
+                  {
+                    this.state.activeMenuItem == 'REJECTED' ? 
+                      <Button className="submitButton" onClick={this.handleRedeem} fluid negative>Redeem</Button>
                     : null
                   }
                 
