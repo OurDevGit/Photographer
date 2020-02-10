@@ -1,12 +1,25 @@
 form{
+    position: relative;
     width: 80%;
     min-height: 300px;
     border: 3px solid gray;
     margin: 50px auto;
-    .select_files{
+    .dragImage{
+        height: 300px;
         position: absolute;
+        top: 0;
+        width: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+    .select_files_label{
+        position: absolute;
+        display: block;
+        width: 100%;
         top: 50%;
-        left: 45%;
+        margin: 0 auto;
+        text-align: center;
+        z-index: 10;
     }
     .upload_button{
         position: absolute;
@@ -20,8 +33,8 @@ form{
     }
     .goSubmitButton{
         position: absolute !important;
-        bottom: 10px;
-        right: 10%;
+        bottom: -50px;
+        right: 0%;
         background: skyblue !important;
     }
     img{

@@ -1,4 +1,4 @@
-import React, { Component, Input } from 'react';
+import React, { Component, Input, Fragment  } from 'react';
 import UploadPhoto from '../UploadPhoto'
 import  { Redirect } from 'react-router-dom'
 import './style.less'
@@ -6,8 +6,9 @@ import { uploadPhotos } from '../../../util/APIUtils';
 import axios from "axios"
 import { API_BASE_URL, PHOTO_LIST_SIZE, ACCESS_TOKEN } from '../../../constants';
 import LoadingIndicator  from '../../../common/LoadingIndicator';
-export default class MultipleImageUploadComponent extends Component {
+import ReactDropzone from 'react-dropzone';
 
+export default class MultipleImageUploadComponent extends Component {
     fileObj = [];
     fileArray = [];
     file = [];
@@ -32,6 +33,9 @@ export default class MultipleImageUploadComponent extends Component {
         });
     }
 
+    onDrop(e){
+        console.log(e)
+    }
     uploadMultipleFiles(e) {
         this.fileObj = e.target.files;
         console.log(this.fileObj)
@@ -118,10 +122,16 @@ export default class MultipleImageUploadComponent extends Component {
                                 <img src={url} alt="..." />
                             ))}
                         </div>
-    
-                        <div className="form-group">
-                            <input type="file" accept="image/*" className="form-control select_files" name="file" onChange={this.uploadMultipleFiles} multiple />
-                        </div>
+                        {/* <ReactDropzone
+                        // onDrop={this.onDrop}
+                        >
+                        Drop your best gator GIFs here!!
+                        </ReactDropzone> */}
+                        <input type="file" accept="image/*" className="dragImage" name="file" onChange={this.uploadMultipleFiles} multiple />
+                        {/* <div className="form-group"> */}
+                            <span className="select_files_label">Drag and Drop Image or Click this area to upload photo</span>
+                            {/* <input type="file" accept="image/*" className="form-control select_files" name="file" onChange={this.uploadMultipleFiles} multiple /> */}
+                        {/* </div> */}
                         {/* <button type="button" disabled={this.state.disabled} className="btn btn-danger btn-block upload_button" onClick={this.uploadFiles}>Next</button> */}
                         <button type="button" disabled={this.state.disabled} class="ui icon right btn btn-danger labeled button goSubmitButton" onClick={this.uploadFiles}>
                             <i aria-hidden="true" class="right arrow icon"></i>

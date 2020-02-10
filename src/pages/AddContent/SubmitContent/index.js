@@ -250,18 +250,18 @@ class SubmitContent extends Component {
       })
       if(TagScore == 0){
         console.log(value[value.length-1])
-        // addNewTag(value[value.length-1])
-        // .then(response=>{
-        //   console.log(response)
-        //   this.state.tags.push({
-        //     key:'',
-        //     value:value[value.length-1],
-        //     text: value[value.length-1]
-        //   })
-        // })
-        // .catch(error=>{
-        //   console.log(error)
-        // })
+        addNewTag(value[value.length-1])
+        .then(response=>{
+          console.log(response)
+          this.state.tags.push({
+            key:'',
+            value:value[value.length-1],
+            text: value[value.length-1]
+          })
+        })
+        .catch(error=>{
+          console.log(error)
+        })
       }
       console.log(this.state.tags)
     }
