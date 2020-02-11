@@ -230,8 +230,6 @@ class PhotoContent extends Component
         }else if(this.props.status == 'list_accepted_photos'){
           buttonGroup = [
             <Button.Group>
-              <Button positive onClick={this.handleRedeemClick}>Redeem</Button>
-              <Button.Or />
               <Button negative onClick={this.handleRejectClick}>Reject</Button>
             </Button.Group>
           ]

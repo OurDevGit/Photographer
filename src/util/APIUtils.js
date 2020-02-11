@@ -52,9 +52,9 @@ export function getAllPhotos(page, size) {
     });
 }
 
-export function getPhotoLists() {
+export function getPhotoLists(page, size) {
     return request({
-        url: API_BASE_URL + "/public/lists/homepage",
+        url: API_BASE_URL + "/public/lists/homepage?page="+ page + "&size=" +  size,
         method: 'GET'
     });
 }
@@ -184,7 +184,7 @@ export function adminRejectPhoto(Request) {
 
 export function adminRedeemPhoto(Request) {
     return request1({
-        url: API_BASE_URL + "/admin/publication_controller/redeem_photos",
+        url: API_BASE_URL + "/photo_submit/redeem_photos",
         method: 'POST',
         body: JSON.stringify(Request)
     });
@@ -286,6 +286,13 @@ export function getAllCategories() {
 export function getAllTags() {
     return request({
         url: API_BASE_URL + "/public/tags/getAll" ,
+        method: 'GET'
+    });
+}
+
+export function getPhotoDetail(id){
+    return request({
+        url: API_BASE_URL + "/photo_details_controller/photo_details/" + id ,
         method: 'GET'
     });
 }

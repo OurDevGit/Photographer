@@ -1,7 +1,7 @@
 export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://198.23.255.20:5000/api';
 export const ACCESS_TOKEN = 'accessToken';
 
-export const PHOTO_LIST_SIZE = 30;
+export const PHOTO_LIST_SIZE = 1;
 export const MAX_CHOICES = 6;
 export const PHOTO_QUESTION_MAX_LENGTH = 140;
 export const PHOTO_CHOICE_MAX_LENGTH = 40;

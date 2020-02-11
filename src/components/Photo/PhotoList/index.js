@@ -45,6 +45,7 @@ class PhotoList extends Component {
                 promise = getAdminPublicationPhotoList(this.props.status)
             }
         } else {
+            console.log(page, size)
             promise = getPhotoLists(page, size);
         }
 
@@ -101,7 +102,7 @@ class PhotoList extends Component {
                 const currentVotes = this.state.currentVotes.slice();
                 this.setState({
                     photos: photos.concat(response.content),
-                    photo_list: photos.concat(response.content).slice(0, 5),
+                    photo_list: photos.concat(response.content),
                     page: response.page,
                     size: response.size,
                     totalElements: response.totalElements,
@@ -165,6 +166,17 @@ class PhotoList extends Component {
             })
             
         }
+        if(this.props.activePage != prevProps.activePage){
+            this.setState({
+                photos: [],
+                page: 0,
+                totalElements: 0,
+                last: true,
+                currentVotes: [],
+                isLoading: false
+            });  
+            this.loadPhotoList(this.props.activePage -1, PHOTO_LIST_SIZE);
+        }
     }
 
     handleLoadMore() {
@@ -220,6 +232,7 @@ class PhotoList extends Component {
     }
 
     render() {
+        console.log("photo_list", this.state.photo_list)
         const photoViews = [];
         this.state.photo_list.forEach((photo, photoIndex) => {
             photoViews.push(<Photo
@@ -248,14 +261,14 @@ class PhotoList extends Component {
                         </div>    
                     ): null
                 }  
-                {
+                {/* {
                     !this.state.isLoading && !this.state.last ? (
                         <div className="load-more-photos">
                             <Button type="dashed" onClick={this.handleLoadMore} disabled={this.state.isLoading}>
                                 <Icon type="plus" /> Load more
                             </Button>
                         </div>): null
-                }              
+                }               */}
                 {
                     this.state.isLoading ? 
                     <LoadingIndicator />: null                     

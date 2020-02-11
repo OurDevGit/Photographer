@@ -12,3 +12,4 @@ export { default as PhotoList } from './Photo/PhotoList';
 export { default as Photo } from './Photo/Photo';
 export { default as MultiSelect } from './MultiSelect';
 export { default as ListComponent} from './List';
+export { default as Pagination_Component} from './Pagenation'

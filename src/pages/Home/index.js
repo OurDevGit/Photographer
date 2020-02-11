@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Grid, GridColumn, Image, Divider } from 'semantic-ui-react'
 import MetaTags from 'react-meta-tags'
-import { getCurrentUser, getAllCategories } from '../../util/APIUtils';
-import { ACCESS_TOKEN } from '../../constants';
-import { HomeHeader, SearchBar, PhotoList } from '../../components'
+import { getCurrentUser, getAllCategories, getPhotoLists } from '../../util/APIUtils';
+import { ACCESS_TOKEN, PHOTO_LIST_SIZE } from '../../constants';
+import { HomeHeader, SearchBar, PhotoList, Pagination_Component } from '../../components'
 import Footer from './Footer'
 import CategoryCarousel from  './CategoryCarousel'
 import PhotoDetails from './PhotoDetails'
@@ -20,6 +20,8 @@ class Home extends Component {
       categories: [],
       ImageShow: false,
       selImage:{},
+      totalPages:0,
+      activePage: 1,
       BucketShow: false
     }
     this.handleLogout = this.handleLogout.bind(this);
@@ -30,6 +32,7 @@ class Home extends Component {
     this.CloseImageModal = this.CloseImageModal.bind(this);
     this.CloseBucketModal = this.CloseBucketModal.bind(this);
     this.addToBucket = this.addToBucket.bind(this);
+    this.onChangePage =  this.onChangePage.bind(this);
   }
 
   loadCurrentUser() {
@@ -64,9 +67,22 @@ class Home extends Component {
     });
   }
 
+  getTotalpages(){
+    getPhotoLists(0, PHOTO_LIST_SIZE)
+      .then(response=>{
+        this.setState({
+          totalPages: response.totalPages
+        })
+      })
+      .catch(error=>{
+        console.log("error", error)
+      })
+  }
+
   componentDidMount() {
     this.loadCurrentUser();
     this.loadAllCategories();
+    this.getTotalpages();
   }
 
   handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
@@ -121,8 +137,15 @@ class Home extends Component {
     })
   }
 
+  onChangePage(activePage){
+    console.log(activePage)
+    this.setState({
+      activePage: activePage
+    })
+  }
+
   render() {
-    console.log("~!!~~!~!~!~!~!", this.state.selImage)
+    console.log("~!!~~!~!~!~!~!", this.state.totalPages)
     return (
       <>
         <MetaTags>
@@ -144,6 +167,7 @@ class Home extends Component {
                 type="home_list" 
                 onClickImage = {this.handleImageClick}
                 addToBucket = {this.addToBucket}
+                activePage = {this.state.activePage}
               />
               <PhotoDetails 
                 show={this.state.ImageShow}
@@ -156,6 +180,16 @@ class Home extends Component {
                 photo = {this.state.selImage}
                 handleClose={this.CloseBucketModal}
               />
+              
+              
+            </Grid.Column>
+            <Grid.Column className='PageNation' width='16'>
+              <Pagination_Component 
+                totalPages = {this.state.totalPages}
+                onChangePage = {this.onChangePage}
+              />
+            </Grid.Column>
+            <Grid.Column width='16'>
               <Footer />
             </Grid.Column>
           </Grid.Row>
