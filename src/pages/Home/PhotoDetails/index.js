@@ -46,7 +46,7 @@ class PhotoDetails extends Component {
           <Modal.Content className="modal_content" >
             <Modal.Description>
               <div className='image'>
-                <Image src={photo.url_fr} wrapped />
+                <Image src={photo.url_mr} wrapped />
                 <a target='blank' href={photo.url_fr}><Zoom_Icon className="detail_Icon Zoom-icon" /></a>
                 <a onClick={this.addToPreferred}><Heart_Icon className="detail_Icon Heart-icon"/></a>
                 <a onClick={this.addToBucket}><Plus_Icon className="detail_Icon Plus-icon" /></a>   

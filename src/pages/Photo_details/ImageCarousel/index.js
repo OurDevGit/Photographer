@@ -103,25 +103,14 @@ class ImageCarousel extends React.Component {
           <Grid.Row>
             <Grid.Column width={16}>
               <Slider {...settings} ref={c => (this.slider = c)}>
-                {this.props.photo.map((slide, index) => (
+                {this.props.photo.map((photo, index) => (
                   <div key={index}>
                     <div className="category_content">
-                      {/* <img src='https://picktur.s3.eu-central-1.amazonaws.com/FR_1581394475419-B_HR.jpg' /> */}
-                      <Photo
-                        // index={photoIndex}
-                        photo={slide}
-                        // onClick = {this.props.onClickImage}
-                        // active = {this.props.active}
-                        // total = {this.state.photo_list.length}
-                        // type = {this.props.type}
-                        // addToBucket = {this.props.addToBucket}
-                        // action = {this.props.action}
-                        // publish = {this.props.publish}
-                        // status = {this.props.status}
-                        // currentVote={this.state.currentVotes[photoIndex]}
-                        // handleVoteChange={(event) => this.handleVoteChange(event, photoIndex)}
-                        // handleVoteSubmit={(event) => this.handleVoteSubmit(event, photoIndex)} 
+                      <a href={'/Photo_details/' + photo.id}>
+                        <Photo
+                          photo={photo}
                         />
+                      </a>
                     </div>
                   </div>
                 ))}

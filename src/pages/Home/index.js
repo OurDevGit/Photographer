@@ -8,6 +8,7 @@ import Footer from './Footer'
 import CategoryCarousel from  './CategoryCarousel'
 import PhotoDetails from './PhotoDetails'
 import Bucket from './Bucket'
+
 import './style.less'
 import {notification} from 'antd'
 class Home extends Component {
@@ -71,7 +72,8 @@ class Home extends Component {
     getPhotoLists(0, PHOTO_LIST_SIZE)
       .then(response=>{
         this.setState({
-          totalPages: response.totalPages
+          totalPages: response.totalPages,
+          photos: response.content
         })
       })
       .catch(error=>{
@@ -145,7 +147,7 @@ class Home extends Component {
   }
 
   render() {
-    console.log("~!!~~!~!~!~!~!", this.state.totalPages)
+    console.log("~!!~~!~!~!~!~!", this.state.photos)
     return (
       <>
         <MetaTags>
@@ -168,6 +170,7 @@ class Home extends Component {
                 onClickImage = {this.handleImageClick}
                 addToBucket = {this.addToBucket}
                 activePage = {this.state.activePage}
+                totalPages = {this.state.totalPages}
               />
               <PhotoDetails 
                 show={this.state.ImageShow}
@@ -180,8 +183,6 @@ class Home extends Component {
                 photo = {this.state.selImage}
                 handleClose={this.CloseBucketModal}
               />
-              
-              
             </Grid.Column>
             <Grid.Column className='PageNation' width='16'>
               <Pagination_Component 
@@ -190,7 +191,7 @@ class Home extends Component {
               />
             </Grid.Column>
             <Grid.Column width='16'>
-              <Footer />
+              {/* <Footer /> */}
             </Grid.Column>
           </Grid.Row>
         </Grid>

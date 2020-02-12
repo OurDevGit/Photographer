@@ -5,6 +5,7 @@ import { castVote } from '../../../util/APIUtils';
 import LoadingIndicator  from '../../../common/LoadingIndicator';
 import { Button, Icon, notification } from 'antd';
 import { PHOTO_LIST_SIZE } from '../../../constants';
+import InfiniteScroll from 'react-infinite-scroller'
 import './style.less';
 
 const photos = [
@@ -26,10 +27,12 @@ class PhotoList extends Component {
             totalPages: 0,
             last: true,
             currentVotes: [],
+            hasMore:true,
             isLoading: false
         };
         this.loadPhotoList = this.loadPhotoList.bind(this);
         this.handleLoadMore = this.handleLoadMore.bind(this);
+        this.loadFunc =  this.loadFunc.bind(this)
     }
 
     loadPhotoList(page = 0, size = PHOTO_LIST_SIZE) {
@@ -97,13 +100,13 @@ class PhotoList extends Component {
         else{
             promise            
             .then(response => {
-                
+                console.log(response)
                 const photos = this.state.photos.slice();
                 const currentVotes = this.state.currentVotes.slice();
                 this.setState({
                     photos: photos.concat(response.content),
                     photo_list: photos.concat(response.content),
-                    page: response.page,
+                    // page: response.page,
                     size: response.size,
                     totalElements: response.totalElements,
                     totalPages: response.totalPages,
@@ -231,8 +234,25 @@ class PhotoList extends Component {
         });
     }
 
+    loadFunc(page){
+        console.log("++++++++++++++++++++++++++++++++++++++++", page)
+        // this.state.page = this.state.page + 1;
+        this.setState({
+            page: this.state.page,
+        })
+        console.log("===================================",this.props.totalPages)
+        if(page == this.props.totalPages)
+        {
+            this.setState({
+                hasMore: false
+            })
+        }
+        this.loadPhotoList(page, PHOTO_LIST_SIZE)
+    }
+
     render() {
-        console.log("photo_list", this.state.photo_list)
+        console.log("photo_list", this.props.totalPages)
+        console.log(this.props.type)
         const photoViews = [];
         this.state.photo_list.forEach((photo, photoIndex) => {
             photoViews.push(<Photo
@@ -251,9 +271,38 @@ class PhotoList extends Component {
                 // handleVoteSubmit={(event) => this.handleVoteSubmit(event, photoIndex)} 
                 />)
         });
+
+        var items = [];
+        this.state.photo_list.map((track, i) => {
+            items.push(
+                <div className="track" key={i}>
+                    <a href={track.url_fr} target="_blank">
+                        <img src={track.url_fr} width="150" height="150" />
+                    </a>
+                </div>
+            );
+        });
         return (
             <div className="photos-container">
-                {photoViews}
+                {/* {photoViews} */}
+                {
+                    this.props.type == 'home_list' && this.props.totalPages > 0 ?(
+                        <div className="infiniteScroll">
+                            <InfiniteScroll
+                                pageStart={0}
+                                loadMore={this.loadFunc}
+                                hasMore={this.state.hasMore}
+                                loader={<div className="loader" key={0}>Loading ...</div>}
+                                // useWindow={false}
+                            >
+                                {photoViews}
+                            </InfiniteScroll>
+                        </div>
+                    )
+                        
+                    :   photoViews
+                }
+                
                 {
                     !this.state.isLoading && this.state.photos.length === 0 ? (
                         <div className="no-photos-found">

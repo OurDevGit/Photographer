@@ -94,7 +94,7 @@ class Photo extends Component {
                         }
                         
                     </div>
-                    <img onClick={this.handleCheck} src={photo.url_fr} id={index}  value={photo} />
+                    <img onClick={this.handleCheck} src={photo.url_lr} id={index}  value={photo} />
                     <List className='rejectingMotives'>
                         {rejectingMotives}
                     </List>
