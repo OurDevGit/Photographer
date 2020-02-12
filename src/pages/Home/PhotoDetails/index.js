@@ -38,12 +38,12 @@ class PhotoDetails extends Component {
       });
       var url = photo.url_fr + ''
       return(
-        <Modal open={show} className='PhotoDetailModal'>
+        <Modal open={show} closeOnEscape={false} closeOnDimmerClick={true}  onClose={this.handleClose} className='PhotoDetailModal'>
           <Modal.Header>
             {photo.title}
             <a onClick={this.handleClose}><CloseIcon className='close_icon' /></a>
           </Modal.Header>
-          <Modal.Content className="modal_content" >
+          <Modal.Content className="modal_content" scrolling>
             <Modal.Description>
               <div className='image'>
                 <Image src={photo.url_mr} wrapped />

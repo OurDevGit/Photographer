@@ -266,6 +266,7 @@ class PhotoList extends Component {
                 action = {this.props.action}
                 publish = {this.props.publish}
                 status = {this.props.status}
+                quickView =  {this.props.quickView}
                 // currentVote={this.state.currentVotes[photoIndex]}
                 // handleVoteChange={(event) => this.handleVoteChange(event, photoIndex)}
                 // handleVoteSubmit={(event) => this.handleVoteSubmit(event, photoIndex)} 

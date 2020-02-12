@@ -947,8 +947,16 @@ handleChangeReleasename = (e, {value}) => {
                     </div>
                     <div class="column">
                       <Form.Field>
+                      <div class="label">Description</div>
                         <TextArea rows={1} placeholder="Descriptions" name='Description' value={this.state.photoOptions['Description']} required onChange={this.handleSetPhotoOption} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'} />
                           <div class='label error'>{this.state.errorMessage['Description']}</div>
+                      </Form.Field>
+                    </div>
+                    <div class="column">
+                      <Form.Field>
+                      <div class="label">Collection</div>
+                        <Select placeholder='Collection' options={this.state.categories} name="Category1" value={this.state.photoOptions['Collection']} onChange={this.handleSetPhotoOption} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'}/>
+                        <div class='label error'>{this.state.errorMessage['Collection']}</div>
                       </Form.Field>
                     </div>
                     <div class="column">

@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React, {Component} from 'react';
-import { Button, Header, Icon, Image, Modal, Label, Dropdown } from 'semantic-ui-react'
+import { Button, Header, Icon, Image, Modal, Label, Dropdown, Input } from 'semantic-ui-react'
 import { Heart_Icon, Plus_Icon, Zoom_Icon, CloseIcon} from '../../../assets/icons'
 import './style.less'
 

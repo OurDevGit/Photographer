@@ -34,6 +34,7 @@ class Home extends Component {
     this.CloseBucketModal = this.CloseBucketModal.bind(this);
     this.addToBucket = this.addToBucket.bind(this);
     this.onChangePage =  this.onChangePage.bind(this);
+    this.quickView = this.quickView.bind(this)
   }
 
   loadCurrentUser() {
@@ -115,9 +116,10 @@ class Home extends Component {
   handleImageClick(e){
     console.log("Image", e);
     this.setState({
-      ImageShow: true,
+      // ImageShow: true,
       selImage: e
     })
+    this.props.history.push('/Photo_details/'+e.id);
   }
 
   CloseImageModal(flag){
@@ -126,6 +128,12 @@ class Home extends Component {
     })
   }
 
+  quickView(e){
+    this.setState({
+      ImageShow: true,
+      selImage: e
+    })
+  }
   CloseBucketModal(flag){
     this.setState({
       BucketShow: flag
@@ -171,6 +179,7 @@ class Home extends Component {
                 addToBucket = {this.addToBucket}
                 activePage = {this.state.activePage}
                 totalPages = {this.state.totalPages}
+                quickView = {this.quickView}
               />
               <PhotoDetails 
                 show={this.state.ImageShow}
@@ -185,10 +194,10 @@ class Home extends Component {
               />
             </Grid.Column>
             <Grid.Column className='PageNation' width='16'>
-              <Pagination_Component 
+              {/* <Pagination_Component 
                 totalPages = {this.state.totalPages}
                 onChangePage = {this.onChangePage}
-              />
+              /> */}
             </Grid.Column>
             <Grid.Column width='16'>
               {/* <Footer /> */}

@@ -17,6 +17,7 @@ class Photo extends Component {
         }
         this.handleCheck = this.handleCheck.bind(this);
         this.addToBucket =  this.addToBucket.bind(this);
+        this.quickView = this.quickView.bind(this);
     }
 
     componentDidUpdate(prevProps) {
@@ -41,6 +42,10 @@ class Photo extends Component {
     onClickImage = () => {
 
         this.props.onClick(this.props)
+    }
+
+    quickView(){
+        this.props.quickView(this.props.photo)
     }
 
     handleCheck(){
@@ -85,7 +90,7 @@ class Photo extends Component {
                         {
                             type == 'home_list' ? (
                                 <div>
-                                    <a target='blank' href={photo.url_fr}><Zoom_Icon className="detail_Icon Zoom-icon" /></a>
+                                    <a target='blank' onClick={this.quickView}><Zoom_Icon className="detail_Icon Zoom-icon" /></a>
                                     <Heart_Icon className="detail_Icon Heart-icon" />
                                     <a onClick={this.addToBucket}><Plus_Icon className="detail_Icon Plus-icon" /></a>
                                     <p className="owner_content">{photo.owner}</p>    

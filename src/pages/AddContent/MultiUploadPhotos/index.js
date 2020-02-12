@@ -1,6 +1,7 @@
 import React, { Component, Input, Fragment  } from 'react';
 import UploadPhoto from '../UploadPhoto'
 import  { Redirect } from 'react-router-dom'
+import {Select} from 'semantic-ui-react'
 import './style.less'
 import { uploadPhotos } from '../../../util/APIUtils';
 import axios from "axios"
@@ -16,12 +17,14 @@ export default class MultipleImageUploadComponent extends Component {
         super(props)
         this.state = {
             files: [],
+            collection: '',
             disabled: true,
             isLoading: false,
         }
         this.uploadMultipleFiles = this.uploadMultipleFiles.bind(this)
         this.uploadFiles = this.uploadFiles.bind(this)
         this.goSubmitContent = this.goSubmitContent.bind(this)
+        this.handleSetCollection = this.handleSetCollection.bind(this)
     }
 
     getBase64 = file => {
@@ -34,6 +37,10 @@ export default class MultipleImageUploadComponent extends Component {
     }
 
     onDrop(e){
+        console.log(e)
+    }
+
+    handleSetCollection(e){
         console.log(e)
     }
     uploadMultipleFiles(e) {
@@ -137,6 +144,9 @@ export default class MultipleImageUploadComponent extends Component {
                             <i aria-hidden="true" class="right arrow icon"></i>
                             Upload Photo
                         </button>
+                        <div className='collection'>
+                            <b>Collection: </b> <Select placeholder='Collection' options={this.state.categories} name="Collection" onChange={this.handleSetCollection}/>
+                        </div>
                     </form >
                 )
             }

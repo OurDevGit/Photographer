@@ -59,7 +59,7 @@ class HomeHeader extends React.Component {
           </Menu.Item>,  
           <Menu.Item as={NavLink} to='/submitContent'>
             <PaperPlaneIcon className="paper-plane-icon" />
-            My Photos
+            My submitted Photos
           </Menu.Item>,
           <Menu.Item >
             <Avatar fullname={currentUser.name} status="online" />
@@ -163,10 +163,6 @@ class HomeHeader extends React.Component {
                       <Menu.Item as={NavLink} to="/founders">
                         <StarIcon className="star-icon" />
                         Images
-                      </Menu.Item>
-                      <Menu.Item as="a" onClick={this.openContactUsModal}>
-                        <PaperPlaneIcon className="paper-plane-icon" />
-                        Contact us
                       </Menu.Item>
                       <Menu.Item as="a" href="#" target="_blank">
                         <QuestionSVG className="verticalMenuItemSvgStyle" />
