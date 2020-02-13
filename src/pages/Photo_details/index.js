@@ -6,6 +6,7 @@ import { ACCESS_TOKEN } from '../../constants';
 import { HomeHeader, SearchBar, PhotoList } from '../../components'
 import PanAndZoomImage from '../../PanAndZoomImage';
 import ImageCarousel from  './ImageCarousel'
+import  Bucket from '../Home/Bucket'
 import { Heart_Icon, Plus_Icon, Zoom_Icon, CloseIcon} from '../../assets/icons'
 import './style.less'
 import {notification} from 'antd'
@@ -131,9 +132,8 @@ class Photo_details extends Component {
     })
   }
 
-  addToBucket(e, flag){
+  addToBucket(){
     this.setState({
-      selImage: e,
       BucketShow: true
     })
   }
@@ -151,7 +151,7 @@ class Photo_details extends Component {
       url = selImage.url_fr + ''
     }
 
-    console.log("~!!~~!~!~!~!~!", similarPhotos)
+    console.log("~!!~~!~!~!~!~!", selImage)
     return (
       <>
         <MetaTags>
@@ -168,7 +168,12 @@ class Photo_details extends Component {
             <div className='zoomImage'>
                 <a target='blank' href={url}><Zoom_Icon className="detail_Icon Zoom-icon" /></a>
                 <a ><Heart_Icon className="detail_Icon Heart-icon"/></a>
-                <a ><Plus_Icon className="detail_Icon Plus-icon" /></a>  
+                <a onClick={this.addToBucket}><Plus_Icon className="detail_Icon Plus-icon" /></a>  
+                <Bucket 
+                  show={this.state.BucketShow}
+                  photo = {selImage}
+                  handleClose={this.CloseBucketModal}
+                />
                 <Button as='div' className='loveImageButton' labelPosition='right'>
                   <Button color='red'>
                     <Icon name='heart' />

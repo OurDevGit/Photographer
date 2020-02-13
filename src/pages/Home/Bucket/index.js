@@ -2,6 +2,7 @@ import _ from 'lodash'
 import React, {Component} from 'react';
 import { Button, Header, Icon, Image, Modal, Label, Dropdown, Input } from 'semantic-ui-react'
 import { Heart_Icon, Plus_Icon, Zoom_Icon, CloseIcon} from '../../../assets/icons'
+import {getListOfBaskets, addNewBasketForUser, addToBasketForPhoto} from '../../../util/APIUtils'
 import './style.less'
 
 class Bucket extends Component {
@@ -25,13 +26,49 @@ class Bucket extends Component {
         super(props);
         this.state = {
             rating: 108,
+            baskets:[],
             currentBucketValues:[]
         }
+        this.loadBasketsForUser =  this.loadBasketsForUser.bind(this)
         this.handleClose = this.handleClose.bind(this);
         this.addToPreferred =  this.addToPreferred.bind(this);
         this.handleMultiSelectAddition = this.handleMultiSelectAddition.bind(this);
         this.handleMultiSelectChange = this.handleMultiSelectChange.bind(this);
+        this.addNewBasket = this.addNewBasket.bind(this)
+        this.addToBasket = this.addToBasket.bind(this)
     }
+
+    componentDidMount(){
+      console.log(
+        "sfdf"
+      )
+      this.loadBasketsForUser();
+    }
+
+    loadBasketsForUser() {
+      getListOfBaskets()
+      .then(response => {
+        
+        let basketlist = response.map((basket)=>{
+          return{
+            key: basket.id,
+            value: basket.value,
+            text: basket.value
+          }
+        });
+        console.log("_+_+_+_+_", basketlist)
+        this.setState({
+          baskets: basketlist,
+          isLoading:false
+        });
+      }).catch(error => {
+        console.log("error", error)
+        this.setState({
+          isLoading: false
+        });  
+      });
+    }
+
     handleClose(){
       this.props.handleClose(false)
     }
@@ -42,19 +79,59 @@ class Bucket extends Component {
       })
     }
 
+    addNewBasket(newBasket){
+      console.log("newBasket", newBasket)
+      addNewBasketForUser(newBasket)
+        .then(response=>{
+          console.log("ADDBASket",response)
+        })
+        .catch(error=>{
+          console.log('error', error)
+        })
+    }
+
     handleMultiSelectAddition = (e, { value }) => {
         this.setState((prevState) => ({
-          buckets: [{ text: value, value }, ...prevState.tags],
+          baskets: [{ text: value, value }, ...prevState.baskets],
         }))
       }
     
-      handleMultiSelectChange = (e, { value }) => {
+    handleMultiSelectChange = (e, { value }) => {
+      if(value.length > this.state.currentBucketValues.length)
+      {
+        for(let i=0; i<this.state.baskets.length; i++)
+        {
+          if(this.state.baskets[i].value == value[value.length-1]){
+            i = this.state.baskets.length
+          }
+          if(i == this.state.baskets.length-1){
+            this.addNewBasket(value[value.length-1]);
+          }
+        }
+        
+      }
         this.state.currentBucketValues = value;
         this.setState({ 
           currentBucketValues: value,
         })
         console.log(this.state.currentBucketValues)
+    }
+
+    addToBasket(){
+      
+      var Request={
+        "photoId": this.props.photo.id,
+        "baskets": this.state.currentBucketValues
       }
+      console.log(Request)
+      addToBasketForPhoto(Request)
+        .then(response=>{
+          console.log("add_to_basket_for User", response)
+        })
+        .catch(error=>{
+          console.log(error)
+        })
+    }
 
     render() {
       const {show, photo} = this.props;
@@ -80,7 +157,7 @@ class Bucket extends Component {
               <div className='AddBucket'>
                   <p>Add To Bucket</p>
                 <Dropdown
-                    options={this.buckets}
+                    options={this.state.baskets}
                     placeholder='Choose Keywords'
                     search
                     selection
@@ -95,7 +172,7 @@ class Bucket extends Component {
             </Modal.Description>
           </Modal.Content>
           <Modal.Actions>
-            <Button primary>
+            <Button primary onClick={this.addToBasket}>
               Save <Icon name='chevron right' />
             </Button>
           </Modal.Actions>

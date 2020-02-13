@@ -1,4 +1,5 @@
 import { API_BASE_URL, PHOTO_LIST_SIZE, ACCESS_TOKEN } from '../constants';
+import { string } from 'prop-types';
 
 const request = (options) => {
     const headers = new Headers({
@@ -294,5 +295,28 @@ export function getPhotoDetail(id){
     return request({
         url: API_BASE_URL + "/photo_details_controller/photo_details/" + id ,
         method: 'GET'
+    });
+}
+
+export function getListOfBaskets(){
+    return request({
+        url: API_BASE_URL + "/user_actions/photo_actions_controller/list_baskets_for_user",
+        method: 'GET'
+    });
+}
+
+export function addNewBasketForUser(Request){
+    return request({
+        url: API_BASE_URL + "/user_actions/photo_actions_controller/add_new_basket_for_user",
+        method: 'POST',
+        body: Request
+    });
+}
+
+export function addToBasketForPhoto(Request){
+    return request({
+        url: API_BASE_URL + "/user_actions/photo_actions_controller/add_to_basket",
+        method: 'POST',
+        body: JSON.stringify(Request)
     });
 }
