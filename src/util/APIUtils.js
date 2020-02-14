@@ -4,6 +4,7 @@ import { string } from 'prop-types';
 const request = (options) => {
     const headers = new Headers({
         'Content-Type': 'application/json',
+        
     })
     
     if(localStorage.getItem(ACCESS_TOKEN)) {
@@ -27,6 +28,7 @@ const request = (options) => {
 const request1 = (options) => {
     const headers = new Headers({
         'Content-Type': 'application/json',
+        "Content-Type": "text/plain"
     })
     
     if(localStorage.getItem(ACCESS_TOKEN)) {
@@ -298,6 +300,41 @@ export function getPhotoDetail(id){
     });
 }
 
+export function getSimilarPhotos(id){
+    return request({
+        url: API_BASE_URL + "/photo_details_controller/similarPhotos/" + id ,
+        method: 'GET'
+    });
+}
+
+export function getSameCollection(id){
+    return request({
+        url: API_BASE_URL + "/photo_details_controller/same_collection/" + id ,
+        method: 'GET'
+    });
+}
+
+export function getLikeAmount(id){
+    return request({
+        url: API_BASE_URL + "/photo_details_controller/like_amount/" + id ,
+        method: 'GET'
+    });
+}
+
+export function getDownloadAmount(id){
+    return request({
+        url: API_BASE_URL + "/photo_details_controller/download_amount/" + id ,
+        method: 'GET'
+    });
+}
+
+export function getViewsAmount(id){
+    return request({
+        url: API_BASE_URL + "/photo_details_controller/views_amount/" + id ,
+        method: 'GET'
+    });
+}
+
 export function getListOfBaskets(){
     return request({
         url: API_BASE_URL + "/user_actions/photo_actions_controller/list_baskets_for_user",
@@ -317,6 +354,38 @@ export function addToBasketForPhoto(Request){
     return request({
         url: API_BASE_URL + "/user_actions/photo_actions_controller/add_to_basket",
         method: 'POST',
+        body: JSON.stringify(Request)
+    });
+}
+
+export function removeToBasketForUser(Request){
+    return request({
+        url: API_BASE_URL + "/user_actions/photo_actions_controller/remove_basket_for_user",
+        method: 'GET',
+        body: JSON.stringify(Request)
+    })
+}
+
+export function is_liked(Request){
+    return request1({
+        url: API_BASE_URL + "/user_actions/photo_actions_controller/is_liked",
+        method: 'GET',
+        body: Request
+    })
+}
+
+export function addToLike(Request){
+    return request1({
+        url: API_BASE_URL + "/user_actions/photo_actions_controller/add_like",
+        method: 'POST',
+        body: Request
+    });
+}
+
+export function removeToLike(Request){
+    return request({
+        url: API_BASE_URL + "/user_actions/photo_actions_controller/remove_like_for_user",
+        method: 'GET',
         body: JSON.stringify(Request)
     });
 }

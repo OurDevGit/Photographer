@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Grid, Button, Icon, Label, GridRow } from 'semantic-ui-react'
 import MetaTags from 'react-meta-tags'
-import { getCurrentUser, getAllCategories, getPhotoDetail } from '../../util/APIUtils';
+import { getCurrentUser, getAllCategories, getPhotoDetail, addToLike, removeToLike, is_liked, getLikeAmount, getDownloadAmount, getViewsAmount } from '../../util/APIUtils';
 import { ACCESS_TOKEN } from '../../constants';
 import { HomeHeader, SearchBar, PhotoList } from '../../components'
 import PanAndZoomImage from '../../PanAndZoomImage';
@@ -10,6 +10,7 @@ import  Bucket from '../Home/Bucket'
 import { Heart_Icon, Plus_Icon, Zoom_Icon, CloseIcon} from '../../assets/icons'
 import './style.less'
 import {notification} from 'antd'
+import request from 'superagent';
 class Photo_details extends Component {
   constructor(props) {
     super(props);
@@ -21,18 +22,23 @@ class Photo_details extends Component {
       ImageShow: false,
       selImage:{},
       similarPhotos:[],
-      likes:192,
+      likes:0,
+      downloads:0,
+      views:0,
+      likeFlag: false,
       BucketShow: false
     }
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
     this.loadAllCategories = this.loadAllCategories.bind(this);
+    this.is_like_photo =  this.is_like_photo.bind(this)
     this.loadPhotoDetail = this.loadPhotoDetail.bind(this)
     this.handleLogin = this.handleLogin.bind(this);
     this.handleImageClick = this.handleImageClick.bind(this);
     this.CloseImageModal = this.CloseImageModal.bind(this);
     this.CloseBucketModal = this.CloseBucketModal.bind(this);
     this.addToBucket = this.addToBucket.bind(this);
+    this.addLike = this.addLike.bind(this);
   }
 
   loadCurrentUser() {
@@ -80,10 +86,67 @@ class Photo_details extends Component {
         console.log('error', error)
       })
   }
+  is_like_photo(id){
+    var urlencoded = new URLSearchParams();
+    urlencoded.append("photoLiked", id);
+    is_liked(urlencoded)
+    .then(response=>{
+      console.log("res", response)
+      this.setState({
+        likeFlag: response
+      })
+    })
+    .catch(error=>{
+      console.log("Error", error)
+    })
+  }
+
+  loadLikeAmount(id){
+    getLikeAmount(id)
+    .then(response=>{
+      console.log("amoutn",response)
+      this.setState({
+        likes: response
+      })
+    })
+    .catch(error=>{
+      console.log('error', error)
+    })
+  }
+
+  loadDownloadAmount(id){
+    getDownloadAmount(id)
+    .then(response=>{
+      console.log("amoutn",response)
+      this.setState({
+        downloads: response
+      })
+    })
+    .catch(error=>{
+      console.log('error', error)
+    })
+  }
+
+  loadViewsAmount(id){
+    getViewsAmount(id)
+    .then(response=>{
+      console.log("amoutn",response)
+      this.setState({
+        views: response
+      })
+    })
+    .catch(error=>{
+      console.log('error', error)
+    })
+  }
 
   componentDidMount() {
     this.loadCurrentUser();
     this.loadAllCategories();
+    this.loadLikeAmount(this.props.match.params.id)
+    this.loadDownloadAmount(this.props.match.params.id)
+    this.loadViewsAmount(this.props.match.params.id)
+    this.is_like_photo(this.props.match.params.id);
     this.loadPhotoDetail(this.props.match.params.id);
   }
 
@@ -138,6 +201,26 @@ class Photo_details extends Component {
     })
   }
 
+  addLike(){
+    console.log(this.state.selImage.id)
+    if(this.state.likeFlag == false)
+    {
+      addToLike(this.props.match.params.id)
+       .then(response=> {
+         console.log(response)
+         this.state.likes =this.state.likes + 1;
+         this.setState({
+           likes: this.state.likes
+         })
+       })
+       .catch(error=>{
+         console.log("error", error)   
+        })
+    }
+
+    // console.log(urlencoded)
+  }
+
   render() {
     const {selImage, similarPhotos} = this.state;
     const keywords = [];
@@ -167,20 +250,38 @@ class Photo_details extends Component {
             <Grid.Column width={12}>
             <div className='zoomImage'>
                 <a target='blank' href={url}><Zoom_Icon className="detail_Icon Zoom-icon" /></a>
-                <a ><Heart_Icon className="detail_Icon Heart-icon"/></a>
+                <a onClick={this.addLike}><Heart_Icon className="detail_Icon Heart-icon"/></a>
                 <a onClick={this.addToBucket}><Plus_Icon className="detail_Icon Plus-icon" /></a>  
                 <Bucket 
                   show={this.state.BucketShow}
                   photo = {selImage}
                   handleClose={this.CloseBucketModal}
                 />
-                <Button as='div' className='loveImageButton' labelPosition='right'>
+                <Button as='div' className='love ImageButton' labelPosition='right'>
                   <Button color='red'>
                     <Icon name='heart' />
-                    Like
+                    {/* Like */}
                   </Button>
                   <Label as='a' basic color='red' pointing='left'>
                     {this.state.likes}
+                  </Label>
+                </Button>
+                <Button as='div' className='download ImageButton' labelPosition='right'>
+                  <Button color='blue'>
+                    <Icon name='download' />
+                    
+                  </Button>
+                  <Label as='a' basic color='blue' pointing='left'>
+                    {this.state.downloads}
+                  </Label>
+                </Button>
+                <Button as='div' className='view ImageButton' labelPosition='right'>
+                  <Button color='gray'>
+                    <Icon name='eye' />
+                    
+                  </Button>
+                  <Label as='a' basic color='gray' pointing='left'>
+                    {this.state.views}
                   </Label>
                 </Button>
               <PanAndZoomImage src={url}>

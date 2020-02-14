@@ -7,6 +7,7 @@ import { HomeHeader, SearchBar, PhotoList } from '../../components'
 import './style.less'
 import VerticalSidebar from './VerticalSidebar'
 import PhotoContent from './PhotoContent'
+import OrderingPhotoForHome from './OrderingPhotoForHome'
 import CategoriesAndTags from './CategoriesAndTags'
 import Users from './Users'
 import {notification} from 'antd'
@@ -123,6 +124,10 @@ class Admin extends Component {
                       visible = {this.state.visible == 'list_submitted_photos' || this.state.visible == 'list_accepted_photos' || this.state.visible == 'list_rejected_photos' }
                       currentUser = {this.state.currentUser}
                       status = {this.state.visible}
+                    />
+
+                    <OrderingPhotoForHome 
+                      visible = {this.state.visible == 'order_photo_home'}
                     />
                     <CategoriesAndTags
                       visible = {this.state.visible == 'CategoriesAndTags'}

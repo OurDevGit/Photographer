@@ -56,6 +56,10 @@ export default class VerticalSidebar extends Component{
                 <Icon name='exclamation triangle' />
                 Rejected Content
                 </Menu.Item>
+                <Menu.Item as='a' value='order_photo_home' className={this.state.activeMentItem == 'order_photo_home' ? 'active' : ''} onClick={this.handleMenuClick}>
+                <Icon name='ordered list' />
+                Ordering Photo For Home
+                </Menu.Item>
                 <Menu.Item as='a' value='Authorizations' className={this.state.activeMentItem == 'Authorizations' ? 'active' : ''} onClick={this.handleMenuClick}>
                 <Icon name='id card' />
                 Authorizations

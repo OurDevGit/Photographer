@@ -81,7 +81,7 @@ class HomeHeader extends React.Component {
             </Menu.Item>,  
             <Menu.Item as={NavLink} to='/submitContent'>
               <PaperPlaneIcon className="paper-plane-icon" />
-              My Photos
+              My submitted Photos
             </Menu.Item>,
             <Menu.Item >
               <Avatar fullname={currentUser.name} status="online" />
