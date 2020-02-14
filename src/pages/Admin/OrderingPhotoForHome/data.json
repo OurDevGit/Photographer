@@ -5,7 +5,7 @@
         "title": "Publicated Photos",
         "label": "20/70",
         "style": {
-          "width": 280,
+          "width": 400,
           "border-right": "1px solid"
         },
         "cards": []
@@ -15,7 +15,7 @@
         "title": "First",
         "label": "10/20",
         "style": {
-          "width": 280
+          "width": 400
         },
         "cards": []
       },
@@ -24,26 +24,8 @@
         "title": "Second",
         "label": "0/0",
         "style": {
-          "width": 280
+          "width": 400
         },
-        "cards": []
-      },
-      {
-        "id": "Thrid",
-        "title": "Thrid",
-        "style": {
-          "width": 280
-        },
-        "label": "2/5",
-        "cards": []
-      },
-      {
-        "id": "Forth",
-        "title": "Forth",
-        "style": {
-          "width": 280
-        },
-        "label": "1/1",
         "cards": []
       }
     ]
