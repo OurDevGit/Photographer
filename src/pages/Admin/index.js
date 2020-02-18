@@ -120,21 +120,36 @@ class Admin extends Component {
                 </Grid.Column>
                 <Grid.Column width='13'>
                     <div className='admin_content'>
-                    <PhotoContent
-                      visible = {this.state.visible == 'list_submitted_photos' || this.state.visible == 'list_accepted_photos' || this.state.visible == 'list_rejected_photos' }
-                      currentUser = {this.state.currentUser}
-                      status = {this.state.visible}
-                    />
-
-                    <OrderingPhotoForHome 
-                      visible = {this.state.visible == 'order_photo_home'}
-                    />
-                    <CategoriesAndTags
-                      visible = {this.state.visible == 'CategoriesAndTags'}
-                    />
-                    <Users 
-                        visible = {this.state.visible == 'Users'}
-                    />
+                      {
+                        this.state.visible == 'list_submitted_photos' || this.state.visible == 'list_accepted_photos' || this.state.visible == 'list_rejected_photos' ?
+                          <PhotoContent
+                            visible = {this.state.visible == 'list_submitted_photos' || this.state.visible == 'list_accepted_photos' || this.state.visible == 'list_rejected_photos' }
+                            currentUser = {this.state.currentUser}
+                            status = {this.state.visible}
+                          />
+                        : null
+                      }
+                      {
+                        this.state.visible == 'order_photo_home' ? 
+                          <OrderingPhotoForHome 
+                            visible = {this.state.visible == 'order_photo_home'}
+                          />
+                        : null
+                      }
+                      {
+                        this.state.visible == 'CategoriesAndTags' ?
+                          <CategoriesAndTags
+                            visible = {this.state.visible == 'CategoriesAndTags'}
+                          />
+                        : null
+                      }
+                      {
+                        this.state.visible == 'Users' ? 
+                          <Users 
+                            visible = {this.state.visible == 'Users'}
+                          />
+                        : null
+                      }
                     </div>
                 </Grid.Column>
 

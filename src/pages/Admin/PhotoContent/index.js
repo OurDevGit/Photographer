@@ -294,9 +294,9 @@ class PhotoContent extends Component
                 <Grid.Row>
                   <Grid.Column className='admin_photolist' width='3'>
                     {
-                      this.state.currentUser ?
+                      this.state.currentUser && visible ?
                         <div className='adminPhotolist'>
-                          <PhotoList 
+                          <PhotoList
                             onClickImage={this.handleImageClick} 
                             username ={this.state.currentUser.username} 
                             type="admin_photolist" 
@@ -318,7 +318,8 @@ class PhotoContent extends Component
                               {/* <PanAndZoomImage
                                 src={url}
                               /> */}
-                              {this.state.zoomImage}
+                              <div className="zoomImage"><PanAndZoomImage src={url} /></div>
+                              {/* {this.state.zoomImage} */}
                             </Grid.Column>
                             <Grid.Column width='6'>
                               <div className='photoDetail'>

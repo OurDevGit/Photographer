@@ -9,7 +9,7 @@ export default class customImageCard extends Component {
     render(){
         const {id, title, description, url} =  this.props;
         return (
-            <div>
+            <div className='ImageContent'>
                 <div className='Image'>
                 <img src={url} /> 
                 </div>

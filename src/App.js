@@ -12,5 +12,5 @@ const App = ({ history }) => (
 App.propTypes = {
   history: PropTypes.object,
 }
-
+process.title = App;
 export default App

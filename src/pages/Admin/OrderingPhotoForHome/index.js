@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import ReactDOM from "react-dom";
-
+import {Button} from 'semantic-ui-react'
 import data from "./data.json";
 import "./style.less";
 import Board from "react-trello";
@@ -66,10 +66,13 @@ export default class OrderingPhotoForHome extends Component {
       const {visible} =  this.props;
       console.log("____________", this.imageData)
         return (
+          <div>
             <div className={visible ? 'visible': 'disable'} id='order_list_home'>
+              <Button content='Save' icon='save' labelPosition='left' positive size='large' />
               <Board data={this.imageData} draggable components={{Card: customImageCard}} onDataChange={this.datachange} />
             </div>
-          );
+          </div>
+        );
     }
 }
 
