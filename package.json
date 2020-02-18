@@ -42,6 +42,7 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "craco eject",
+    "stop": "taskkill -F -IM node.exe",
     "deploy-production": "git pull --rebase; git checkout production; git pull --rebase; git merge master; git push origin production; git checkout master;"
   },
   "eslintConfig": {
