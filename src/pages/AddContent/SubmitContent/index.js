@@ -37,6 +37,8 @@ class SubmitContent extends Component {
       isAuthenticated: false,
       isLoading: true,
       categories: [],
+      categories1: [],
+      categories2: [],
       tags: [],
       containTags: [],
       activeIndex: 1,
@@ -126,6 +128,8 @@ class SubmitContent extends Component {
       });
       this.setState({
         categories: categorylist,
+        categories1: categorylist,
+        categories2: categorylist
       });
     }).catch(error => {
       this.setState({
@@ -317,6 +321,8 @@ class SubmitContent extends Component {
       authorizationId: value + '',
       authorizedPhotos: this.state.selImageIDs
     };
+    this.state.categories2 = this.state.categories;
+    this.state.categories1 = this.state.categories;
     console.log(Request)
     if(name == 'attachAll' || name == 'attach')
     {
@@ -536,8 +542,26 @@ class SubmitContent extends Component {
           photoOptions: this.state.photoOptions
         })
       }
+      if(this.state.photoOptions['Category1']){
+        var Categories2 =  [];
+        var pos =  this.state.categories2.findIndex(v => v.value === this.state.photoOptions['Category1']);
+        console.log("@@@@@@@@@@@@@@@@@@@", pos)
+        Categories2 = this.state.categories2.slice(0, pos).concat(this.state.categories2.slice(pos+1, this.state.categories2.length));
+        this.state.categories2 = Categories2
+      }
+      if(this.state.photoOptions['Category2']){
+        var Categories1 =  [];
+        var pos =  this.state.categories1.findIndex(v => v.value === this.state.photoOptions['Category2']);
+        Categories1 = this.state.categories1.slice(0, pos).concat(this.state.categories1.slice(pos+1, this.state.categories1.length));
+        this.state.categories1 = Categories1
+      }
+
+      this.setState({
+        categories1: this.state.categories1,
+        categories2: this.state.categories2
+      })
+
       this.getCommonRelease(this.state.selImage, this.state.selImageIDs);
-      console.log("__________________________________", this.state.currentTagValues)
       this.state.currentTagValues = this.state.currentTagValues ? this.state.currentTagValues : []
       for(let t=0; t<this.state.currentTagValues.length; t++)
       {
@@ -576,10 +600,43 @@ handleSetPhotoOption = (e, { name, value }) => {
     this.arr_options = this.state.photoOptions;
     this.arr_options[name] = value; 
     this.state.errorMessage[name] = "";
+
+
+    if(name == 'Category1'){
+      this.state.categories2 = this.state.categories
+      var Categories2 =  [];
+      var pos =  this.state.categories2.findIndex(v => v.value === value);
+      console.log("@@@@@@@@@@@@@@@@@@@", pos)
+      Categories2 = this.state.categories2.slice(0, pos).concat(this.state.categories2.slice(pos+1, this.state.categories2.length));
+      this.state.categories2 = Categories2
+    }
+    if(name == 'Category2'){
+      this.state.categories1 =  this.state.categories
+      var Categories1 =  [];
+      var pos =  this.state.categories1.findIndex(v => v.value === value);
+      Categories1 = this.state.categories1.slice(0, pos).concat(this.state.categories1.slice(pos+1, this.state.categories1.length));
+      this.state.categories1 = Categories1
+    }
+
     this.setState({ 
       photoOptions : this.arr_options,
-      errorMessage: this.state.errorMessage
+      errorMessage: this.state.errorMessage,
+      categories1 : this.state.categories1,
+      categories2: this.state.categories2
     })
+    // if(name == 'Category1' || name == 'Category2'){
+    //   for(let i=0; i< this.state.categories.length; i++)
+    //   {
+    //     if(this.state.categories[i].value == this.arr_options[name])
+    //     {
+    //       this.state.categories.splice(i,1);
+    //       i=this.state.categories.length;
+    //     }
+    //   }
+    //   this.setState({
+    //     categories: this.state.categories
+    //   })
+    // }
     this.updatePhotoOptions(name);
   }
 
@@ -827,9 +884,13 @@ handleChangeReleasename = (e, {value}) => {
   }
 
   render() {
+
     const { activeIndex, activeItem } = this.state
     const keywords = [];
     const commonReleases = [];
+
+    console.log("category 1", this.state.categories1)
+
     this.state.ReleaseScore.forEach((Release, ReleaseIndex) => {
       if(Release > 0){
         commonReleases.push(
@@ -854,6 +915,7 @@ handleChangeReleasename = (e, {value}) => {
           onClick={this.addFromContainedTags}
         />)
     });
+
     if(this.state.isLoading){
       return(
           <LoadingIndicator /> 
@@ -990,14 +1052,14 @@ handleChangeReleasename = (e, {value}) => {
                     <div class="column">
                       <Form.Field>
                       <div class="label">Category 1</div>
-                        <Select placeholder='Category 1' options={this.state.categories} name="Category1" value={this.state.photoOptions['Category1']} onChange={this.handleSetPhotoOption} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'}/>
+                        <Select placeholder='Category 1' options={this.state.categories1} name="Category1" value={this.state.photoOptions['Category1']} onChange={this.handleSetPhotoOption} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'}/>
                         <div class='label error'>{this.state.errorMessage['Category1']}</div>
                       </Form.Field>
                     </div>
                     <div class="column">
                       <Form.Field>
                       <div class="label">Category 2(optional)</div>
-                        <Select placeholder='Category 2(optional)' options={this.state.categories} name="Category2" value={this.state.photoOptions['Category2']} onChange={this.handleSetPhotoOption} disabled={(this.state.photoOptions['Category1'] &&  this.state.activeMenuItem == 'TO_BE_SUBMITTED') ? false : true}/>
+                        <Select placeholder='Category 2(optional)' options={this.state.categories2} name="Category2" value={this.state.photoOptions['Category2']} onChange={this.handleSetPhotoOption} disabled={(this.state.photoOptions['Category1'] &&  this.state.activeMenuItem == 'TO_BE_SUBMITTED') ? false : true}/>
                       </Form.Field>
                     </div>
                     <div class="column">
