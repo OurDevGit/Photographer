@@ -31,6 +31,7 @@ const isChecked = false;
 class SubmitContent extends Component {
   constructor(props) {
     super(props);
+    this.tagDropbox = React.createRef();
     this.state = {
       currentUser: null,
       isAuthenticated: false,
@@ -84,9 +85,11 @@ class SubmitContent extends Component {
     this.getCommonRelease =  this.getCommonRelease.bind(this)
     this.handleClickAttach = this.handleClickAttach.bind(this)
     this.handleRedeem = this.handleRedeem.bind(this)
+    this.addAllContainTags =  this.addAllContainTags.bind(this)
   }
 
   componentDidMount() {
+
     this.loadCurrentUser();
     this.loadAllCategories();
     this.loadAllTags();
@@ -212,6 +215,28 @@ class SubmitContent extends Component {
     this.setState({
       currentTagValues: this.state.currentTagValues,
       currentContainTags: this.state.currentContainTags
+    })
+    // this.tagDropbox.current.target.focus()
+    this.tagDropbox.current.setState({
+      focus: true
+    })
+    console.log("***************", this.tagDropbox.current.state)
+    this.updatePhotoOptions('Tag');
+  }
+
+  addAllContainTags(){
+    if(this.state.currentTagValues == null){
+      this.state.currentTagValues = [];
+    }
+    this.state.currentTagValues = this.state.currentTagValues.concat(this.state.currentContainTags);
+    this.state.currentContainTags = [];
+    this.setState({
+      currentTagValues: this.state.currentTagValues,
+      currentContainTags: this.state.currentContainTags
+    })
+    console.log(this.state.currentContainTags)
+    this.tagDropbox.current.setState({
+      focus: true
     })
     this.updatePhotoOptions('Tag');
   }
@@ -616,6 +641,9 @@ handleChangeReleasename = (e, {value}) => {
 // update photo options
 
   updatePhotoOptions(name){
+      // this.tagDropbox.current.setState({
+      //   focus: false
+      // })
       this.setState({
         common_tag: this.state.currentTagValues
       })
@@ -1033,7 +1061,7 @@ handleChangeReleasename = (e, {value}) => {
                                   </div>
                                   <div class="column">
                                     <Form.Field>
-                                      <Input fluid loading icon='user' placeholder='Search...' name="search" value={this.state.searchReleaseKey} onChange={this.handleSearchReleaseKeyChange}/>                                 
+                                      <Input fluid placeholder='Search...' name="search" value={this.state.searchReleaseKey} onChange={this.handleSearchReleaseKeyChange}/>                                 
                                     </Form.Field>
                                   </div>
                                   {/* <div class="releases column">
@@ -1050,7 +1078,7 @@ handleChangeReleasename = (e, {value}) => {
                                     />
                                   </div>
                                   <div className="column">
-                                    <Button className="" fluid negative>Done</Button>
+                                    <Button className="" fluid negative onClick={this.onCloseModal}>Done</Button>
                                   </div>
                                   <div className="column">
                                     <input accept='image/*' type="file" class='hide_file' onChange={this.onChangeFIle} />
@@ -1149,10 +1177,12 @@ handleChangeReleasename = (e, {value}) => {
                         fluid
                         multiple
                         allowAdditions
+                        // openOnFocus={false}
                         value={this.state.currentTagValues}
                         onAddItem={this.handleMultiSelectAddition}
                         onChange={this.handleMultiSelectChange}
                         disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'}
+                        ref={this.tagDropbox}
                       />
                       <div class='column'>
                         <div class='label error'>{this.state.errorMessage['tags']}</div>
@@ -1160,7 +1190,14 @@ handleChangeReleasename = (e, {value}) => {
                     </div>
                   </Form.Field>
                   <Form.Field>
-                    <div class="label">Keyword Suggestions</div>
+                    <div class="label">
+                      Keyword Suggestions
+                      <Popup
+                        trigger={<Icon name='plus' size="large" onClick={this.addAllContainTags}/>}
+                        content='Add all contained tags'
+                        position='bottom right'
+                      />
+                    </div>
                     <div className='suggestKeywords'>
                       {this.state.activeMenuItem == 'TO_BE_SUBMITTED' ? keywords : null}
                     </div>
