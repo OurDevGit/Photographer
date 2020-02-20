@@ -13,7 +13,6 @@ const request = (options) => {
     console.log("OPTIONSzzz",localStorage.getItem(ACCESS_TOKEN))
     const defaults = {headers: headers};
     options = Object.assign({}, defaults, options);
-    console.log(options)
     return fetch(options.url, options)
     .then(response => 
         response.json().then(json => {
@@ -37,7 +36,6 @@ const request1 = (options) => {
     console.log("OPTIONSzzz",localStorage.getItem(ACCESS_TOKEN))
     const defaults = {headers: headers};
     options = Object.assign({}, defaults, options);
-    console.log(options)
     return fetch(options.url, options)
     .then(response => {
         return response

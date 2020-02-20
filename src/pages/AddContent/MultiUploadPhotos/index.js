@@ -1,13 +1,11 @@
-import React, { Component, Input, Fragment  } from 'react';
-import UploadPhoto from '../UploadPhoto'
+import React, { Component } from 'react';
 import  { Redirect } from 'react-router-dom'
 import {Select} from 'semantic-ui-react'
 import './style.less'
-import { uploadPhotos } from '../../../util/APIUtils';
-import axios from "axios"
-import { API_BASE_URL, PHOTO_LIST_SIZE, ACCESS_TOKEN } from '../../../constants';
+import { API_BASE_URL, ACCESS_TOKEN } from '../../../constants';
 import LoadingIndicator  from '../../../common/LoadingIndicator';
-import ReactDropzone from 'react-dropzone';
+import {Progress} from 'semantic-ui-react'
+import {notification} from 'antd'
 
 export default class MultipleImageUploadComponent extends Component {
     fileObj = [];
@@ -20,11 +18,15 @@ export default class MultipleImageUploadComponent extends Component {
             collection: '',
             disabled: true,
             isLoading: false,
+            uploadedFileNumber:0,
+            uploadFailedNumber:0,
+            uploadingProgress:0
         }
         this.uploadMultipleFiles = this.uploadMultipleFiles.bind(this)
         this.uploadFiles = this.uploadFiles.bind(this)
         this.goSubmitContent = this.goSubmitContent.bind(this)
         this.handleSetCollection = this.handleSetCollection.bind(this)
+        this.handleClickUpload = this.handleClickUpload.bind(this)
     }
 
     getBase64 = file => {
@@ -57,22 +59,21 @@ export default class MultipleImageUploadComponent extends Component {
     }
     
 
-    uploadFiles(e) {
+    uploadFiles(fileNo, len) {
 
         var myHeaders = new Headers({})
 
         if(localStorage.getItem(ACCESS_TOKEN)) {
             myHeaders.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
         }
-        console.log(localStorage.getItem(ACCESS_TOKEN))
-        console.log("headers",myHeaders)
-
+        console.log("File",this.state.files[fileNo])
         const formData = new FormData();
         formData.append('collection', 'Prova_2345');
-        for (let i = 0; i < this.state.files.length; i++) {
-            formData.append('files', this.state.files[i]);
-            console.log("afdfsadfsdafsadfsdf",this.state.files[i]);
-        }
+        formData.append('files', this.state.files[fileNo]);
+        // for (let i = 0; i < this.state.files.length; i++) {
+        //     formData.append('files', this.state.files[i]);
+        //     console.log("afdfsadfsdafsadfsdf",this.state.files[i]);
+        // }
         var requestOptions = {
             method: 'POST',
             headers: myHeaders,
@@ -85,23 +86,66 @@ export default class MultipleImageUploadComponent extends Component {
           fetch(API_BASE_URL + "/photo_submit/uploadMultipleFiles", requestOptions)
           .then(response => {
               if(response.ok){
+                  this.state.uploadedFileNumber =  this.state.uploadedFileNumber + 1;
+                  this.state.uploadingProgress  =  Math.floor(this.state.uploadedFileNumber * 100/len);
+                  if(this.state.uploadedFileNumber == len){
+                    this.setState({
+                        isLoading: false,
+                        uploadStatus: true
+                      })
+                  }
                   this.setState({
-                    isLoading: false,
-                      uploadStatus: true
+                      uploadedFileNumber: this.state.uploadedFileNumber,
+                      uploadingProgress : this.state.uploadingProgress
                   })
               }else{
-                  this.setState({
-                      isLoading: false,
-                  })
+
+                this.state.uploadedFileNumber =  this.state.uploadedFileNumber + 1;
+                this.state.uploadFailedNumber =  this.state.uploadFailedNumber + 1;
+                this.state.uploadingProgress  =  Math.floor(this.state.uploadedFileNumber * 100/len);
+                if(this.state.uploadedFileNumber == len){
+                    this.setState({
+                        isLoading: false,
+                        uploadStatus: true
+                        })
+                }
+                this.setState({
+                    uploadedFileNumber: this.state.uploadedFileNumber,
+                    uploadFailedNumber: this.state.uploadFailedNumber,
+                    uploadingProgress : this.state.uploadingProgress
+                })
+                //   this.setState({
+                //       isLoading: false,
+                //   })
                   console.log("error_resp", response)
               }
           })
           .catch(error => {
-              console.log('error', error)
-              this.setState({
-                isLoading: false
-              });
+                this.state.uploadedFileNumber =  this.state.uploadedFileNumber + 1;
+                this.state.uploadFailedNumber =  this.state.uploadFailedNumber + 1;
+                this.state.uploadingProgress  =  Math.floor(this.state.uploadedFileNumber * 100/len);
+                if(this.state.uploadedFileNumber == len){
+                    this.setState({
+                        isLoading: false,
+                        uploadStatus: true
+                        })
+                }
+                this.setState({
+                    uploadedFileNumber: this.state.uploadedFileNumber,
+                    uploadFailedNumber: this.state.uploadFailedNumber,
+                    uploadingProgress : this.state.uploadingProgress
+                })
+                console.log('error', error)
+            //   this.setState({
+            //     isLoading: false
+            //   });
             });
+    }
+
+    handleClickUpload(){
+        for (let i = 0; i < this.state.files.length; i++) {
+            this.uploadFiles(i, this.state.files.length);
+        }
     }
 
     goSubmitContent(){
@@ -111,13 +155,26 @@ export default class MultipleImageUploadComponent extends Component {
     }
 
     render() {
+        console.log("fsdafsd", this.state.uploadingProgress)
         if(this.state.isLoading){
             return (
-                <LoadingIndicator />
+                // <LoadingIndicator />
+                <Progress percent={this.state.uploadingProgress} indicating progress/>
             )
         }else{
             if(this.state.uploadStatus){
-                console.log(this.state.uploadStatus)
+                console.log("^^^^^^^^^^^^^^^^^^^^^^^", this.state.uploadFailedNumber)
+                if(this.state.uploadFailedNumber == 0){
+                    notification.success({
+                        message: 'Photoing App',
+                        description: "Success" + this.state.uploadedFileNumber + 'files uploaded!'
+                    });     
+                }else{
+                    notification.error({
+                        message: 'Photoing App',
+                        description: 'Sorry!' + this.state.uploadFailedNumber + 'files uploading are failed. Please try again!'
+                    });  
+                }
                 return(
                     <Redirect to='/submitContent' />
                 )
@@ -140,7 +197,7 @@ export default class MultipleImageUploadComponent extends Component {
                             {/* <input type="file" accept="image/*" className="form-control select_files" name="file" onChange={this.uploadMultipleFiles} multiple /> */}
                         {/* </div> */}
                         {/* <button type="button" disabled={this.state.disabled} className="btn btn-danger btn-block upload_button" onClick={this.uploadFiles}>Next</button> */}
-                        <button type="button" disabled={this.state.disabled} class="ui icon right btn btn-danger labeled button goSubmitButton" onClick={this.uploadFiles}>
+                        <button type="button" disabled={this.state.disabled} class="ui icon right btn btn-danger labeled button goSubmitButton" onClick={this.handleClickUpload}>
                             <i aria-hidden="true" class="right arrow icon"></i>
                             Upload Photo
                         </button>

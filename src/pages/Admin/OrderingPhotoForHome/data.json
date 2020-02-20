@@ -18,15 +18,6 @@
           "width": 400
         },
         "cards": []
-      },
-      {
-        "id": "Second",
-        "title": "Second",
-        "label": "0/0",
-        "style": {
-          "width": 400
-        },
-        "cards": []
       }
     ]
   }

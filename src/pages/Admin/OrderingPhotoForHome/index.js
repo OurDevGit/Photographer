@@ -20,7 +20,6 @@ export default class OrderingPhotoForHome extends Component {
     }
 
     componentDidMount(){
-      
       this.loadPublicatedPhotosList();
     }
 
