@@ -13,9 +13,9 @@ import {
   removeAuthorizationToPhotoIDs, 
   addNewTag, 
   redeemMultiplePhoto} 
-from '../../../util/APIUtils';
+  from '../../../util/APIUtils';
 import { API_BASE_URL, PHOTO_LIST_SIZE, ACCESS_TOKEN, releaseOptions, sortOptions, age, gender, ethnicity } from '../../../constants';
-import { HomeHeader, PhotoList, AvatarImage, MultiSelect, ListComponent } from '../../../components'
+import { HomeHeader, PhotoList, AvatarImage, ConfirmModal, ListComponent } from '../../../components'
 import './style.less'
 import {notification} from 'antd'
 import LoadingIndicator  from '../../../common/LoadingIndicator';
@@ -62,7 +62,8 @@ class SubmitContent extends Component {
       releaseFile:{},
       releaseName:"",
       selRelease: [],
-      ReleaseScore: []
+      ReleaseScore: [],
+      deleteAction: false
     }
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -88,6 +89,10 @@ class SubmitContent extends Component {
     this.handleClickAttach = this.handleClickAttach.bind(this)
     this.handleRedeem = this.handleRedeem.bind(this)
     this.addAllContainTags =  this.addAllContainTags.bind(this)
+    this.confirmModalShow =  this.confirmModalShow.bind(this)
+    this.confirmModalClose = this.confirmModalClose.bind(this)
+    this.deletePhotos =  this.deletePhotos.bind(this)
+    this.deleteFun =  this.deleteFun.bind(this)
   }
 
   componentDidMount() {
@@ -194,6 +199,36 @@ class SubmitContent extends Component {
     });
     this.loadCurrentUser();
     this.props.history.push("/");
+  }
+
+  confirmModalShow(){
+    this.setState({
+      confirmModalShow: true
+    })
+  }
+
+  confirmModalClose(){
+    this.setState({
+      confirmModalShow: false
+    })
+  }
+
+  deletePhotos(){
+    console.log("delete", this.state.selImageIDs)
+    getNumberOfPhotos();
+    this.setState({
+      confirmModalShow: false,
+      deleteAction: true
+    })
+  }
+
+  deleteFun(){
+    this.setState({
+      deleteAction: false,
+      showOptions: ["unvisible", "visible"],
+      selImageIDs: [],
+      selImage: []
+    })
   }
 
   handleAccordionClick = (e, titleProps) => {
@@ -606,7 +641,6 @@ handleSetPhotoOption = (e, { name, value }) => {
       this.state.categories2 = this.state.categories
       var Categories2 =  [];
       var pos =  this.state.categories2.findIndex(v => v.value === value);
-      console.log("@@@@@@@@@@@@@@@@@@@", pos)
       Categories2 = this.state.categories2.slice(0, pos).concat(this.state.categories2.slice(pos+1, this.state.categories2.length));
       this.state.categories2 = Categories2
     }
@@ -666,8 +700,6 @@ handleChangeReleasename = (e, {value}) => {
     submitMultiplePhoto(this.state.selImageIDs)
         .then(response => {
           console.log("OPOPOP",response)
-          // this.state.total.toBeSubmitted = this.state.total.toBeSubmitted - this.state.selImageIDs.length;
-          // this.state.total.submitted = this.state.total.submitted + this.state.selImageIDs.length
           this.getTotalNumberOfPhotos();
           this.setState({
             activeMenuItem : "SUBMITTED",
@@ -889,7 +921,7 @@ handleChangeReleasename = (e, {value}) => {
     const keywords = [];
     const commonReleases = [];
 
-    console.log("category 1", this.state.categories1)
+    console.log("############################### 1", this.state.deleteAction)
 
     this.state.ReleaseScore.forEach((Release, ReleaseIndex) => {
       if(Release > 0){
@@ -939,8 +971,27 @@ handleChangeReleasename = (e, {value}) => {
           onLogout={this.handleLogout}
         />
         <Grid className="pages page-index submit_page">
-          <Grid.Row>
-            <h2 class='content_title'>Submit Content</h2>
+          <Grid.Row className="content_title">
+            <Grid.Column width='8'>
+              <h2>Submit Content</h2>
+            </Grid.Column>
+            {
+              this.state.selImageIDs.length > 0 ?
+                <Grid.Column className='selectedShowContent right' width='8'>
+                  <span>{this.state.selImageIDs.length} selected files</span>
+                  <Button negative onClick={this.confirmModalShow}>DELETE</Button>
+                  <ConfirmModal 
+                    modalHeader =  'Delete Files'
+                    modalContent = 'Do you really delete selected files?'
+                    modalOpen = {this.state.confirmModalShow}
+                    modalClose = {this.confirmModalClose}
+                    handleOK = {this.deletePhotos}
+                  />
+                </Grid.Column>
+                
+              : null
+            }
+            
           </Grid.Row>
           <Grid.Row>
             <Grid.Column width={10} className='image_section'>
@@ -996,6 +1047,8 @@ handleChangeReleasename = (e, {value}) => {
                     username ={this.state.currentUser.username} 
                     type="Submit_operation" 
                     status={this.state.activeMenuItem}
+                    delete = {this.state.deleteAction}
+                    deleteFun = {this.deleteFun}
                     />
               </Grid.Row>                   
             </Grid.Column>

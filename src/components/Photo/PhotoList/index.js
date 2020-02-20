@@ -14,7 +14,6 @@ const photos = [
         
     }
 ];
-var action
 class PhotoList extends Component {
     constructor(props) {
         super(props);
@@ -130,6 +129,7 @@ class PhotoList extends Component {
 
     componentDidUpdate(prevProps) {
         // console.log(this.props.publish, prevProps.publish)
+        console.log(this.props.deleteAction)
         if(this.props.isAuthenticated !== prevProps.isAuthenticated) {
             // Reset State
             this.setState({
@@ -144,7 +144,7 @@ class PhotoList extends Component {
             });    
             this.loadPhotoList();
         }
-        if(this.props.status !== prevProps.status)
+        if(this.props.status !== prevProps.status || this.props.delete)
         {
             this.setState({
                 photos: [],
@@ -158,7 +158,7 @@ class PhotoList extends Component {
                 isLoading: false
             });
             this.loadPhotoList();
-            
+            this.props.deleteFun();
         }
         if(this.props.publish != prevProps.publish)
         {   
