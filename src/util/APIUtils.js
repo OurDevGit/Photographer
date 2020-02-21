@@ -27,7 +27,7 @@ const request = (options) => {
 const request1 = (options) => {
     const headers = new Headers({
         'Content-Type': 'application/json',
-        "Content-Type": "text/plain"
+        // "Content-Type": "text/plain"
     })
     
     if(localStorage.getItem(ACCESS_TOKEN)) {
@@ -57,6 +57,21 @@ export function getPhotoLists(page, size) {
     return request({
         url: API_BASE_URL + "/public/lists/homepage?page="+ page + "&size=" +  size,
         method: 'GET'
+    });
+}
+
+export function getNotChoosenForHome() {
+    return request({
+        url: API_BASE_URL + "/public/lists/not_choosen_for_Home",
+        method: 'GET'
+    });
+}
+
+export function updateChoosedForHome(Request) {
+    return request1({
+        url: API_BASE_URL + "/public/lists/choosedForHome",
+        method: 'POST',
+        body: JSON.stringify(Request)
     });
 }
 

@@ -158,8 +158,12 @@ class PhotoList extends Component {
                 isLoading: false
             });
             this.loadPhotoList();
-            this.props.deleteFun();
+            if(this.props.type == 'Submit_operation')
+            {
+                this.props.deleteFun()
+            }
         }
+
         if(this.props.publish != prevProps.publish)
         {   
             this.state.photo_list.splice(this.props.active,1)

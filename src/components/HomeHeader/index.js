@@ -123,6 +123,15 @@ class HomeHeader extends React.Component {
           className="investBtnStyle login-btn"
         >
           Log in
+        </Button>,
+        <Button
+          as="a"
+          href="/user/signUp"
+          primary
+          basic
+          className="investBtnStyle login-btn"
+        >
+          Sign Up
         </Button>
       ]
     }

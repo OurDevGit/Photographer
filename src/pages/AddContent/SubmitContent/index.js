@@ -703,6 +703,8 @@ handleChangeReleasename = (e, {value}) => {
           this.getTotalNumberOfPhotos();
           this.setState({
             activeMenuItem : "SUBMITTED",
+            selImage: [],
+            selImageIDs: []
             // total: this.state.total
           })
         }).catch(error => {
@@ -976,7 +978,7 @@ handleChangeReleasename = (e, {value}) => {
               <h2>Submit Content</h2>
             </Grid.Column>
             {
-              this.state.selImageIDs.length > 0 ?
+              this.state.selImageIDs.length > 0 && this.state.activeMenuItem != 'ACCEPTED' ?
                 <Grid.Column className='selectedShowContent right' width='8'>
                   <span>{this.state.selImageIDs.length} selected files</span>
                   <Button negative onClick={this.confirmModalShow}>DELETE</Button>
