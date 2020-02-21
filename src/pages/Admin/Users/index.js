@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import { Icon, Label, Menu, Table } from 'semantic-ui-react'
+import {getUsers} from '../../../util/APIUtils' 
 import './style.less'
+import { get } from 'animejs';
 class Users extends Component 
 {
     constructor(props) {
@@ -9,10 +11,47 @@ class Users extends Component
           currentUser: null,
           isAuthenticated: false,
           isLoading: false,
-          visible: ''
+          visible: '',
+          users:[]
         }
-      }
+
+        this.loadUsers =  this.loadUsers.bind(this)
+    }
+    componentDidMount(){
+        this.loadUsers();
+    }
+
+    loadUsers(){
+        getUsers(0, 20)
+         .then(response => {
+            //  console.log(response)
+             this.setState({
+                 users: response.content
+             })
+         })
+         .catch(error => {
+             console.log("error", error)
+         })
+    }
     render(){
+        console.log(this.state.users)
+        var arr_users = [];
+        if(this.state.users.length > 0)
+        {
+            this.state.users.forEach((user, userIndex) => {
+                arr_users.push(
+                    <Table.Row>
+                        <Table.Cell>
+                        <Label ribbon>{userIndex}</Label>
+                        </Table.Cell>
+                        <Table.Cell>{user.name}</Table.Cell>
+                        <Table.Cell>{user.username}</Table.Cell>
+                        <Table.Cell>{user.email}</Table.Cell>
+                        <Table.Cell>Cell</Table.Cell>
+                    </Table.Row>
+                )
+            })
+        }
         const {visible} =  this.props
         return(
             <Table className={visible ? 'visible': 'disable'} celled>
@@ -27,16 +66,7 @@ class Users extends Component
                 </Table.Header>
 
                 <Table.Body>
-                <Table.Row>
-                    <Table.Cell>
-                    <Label ribbon>First</Label>
-                    </Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-
-                </Table.Row>
+                    {arr_users}
                 </Table.Body>
 
                 <Table.Footer>

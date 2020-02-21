@@ -99,16 +99,17 @@ class Bucket extends Component {
     handleMultiSelectChange = (e, { value }) => {
       if(value.length > this.state.currentBucketValues.length)
       {
-        for(let i=0; i<this.state.baskets.length; i++)
+        let i=0;
+        for(i=0; i<this.state.baskets.length; i++)
         {
           if(this.state.baskets[i].value == value[value.length-1]){
-            i = this.state.baskets.length
-          }
-          if(i == this.state.baskets.length-1){
-            this.addNewBasket(value[value.length-1]);
+            i = this.state.baskets.length + 10
           }
         }
-        
+        if(i == this.state.baskets.length){
+          this.addNewBasket(value[value.length-1]);
+        }
+        console.log("^^^^^^^^^^^^^^",i)
       }
         this.state.currentBucketValues = value;
         this.setState({ 

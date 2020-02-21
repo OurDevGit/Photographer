@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import  { Redirect } from 'react-router-dom'
-import {Select} from 'semantic-ui-react'
+import {Input} from 'semantic-ui-react'
 import './style.less'
 import { API_BASE_URL, ACCESS_TOKEN } from '../../../constants';
 import LoadingIndicator  from '../../../common/LoadingIndicator';
@@ -15,7 +15,7 @@ export default class MultipleImageUploadComponent extends Component {
         super(props)
         this.state = {
             files: [],
-            collection: '',
+            Collection: '',
             disabled: true,
             isLoading: false,
             uploadedFileNumber:0,
@@ -43,7 +43,10 @@ export default class MultipleImageUploadComponent extends Component {
     }
 
     handleSetCollection(e){
-        console.log(e)
+        console.log(e.target.value)
+        this.setState({
+            Collection: e.target.value
+        })
     }
     uploadMultipleFiles(e) {
         this.fileObj = e.target.files;
@@ -62,13 +65,12 @@ export default class MultipleImageUploadComponent extends Component {
     uploadFiles(fileNo, len) {
 
         var myHeaders = new Headers({})
-
         if(localStorage.getItem(ACCESS_TOKEN)) {
             myHeaders.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
         }
         console.log("File",this.state.files[fileNo])
         const formData = new FormData();
-        formData.append('collection', 'Prova_2345');
+        formData.append('collection', this.state.Collection);
         formData.append('files', this.state.files[fileNo]);
         // for (let i = 0; i < this.state.files.length; i++) {
         //     formData.append('files', this.state.files[i]);
@@ -202,7 +204,8 @@ export default class MultipleImageUploadComponent extends Component {
                             Upload Photo
                         </button>
                         <div className='collection'>
-                            <b>Collection: </b> <Select placeholder='Collection' options={this.state.categories} name="Collection" onChange={this.handleSetCollection}/>
+                            {/* <b>Collection: </b> <Select placeholder='Collection' options={this.state.categories} name="Collection" onChange={this.handleSetCollection}/> */}
+                            <b>Collection: </b> <Input placeholder='Collection' value={this.state.Collection} name="Collection" onChange={this.handleSetCollection}/>
                         </div>
                     </form >
                 )

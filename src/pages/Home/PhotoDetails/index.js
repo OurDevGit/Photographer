@@ -47,7 +47,7 @@ class PhotoDetails extends Component {
             <Modal.Description>
               <div className='image'>
                 <Image src={photo.url_mr} wrapped />
-                <a target='blank' href={photo.url_fr}><Zoom_Icon className="detail_Icon Zoom-icon" /></a>
+                {/* <a target='blank' href={photo.url_fr}><Zoom_Icon className="detail_Icon Zoom-icon" /></a>
                 <a onClick={this.addToPreferred}><Heart_Icon className="detail_Icon Heart-icon"/></a>
                 <a onClick={this.addToBucket}><Plus_Icon className="detail_Icon Plus-icon" /></a>   
                 <Button as='div' className='loveImageButton' labelPosition='right'>
@@ -58,29 +58,14 @@ class PhotoDetails extends Component {
                   <Label as='a' basic color='red' pointing='left'>
                     {this.state.rating}
                   </Label>
-                </Button>
+                </Button> */}
               </div>
               
               <Header></Header>
+
               <p>
-                This Content is created by <a href=""><b>{photo.owner}</b></a>.
+                <b> Has 1 model release</b>
               </p>
-              <p>
-                Image# <a href=""><b>{url.split('/')[url.split('/').length-1]}</b></a>.
-              </p>
-              <p>
-                uploaded: <b> June 18, 2018 11:14 AM</b>
-              </p>
-              <p>
-                Releases: <b> Has 1 model release</b>
-              </p>
-              <p>
-                Descriptions: <b> {photo.description}</b>
-              </p>
-              <div className='keywords'>
-                <p>Keywords</p>
-                {keywords}
-              </div>
             </Modal.Description>
           </Modal.Content>
           <Modal.Actions>

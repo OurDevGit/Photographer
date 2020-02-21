@@ -402,3 +402,11 @@ export function removeToLike(Request){
         body: JSON.stringify(Request)
     });
 }
+
+
+export function getUsers(page, size){
+    return request({
+        url: API_BASE_URL + "/admin/user_controller/get_users?page=" + page + "&size=" + size,
+        method: 'GET',
+    })
+}
