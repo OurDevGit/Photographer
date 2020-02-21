@@ -380,10 +380,9 @@ export function removeToBasketForUser(Request){
 }
 
 export function is_liked(Request){
-    return request1({
-        url: API_BASE_URL + "/user_actions/photo_actions_controller/is_liked",
-        method: 'GET',
-        body: Request
+    return request({
+        url: API_BASE_URL + "/user_actions/photo_actions_controller/is_liked/" + Request,
+        method: 'GET'
     })
 }
 

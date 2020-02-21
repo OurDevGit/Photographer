@@ -7,6 +7,9 @@ import { login } from '../../../util/APIUtils';
 import { ACCESS_TOKEN } from '../../../constants';
 import './style.less'
 import {notification } from 'antd';
+import FacebookLoginWithButton from 'react-facebook-login'
+import InstagramLogin from 'react-instagram-login'
+
 class Login extends Component{
   constructor(props) {
     super(props);
@@ -61,6 +64,21 @@ class Login extends Component{
         }
     });
   }
+
+
+  responseFacebook = (response) => {
+    console.log(response);
+  }
+  
+  componentClicked = () => {
+    console.log( "Clicked!" )
+  }
+
+  responseInstagram = (response) => {
+    console.log(response);
+  }
+
+
   render(){
     if(this.state.flag){
       return(
@@ -103,10 +121,26 @@ class Login extends Component{
                 >
                   Login
                 </Button>
-                <Button className='social' color='facebook' fluid size='large' href='/'>
+                <FacebookLoginWithButton
+                  appId="337581380455777"
+                  fields="name,email,picture"
+                  onClick={this.componentClicked}
+                  callback={this.responseFacebook}
+                  icon="fa-facebook"/>
+                  <div  className='InstagramButton'>
+                    <InstagramLogin
+                      clientId="5fd2f11482844c5eba963747a5f34556"
+                      buttonText="Login"
+                      onSuccess={this.responseInstagram}
+                      onFailure={this.responseInstagram}
+                    />
+                  </div>
+
+                <Button className='social face' color='facebook' fluid size='large'>
                   <Icon name='facebook' /> Facebook Login
                 </Button>
-                <Button className='social' color='instagram' fluid size='large' href='/'>
+
+                <Button className='social insta' color='instagram' fluid size='large'>
                   <Icon name='instagram' /> Instagram Login
                 </Button>
               </Segment>

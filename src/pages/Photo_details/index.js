@@ -79,7 +79,10 @@ class Photo_details extends Component {
         console.log("res_photodetail",response)
         this.setState({
           selImage: response.photoDto,
-          similarPhotos: response.similarPhotos.content
+          similarPhotos: response.similarPhotos.content,
+          likes: response.photoDto.likes,
+          downloads: response.photoDto.downloads,
+          views: response.photoDto.viewed
         })
       })
       .catch(error=>{
@@ -87,9 +90,7 @@ class Photo_details extends Component {
       })
   }
   is_like_photo(id){
-    var urlencoded = new URLSearchParams();
-    urlencoded.append("photoLiked", id);
-    is_liked(urlencoded)
+    is_liked(id)
     .then(response=>{
       console.log("res", response)
       this.setState({
@@ -143,9 +144,9 @@ class Photo_details extends Component {
   componentDidMount() {
     this.loadCurrentUser();
     this.loadAllCategories();
-    this.loadLikeAmount(this.props.match.params.id)
-    this.loadDownloadAmount(this.props.match.params.id)
-    this.loadViewsAmount(this.props.match.params.id)
+    // this.loadLikeAmount(this.props.match.params.id)
+    // this.loadDownloadAmount(this.props.match.params.id)
+    // this.loadViewsAmount(this.props.match.params.id)
     this.is_like_photo(this.props.match.params.id);
     this.loadPhotoDetail(this.props.match.params.id);
   }
@@ -210,13 +211,19 @@ class Photo_details extends Component {
          console.log(response)
          this.state.likes =this.state.likes + 1;
          this.setState({
-           likes: this.state.likes
+           likes: this.state.likes,
+           likeFlag: true
          })
        })
        .catch(error=>{
          console.log("error", error)   
         })
-    }
+      }else{
+        notification.success({
+          message: 'Photoing App',
+          description: "This photo is already your liked photo"
+        });     
+      }
 
     // console.log(urlencoded)
   }
@@ -224,14 +231,16 @@ class Photo_details extends Component {
   render() {
     const {selImage, similarPhotos} = this.state;
     const keywords = [];
-    var url = ''
+    var url = '';
+    var downloadUrl = ''
     if(selImage.tags){
       console.log("---------------------------", selImage.tags.length)
       for(let i=0; i<selImage.tags.length;i++)
       {
           keywords.push(<button>{selImage.tags[i].value}</button>)
       }
-      url = selImage.url_fr + ''
+      url = selImage.url_fr + '';
+      downloadUrl =  selImage.url_hr + ''
     }
 
     console.log("~!!~~!~!~!~!~!", selImage)
@@ -268,7 +277,7 @@ class Photo_details extends Component {
                 </Button>
                 <Button as='div' className='download ImageButton' labelPosition='right'>
                   <Button color='blue'>
-                    <Icon name='download' />
+                    <a href={downloadUrl}><Icon name='download' onClick={this.downloadImage}/></a>
                     
                   </Button>
                   <Label as='a' basic color='blue' pointing='left'>
