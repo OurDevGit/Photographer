@@ -81,7 +81,7 @@ class Photo extends Component {
         return (
             <div className={status == 'REJECTED' ? 'rejectedPhoto' : ''}>
                 <div className={(this.state.isChecked )? 'photo-content active': 'photo-content'}  id={index == active ? 'active' : ''}>
-                    <div className="photo-header">
+                    {/* <div className="photo-header"> */}
                         {
                             type == 'Submit_operation' ? (
                                 <Checkbox value={this.state.isChecked} className="ddd" onClick={this.handleCheck}  checked={this.state.isChecked}  />  
@@ -98,7 +98,7 @@ class Photo extends Component {
                             ) : null
                         }
                         
-                    </div>
+                    {/* </div> */}
                     <img onClick={this.handleCheck} src={photo.url_lr} id={index}  value={photo} />
                     <List className='rejectingMotives'>
                         {rejectingMotives}

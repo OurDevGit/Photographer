@@ -229,6 +229,7 @@ class Photo_details extends Component {
   }
 
   render() {
+    console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",this.state.currentUser)
     const {selImage, similarPhotos} = this.state;
     const keywords = [];
     var url = '';
@@ -293,7 +294,7 @@ class Photo_details extends Component {
                     {this.state.views}
                   </Label>
                 </Button>
-              <PanAndZoomImage src={url}>
+              <PanAndZoomImage src={downloadUrl}>
 
               </PanAndZoomImage>
             </div>

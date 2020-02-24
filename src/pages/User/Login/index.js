@@ -122,20 +122,19 @@ class Login extends Component{
                   Login
                 </Button>
                 <FacebookLoginWithButton
-                  appId="337581380455777"
+                  appId="222223435486606"
                   fields="name,email,picture"
                   onClick={this.componentClicked}
                   callback={this.responseFacebook}
                   icon="fa-facebook"/>
                   <div  className='InstagramButton'>
                     <InstagramLogin
-                      clientId="5fd2f11482844c5eba963747a5f34556"
+                      clientId="edd15be96d05fac4fcb16b5a72084241"
                       buttonText="Login"
                       onSuccess={this.responseInstagram}
                       onFailure={this.responseInstagram}
                     />
                   </div>
-
                 <Button className='social face' color='facebook' fluid size='large'>
                   <Icon name='facebook' /> Facebook Login
                 </Button>

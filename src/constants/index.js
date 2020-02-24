@@ -1,4 +1,7 @@
-export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://198.23.255.20:5000/api';
+// export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://198.23.255.20:5000/api';
+export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://picktur.com:8443/api';
+
+
 export const ACCESS_TOKEN = 'accessToken';
 
 export const PHOTO_LIST_SIZE = 2;

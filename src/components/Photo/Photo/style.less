@@ -3,6 +3,7 @@
     // margin: 0 auto;
     height: 100%;    
     margin-top: 20px; 
+    padding: 10px
 }
 .disabled{
     display: none;
@@ -18,15 +19,19 @@
     .rejectingMotives{
         display: block !important;
     }
+    max-width: 100% !important;
 }
 .photo-content {
     position: relative;
     float: left;
     margin-bottom: 30px;
     margin-left: 10px;
-    padding: 20px 15px 20px 15px;
+    // padding: 20px 15px 20px 15px;
     letter-spacing: .01em;
     box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
+    .ui.checkbox{
+        position: absolute !important;
+    }
     img{
         height: 200px;
         width: auto;
@@ -37,7 +42,7 @@
     }
     .detail_Icon{
         position: absolute;
-        right: 30px;
+        right: 10px;
         width: 30px;
         cursor: pointer;
         background: black;
@@ -51,19 +56,19 @@
         opacity: 0.5;
     }
     .Zoom-icon{
-        top: 40px;
+        top: 20px;
         color: white;
     }
     .Heart-icon{
-        top: 80px;
+        top: 60px;
     }
     .Plus-icon{
-        top: 120px;
+        top: 100px;
         color: white;
     }
     .owner_content{
         position: absolute;
-        bottom: 20px;
+        bottom: 0px;
         left: 0;
         color: blue;
         text-align: center;
@@ -76,7 +81,7 @@
     }
     .rejectingMotives{
         position: absolute;
-        top: 40px;
+        top: 0px;
         left: 200px;
     }
 }

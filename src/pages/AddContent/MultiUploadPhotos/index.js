@@ -15,7 +15,7 @@ export default class MultipleImageUploadComponent extends Component {
         super(props)
         this.state = {
             files: [],
-            Collection: '',
+            Collection: 'prova123',
             disabled: true,
             isLoading: false,
             uploadedFileNumber:0,

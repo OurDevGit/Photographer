@@ -5,59 +5,9 @@ import { Image, Header, Grid, Icon } from 'semantic-ui-react'
 import Slider from 'react-slick'
 import { getCurrentUser, getAllCategories } from '../../../util/APIUtils';
 
-import {
-  S1, S2, S3, S4, S5, SupportBg
-} from '../../../assets/images/homepage'
 import './style.less'
 
-const slides = [
-  {
-    id    : 1,
-    title : 'woman',
-    desc  : 'include woman'
-  },
-  {
-    id    : 2,
-    title : 'man',
-    desc  : 'include man'
-  },
-  {
-    id    : 3,
-    title : 'Why to invest',
-    desc  : 'Now that you\'ve learned your way around the dashboard, you can do some research: read about the founding team, the company\'s story, and decide if you want to support their mission.',
-    image : S3
-  },
-  {
-    id    : 4,
-    title : 'Consult financial data',
-    desc  : 'Whether you\'re a professional investor or not, you get the answers you need. See clear financial data, key metrics on the company\'s top line results, how things are changing.',
-    image : S4
-  },
-  {
-    id    : 5,
-    title : 'Invest',
-    desc  : 'With your investment plan in mind, whether once or on a recurring basis, start investing with as little as $50/company - and become an insider earning returns if the company succeeds.',
-    image : S5
-  },
-  {
-    id    : 6,
-    title : 'afas',
-    desc  : 'With your investment plan in mind, whether once or on a recurring basis, start investing with as little as $50/company - and become an insider earning returns if the company succeeds.',
-    image : S5
-  },
-  {
-    id    : 7,
-    title : 'red',
-    desc  : 'With your investment plan in mind, whether once or on a recurring basis, start investing with as little as $50/company - and become an insider earning returns if the company succeeds.',
-    image : S5
-  },
-  {
-    id    : 8,
-    title : 'blue',
-    desc  : 'With your investment plan in mind, whether once or on a recurring basis, start investing with as little as $50/company - and become an insider earning returns if the company succeeds.',
-    image : S5
-  },
-]
+
 
 class CategoryCarousel extends React.Component {
 
