@@ -91,7 +91,7 @@ export default class OrderingPhotoForHome extends Component {
         response.content.forEach(photo => {
           i++;
           var card = {
-            'id': i,
+            'id': photo.id,
             'photoid':photo.id + '',
             'title': photo.title,
             'description': photo.description,

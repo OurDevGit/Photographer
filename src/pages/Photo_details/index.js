@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Grid, Button, Icon, Label, GridRow } from 'semantic-ui-react'
 import MetaTags from 'react-meta-tags'
+import { NavLink, Redirect } from 'react-router-dom'
 import { getCurrentUser, getAllCategories, getPhotoDetail, addToLike, removeToLike, is_liked, getLikeAmount, getDownloadAmount, getViewsAmount } from '../../util/APIUtils';
 import { ACCESS_TOKEN } from '../../constants';
 import { HomeHeader, SearchBar, PhotoList } from '../../components'
@@ -10,7 +11,7 @@ import  Bucket from '../Home/Bucket'
 import { Heart_Icon, Plus_Icon, Zoom_Icon, CloseIcon} from '../../assets/icons'
 import './style.less'
 import {notification} from 'antd'
-import request from 'superagent';
+import LoadingIndicator  from '../../common/LoadingIndicator';
 class Photo_details extends Component {
   constructor(props) {
     super(props);
@@ -26,7 +27,9 @@ class Photo_details extends Component {
       downloads:0,
       views:0,
       likeFlag: false,
-      BucketShow: false
+      BucketShow: false,
+      isFollower: false,
+      followerUrl: "https://www.instagram.com/plutus_in_fabula/"
     }
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -229,7 +232,7 @@ class Photo_details extends Component {
   }
 
   render() {
-    console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",this.state.currentUser)
+    console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", this.state.currentUser)
     const {selImage, similarPhotos} = this.state;
     const keywords = [];
     var url = '';
@@ -245,6 +248,19 @@ class Photo_details extends Component {
     }
 
     console.log("~!!~~!~!~!~!~!", selImage)
+
+    // if(this.state.isLoading){
+    //   return(
+    //       <LoadingIndicator /> 
+    //   )
+    // }else{
+    //   if(!this.state.currentUser)
+    //   {
+    //     return(
+    //       <Redirect to='/' />
+    //     )
+    //   }
+    // }
     return (
       <>
         <MetaTags>
@@ -276,15 +292,16 @@ class Photo_details extends Component {
                     {this.state.likes}
                   </Label>
                 </Button>
+
                 <Button as='div' className='download ImageButton' labelPosition='right'>
                   <Button color='blue'>
-                    <a href={downloadUrl}><Icon name='download' onClick={this.downloadImage}/></a>
-                    
+                    <a target='blank' href={ this.state.isFollower ? downloadUrl : this.state.followerUrl}><Icon name='download' onClick={this.downloadImage}/></a>
                   </Button>
                   <Label as='a' basic color='blue' pointing='left'>
                     {this.state.downloads}
                   </Label>
                 </Button>
+
                 <Button as='div' className='view ImageButton' labelPosition='right'>
                   <Button color='gray'>
                     <Icon name='eye' />
