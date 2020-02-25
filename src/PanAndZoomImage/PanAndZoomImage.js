@@ -3,6 +3,7 @@ import './PanAndZoomImage.less';
 import { Heart_Icon, Plus_Icon, Zoom_Icon, CloseIcon} from '../assets/icons'
 const PanAndZoomImage = ({ src }) => {
   const [isPanning, setPanning] = useState(false);
+  const [isKey, setKey] = useState(false);
   const [image, setImage] = useState();
   const [position, setPosition] = useState({
     oldX: 0,
@@ -28,7 +29,8 @@ const PanAndZoomImage = ({ src }) => {
     })
   };
 
-  const onMouseDown = (e) => {
+   const onMouseDown = (e) => {
+     console.log("mousedown")
     e.preventDefault();
     setPanning(true);
     setPosition({
@@ -39,7 +41,7 @@ const PanAndZoomImage = ({ src }) => {
   };
 
   const onWheel = (e) => {
-    if (e.deltaY) {
+    if (e.deltaY && isKey) {
       const sign = Math.sign(e.deltaY) / 10;
       const scale = 1 - sign;
       const rect = containerRef.current.getBoundingClientRect();
@@ -58,6 +60,19 @@ const PanAndZoomImage = ({ src }) => {
       setPanning(false);
     };
 
+    const keydown = (e) => {
+      if(e.keyCode == 16){
+        setKey(true);
+      }
+    }
+
+    const keyup = (e) => {
+      if(e.keyCode == 16){
+        setKey(false);
+      }
+    }
+  
+
     const mousemove = (event) => {
       if (isPanning) {
         setPosition({
@@ -71,6 +86,8 @@ const PanAndZoomImage = ({ src }) => {
     };
     window.addEventListener('mouseup', mouseup);
     window.addEventListener('mousemove', mousemove);
+    window.addEventListener('keydown', keydown);
+    window.addEventListener('keyup', keyup);
 
     return () => {
       window.removeEventListener('mouseup', mouseup);
@@ -81,8 +98,10 @@ const PanAndZoomImage = ({ src }) => {
     <div
       className="PanAndZoomImage-container"
       ref={containerRef}
+      tabIndex= "1"
       onMouseDown={onMouseDown}
       onWheel={onWheel}
+      
     >
       <div
         

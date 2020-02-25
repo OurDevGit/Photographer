@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Gallery from "react-photo-gallery";
 import { getAllPhotos, getUserCreatedPhotos, getUserVotedPhotos, getPhotoLists, getSubmitPhotos, getAdminPublicationPhotoList } from '../../../util/APIUtils';
 import Photo from '../Photo';
 import { castVote } from '../../../util/APIUtils';
@@ -6,6 +7,7 @@ import LoadingIndicator  from '../../../common/LoadingIndicator';
 import { Button, Icon, notification } from 'antd';
 import { PHOTO_LIST_SIZE } from '../../../constants';
 import InfiniteScroll from 'react-infinite-scroller'
+import { samphotos } from "./Photo";
 import './style.less';
 
 const photos = [
@@ -32,6 +34,7 @@ class PhotoList extends Component {
         this.loadPhotoList = this.loadPhotoList.bind(this);
         this.handleLoadMore = this.handleLoadMore.bind(this);
         this.loadFunc =  this.loadFunc.bind(this)
+        this.photoClick =  this.photoClick.bind(this)
     }
 
     loadPhotoList(page = 0, size = PHOTO_LIST_SIZE) {
@@ -254,6 +257,11 @@ class PhotoList extends Component {
         this.loadPhotoList(page, PHOTO_LIST_SIZE)
     }
 
+    photoClick(e){
+        console.log(e.target.id)
+        this.props.onClickImage(e.target)
+    }
+
     render() {
         console.log("photo_list", this.props.totalPages)
         console.log(this.props.type)
@@ -287,6 +295,27 @@ class PhotoList extends Component {
                 </div>
             );
         });
+
+        var samphotosq =  [];
+        console.log("OOOOOOOOOOOOOOOOOOOOOO",samphotosq)
+        if(this.state.photo_list.length>0)
+        {
+            for(let k=0; k< this.state.photo_list.length; k++)
+            {
+                // samphotosq[k].id = this.state.photo_list[k].id;
+                // samphotosq[k].src = this.state.photo_list[k].url_lr;
+                // samphotosq[k].width = k % 4;
+                // samphotosq[k].height = 3
+
+                samphotosq[k] = {
+                    'id': this.state.photo_list[k].id,
+                    'src' : this.state.photo_list[k].url_lr,
+                    'width': k % 4,
+                    'height': 2
+                }
+            }
+        }
+
         return (
             <div className="photos-container">
                 {/* {photoViews} */}
@@ -300,9 +329,11 @@ class PhotoList extends Component {
                                 loader={<div className="loader" key={0}>Loading ...</div>}
                                 // useWindow={false}
                             >
-                                {photoViews}
+                                {/* {photoViews} */}
+                                <Gallery photos={samphotosq} onClick={this.photoClick}  /> 
                             </InfiniteScroll>
                         </div>
+                         
                     )
                         
                     :   photoViews

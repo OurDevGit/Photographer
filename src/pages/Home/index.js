@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Grid, GridColumn, Image, Divider } from 'semantic-ui-react'
 import MetaTags from 'react-meta-tags'
+import Gallery from "react-photo-gallery";
 import { getCurrentUser, getAllCategories, getPhotoLists } from '../../util/APIUtils';
 import { ACCESS_TOKEN, PHOTO_LIST_SIZE } from '../../constants';
 import { HomeHeader, SearchBar, PhotoList, Pagination_Component } from '../../components'
@@ -8,7 +9,7 @@ import Footer from './Footer'
 import CategoryCarousel from  './CategoryCarousel'
 import PhotoDetails from './PhotoDetails'
 import Bucket from './Bucket'
-
+import { photos } from "./Photo";
 import './style.less'
 import {notification} from 'antd'
 class Home extends Component {
@@ -115,11 +116,17 @@ class Home extends Component {
 
   handleImageClick(e){
     console.log("Image", e);
-    this.setState({
-      // ImageShow: true,
-      selImage: e
-    })
-    this.props.history.push('/Photo_details/'+e.id);
+    if(this.state.currentUser)
+    {
+      this.setState({
+        // ImageShow: true,
+        selImage: e
+      })
+      this.props.history.push('/Photo_details/'+e.id);
+    }else{
+      this.props.history.push('/user/login');
+    }
+
   }
 
   CloseImageModal(flag){
@@ -181,6 +188,7 @@ class Home extends Component {
                 totalPages = {this.state.totalPages}
                 quickView = {this.quickView}
               />
+               {/* <Gallery photos={photos}  /> */}
               <PhotoDetails 
                 show={this.state.ImageShow}
                 photo = {this.state.selImage}

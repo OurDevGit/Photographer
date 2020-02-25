@@ -77,6 +77,9 @@ class Photo_details extends Component {
   }
 
   loadPhotoDetail(id){
+    this.setState({
+      isLoading: true
+    })
     getPhotoDetail(id)
       .then(response=>{
         console.log("res_photodetail",response)
@@ -85,11 +88,15 @@ class Photo_details extends Component {
           similarPhotos: response.similarPhotos.content,
           likes: response.photoDto.likes,
           downloads: response.photoDto.downloads,
-          views: response.photoDto.viewed
+          views: response.photoDto.viewed,
+          isLoading: false
         })
       })
       .catch(error=>{
         console.log('error', error)
+        this.setState({
+          isLoading: false
+        })
       })
   }
   is_like_photo(id){
@@ -246,116 +253,112 @@ class Photo_details extends Component {
       url = selImage.url_fr + '';
       downloadUrl =  selImage.url_hr + ''
     }
+if(selImage){
+  console.log("~!!~~!~!~!~!~!", similarPhotos)
+}
+    
 
-    console.log("~!!~~!~!~!~!~!", selImage)
-
-    // if(this.state.isLoading){
-    //   return(
-    //       <LoadingIndicator /> 
-    //   )
-    // }else{
-    //   if(!this.state.currentUser)
-    //   {
-    //     return(
-    //       <Redirect to='/' />
-    //     )
-    //   }
-    // }
-    return (
-      <>
-        <MetaTags>
-          <title>Photographer - Image Platform</title>
-        </MetaTags>
-        <HomeHeader 
-          isAuthenticated={this.state.isAuthenticated} 
-          currentUser={this.state.currentUser} 
-          onLogout={this.handleLogout}
-        />
-        <Grid className="photo_details" verticalAlign='middle'>
-          <Grid.Row className='photo_details_row'>
-            <Grid.Column width={12}>
-            <div className='zoomImage'>
-                <a target='blank' href={url}><Zoom_Icon className="detail_Icon Zoom-icon" /></a>
-                <a onClick={this.addLike}><Heart_Icon className="detail_Icon Heart-icon"/></a>
-                <a onClick={this.addToBucket}><Plus_Icon className="detail_Icon Plus-icon" /></a>  
-                <Bucket 
-                  show={this.state.BucketShow}
-                  photo = {selImage}
-                  handleClose={this.CloseBucketModal}
+    if(selImage =={}){
+      return(
+          <LoadingIndicator /> 
+      )
+    }else{
+      return (
+        <>
+          <MetaTags>
+            <title>Photographer - Image Platform</title>
+          </MetaTags>
+          <HomeHeader 
+            isAuthenticated={this.state.isAuthenticated} 
+            currentUser={this.state.currentUser} 
+            onLogout={this.handleLogout}
+          />
+          <Grid className="photo_details" verticalAlign='middle'>
+            <Grid.Row className='photo_details_row'>
+              <Grid.Column width={12}>
+              <div className='zoomImage'>
+                  <a target='blank' href={url}><Zoom_Icon className="detail_Icon Zoom-icon" /></a>
+                  <a onClick={this.addLike}><Heart_Icon className="detail_Icon Heart-icon"/></a>
+                  <a onClick={this.addToBucket}><Plus_Icon className="detail_Icon Plus-icon" /></a>  
+                  <Bucket 
+                    show={this.state.BucketShow}
+                    photo = {selImage}
+                    handleClose={this.CloseBucketModal}
+                  />
+                  <Button as='div' className='love ImageButton' labelPosition='right'>
+                    <Button color='red'>
+                      <Icon name='heart' />
+                      {/* Like */}
+                    </Button>
+                    <Label as='a' basic color='red' pointing='left'>
+                      {this.state.likes}
+                    </Label>
+                  </Button>
+  
+                  <Button as='div' className='download ImageButton' labelPosition='right'>
+                    <Button color='blue'>
+                      <a target='blank' href={ this.state.isFollower ? downloadUrl : this.state.followerUrl}><Icon name='download' onClick={this.downloadImage}/></a>
+                    </Button>
+                    <Label as='a' basic color='blue' pointing='left'>
+                      {this.state.downloads}
+                    </Label>
+                  </Button>
+  
+                  <Button as='div' className='view ImageButton' labelPosition='right'>
+                    <Button color='gray'>
+                      <Icon name='eye' />
+                      
+                    </Button>
+                    <Label as='a' basic color='gray' pointing='left'>
+                      {this.state.views}
+                    </Label>
+                  </Button>
+                <PanAndZoomImage src={downloadUrl}>
+  
+                </PanAndZoomImage>
+              </div>
+              </Grid.Column>
+              <Grid.Column width={4}>    
+              <div className='photoDetail'>
+                <p>
+                  This Content is created by <a href=""><b>{selImage.owner}</b></a>.
+                </p>
+                <p>
+                  Image# <a href=""><b>{url.split('/')[url.split('/').length-1]}</b></a>.
+                </p>
+                <p>
+                  uploaded: <b> June 18, 2018 11:14 AM</b>
+                </p>
+                <p>
+                  Releases: <b> Has {selImage.authorizations ? selImage.authorizations.length : ''}  model release</b>
+                </p>
+                <p>
+                  Descriptions: <b>{selImage.description}</b>
+                </p>
+                <div className='keywords'>
+                  <p>Keywords</p>    
+                  {keywords}                
+                </div>
+              </div>
+              {/* <div className='photoReleases'>
+                <div className='keywords'>
+                  <p>Releases</p>
+                </div>
+              </div>                      */}
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row>
+              <Grid.Column>
+                <a className="relatedPhotosLabel">Related Photos</a> <a>See All</a>
+                <ImageCarousel 
+                  photo =  {similarPhotos}
                 />
-                <Button as='div' className='love ImageButton' labelPosition='right'>
-                  <Button color='red'>
-                    <Icon name='heart' />
-                    {/* Like */}
-                  </Button>
-                  <Label as='a' basic color='red' pointing='left'>
-                    {this.state.likes}
-                  </Label>
-                </Button>
-
-                <Button as='div' className='download ImageButton' labelPosition='right'>
-                  <Button color='blue'>
-                    <a target='blank' href={ this.state.isFollower ? downloadUrl : this.state.followerUrl}><Icon name='download' onClick={this.downloadImage}/></a>
-                  </Button>
-                  <Label as='a' basic color='blue' pointing='left'>
-                    {this.state.downloads}
-                  </Label>
-                </Button>
-
-                <Button as='div' className='view ImageButton' labelPosition='right'>
-                  <Button color='gray'>
-                    <Icon name='eye' />
-                    
-                  </Button>
-                  <Label as='a' basic color='gray' pointing='left'>
-                    {this.state.views}
-                  </Label>
-                </Button>
-              <PanAndZoomImage src={downloadUrl}>
-
-              </PanAndZoomImage>
-            </div>
-            </Grid.Column>
-            <Grid.Column width={4}>    
-            <div className='photoDetail'>
-              <p>
-                This Content is created by <a href=""><b>{selImage.owner}</b></a>.
-              </p>
-              <p>
-                Image# <a href=""><b>{url.split('/')[url.split('/').length-1]}</b></a>.
-              </p>
-              <p>
-                uploaded: <b> June 18, 2018 11:14 AM</b>
-              </p>
-              <p>
-                Releases: <b> Has {selImage.authorizations ? selImage.authorizations.length : ''}  model release</b>
-              </p>
-              <p>
-                Descriptions: <b>{selImage.description}</b>
-              </p>
-              <div className='keywords'>
-                <p>Keywords</p>    
-                {keywords}                
-              </div>
-            </div>
-            {/* <div className='photoReleases'>
-              <div className='keywords'>
-                <p>Releases</p>
-              </div>
-            </div>                      */}
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Column>
-              <a className="relatedPhotosLabel">Related Photos</a> <a>See All</a>
-              <ImageCarousel 
-                photo =  {this.state.similarPhotos}
-              />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </>
-    )
-  }
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </>
+      )
+      }
+    }
 }
 export default Photo_details
