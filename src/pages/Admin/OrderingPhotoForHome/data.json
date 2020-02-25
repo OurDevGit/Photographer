@@ -3,7 +3,7 @@
       {
         "id": "PLANNED",
         "title": "Publicated Photos",
-        "label": "20/70",
+        "label": "",
         "style": {
           "width": 400,
           "border-right": "1px solid"
@@ -13,7 +13,7 @@
       {
         "id": "HOMELIST",
         "title": "First",
-        "label": "10/20",
+        "label": "",
         "style": {
           "width": 400
         },

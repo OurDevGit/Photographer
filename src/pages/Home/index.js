@@ -9,7 +9,6 @@ import Footer from './Footer'
 import CategoryCarousel from  './CategoryCarousel'
 import PhotoDetails from './PhotoDetails'
 import Bucket from './Bucket'
-import { photos } from "./Photo";
 import './style.less'
 import {notification} from 'antd'
 class Home extends Component {

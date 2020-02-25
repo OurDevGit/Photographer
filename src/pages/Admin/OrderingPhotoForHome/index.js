@@ -15,7 +15,7 @@ export default class OrderingPhotoForHome extends Component {
       {
         "id": "PLANNED",
         "title": "Publicated Photos",
-        "label": "20/70",
+        "label": "",
         "style": {
           "width": 400,
           "border-right": "1px solid"
@@ -25,7 +25,7 @@ export default class OrderingPhotoForHome extends Component {
       {
         "id": "HOMELIST",
         "title": "First",
-        "label": "10/20",
+        "label": "",
         "style": {
           "width": 400
         },
@@ -55,7 +55,7 @@ export default class OrderingPhotoForHome extends Component {
           {
             "id": "PLANNED",
             "title": "Publicated Photos",
-            "label": "20/70",
+            "label": "",
             "style": {
               "width": 400,
               "border-right": "1px solid"
@@ -65,7 +65,7 @@ export default class OrderingPhotoForHome extends Component {
           {
             "id": "HOMELIST",
             "title": "First",
-            "label": "10/20",
+            "label": "",
             "style": {
               "width": 400
             },
@@ -100,6 +100,7 @@ export default class OrderingPhotoForHome extends Component {
           }
           this.imageData.lanes[0].cards.push(card)
         });
+        this.imageData.lanes[0].label = i
         this.setState({
           NotChoosenForHome: response.content
         })
@@ -118,7 +119,7 @@ export default class OrderingPhotoForHome extends Component {
         response.content.forEach(photo => {
           i++;
           var card = {
-            'id': i,
+            'id': photo.id,
             'photoid':photo.id + '',
             'title': photo.title,
             'description': photo.description,
@@ -127,6 +128,7 @@ export default class OrderingPhotoForHome extends Component {
           }
           this.imageData.lanes[1].cards.push(card)
         });
+        this.imageData.lanes[1].label = i
         this.setState({
             photosForHome: response.content
         })
@@ -138,6 +140,8 @@ export default class OrderingPhotoForHome extends Component {
     }
 
     datachange(newData){
+      newData.lanes[0].label = newData.lanes[0].cards.length;
+      newData.lanes[1].label = newData.lanes[1].cards.length;
       this.setState({
         presentData: newData
       })

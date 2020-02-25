@@ -37,6 +37,7 @@ class PhotoDetails extends Component {
         keywords.push(<button>{tag}</button>)
       });
       var url = photo.url_fr + ''
+      var releaseNum = photo.authoriztions ? photo.authoriztions.length : 0
       return(
         <Modal open={show} closeOnEscape={false} closeOnDimmerClick={true}  onClose={this.handleClose} className='PhotoDetailModal'>
           <Modal.Header>
@@ -47,24 +48,10 @@ class PhotoDetails extends Component {
             <Modal.Description>
               <div className='image'>
                 <Image src={photo.url_mr} wrapped />
-                {/* <a target='blank' href={photo.url_fr}><Zoom_Icon className="detail_Icon Zoom-icon" /></a>
-                <a onClick={this.addToPreferred}><Heart_Icon className="detail_Icon Heart-icon"/></a>
-                <a onClick={this.addToBucket}><Plus_Icon className="detail_Icon Plus-icon" /></a>   
-                <Button as='div' className='loveImageButton' labelPosition='right'>
-                  <Button color='red'>
-                    <Icon name='heart' />
-                    Like
-                  </Button>
-                  <Label as='a' basic color='red' pointing='left'>
-                    {this.state.rating}
-                  </Label>
-                </Button> */}
               </div>
-              
               <Header></Header>
-
               <p>
-                <b> Has 1 model release</b>
+                <b> Has {releaseNum} model release</b>
               </p>
             </Modal.Description>
           </Modal.Content>

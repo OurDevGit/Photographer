@@ -312,7 +312,10 @@ class PhotoContent extends Component
                               {/* <PanAndZoomImage
                                 src={url}
                               /> */}
-                              <div className="zoomImage"><PanAndZoomImage src={url} /></div>
+                              <div className="zoomImage">
+                                <a>Zoom : Shift + scroll</a>
+                                <PanAndZoomImage src={url} />
+                                </div>
                               {/* {this.state.zoomImage} */}
                             </Grid.Column>
                             <Grid.Column width='6'>

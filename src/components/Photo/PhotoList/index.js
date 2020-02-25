@@ -7,7 +7,6 @@ import LoadingIndicator  from '../../../common/LoadingIndicator';
 import { Button, Icon, notification } from 'antd';
 import { PHOTO_LIST_SIZE } from '../../../constants';
 import InfiniteScroll from 'react-infinite-scroller'
-import { samphotos } from "./Photo";
 import  PhotoBox  from './PhotoBox'
 import './style.less';
 
@@ -263,6 +262,7 @@ class PhotoList extends Component {
     ImageRender = 
     ({ index, left, top, key, photo }) => (
     <PhotoBox
+        key= {photo.id}
         margin={"2px"}
         index={index}
         photo={photo}

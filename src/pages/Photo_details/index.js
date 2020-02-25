@@ -152,9 +152,6 @@ class Photo_details extends Component {
   componentDidMount() {
     this.loadCurrentUser();
     this.loadAllCategories();
-    // this.loadLikeAmount(this.props.match.params.id)
-    // this.loadDownloadAmount(this.props.match.params.id)
-    // this.loadViewsAmount(this.props.match.params.id)
     this.is_like_photo(this.props.match.params.id);
     this.loadPhotoDetail(this.props.match.params.id);
   }
@@ -290,14 +287,14 @@ if(selImage){
                   </Button>
   
                   <Button as='div' className='view ImageButton' labelPosition='right'>
-                    <Button color='gray'>
+                    <Button color='grey'>
                       <Icon name='eye' />
-                      
                     </Button>
                     <Label as='a' basic color='gray' pointing='left'>
                       {this.state.views}
                     </Label>
                   </Button>
+                  <a>Zoom : Shift + scroll</a>
                 <PanAndZoomImage src={downloadUrl}>
   
                 </PanAndZoomImage>
@@ -364,7 +361,7 @@ if(selImage){
                   </Button>
   
                   <Button as='div' className='view ImageButton' labelPosition='right'>
-                    <Button color='gray'>
+                    <Button color='grey'>
                       <Icon name='eye' />
                       
                     </Button>
