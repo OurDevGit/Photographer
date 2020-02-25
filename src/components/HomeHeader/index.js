@@ -41,7 +41,6 @@ class HomeHeader extends React.Component {
   }
 
   render() {
-    console.log("user",this.props.currentUser)
     const { mobileMenuOpen } = this.state
     const {currentUser} = this.props
     let menuItems;
@@ -61,7 +60,7 @@ class HomeHeader extends React.Component {
             <PaperPlaneIcon className="paper-plane-icon" />
             My submitted Photos
           </Menu.Item>,
-          <Menu.Item >
+          <Menu.Item className="myAccount" >
             <Avatar fullname={currentUser.name} status="online" />
               <Dropdown item >
                 <Dropdown.Menu>
@@ -83,7 +82,7 @@ class HomeHeader extends React.Component {
               <PaperPlaneIcon className="paper-plane-icon" />
               My submitted Photos
             </Menu.Item>,
-            <Menu.Item >
+            <Menu.Item className="myAccount">
               <Avatar fullname={currentUser.name} status="online" />
                 <Dropdown item >
                   <Dropdown.Menu>
@@ -100,7 +99,7 @@ class HomeHeader extends React.Component {
               <StarIcon className="star-icon" />
               AdminDashboard
             </Menu.Item>,
-            <Menu.Item >
+            <Menu.Item className="myAccount">
               <Avatar fullname={currentUser.name} status="online" />
                 <Dropdown item >
                   <Dropdown.Menu>
@@ -157,6 +156,19 @@ class HomeHeader extends React.Component {
                   <Image src={logoPng} style={{ width: 130 }} />
                 </Menu.Item>
                 <Menu.Item position="right" style={style.noPaddingStyle}>
+                  {
+                    currentUser ? 
+                      <Menu.Item className="myAccountMobile">
+                        <Avatar fullname={currentUser.name} status="online" />
+                          <Dropdown item floating >
+                            <Dropdown.Menu>
+                              <Dropdown.Item as={NavLink} to='/user/profile'>My account</Dropdown.Item>
+                              <Dropdown.Item><a onClick={this.props.onLogout}>Logout</a></Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown>
+                      </Menu.Item>
+                    : null
+                  }
                   <Menu.Item onClick={() => this.openMobileMenu(!mobileMenuOpen)}>
                     {!mobileMenuOpen && <Image src={mobileMenuPng} style={{ width: 36 }} />}
                     {mobileMenuOpen && <Image src={mobileCloseMenuPng} style={{ width: 36 }} />}
@@ -168,27 +180,7 @@ class HomeHeader extends React.Component {
               && (
                 <Grid.Column width={16} onClick={() => this.openMobileMenu(false)}>
                   <Menu borderless vertical>
-                    <Menu.Item style={style.noPaddingStyle}>
-                      <Menu.Item as={NavLink} to="/founders">
-                        <StarIcon className="star-icon" />
-                        Images
-                      </Menu.Item>
-                      <Menu.Item as="a" href="#" target="_blank">
-                        <QuestionSVG className="verticalMenuItemSvgStyle" />
-                        Help
-                      </Menu.Item>
-                    </Menu.Item>
-                    <Grid.Column width={16}>
-                      <Button
-                        as="a"
-                        href="#"
-                        primary
-                        basic
-                        className="login-btn"
-                      >
-                        Log in
-                      </Button>
-                    </Grid.Column>
+                    {menuItems}
                   </Menu>
                 </Grid.Column>
               )}

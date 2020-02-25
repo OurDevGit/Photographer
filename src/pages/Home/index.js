@@ -62,7 +62,6 @@ class Home extends Component {
       this.setState({
         categories: response.categories,
       });
-      console.log("categories",this.state.categories);
     }).catch(error => {
       this.setState({
         isLoading: false
@@ -91,7 +90,6 @@ class Home extends Component {
 
   handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
     localStorage.removeItem(ACCESS_TOKEN);
-    console.log("aaa");
     this.setState({
       currentUser: null,
       isAuthenticated: false
@@ -115,7 +113,6 @@ class Home extends Component {
   }
 
   handleImageClick(e){
-    console.log("Image", e);
     if(this.state.currentUser)
     {
       this.setState({
@@ -155,14 +152,12 @@ class Home extends Component {
   }
 
   onChangePage(activePage){
-    console.log(activePage)
     this.setState({
       activePage: activePage
     })
   }
 
   render() {
-    console.log("~!!~~!~!~!~!~!", this.state.photos)
     return (
       <>
         <MetaTags>
@@ -176,10 +171,13 @@ class Home extends Component {
         <Grid className="pages page-index">
           <Grid.Row>
             <Grid.Column width={16}>
-            <SearchBar />
+              <SearchBar />
             </Grid.Column>
-            <Grid.Column width={16}>              
+            <GridColumn only='computer' width={16}>
               <CategoryCarousel categories={this.state.categories} />
+            </GridColumn>
+            
+            <Grid.Column width={16}>              
               <PhotoList 
                 type="home_list" 
                 onClickImage = {this.handleImageClick}

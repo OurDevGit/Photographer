@@ -39,9 +39,6 @@ class Bucket extends Component {
     }
 
     componentDidMount(){
-      console.log(
-        "sfdf"
-      )
       this.loadBasketsForUser();
     }
 
@@ -56,7 +53,6 @@ class Bucket extends Component {
             text: basket.value
           }
         });
-        console.log("_+_+_+_+_", basketlist)
         this.setState({
           baskets: basketlist,
           isLoading:false
@@ -80,7 +76,6 @@ class Bucket extends Component {
     }
 
     addNewBasket(newBasket){
-      console.log("newBasket", newBasket)
       addNewBasketForUser(newBasket)
         .then(response=>{
           console.log("ADDBASket",response)
@@ -109,13 +104,11 @@ class Bucket extends Component {
         if(i == this.state.baskets.length){
           this.addNewBasket(value[value.length-1]);
         }
-        console.log("^^^^^^^^^^^^^^",i)
       }
         this.state.currentBucketValues = value;
         this.setState({ 
           currentBucketValues: value,
         })
-        console.log(this.state.currentBucketValues)
     }
 
     addToBasket(){
@@ -124,10 +117,9 @@ class Bucket extends Component {
         "photoId": this.props.photo.id,
         "baskets": this.state.currentBucketValues
       }
-      console.log(Request)
       addToBasketForPhoto(Request)
         .then(response=>{
-          console.log("add_to_basket_for User", response)
+          console.log(response)
         })
         .catch(error=>{
           console.log(error)
@@ -137,7 +129,6 @@ class Bucket extends Component {
     render() {
       const {show, photo} = this.props;
       const keywords = [];
-      console.log(this.buckets)
       this.buckets.forEach((bucket, bucketIndex) => {
         keywords.push(<button>{bucket.value}</button>)
       });

@@ -12,7 +12,6 @@ class MultiSelect extends Component {
     }
 
     componentDidMount(){
-        console.log("aaa",this.props.options)
         this.setState({
             options: this.props.options
         })

@@ -88,8 +88,13 @@ class AddContent extends Component {
         
         <Grid className="pages page-index content_page">
           <Grid.Row>
-            <Grid.Column width={16}>
+            <Grid.Column only="computer" width={16}>
               <div className = "page_title">              
+                <h2>Upload Your Content</h2>
+              </div>
+            </Grid.Column>
+            <Grid.Column only="mobile tablet" width={16}>
+              <div className = "mobile_page_title">              
                 <h2>Upload Your Content</h2>
               </div>
             </Grid.Column>

@@ -34,7 +34,6 @@ class ImageCarousel extends React.Component {
   }
 
   render() {
-    console.log(this.props.categories)
     const settings = {
       dots           : false,
       infinite       : true,

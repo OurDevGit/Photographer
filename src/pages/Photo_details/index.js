@@ -37,7 +37,6 @@ class Photo_details extends Component {
     this.is_like_photo =  this.is_like_photo.bind(this)
     this.loadPhotoDetail = this.loadPhotoDetail.bind(this)
     this.handleLogin = this.handleLogin.bind(this);
-    this.handleImageClick = this.handleImageClick.bind(this);
     this.CloseImageModal = this.CloseImageModal.bind(this);
     this.CloseBucketModal = this.CloseBucketModal.bind(this);
     this.addToBucket = this.addToBucket.bind(this);
@@ -68,7 +67,6 @@ class Photo_details extends Component {
       this.setState({
         categories: response.categories,
       });
-      console.log("categories",this.state.categories);
     }).catch(error => {
       this.setState({
         isLoading: false
@@ -82,7 +80,7 @@ class Photo_details extends Component {
     })
     getPhotoDetail(id)
       .then(response=>{
-        console.log("res_photodetail",response)
+        console.log(response)
         this.setState({
           selImage: response.photoDto,
           similarPhotos: response.similarPhotos.content,
@@ -163,7 +161,6 @@ class Photo_details extends Component {
 
   handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
     localStorage.removeItem(ACCESS_TOKEN);
-    console.log("aaa");
     this.setState({
       currentUser: null,
       isAuthenticated: false
@@ -186,14 +183,6 @@ class Photo_details extends Component {
     this.props.history.push("/");
   }
 
-  handleImageClick(e){
-    console.log("Image", e);
-    this.props.history.push('/Photo_details/${4324}');
-    this.setState({
-
-    })
-  }
-
   CloseImageModal(flag){
     this.setState({
       ImageShow: flag
@@ -213,7 +202,6 @@ class Photo_details extends Component {
   }
 
   addLike(){
-    console.log(this.state.selImage.id)
     if(this.state.likeFlag == false)
     {
       addToLike(this.props.match.params.id)
@@ -235,17 +223,14 @@ class Photo_details extends Component {
         });     
       }
 
-    // console.log(urlencoded)
   }
 
   render() {
-    console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", this.state.currentUser)
     const {selImage, similarPhotos} = this.state;
     const keywords = [];
     var url = '';
     var downloadUrl = ''
     if(selImage.tags){
-      console.log("---------------------------", selImage.tags.length)
       for(let i=0; i<selImage.tags.length;i++)
       {
           keywords.push(<button>{selImage.tags[i].value}</button>)
@@ -254,7 +239,7 @@ class Photo_details extends Component {
       downloadUrl =  selImage.url_hr + ''
     }
 if(selImage){
-  console.log("~!!~~!~!~!~!~!", similarPhotos)
+
 }
     
 
@@ -274,7 +259,7 @@ if(selImage){
             onLogout={this.handleLogout}
           />
           <Grid className="photo_details" verticalAlign='middle'>
-            <Grid.Row className='photo_details_row'>
+            <Grid.Row only="computer" className='photo_details_row'>
               <Grid.Column width={12}>
               <div className='zoomImage'>
                   <a target='blank' href={url}><Zoom_Icon className="detail_Icon Zoom-icon" /></a>
@@ -319,6 +304,80 @@ if(selImage){
               </div>
               </Grid.Column>
               <Grid.Column width={4}>    
+              <div className='photoDetail'>
+                <p>
+                  This Content is created by <a href=""><b>{selImage.owner}</b></a>.
+                </p>
+                <p>
+                  Image# <a href=""><b>{url.split('/')[url.split('/').length-1]}</b></a>.
+                </p>
+                <p>
+                  uploaded: <b> June 18, 2018 11:14 AM</b>
+                </p>
+                <p>
+                  Releases: <b> Has {selImage.authorizations ? selImage.authorizations.length : ''}  model release</b>
+                </p>
+                <p>
+                  Descriptions: <b>{selImage.description}</b>
+                </p>
+                <div className='keywords'>
+                  <p>Keywords</p>    
+                  {keywords}                
+                </div>
+              </div>
+              {/* <div className='photoReleases'>
+                <div className='keywords'>
+                  <p>Releases</p>
+                </div>
+              </div>                      */}
+              </Grid.Column>
+            </Grid.Row>
+            
+            <Grid.Row only="mobile tablet" className='photo_details_row'>
+              <Grid.Column width={16}>
+              <div className='zoomImage'>
+                  <a target='blank' href={url}><Zoom_Icon className="detail_Icon Zoom-icon" /></a>
+                  <a onClick={this.addLike}><Heart_Icon className="detail_Icon Heart-icon"/></a>
+                  <a onClick={this.addToBucket}><Plus_Icon className="detail_Icon Plus-icon" /></a>  
+                  <Bucket 
+                    show={this.state.BucketShow}
+                    photo = {selImage}
+                    handleClose={this.CloseBucketModal}
+                  />
+                  <Button as='div' className='love ImageButton' labelPosition='right'>
+                    <Button color='red'>
+                      <Icon name='heart' />
+                      {/* Like */}
+                    </Button>
+                    <Label as='a' basic color='red' pointing='left'>
+                      {this.state.likes}
+                    </Label>
+                  </Button>
+  
+                  <Button as='div' className='download ImageButton' labelPosition='right'>
+                    <Button color='blue'>
+                      <a target='blank' href={ this.state.isFollower ? downloadUrl : this.state.followerUrl}><Icon name='download' onClick={this.downloadImage}/></a>
+                    </Button>
+                    <Label as='a' basic color='blue' pointing='left'>
+                      {this.state.downloads}
+                    </Label>
+                  </Button>
+  
+                  <Button as='div' className='view ImageButton' labelPosition='right'>
+                    <Button color='gray'>
+                      <Icon name='eye' />
+                      
+                    </Button>
+                    <Label as='a' basic color='gray' pointing='left'>
+                      {this.state.views}
+                    </Label>
+                  </Button>
+                <PanAndZoomImage src={downloadUrl}>
+  
+                </PanAndZoomImage>
+              </div>
+              </Grid.Column>
+              <Grid.Column width={16}>    
               <div className='photoDetail'>
                 <p>
                   This Content is created by <a href=""><b>{selImage.owner}</b></a>.

@@ -39,26 +39,23 @@ export default class MultipleImageUploadComponent extends Component {
     }
 
     onDrop(e){
-        console.log(e)
     }
 
     handleSetCollection(e){
-        console.log(e.target.value)
         this.setState({
             Collection: e.target.value
         })
     }
     uploadMultipleFiles(e) {
         this.fileObj = e.target.files;
-        console.log(this.fileObj)
         for (let i = 0; i < this.fileObj.length; i++) {
             this.fileArray.push(URL.createObjectURL(this.fileObj[i]));
             this.file.push(this.fileObj[i]);
         }
         this.setState({ 
-                        files: this.file,
-                        disabled: false,
-                    })
+            files: this.file,
+            disabled: false,
+        })
     }
     
 
@@ -68,14 +65,10 @@ export default class MultipleImageUploadComponent extends Component {
         if(localStorage.getItem(ACCESS_TOKEN)) {
             myHeaders.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
         }
-        console.log("File",this.state.files[fileNo])
         const formData = new FormData();
         formData.append('collection', this.state.Collection);
         formData.append('files', this.state.files[fileNo]);
-        // for (let i = 0; i < this.state.files.length; i++) {
-        //     formData.append('files', this.state.files[i]);
-        //     console.log("afdfsadfsdafsadfsdf",this.state.files[i]);
-        // }
+
         var requestOptions = {
             method: 'POST',
             headers: myHeaders,
@@ -116,10 +109,6 @@ export default class MultipleImageUploadComponent extends Component {
                     uploadFailedNumber: this.state.uploadFailedNumber,
                     uploadingProgress : this.state.uploadingProgress
                 })
-                //   this.setState({
-                //       isLoading: false,
-                //   })
-                  console.log("error_resp", response)
               }
           })
           .catch(error => {
@@ -137,10 +126,6 @@ export default class MultipleImageUploadComponent extends Component {
                     uploadFailedNumber: this.state.uploadFailedNumber,
                     uploadingProgress : this.state.uploadingProgress
                 })
-                console.log('error', error)
-            //   this.setState({
-            //     isLoading: false
-            //   });
             });
     }
 
@@ -157,7 +142,6 @@ export default class MultipleImageUploadComponent extends Component {
     }
 
     render() {
-        console.log("fsdafsd", this.state.uploadingProgress)
         if(this.state.isLoading){
             return (
                 // <LoadingIndicator />
@@ -165,7 +149,6 @@ export default class MultipleImageUploadComponent extends Component {
             )
         }else{
             if(this.state.uploadStatus){
-                console.log("^^^^^^^^^^^^^^^^^^^^^^^", this.state.uploadFailedNumber)
                 if(this.state.uploadFailedNumber == 0){
                     notification.success({
                         message: 'Photoing App',

@@ -93,8 +93,6 @@ class Profile extends Component {
             user_avatar_url: url,
             uploadLabel: 'Change your photo'
         })
-        // console.log(URL.createObjectURL(e.target.files[0]))
-        // console.log()
     }
       
     componentDidMount() {
@@ -102,7 +100,6 @@ class Profile extends Component {
         // this.loadUserProfile(username);
         this.loadCurrentUser();
         this.setState({user: UserJson});
-        console.log(this.state.user);
     }
 
     componentDidUpdate(nextProps) {

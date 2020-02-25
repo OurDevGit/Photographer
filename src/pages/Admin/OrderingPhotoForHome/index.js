@@ -113,7 +113,7 @@ export default class OrderingPhotoForHome extends Component {
     loadHomeList(){
       getPhotoLists(0, 30)
       .then(response=>{
-        console.log("res",response)
+        console.log(response)
         var i=0;
         response.content.forEach(photo => {
           i++;
@@ -138,14 +138,12 @@ export default class OrderingPhotoForHome extends Component {
     }
 
     datachange(newData){
-      console.log("Change__+________________________", newData.lanes[1])
       this.setState({
         presentData: newData
       })
     }
 
     handleSave(){
-      console.log("safsdfsf",this.state.presentData.lanes)
       var NotChoosed = [];
       var HomeList = [];
       for(let i=0; i<2; i++)
@@ -171,11 +169,9 @@ export default class OrderingPhotoForHome extends Component {
        .catch(error => {
          console.log("error", error)
        })
-      console.log("HomeList", HomeList)
     }
 
     render(){
-      console.log("++++++++",this.state.presentData)
       const {visible} =  this.props;
         return (
           <div>

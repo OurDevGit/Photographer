@@ -30,7 +30,6 @@ const PanAndZoomImage = ({ src }) => {
   };
 
    const onMouseDown = (e) => {
-     console.log("mousedown")
     e.preventDefault();
     setPanning(true);
     setPosition({

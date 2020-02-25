@@ -214,7 +214,6 @@ class SubmitContent extends Component {
   }
 
   deletePhotos(){
-    console.log("delete", this.state.selImageIDs)
     getNumberOfPhotos();
     this.setState({
       confirmModalShow: false,
@@ -259,7 +258,6 @@ class SubmitContent extends Component {
     this.tagDropbox.current.setState({
       focus: true
     })
-    console.log("***************", this.tagDropbox.current.state)
     this.updatePhotoOptions('Tag');
   }
 
@@ -273,7 +271,6 @@ class SubmitContent extends Component {
       currentTagValues: this.state.currentTagValues,
       currentContainTags: this.state.currentContainTags
     })
-    console.log(this.state.currentContainTags)
     this.tagDropbox.current.setState({
       focus: true
     })
@@ -289,7 +286,6 @@ class SubmitContent extends Component {
     if(this.state.currentTagValues ==  null){
       this.state.currentTagValues = [];
     }
-    console.log(this.state.currentTagValues, value)
     if(this.state.currentTagValues.length > value.length)
     {
       var RemoveItem = this.state.currentTagValues;
@@ -309,7 +305,6 @@ class SubmitContent extends Component {
         }
       }
     }else{
-      console.log("&&&&&&&&&&&&&&&&&&&&", value[value.length-1])
       for(let k=0; k<this.state.currentContainTags.length; k++)
       {
         if(this.state.currentContainTags[k] == value[value.length-1])
@@ -325,7 +320,6 @@ class SubmitContent extends Component {
         }
       })
       if(TagScore == 0){
-        console.log(value[value.length-1])
         addNewTag(value[value.length-1])
         .then(response=>{
           console.log(response)
@@ -339,7 +333,6 @@ class SubmitContent extends Component {
           console.log(error)
         })
       }
-      console.log(this.state.tags)
     }
     this.state.currentTagValues = value;
     this.setState({ 
@@ -351,19 +344,16 @@ class SubmitContent extends Component {
   }
 
   handleClickAttach(name, value){
-    console.log(name, value)
     const Request = {
       authorizationId: value + '',
       authorizedPhotos: this.state.selImageIDs
     };
     this.state.categories2 = this.state.categories;
     this.state.categories1 = this.state.categories;
-    console.log(Request)
     if(name == 'attachAll' || name == 'attach')
     {
       addAuthorizationToPhotoIDs(Request)
       .then(response => {
-        console.log("dddd",response) 
           this.state.ReleaseScore[value] = 1;
           this.setState({
             ReleaseScore: this.state.ReleaseScore
@@ -431,7 +421,6 @@ class SubmitContent extends Component {
   //Multiple Image click event
 
   handleImageClick(e, flag){
-    console.log(e)
     this.setState({
       containTags: e.photo.containedTags,
       currentContainTags: e.photo.containedTags
@@ -441,7 +430,6 @@ class SubmitContent extends Component {
       this.setState({
         selImage: this.state.selImage
       })
-      console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", this.state.selImage)
     }
 // flag: check imgae or uncheck image when click Image
     if(flag)
@@ -487,8 +475,6 @@ class SubmitContent extends Component {
           photoOptions: this.state.photoOptions,
           currentTagValues: this.state.currentTagValues,
         })
-        console.log("@!@!@!@!@!@!", this.state.photoOptions);
-        console.log("#$#$#$#####$#", this.state.currentTagValues)
       }else{
         var tag_flag = [];
         var category_flag1 = [];
@@ -580,7 +566,6 @@ class SubmitContent extends Component {
       if(this.state.photoOptions['Category1']){
         var Categories2 =  [];
         var pos =  this.state.categories2.findIndex(v => v.value === this.state.photoOptions['Category1']);
-        console.log("@@@@@@@@@@@@@@@@@@@", pos)
         Categories2 = this.state.categories2.slice(0, pos).concat(this.state.categories2.slice(pos+1, this.state.categories2.length));
         this.state.categories2 = Categories2
       }
@@ -602,7 +587,6 @@ class SubmitContent extends Component {
       {
         if(e.photo.containedTags.includes(this.state.currentTagValues[t]))
         {
-          console.log("++++++++++++++@@@@@@@@@", this.state.currentTagValues[t])
           e.photo.containedTags = e.photo.containedTags.filter(item=> item != this.state.currentTagValues[t]);
         }
       }
@@ -699,7 +683,7 @@ handleChangeReleasename = (e, {value}) => {
 
     submitMultiplePhoto(this.state.selImageIDs)
         .then(response => {
-          console.log("OPOPOP",response)
+          console.log(response)
           this.getTotalNumberOfPhotos();
           this.setState({
             activeMenuItem : "SUBMITTED",
@@ -739,7 +723,6 @@ handleChangeReleasename = (e, {value}) => {
         common_tag: this.state.currentTagValues
       })
       const updateRequest = {"photos": []};
-      console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",this.state.common_tag)
       for(let i=0; i<this.state.selImageIDs.length; i++)
       {
         var temp_options = this.state.selImage[this.state.selImageIDs[i]];
@@ -766,7 +749,6 @@ handleChangeReleasename = (e, {value}) => {
 
 //update tags
         else if(name == 'Tag'){
-          console.log("tag^^^^^^^^^^^^^^^^^^^^^^^^^^^")
           var temp_flags =[];
           var tem_tag = this.state.common_tag;
           if(!tem_tag){
@@ -804,12 +786,10 @@ handleChangeReleasename = (e, {value}) => {
               {
                 temp_options.tags = [];
               }
-              console.log("opopopopop",temp_options.tags)
               for(let index=0; index<this.state.currentTagValues.length; index++)
               {
                 temp_options.tags.push(this.state.currentTagValues[index]);
               }
-              console.log(this.state.currentTagValues)
             }
           }
         }
@@ -867,7 +847,6 @@ handleChangeReleasename = (e, {value}) => {
       };
       fetch(API_BASE_URL + "/authorization_controller/upload_authorization", requestOptions)
       .then(response => {
-        console.log("upload Release response",response.body)
           if(response.ok){
               this.setState({
                   NewReleaseModalOpen: false,
@@ -903,7 +882,6 @@ handleChangeReleasename = (e, {value}) => {
       releaseFile: e.target.files[0],
       releaseName: e.target.files[0].name.split(".")[0]
     })
-    console.log(e.target.files)
   }
   openReleaseModal(){
     this.setState({
@@ -922,8 +900,6 @@ handleChangeReleasename = (e, {value}) => {
     const { activeIndex, activeItem } = this.state
     const keywords = [];
     const commonReleases = [];
-
-    console.log("############################### 1", this.state.deleteAction)
 
     this.state.ReleaseScore.forEach((Release, ReleaseIndex) => {
       if(Release > 0){

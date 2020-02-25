@@ -72,7 +72,7 @@ class PhotoContent extends Component
       });
       getRejectingMotives()
       .then(response => {
-        console.log("motives",response)
+        console.log(response)
         this.setState({
           motives: response,
           isLoading: false
@@ -186,7 +186,6 @@ class PhotoContent extends Component
     }
 
     render(){
-      console.log("total", this.state.photo)
         const {visible} =  this.props;
         const keywords = [];
         const releases = [];
@@ -215,7 +214,6 @@ class PhotoContent extends Component
                 
               </List.Item>
             );
-            // console.log(motive, this.state.photo.rejectingMotives.includes({id: "1048675", value: "Wrong exposition on main subject"}))
           });
         }
         if(this.props.status == 'list_submitted_photos')
@@ -245,9 +243,7 @@ class PhotoContent extends Component
 
         if(this.state.photo)
         {
-          console.log(this.state.photo.authorizations)
-          var url = this.state.photo.url_fr + ''
-          
+          var url = this.state.photo.url_fr + ''         
           const tags = this.state.photo.tags ? this.state.photo.tags : []
           tags.forEach((tag, tagIndex) => {
             keywords.push(<button>{tag}</button>)
@@ -285,8 +281,6 @@ class PhotoContent extends Component
               )
           });
         }
-
-        console.log("**********************",this.props.status)
       
         return(
             <div className={visible ? 'admin_photo visible': 'admin_photo disable'} id='PhotoContent'>

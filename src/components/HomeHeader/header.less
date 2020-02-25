@@ -144,9 +144,13 @@
     border-radius: 0;
   }
 
-  .ui.menu.mobile-navmenu .right.item .item {
-    padding: 0.2em;
-  }
+  .ui.menu.mobile-navmenu .right.item
+  {
+    .item {
+      padding: 0.2em;
+    }
+  } 
+
 
   .mobile-navbar {
     margin-top: 114px;
@@ -169,12 +173,19 @@
     }
 
     .vertical.menu {
+      text-align: center;
+      margin-top: 60px;
+      .myAccount{
+        display: none;
+      }
       .column {
         text-align: center;
       }
       a.item {
-        display: -webkit-box;
-        display: flex !important;
+        text-align: center;
+        color: #00D1C1 !important;
+        // display: -webkit-box;
+        // display: flex !important;
         align-items: center;
         width: 100%;
         margin: 0.5em 0;

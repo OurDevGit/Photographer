@@ -221,7 +221,6 @@ class UploadPhoto extends Component {
         let data = new FormData();
         data.append('user', 'name');
         data.append('file', this.state.file);
-        console.log("dddddddddddddddddddddddddddddd", data);
         fetch(API_BASE_URL + '/photos/uploadMultipleFiles/', {
             method: 'POST',
             body: data,
@@ -242,7 +241,6 @@ class UploadPhoto extends Component {
     render() {
 
         const redirect = this.state.redirect;
-        console.log(redirect);
 
         if (redirect) {
             return <Redirect to={{

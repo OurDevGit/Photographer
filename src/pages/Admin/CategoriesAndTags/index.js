@@ -88,7 +88,6 @@ class CategoriesAndTags extends Component
 
     render(){
         const {visible} =  this.props;
-        console.log("fasfsadfsdafsdf", this.state.tags)
         const keywords = [];
         this.state.tags.forEach((tag, tagIndex) => {
           keywords.push(<button className='value'>{tag.value}</button>)

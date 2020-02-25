@@ -40,14 +40,7 @@ class ListComponent extends Component {
       });
     }
     handleClickAttach(e, {name, value}){
-
-      // if(name == 'attachAll')
-      // {
-      //   this.props.ReleaseScore[value] = 1;
-      // }
-      // console.log("AfsdAFsda", this.props.ReleaseScore)
       this.props.handleClickAttach(name, value);
-      
     }
 
     getCommonRelease(images, IDs){
@@ -71,7 +64,6 @@ class ListComponent extends Component {
               ReleaseScore[authorizations[j].id] = 0;
             }
           }
-          console.log("sfsdfasfsdfsafasd",ReleaseScore)
         }
       }
       this.setState({

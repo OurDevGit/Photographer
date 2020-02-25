@@ -24,7 +24,6 @@ class Users extends Component
     loadUsers(){
         getUsers(0, 20)
          .then(response => {
-            //  console.log(response)
              this.setState({
                  users: response.content
              })
@@ -34,7 +33,6 @@ class Users extends Component
          })
     }
     render(){
-        console.log(this.state.users)
         var arr_users = [];
         if(this.state.users.length > 0)
         {

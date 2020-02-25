@@ -51,7 +51,6 @@ class Admin extends Component {
       this.setState({
         categories: response.categories,
       });
-      console.log("categories",this.state.categories);
     }).catch(error => {
       this.setState({
         isLoading: false
@@ -66,7 +65,6 @@ class Admin extends Component {
 
   handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
     localStorage.removeItem(ACCESS_TOKEN);
-    console.log("aaa");
     this.setState({
       currentUser: null,
       isAuthenticated: false
@@ -96,7 +94,6 @@ class Admin extends Component {
   }
 
   render() {
-    console.log("~!!~~!~!~!~!~!", this.state.currentUser)
     return (
       <>
         <MetaTags>

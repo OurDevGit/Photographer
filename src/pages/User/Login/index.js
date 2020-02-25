@@ -49,7 +49,6 @@ class Login extends Component{
     .then(response => {
         localStorage.setItem(ACCESS_TOKEN, response.accessToken);
         this.setState({flag: true});
-        console.log("access", response.accessToken)
     }).catch(error => {
         if(error.status === 401) {
             notification.error({
@@ -122,19 +121,20 @@ class Login extends Component{
                   Login
                 </Button>
                 <FacebookLoginWithButton
-                  appId="222223435486606"
+                  // appId="222223435486606"
+                  appId = '2719403554847722'
                   fields="name,email,picture"
                   onClick={this.componentClicked}
                   callback={this.responseFacebook}
                   icon="fa-facebook"/>
-                  <div  className='InstagramButton'>
+                <div  className='InstagramButton'>
                     <InstagramLogin
-                      clientId="edd15be96d05fac4fcb16b5a72084241"
+                      clientId="2dfb02f4699b400bc1d6129e53344ee7"
                       buttonText="Login"
                       onSuccess={this.responseInstagram}
                       onFailure={this.responseInstagram}
                     />
-                  </div>
+                </div>
                 <Button className='social face' color='facebook' fluid size='large'>
                   <Icon name='facebook' /> Facebook Login
                 </Button>

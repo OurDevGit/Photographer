@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useCallback } from 'react';
 import Gallery from "react-photo-gallery";
 import { getAllPhotos, getUserCreatedPhotos, getUserVotedPhotos, getPhotoLists, getSubmitPhotos, getAdminPublicationPhotoList } from '../../../util/APIUtils';
 import Photo from '../Photo';
@@ -8,6 +8,7 @@ import { Button, Icon, notification } from 'antd';
 import { PHOTO_LIST_SIZE } from '../../../constants';
 import InfiniteScroll from 'react-infinite-scroller'
 import { samphotos } from "./Photo";
+import  PhotoBox  from './PhotoBox'
 import './style.less';
 
 const photos = [
@@ -35,6 +36,8 @@ class PhotoList extends Component {
         this.handleLoadMore = this.handleLoadMore.bind(this);
         this.loadFunc =  this.loadFunc.bind(this)
         this.photoClick =  this.photoClick.bind(this)
+        // this.ImageRender =  this.ImageRender.bind(this)
+        this.onMouseUp =  this.onMouseUp.bind(this)
     }
 
     loadPhotoList(page = 0, size = PHOTO_LIST_SIZE) {
@@ -50,7 +53,6 @@ class PhotoList extends Component {
                 promise = getAdminPublicationPhotoList(this.props.status)
             }
         } else {
-            console.log(page, size)
             promise = getPhotoLists(page, size);
         }
 
@@ -102,7 +104,6 @@ class PhotoList extends Component {
         else{
             promise            
             .then(response => {
-                console.log(response)
                 const photos = this.state.photos.slice();
                 const currentVotes = this.state.currentVotes.slice();
                 this.setState({
@@ -131,8 +132,6 @@ class PhotoList extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        // console.log(this.props.publish, prevProps.publish)
-        console.log(this.props.deleteAction)
         if(this.props.isAuthenticated !== prevProps.isAuthenticated) {
             // Reset State
             this.setState({
@@ -242,12 +241,9 @@ class PhotoList extends Component {
     }
 
     loadFunc(page){
-        console.log("++++++++++++++++++++++++++++++++++++++++", page)
-        // this.state.page = this.state.page + 1;
         this.setState({
             page: this.state.page,
         })
-        console.log("===================================",this.props.totalPages)
         if(page == this.props.totalPages)
         {
             this.setState({
@@ -258,13 +254,24 @@ class PhotoList extends Component {
     }
 
     photoClick(e){
-        console.log(e.target.id)
         this.props.onClickImage(e.target)
     }
 
+    onMouseUp(){
+    }
+
+    ImageRender = 
+    ({ index, left, top, key, photo }) => (
+    <PhotoBox
+        margin={"2px"}
+        index={index}
+        photo={photo}
+        onClickImage={this.photoClick}
+        quickView={this.props.quickView}
+        addToBucket = {this.props.addToBucket}
+    />
+    )
     render() {
-        console.log("photo_list", this.props.totalPages)
-        console.log(this.props.type)
         const photoViews = [];
         this.state.photo_list.forEach((photo, photoIndex) => {
             photoViews.push(<Photo
@@ -296,23 +303,15 @@ class PhotoList extends Component {
             );
         });
 
-        var samphotosq =  [];
-        console.log("OOOOOOOOOOOOOOOOOOOOOO",samphotosq)
+        var samphotosq =  this.state.photo_list;
         if(this.state.photo_list.length>0)
         {
             for(let k=0; k< this.state.photo_list.length; k++)
             {
                 // samphotosq[k].id = this.state.photo_list[k].id;
-                // samphotosq[k].src = this.state.photo_list[k].url_lr;
-                // samphotosq[k].width = k % 4;
-                // samphotosq[k].height = 3
-
-                samphotosq[k] = {
-                    'id': this.state.photo_list[k].id,
-                    'src' : this.state.photo_list[k].url_lr,
-                    'width': k % 4,
-                    'height': 2
-                }
+                samphotosq[k].src = this.state.photo_list[k].url_lr;
+                samphotosq[k].width =  4;
+                samphotosq[k].height = 3
             }
         }
 
@@ -327,15 +326,14 @@ class PhotoList extends Component {
                                 loadMore={this.loadFunc}
                                 hasMore={this.state.hasMore}
                                 loader={<div className="loader" key={0}>Loading ...</div>}
-                                // useWindow={false}
                             >
                                 {/* {photoViews} */}
-                                <Gallery photos={samphotosq} onClick={this.photoClick}  /> 
+                                <Gallery photos={samphotosq} renderImage={this.ImageRender}/> 
                             </InfiniteScroll>
                         </div>
                          
                     )
-                        
+                    : this.props.type == 'home_list' && this.props.totalPages == 0? null
                     :   photoViews
                 }
                 
