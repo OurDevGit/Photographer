@@ -407,3 +407,10 @@ export function getUsers(page, size){
         method: 'GET',
     })
 }
+
+export function getUserDetail(id){
+    return request({
+        url: API_BASE_URL + "/public/users/getUserDetails/" + id,
+        method: 'GET',
+    })
+}

@@ -60,10 +60,10 @@ export default class VerticalSidebar extends Component{
                 <Icon name='ordered list' />
                 Ordering Photo For Home
                 </Menu.Item>
-                <Menu.Item as='a' value='Authorizations' className={this.state.activeMentItem == 'Authorizations' ? 'active' : ''} onClick={this.handleMenuClick}>
+                {/* <Menu.Item as='a' value='Authorizations' className={this.state.activeMentItem == 'Authorizations' ? 'active' : ''} onClick={this.handleMenuClick}>
                 <Icon name='id card' />
                 Authorizations
-                </Menu.Item>
+                </Menu.Item> */}
                 <Menu.Item as='a' value='CategoriesAndTags' className={this.state.activeMentItem == 'CategoriesAndTags' ? 'active' : ''} onClick={this.handleMenuClick}>
                 <Icon name='grid layout' />
                 Categories and Tags

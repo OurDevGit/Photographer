@@ -14,7 +14,7 @@ const routes = (
     <Route path="/" exact component={Home} />
     <Route path="/user/Login" exact component={Login} />
     <Route path="/user/SignUp" exact component={SignUp} />
-    <Route path="/user/Profile" exact component={Profile} />
+    <Route path="/user/Profile/:id" exact component={Profile} />
     <Route path="/addcontent" exact component={AddContent} />
     <Route path="/submitcontent" exact component={SubmitContent} />
     <Route path="/admin" exact component={Admin} />

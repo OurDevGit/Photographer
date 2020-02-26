@@ -64,7 +64,7 @@ class HomeHeader extends React.Component {
             <Avatar fullname={currentUser.name} status="online" />
               <Dropdown item >
                 <Dropdown.Menu>
-                  <Dropdown.Item as={NavLink} to='/user/profile'>My account</Dropdown.Item>
+                  <Dropdown.Item as={NavLink} to={'/user/profile/' + currentUser.id}>My account</Dropdown.Item>
                   <Dropdown.Item><a onClick={this.props.onLogout}>Logout</a></Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
@@ -86,7 +86,7 @@ class HomeHeader extends React.Component {
               <Avatar fullname={currentUser.name} status="online" />
                 <Dropdown item >
                   <Dropdown.Menu>
-                    <Dropdown.Item as={NavLink} to='/user/profile'>My account</Dropdown.Item>
+                    <Dropdown.Item as={NavLink} to={'/user/profile/' + currentUser.id}>My account</Dropdown.Item>
                     <Dropdown.Item><a onClick={this.props.onLogout}>Logout</a></Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
@@ -103,7 +103,7 @@ class HomeHeader extends React.Component {
               <Avatar fullname={currentUser.name} status="online" />
                 <Dropdown item >
                   <Dropdown.Menu>
-                    <Dropdown.Item as={NavLink} to='/user/profile'>My account</Dropdown.Item>
+                    <Dropdown.Item as={NavLink} to={'/user/profile/' + currentUser.id}>My account</Dropdown.Item>
                     <Dropdown.Item><a onClick={this.props.onLogout}>Logout</a></Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
@@ -162,7 +162,7 @@ class HomeHeader extends React.Component {
                         <Avatar fullname={currentUser.name} status="online" />
                           <Dropdown item floating >
                             <Dropdown.Menu>
-                              <Dropdown.Item as={NavLink} to='/user/profile'>My account</Dropdown.Item>
+                              <Dropdown.Item as={NavLink} to={'/user/profile/' + currentUser.id}>My account</Dropdown.Item>
                               <Dropdown.Item><a onClick={this.props.onLogout}>Logout</a></Dropdown.Item>
                             </Dropdown.Menu>
                           </Dropdown>

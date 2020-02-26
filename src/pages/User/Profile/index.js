@@ -15,16 +15,8 @@ import Footer from '../Footer'
 import {
     AvatarDefault
   } from '../../../assets/images/homepage'
-
+import {getUserDetail} from '../../../util/APIUtils'
 const TabPane = Tabs.TabPane;
-const UserJson = {
-    name: "Tatyana",
-    username: "TatyanaPro",
-    joinedAt: "2020.01.20",
-    photoCount: 9,
-    vodeCount: 10
-
-};
 class Profile extends Component {
     constructor(props) {
         super(props);
@@ -62,13 +54,14 @@ class Profile extends Component {
         });
     }
 
-    loadUserProfile(username) {
+    loadUserProfile(userId) {
         this.setState({
             isLoading: true
         });
 
-        getUserProfile(username)
+        getUserDetail(userId)
         .then(response => {
+            console.log("userdeta",response)
             this.setState({
                 user: response,
                 isLoading: false
@@ -109,8 +102,9 @@ class Profile extends Component {
           fetch(API_BASE_URL + "/public/users/submitMultiplePhoto", requestOptions)
           .then(response => {
               if(response.ok){
+                this.state.user.avatar = url;
                 this.setState({
-                    user_avatar_url: url,
+                    user: this.state.user,
                     isAvatarLoading: false,
                     uploadLabel: 'Change your photo'
                 })
@@ -129,16 +123,15 @@ class Profile extends Component {
     }
       
     componentDidMount() {
-        const username = this.props.match.params.username;
-        // this.loadUserProfile(username);
+        const userId = this.props.match.params.id;
+        this.loadUserProfile(userId);
         this.loadCurrentUser();
-        this.setState({user: UserJson});
     }
 
     componentDidUpdate(nextProps) {
-        if(this.props.match.params.username !== nextProps.match.params.username) {
-            this.loadUserProfile(nextProps.match.params.username);
-        }        
+        // if(this.props.match.params.username !== nextProps.match.params.username) {
+        //     this.loadUserProfile(nextProps.match.params.username);
+        // }        
     }
 
     render() {
@@ -184,7 +177,7 @@ class Profile extends Component {
                                                 <Button className='imageUpload button'>{this.state.uploadLabel}</Button>
                                             </div>
                                     }
-                                    <Image src={this.state.user_avatar_url} className={this.state.isAvatarLoading ? 'avatar_image':''} circular />
+                                    <Image src={this.state.user.avatar ? this.state.user.avatar : AvatarDefault} className={this.state.isAvatarLoading ? 'avatar_image':''} circular />
                                 </div>
                             </Grid.Column>
                             <Grid.Column width={12}>              
@@ -195,12 +188,14 @@ class Profile extends Component {
                                         control={Input}
                                         label='First name'
                                         placeholder='First name'
+                                        value= {this.state.user.username}
                                     />
                                     <Form.Field
                                         id='form-input-control-last-name'
                                         control={Input}
                                         label='Last name'
                                         placeholder='Last name'
+                                        value= {this.state.user.surname}
                                     />
                                     <Form.Field
                                         control={Select}
@@ -211,12 +206,7 @@ class Profile extends Component {
                                         searchInput={{ id: 'form-select-control-gender' }}
                                     />
                                     </Form.Group>
-                                    <Form.Field
-                                        id='form-textarea-control-opinion'
-                                        control={TextArea}
-                                        label='Opinion'
-                                        placeholder='Opinion'
-                                    />
+
                                     <Form.Field
                                         id='form-input-control-error-email'
                                         control={Input}
@@ -226,12 +216,18 @@ class Profile extends Component {
                                             content: 'Please enter a valid email address',
                                             pointing: 'below',
                                         }}
+                                        value= {this.state.user.email}
+                                    />
+                                    <Form.Field
+                                        id='form-textarea-control-opinion'
+                                        control={TextArea}
+                                        label='About me'
+                                        placeholder='About me'
                                     />
                                     <Form.Field
                                         id='form-button-control-public'
                                         control={Button}
-                                        content='Confirm'
-                                        label='Label with htmlFor'
+                                        content='Save'
                                     />
                                 </Form>
                             </Grid.Column>
