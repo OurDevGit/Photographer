@@ -1,8 +1,11 @@
 import React, {Component} from 'react'
-import { Icon, Label, Menu, Table } from 'semantic-ui-react'
+import { Icon, Label, Menu, Table, Image } from 'semantic-ui-react'
 import {getUsers} from '../../../util/APIUtils' 
 import './style.less'
 import { get } from 'animejs';
+import {
+    AvatarDefault
+  } from '../../../assets/images/homepage'
 class Users extends Component 
 {
     constructor(props) {
@@ -24,6 +27,7 @@ class Users extends Component
     loadUsers(){
         getUsers(0, 20)
          .then(response => {
+             console.log(response)
              this.setState({
                  users: response.content
              })
@@ -42,9 +46,10 @@ class Users extends Component
                         <Table.Cell>
                         <Label ribbon>{userIndex}</Label>
                         </Table.Cell>
-                        <Table.Cell>{user.name}</Table.Cell>
+                        <Table.Cell><Image avatar src={user.avatar ? user.avatar : AvatarDefault} />{user.name}</Table.Cell>
                         <Table.Cell>{user.username}</Table.Cell>
                         <Table.Cell>{user.email}</Table.Cell>
+                        <Table.Cell>{user.roles.length ==2 ? "Admin & User" : (user.roles.length == 1 && user.roles[0].name == "ROLE_ADMIN") ? "Admin" : "User"}</Table.Cell>
                         <Table.Cell>Cell</Table.Cell>
                     </Table.Row>
                 )
@@ -59,6 +64,7 @@ class Users extends Component
                     <Table.HeaderCell>FullName</Table.HeaderCell>
                     <Table.HeaderCell>Username</Table.HeaderCell>
                     <Table.HeaderCell>Email</Table.HeaderCell>
+                    <Table.HeaderCell>Role</Table.HeaderCell>
                     <Table.HeaderCell>loginStatus</Table.HeaderCell>
                 </Table.Row>
                 </Table.Header>
@@ -69,7 +75,7 @@ class Users extends Component
 
                 <Table.Footer>
                 <Table.Row>
-                    <Table.HeaderCell colSpan='5'>
+                    <Table.HeaderCell colSpan='6'>
                     <Menu floated='right' pagination>
                         <Menu.Item as='a' icon>
                         <Icon name='chevron left' />

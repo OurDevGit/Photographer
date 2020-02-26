@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import MetaTags from 'react-meta-tags'
 import { Grid, Form, Input, Select, TextArea, Button, Image} from 'semantic-ui-react'
-// import PhotoList from '../../photo/PhotoList';
+import { API_BASE_URL, ACCESS_TOKEN} from '../../../constants';
 import { getUserProfile, getCurrentUser } from '../../../util/APIUtils';
 import {  Tabs } from 'antd';
 import { getAvatarColor } from '../../../util/Colors';
@@ -34,6 +34,7 @@ class Profile extends Component {
             currentUser: null,
             isAuthenticated: false,
             isLoading: false,
+            isAvatarLoading: false,
             user_avatar_url: AvatarDefault,
             uploadLabel: 'Upload your photo'
         }
@@ -88,11 +89,43 @@ class Profile extends Component {
     }
 
     uploadAvatar(e){
-        var url = URL.createObjectURL(e.target.files[0]);
         this.setState({
-            user_avatar_url: url,
-            uploadLabel: 'Change your photo'
+            isAvatarLoading: true
         })
+        var url = URL.createObjectURL(e.target.files[0]);
+        var myHeaders = new Headers({})
+        if(localStorage.getItem(ACCESS_TOKEN)) {
+            myHeaders.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
+        }
+        const formData = new FormData();
+        formData.append('files', e.target.files[0]);
+    
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formData,
+            redirect: 'follow'
+          };
+          fetch(API_BASE_URL + "/public/users/submitMultiplePhoto", requestOptions)
+          .then(response => {
+              if(response.ok){
+                this.setState({
+                    user_avatar_url: url,
+                    isAvatarLoading: false,
+                    uploadLabel: 'Change your photo'
+                })
+                this.setState({
+                    isAvatarLoading: false
+                })
+                console.log("uploadAvatar", response)
+              }
+          })
+          .catch(error => {
+              console.log('error', error)
+              this.setState({
+                isAvatarLoading: false
+              });
+            });    
     }
       
     componentDidMount() {
@@ -144,9 +177,14 @@ class Profile extends Component {
                             <Grid.Column width={4}>              
                                 {/* <UserCard className='UserAvata' user={this.state.user} /> */}
                                 <div className='avatar'>
-                                    <input type="file" accept="image/*" className="imageUpload input" name="file" onChange={this.uploadAvatar} />
-                                    <Button className='imageUpload button'>{this.state.uploadLabel}</Button>
-                                    <Image src={this.state.user_avatar_url} className='avatar_image' circular />
+                                    {
+                                        this.state.isAvatarLoading ? <LoadingIndicator />
+                                         :  <div className='avatarUpload'>
+                                                <input type="file" accept="image/*" className="imageUpload input" name="file" onChange={this.uploadAvatar} />
+                                                <Button className='imageUpload button'>{this.state.uploadLabel}</Button>
+                                            </div>
+                                    }
+                                    <Image src={this.state.user_avatar_url} className={this.state.isAvatarLoading ? 'avatar_image':''} circular />
                                 </div>
                             </Grid.Column>
                             <Grid.Column width={12}>              

@@ -157,6 +157,7 @@ class Home extends Component {
   }
 
   render() {
+    console.log("user",this.state.currentUser)
     return (
       <>
         <MetaTags>
