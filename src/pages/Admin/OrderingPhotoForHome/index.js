@@ -96,7 +96,10 @@ export default class OrderingPhotoForHome extends Component {
             'title': photo.title,
             'description': photo.description,
             'url': photo.url_lr,
-            'laneId': "PLANNED"
+            'laneId': "PLANNED",
+            'views': photo.viewed ? photo.viewed : 0,
+            'likes': photo.likes ? photo.likes : 0,
+            'downloads': photo.downloads? photo.downloads : 0
           }
           this.imageData.lanes[0].cards.push(card)
         });
@@ -124,7 +127,10 @@ export default class OrderingPhotoForHome extends Component {
             'title': photo.title,
             'description': photo.description,
             'url': photo.url_lr,
-            'laneId': "HOMELIST"
+            'laneId': "HOMELIST",
+            'views': photo.viewed ? photo.viewed : 0,
+            'likes': photo.likes ? photo.likes : 0,
+            'downloads': photo.downloads? photo.downloads : 0
           }
           this.imageData.lanes[1].cards.push(card)
         });

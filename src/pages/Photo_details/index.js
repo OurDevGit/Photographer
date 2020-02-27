@@ -41,6 +41,8 @@ class Photo_details extends Component {
     this.CloseBucketModal = this.CloseBucketModal.bind(this);
     this.addToBucket = this.addToBucket.bind(this);
     this.addLike = this.addLike.bind(this);
+    this.goBack =  this.goBack.bind(this)
+    this.handleImageClick = this.handleImageClick.bind(this)
   }
 
   loadCurrentUser() {
@@ -197,6 +199,9 @@ class Photo_details extends Component {
       BucketShow: true
     })
   }
+  goBack(){
+    this.props.history.goBack()
+  }
 
   addLike(){
     if(this.state.likeFlag == false)
@@ -222,6 +227,14 @@ class Photo_details extends Component {
 
   }
 
+  handleImageClick(e){
+    this.setState({
+      // ImageShow: true,
+      selImage: e
+    })
+    this.props.history.push('/Photo_details/'+e.id);
+  }
+
   render() {
     const {selImage, similarPhotos} = this.state;
     const keywords = [];
@@ -235,11 +248,7 @@ class Photo_details extends Component {
       url = selImage.url_fr + '';
       downloadUrl =  selImage.url_hr + ''
     }
-if(selImage){
-
-}
     
-
     if(selImage =={}){
       return(
           <LoadingIndicator /> 
@@ -254,10 +263,12 @@ if(selImage){
             isAuthenticated={this.state.isAuthenticated} 
             currentUser={this.state.currentUser} 
             onLogout={this.handleLogout}
+            Back = {this.goBack}
           />
           <Grid className="photo_details" verticalAlign='middle'>
             <Grid.Row only="computer" className='photo_details_row'>
               <Grid.Column width={12}>
+              {/* <Button content='Back to List' icon='arrow left' labelPosition='left' color='green' className="BackToList"/> */}
               <div className='zoomImage'>
                   <a target='blank' href={url}><Zoom_Icon className="detail_Icon Zoom-icon" /></a>
                   <a onClick={this.addLike}><Heart_Icon className="detail_Icon Heart-icon"/></a>
@@ -267,6 +278,7 @@ if(selImage){
                     photo = {selImage}
                     handleClose={this.CloseBucketModal}
                   />
+                  
                   <Button as='div' className='love ImageButton' labelPosition='right'>
                     <Button color='red'>
                       <Icon name='heart' />
@@ -406,8 +418,16 @@ if(selImage){
             <Grid.Row>
               <Grid.Column>
                 <a className="relatedPhotosLabel">Related Photos</a> <a>See All</a>
-                <ImageCarousel 
+                {/* <ImageCarousel 
                   photo =  {similarPhotos}
+                /> */}
+                <PhotoList 
+                  type="home_list" 
+                  onClickImage = {this.handleImageClick}
+                  addToBucket = {this.addToBucket}
+                  activePage = {this.state.activePage}
+                  totalPages = {5}
+                  quickView = {this.quickView}
                 />
               </Grid.Column>
             </Grid.Row>

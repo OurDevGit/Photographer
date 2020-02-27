@@ -4,7 +4,7 @@ import { string } from 'prop-types';
 const request = (options) => {
     const headers = new Headers({
         'Content-Type': 'application/json',
-        
+        'Access-Control-Allow-Origin':'*',
     })
     console.log("Token", localStorage.getItem(ACCESS_TOKEN))
     if(localStorage.getItem(ACCESS_TOKEN)) {
@@ -26,9 +26,9 @@ const request = (options) => {
 const request1 = (options) => {
     const headers = new Headers({
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin':'*',
         // "Content-Type": "text/plain"
     })
-    
     if(localStorage.getItem(ACCESS_TOKEN)) {
         headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
     }
@@ -412,5 +412,13 @@ export function getUserDetail(id){
     return request({
         url: API_BASE_URL + "/public/users/getUserDetails/" + id,
         method: 'GET',
+    })
+}
+
+
+export function FBLogin(){
+    return request1({
+        url: API_BASE_URL + "/user_social_management/fb_login",
+        method: 'GET'
     })
 }

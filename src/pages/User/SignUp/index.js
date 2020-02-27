@@ -81,14 +81,7 @@ class SignUp extends Component {
 
   render(){
     return(
-      <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
-        <Grid.Column style={{ maxWidth: 450 }}>
-          <Header as='h2' color='teal' textAlign='center'>
-          Sign Up
-            {/* <Image src='/logo.png' /> Log-in to your account */}
-          </Header>
-          <Form size='large' onSubmit={this.handleSubmit} className='signUp_form'>
-            <Segment stacked>
+        <div>
               <Form.Input 
                       autoComplete='off'
                       fluid 
@@ -145,13 +138,7 @@ class SignUp extends Component {
               >
                 Sign Up
               </Button>
-            </Segment>
-          </Form>
-          <Message>
-            Already have accouont? <a href='/login'>Login</a>
-          </Message>
-        </Grid.Column>
-      </Grid>
+        </div>
     )
   }
   

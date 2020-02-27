@@ -304,17 +304,18 @@ class PhotoList extends Component {
         });
 
         var samphotosq =  this.state.photo_list;
+        // 
         if(this.state.photo_list.length>0)
         {
             for(let k=0; k< this.state.photo_list.length; k++)
             {
                 // samphotosq[k].id = this.state.photo_list[k].id;
                 samphotosq[k].src = this.state.photo_list[k].url_lr;
-                samphotosq[k].width =  4;
-                samphotosq[k].height = 3
+                samphotosq[k].width =  this.state.photo_list[k].lr_width;
+                samphotosq[k].height = this.state.photo_list[k].lr_heigh;
             }
         }
-
+        
         return (
             <div className="photos-container">
                 {/* {photoViews} */}

@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import  { Redirect } from 'react-router-dom'
-import { Button, Form, Grid, Header, Image, Message, Segment, Icon } from 'semantic-ui-react'
-import { HomeHeader} from '../../../components'
-import Footer from './Footer'
-import { login } from '../../../util/APIUtils';
+import { Button, Form, Grid, Header, Image, Message, Segment, Icon, Input } from 'semantic-ui-react'
+import { login, FBLogin } from '../../../util/APIUtils';
 import { ACCESS_TOKEN } from '../../../constants';
 import './style.less'
 import {notification } from 'antd';
@@ -24,6 +22,7 @@ class Login extends Component{
     }
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleFBLogin = this.handleFBLogin.bind(this);
   }
   handleInputChange(event){
     const target = event.target;
@@ -64,6 +63,24 @@ class Login extends Component{
     });
   }
 
+  handleFBLogin(){
+    console.log("dd")
+    FBLogin()
+    .then(response =>{
+      console.log(response)
+      if(response.ok)
+      {
+        response.text().then(result => {
+          console.log(result.slice(9))
+          window.location.assign(result.slice(9));
+      })
+      }
+    })
+    .catch(error=>{
+      console.log(error)
+    })
+  }
+
 
   responseFacebook = (response) => {
     console.log(response);
@@ -85,15 +102,8 @@ class Login extends Component{
       )
     }else{
       return(
-        <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
-          {/* <HomeHeader /> */}
-          <Grid.Column width="16" style={{ maxWidth: 450 }}>
-            <Header as='h2' color='teal' textAlign='center'>
-            Log-in to your account
-            </Header>
-            <Form size='large' onSubmit={this.handleSubmit} className='login_form'>
-              <Segment stacked>
-                <Form.Input 
+        <div>
+                <Input 
                         fluid 
                         icon='user' 
                         iconPosition='left' 
@@ -102,7 +112,7 @@ class Login extends Component{
                         value={this.state.usernameOrEmail.value}
                         onChange={this.handleInputChange}
                         />
-                <Form.Input
+                <Input
                         fluid
                         icon='lock'
                         iconPosition='left'
@@ -117,38 +127,11 @@ class Login extends Component{
                         fluid 
                         size='large' 
                         type='submit'
+                        onClick={this.handleSubmit}
                 >
                   Login
                 </Button>
-                <FacebookLoginWithButton
-                  // appId="222223435486606"
-                  appId = '2719403554847722'
-                  fields="name,email,picture"
-                  onClick={this.componentClicked}
-                  callback={this.responseFacebook}
-                  icon="fa-facebook"/>
-                <div  className='InstagramButton'>
-                    <InstagramLogin
-                      clientId="2dfb02f4699b400bc1d6129e53344ee7"
-                      buttonText="Login"
-                      onSuccess={this.responseInstagram}
-                      onFailure={this.responseInstagram}
-                    />
-                </div>
-                <Button className='social face' color='facebook' fluid size='large'>
-                  <Icon name='facebook' /> Facebook Login
-                </Button>
-
-                <Button className='social insta' color='instagram' fluid size='large'>
-                  <Icon name='instagram' /> Instagram Login
-                </Button>
-              </Segment>
-            </Form>
-            <Message>
-              New to us? <a href='/user/signUp'>Sign Up</a>
-            </Message>
-          </Grid.Column>
-        </Grid>
+        </div>
       )
     }
     

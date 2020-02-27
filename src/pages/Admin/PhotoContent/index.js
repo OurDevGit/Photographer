@@ -204,7 +204,7 @@ class PhotoContent extends Component
           }
           this.state.motives.forEach((motive, motiveIndex) => {
             list_motives.push(
-              <List.Item>
+              <List.Item key={motiveIndex}>
                 {
                   this.props.status == 'list_rejected_photos' ?
                     <Checkbox label={motive.value} value={motive.id} onClick={this.handleMotiveCheck} checked={motiveFlag[motive.id] == 1} disabled/>

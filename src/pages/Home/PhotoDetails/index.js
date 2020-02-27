@@ -37,7 +37,7 @@ class PhotoDetails extends Component {
         keywords.push(<button>{tag}</button>)
       });
       var url = photo.url_fr + ''
-      var releaseNum = photo.authoriztions ? photo.authoriztions.length : 0
+      var releaseNum = photo.authorizations ? photo.authorizations.length : 0
       return(
         <Modal open={show} closeOnEscape={false} closeOnDimmerClick={true}  onClose={this.handleClose} className='PhotoDetailModal'>
           <Modal.Header>

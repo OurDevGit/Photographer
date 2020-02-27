@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import MetaTags from 'react-meta-tags'
 import { Grid, Form, Input, Select, TextArea, Button, Image} from 'semantic-ui-react'
+import { Redirect } from 'react-router-dom'
 import { API_BASE_URL, ACCESS_TOKEN} from '../../../constants';
 import { getUserProfile, getCurrentUser } from '../../../util/APIUtils';
 import {  Tabs } from 'antd';
@@ -22,10 +23,9 @@ class Profile extends Component {
         super(props);
         this.state = {
             user: null,
-            isLoading: false,
+            isLoading: true,
             currentUser: null,
             isAuthenticated: false,
-            isLoading: false,
             isAvatarLoading: false,
             user_avatar_url: AvatarDefault,
             uploadLabel: 'Upload your photo'
@@ -145,6 +145,11 @@ class Profile extends Component {
 
         if(this.state.serverError) {
             return <ServerError />;
+        }
+
+        if(!this.state.isLoading && !this.state.currentUser)
+        {
+            return <Redirect to='/user/login' />
         }
 
         const tabBarStyle = {

@@ -44,7 +44,7 @@ class Users extends Component
                 arr_users.push(
                     <Table.Row>
                         <Table.Cell>
-                        <Label ribbon>{userIndex}</Label>
+                        <Label ribbon>{userIndex+1}</Label>
                         </Table.Cell>
                         <Table.Cell><Image avatar src={user.avatar ? user.avatar : AvatarDefault} />{user.name}</Table.Cell>
                         <Table.Cell>{user.username}</Table.Cell>

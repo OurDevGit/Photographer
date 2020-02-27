@@ -7,19 +7,19 @@ import Board from "react-trello";
 export default class customImageCard extends Component {
 
     render(){
-        const {id, title, description, url} =  this.props;
+        const {id, likes, views, url, downloads} =  this.props;
         return (
             <div className='ImageContent'>
                 <div className='Image'>
                 <img src={url} /> 
                 </div>
                 <Button as='div' className='view ImageButton' labelPosition='right'>
-                  <Button color='gray'>
+                  <Button color='grey'>
                     <Icon name='eye' />
                     
                   </Button>
-                  <Label as='a' basic color='gray' pointing='left'>
-                    10
+                  <Label as='a' basic color='grey' pointing='left'>
+                    {/* {photo.viewed} */}{views}
                   </Label>
                 </Button>
                 <Button as='div' className='love ImageButton' labelPosition='right'>
@@ -28,7 +28,7 @@ export default class customImageCard extends Component {
                     {/* Like */}
                   </Button>
                   <Label as='a' basic color='red' pointing='left'>
-                    20
+                    {likes}
                   </Label>
                 </Button>
                 <Button as='div' className='download ImageButton' labelPosition='right'>
@@ -37,7 +37,7 @@ export default class customImageCard extends Component {
                     
                   </Button>
                   <Label as='a' basic color='blue' pointing='left'>
-                    10
+                    {downloads}
                   </Label>
                 </Button>
             </div>

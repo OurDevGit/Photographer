@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/no-webpack-loader-syntax */
 import React from 'react'
-import { Menu, Grid, Image, Button, Dropdown } from 'semantic-ui-react'
+import { Menu, Grid, Image, Button, Dropdown, Icon } from 'semantic-ui-react'
 import { NavLink } from 'react-router-dom'
 import Avatar from '../Avatar'
 import QuestionSVG from '-!svg-react-loader!../../assets/images/question.svg'
@@ -141,10 +141,16 @@ class HomeHeader extends React.Component {
             <Grid.Column>
               <Menu borderless className="desktop-menu-style">
                 {/* <NavLink to="/"><Image src={logoPng} className="logo" /></NavLink> */}
+                {
+                  this.props.Back ? 
+                    <Menu.Item as="a" className="BackIcon" style={style.noPaddingStyle}>
+                      <Icon name="arrow left" size="large" onClick={this.props.Back} />
+                    </Menu.Item>
+                  :null
+                }
                 <NavLink to="/"><h2 className="header">Picktur</h2></NavLink> 
                 <Menu.Item position="right" style={style.noPaddingStyle}>
                     {menuItems}
-                  
                 </Menu.Item>
               </Menu>
             </Grid.Column>
