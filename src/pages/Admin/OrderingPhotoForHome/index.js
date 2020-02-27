@@ -115,7 +115,7 @@ export default class OrderingPhotoForHome extends Component {
     }
 
     loadHomeList(){
-      getPhotoLists(0, 30)
+      getPhotoLists(0, 100)
       .then(response=>{
         console.log(response)
         var i=0;

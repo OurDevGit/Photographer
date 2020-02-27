@@ -4,7 +4,7 @@ import MetaTags from 'react-meta-tags'
 import { NavLink, Redirect } from 'react-router-dom'
 import { getCurrentUser, getAllCategories, getPhotoDetail, addToLike, removeToLike, is_liked, getLikeAmount, getDownloadAmount, getViewsAmount } from '../../util/APIUtils';
 import { ACCESS_TOKEN } from '../../constants';
-import { HomeHeader, SearchBar, PhotoList } from '../../components'
+import { HomeHeader, SearchBar, PhotoList, AnimateButton } from '../../components'
 import PanAndZoomImage from '../../PanAndZoomImage';
 import ImageCarousel from  './ImageCarousel'
 import  Bucket from '../Home/Bucket'
@@ -291,13 +291,18 @@ class Photo_details extends Component {
   
                   <Button as='div' className='download ImageButton' labelPosition='right'>
                     <Button color='blue'>
-                      <a target='blank' href={ this.state.isFollower ? downloadUrl : this.state.followerUrl}><Icon name='download' onClick={this.downloadImage}/></a>
+                      <Icon name='download' onClick={this.downloadImage}/>
                     </Button>
                     <Label as='a' basic color='blue' pointing='left'>
                       {this.state.downloads}
                     </Label>
                   </Button>
-  
+                  <a target='blank' href={ this.state.isFollower ? downloadUrl : this.state.followerUrl} className="ImageButton followAndDownload">
+                    <AnimateButton 
+                      content="Follow and Download"
+                      IconName="download"
+                    />
+                  </a>
                   <Button as='div' className='view ImageButton' labelPosition='right'>
                     <Button color='grey'>
                       <Icon name='eye' />
@@ -353,6 +358,12 @@ class Photo_details extends Component {
                     photo = {selImage}
                     handleClose={this.CloseBucketModal}
                   />
+                  <a target='blank' href={ this.state.isFollower ? downloadUrl : this.state.followerUrl} className="ImageButton followAndDownload">
+                    <AnimateButton 
+                      content="Follow and Download"
+                      IconName="download"
+                    />
+                  </a>
                   <Button as='div' className='love ImageButton' labelPosition='right'>
                     <Button color='red'>
                       <Icon name='heart' />

@@ -149,7 +149,7 @@ class Profile extends Component {
 
         if(!this.state.isLoading && !this.state.currentUser)
         {
-            return <Redirect to='/user/login' />
+            // return <Redirect to='/user/LoginAndSignUp' />
         }
 
         const tabBarStyle = {

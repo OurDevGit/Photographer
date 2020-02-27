@@ -23,21 +23,8 @@ class LoginAndSignUp extends Component{
       title: "Login to your account",
       falg: false
     }
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
     this.handleFBLogin = this.handleFBLogin.bind(this);
     this.handleTabChange =  this.handleTabChange.bind(this)
-  }
-  handleInputChange(event){
-    const target = event.target;
-    const inputName = target.name;        
-    const inputValue = target.value;
-
-    this.setState({
-        [inputName] : {
-            value: inputValue,
-        }
-    });
   }
 
   handleTabChange(e, data){
@@ -55,32 +42,7 @@ class LoginAndSignUp extends Component{
       }
   }
 
-  handleSubmit(event) {
-    event.preventDefault();   
 
-    const loginRequest = {
-        usernameOrEmail: this.state.usernameOrEmail.value,
-        password: this.state.password.value
-    };
-
-    login(loginRequest)
-    .then(response => {
-        localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-        this.setState({flag: true});
-    }).catch(error => {
-        if(error.status === 401) {
-            notification.error({
-                message: 'Photoing App',
-                description: 'Your Username or Password is incorrect. Please try again!'
-            });                    
-        } else {
-            notification.error({
-                message: 'Photoing App',
-                description: error.message || 'Sorry! Something went wrong. Please try again!'
-            });                                            
-        }
-    });
-  }
 
   handleFBLogin(){
     console.log("dd")

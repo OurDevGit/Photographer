@@ -120,7 +120,7 @@ class Home extends Component {
       })
       this.props.history.push('/Photo_details/'+e.id);
     }else{
-      this.props.history.push('/user/login');
+      this.props.history.push('/user/LoginAndSignUp');
     }
 
   }

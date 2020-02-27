@@ -116,22 +116,22 @@ class HomeHeader extends React.Component {
       menuItems = [
         <Button
           as="a"
-          href="/user/login"
+          href="/user/LoginAndSignUp"
           primary
           basic
           className="investBtnStyle login-btn"
         >
-          Log in
+          Login or SignUp
         </Button>,
-        <Button
-          as="a"
-          href="/user/signUp"
-          primary
-          basic
-          className="investBtnStyle login-btn"
-        >
-          Sign Up
-        </Button>
+        // <Button
+        //   as="a"
+        //   href="/user/signUp"
+        //   primary
+        //   basic
+        //   className="investBtnStyle login-btn"
+        // >
+        //   Sign Up
+        // </Button>
       ]
     }
     return (
