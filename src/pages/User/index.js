@@ -100,7 +100,7 @@ class LoginAndSignUp extends Component{
       )
     }else{
       return(
-        <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
+        <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle' className="LoginPage">
           {/* <HomeHeader /> */}
           <Grid.Column width="16" style={{ maxWidth: 450 }}>
             <Header as='h2' color='teal' textAlign='center'>

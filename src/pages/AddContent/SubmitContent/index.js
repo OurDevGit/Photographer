@@ -1052,7 +1052,7 @@ handleChangeReleasename = (e, {value}) => {
                         <Button id={this.state.photoOptions['ImageType'] == 'Illustration' ? 'activate' : ''} type='button' name='ImageType' value='Illustration' onClick={this.handleSetPhotoOption} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'}>Illustration</Button>
                       </Form.Field>
                     </div>
-                    <div class="column">
+                    {/* <div class="column">
                       <Form.Field>
                         <label>Usage 
                           <Popup
@@ -1065,11 +1065,18 @@ handleChangeReleasename = (e, {value}) => {
                         <Button id={this.state.photoOptions['Usage'] == 'Editorial' ? 'activate' : ''} type='button' name='Usage' value='Editorial' onClick={this.handleSetPhotoOption} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'}>Editorial</Button>
 
                       </Form.Field>
-                    </div>
+                    </div> */}
                     <div class="column">
                       <Form.Field>
                       <div class="label">Description</div>
                         <TextArea rows={1} placeholder="Descriptions" name='Description' value={this.state.photoOptions['Description']} required onChange={this.handleSetPhotoOption} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'} />
+                          <div class='label error'>{this.state.errorMessage['Description']}</div>
+                      </Form.Field>
+                    </div>
+                    <div class="column">
+                      <Form.Field>
+                      <div class="label">Follow Instagram link</div>
+                        <Input placeholder="Follow Instagram link" name='FollowIGLink' value={this.state.photoOptions['FollowIGLink']} required onChange={this.handleSetPhotoOption} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'} />
                           <div class='label error'>{this.state.errorMessage['Description']}</div>
                       </Form.Field>
                     </div>
@@ -1080,7 +1087,7 @@ handleChangeReleasename = (e, {value}) => {
                         <div class='label error'>{this.state.errorMessage['Collection']}</div>
                       </Form.Field>
                     </div>
-                    <div class="column">
+                    {/* <div class="column">
                       <Form.Field>
                       <div class="label">Category 1</div>
                         <Select placeholder='Category 1' options={this.state.categories1} name="Category1" value={this.state.photoOptions['Category1']} onChange={this.handleSetPhotoOption} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'}/>
@@ -1092,7 +1099,7 @@ handleChangeReleasename = (e, {value}) => {
                       <div class="label">Category 2(optional)</div>
                         <Select placeholder='Category 2(optional)' options={this.state.categories2} name="Category2" value={this.state.photoOptions['Category2']} onChange={this.handleSetPhotoOption} disabled={(this.state.photoOptions['Category1'] &&  this.state.activeMenuItem == 'TO_BE_SUBMITTED') ? false : true}/>
                       </Form.Field>
-                    </div>
+                    </div> */}
                     <div class="column">
                       <Form.Field required>
                       <div class="label">Location(optional)</div>

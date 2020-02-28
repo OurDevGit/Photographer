@@ -241,7 +241,7 @@ class PhotoList extends Component {
 
     loadFunc(page){
         this.setState({
-            page: this.state.page,
+            page: page,
         })
         if(page == this.props.totalPages)
         {
@@ -262,7 +262,7 @@ class PhotoList extends Component {
     ImageRender = 
     ({ index, left, top, key, photo }) => (
     <PhotoBox
-        key= {photo.id}
+        // key= {photo.id}
         margin={"2px"}
         index={index}
         photo={photo}

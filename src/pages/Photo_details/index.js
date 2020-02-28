@@ -21,7 +21,6 @@ class Photo_details extends Component {
       isLoading: false,
       categories: [],
       ImageShow: false,
-      selImage:{},
       similarPhotos:[],
       likes:0,
       downloads:0,
@@ -240,7 +239,7 @@ class Photo_details extends Component {
     const keywords = [];
     var url = '';
     var downloadUrl = ''
-    if(selImage.tags){
+    if(selImage && selImage.tags){
       for(let i=0; i<selImage.tags.length;i++)
       {
           keywords.push(<button>{selImage.tags[i].value}</button>)
@@ -249,7 +248,7 @@ class Photo_details extends Component {
       downloadUrl =  selImage.url_hr + ''
     }
     
-    if(selImage =={}){
+    if(!selImage){
       return(
           <LoadingIndicator /> 
       )

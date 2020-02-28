@@ -168,14 +168,14 @@ class Home extends Component {
           currentUser={this.state.currentUser} 
           onLogout={this.handleLogout}
         />
-        <Grid className="pages page-index">
+        <Grid className="pages page-index homeContent">
           <Grid.Row>
             <Grid.Column width={16}>
               <SearchBar />
             </Grid.Column>
-            <GridColumn only='computer' width={16}>
+            {/* <GridColumn only='computer' width={16}>
               <CategoryCarousel categories={this.state.categories} />
-            </GridColumn>
+            </GridColumn> */}
             
             <Grid.Column width={16}>              
               <PhotoList 

@@ -5,7 +5,9 @@ import data from "./data.json";
 import "./style.less";
 import Board from "react-trello";
 import customImageCard from "./customImageCard"
+import InfiniteScroll from 'react-infinite-scroller'
 import {updateChoosedForHome, getNotChoosenForHome, getPhotoLists} from '../../../util/APIUtils' 
+import {PHOTO_LIST_SIZE} from '../../../constants'
 import {notification} from 'antd'
 
 export default class OrderingPhotoForHome extends Component {
@@ -47,6 +49,7 @@ export default class OrderingPhotoForHome extends Component {
       this.loadHomeList = this.loadHomeList.bind(this)
       this.datachange = this.datachange.bind(this)
       this.handleSave =  this.handleSave.bind(this)
+      this.loadFunc =  this.loadFunc.bind(this)
     }
 
     componentDidMount(){
@@ -73,8 +76,8 @@ export default class OrderingPhotoForHome extends Component {
           }
         ]
       }
-      this.loadNotChoosenForHome();
-      this.loadHomeList()
+      this.loadNotChoosenForHome(0, PHOTO_LIST_SIZE);
+      this.loadHomeList(0, PHOTO_LIST_SIZE)
     }
 
     componentDidUpdate(prevProps){
@@ -84,10 +87,11 @@ export default class OrderingPhotoForHome extends Component {
       }
     }
 
-    loadNotChoosenForHome(){
-      getNotChoosenForHome()
+    loadNotChoosenForHome(page, size){
+      getNotChoosenForHome(page, size)
       .then(response=>{
-        var i=0;
+        var i=page * size;
+        console.log(response)
         response.content.forEach(photo => {
           i++;
           var card = {
@@ -104,9 +108,26 @@ export default class OrderingPhotoForHome extends Component {
           this.imageData.lanes[0].cards.push(card)
         });
         this.imageData.lanes[0].label = i
+
         this.setState({
-          NotChoosenForHome: response.content
+          NotChoosenForHome: response.content,
         })
+        if(!this.state.totalPages ){
+          this.setState({
+            totalPages: response.totalPages
+          })
+        }else
+        {
+          if(this.state.totalPages < response.totalPages)
+          {
+            this.setState({
+              totalPages: response.totalPages
+            })
+          }
+          this.setState({
+              hasMore: true
+          })
+        }
 
       })
       .catch(error=>{
@@ -114,11 +135,11 @@ export default class OrderingPhotoForHome extends Component {
       })
     }
 
-    loadHomeList(){
-      getPhotoLists(0, 100)
+    loadHomeList(page, size){
+      getPhotoLists(page, size)
       .then(response=>{
-        console.log(response)
-        var i=0;
+        // console.log(response)
+        var i=page * size;
         response.content.forEach(photo => {
           i++;
           var card = {
@@ -138,6 +159,23 @@ export default class OrderingPhotoForHome extends Component {
         this.setState({
             photosForHome: response.content
         })
+
+        if(!this.state.totalPages ){
+          this.setState({
+            totalPages: response.totalPages
+          })
+        }else
+        {
+          if(this.state.totalPages < response.totalPages)
+          {
+            this.setState({
+              totalPages: response.totalPages
+            })
+          }
+          this.setState({
+              hasMore: true
+          })
+        }
 
       })
       .catch(error=>{
@@ -181,13 +219,41 @@ export default class OrderingPhotoForHome extends Component {
        })
     }
 
+    loadFunc(page){
+
+      this.setState({
+          page: page,
+      })
+      if(page >= this.state.totalPages)
+      {
+          this.setState({
+              hasMore: false
+          })
+      }else{
+        this.loadHomeList(page, PHOTO_LIST_SIZE)
+      }
+      console.log("page", page)
+
+      
+      // this.loadNotChoosenForHome(page, PHOTO_LIST_SIZE)
+    }
+
     render(){
       const {visible} =  this.props;
+      console.log("total",this.state.totalPages)
+      console.log("total",this.state.hasMore)
         return (
           <div>
             <div className={visible ? 'visible': 'disable'} id='order_list_home'>
               <Button content='Save' icon='save' labelPosition='left' positive size='large' onClick={this.handleSave} />
-              <Board data={this.imageData} draggable components={{Card: customImageCard}} onDataChange={this.datachange} />
+              <InfiniteScroll
+                  pageStart={0}
+                  loadMore={this.loadFunc}
+                  hasMore={this.state.hasMore}
+                  loader={<div className="loader" key={0}>Loading ...</div>}
+              >
+                <Board data={this.imageData} draggable components={{Card: customImageCard}} onDataChange={this.datachange} />
+              </InfiniteScroll>
             </div>
           </div>
         );

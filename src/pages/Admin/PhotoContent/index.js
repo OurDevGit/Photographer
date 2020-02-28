@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Dropdown, Input, Button, Grid, Modal, List, Checkbox, Rating } from 'semantic-ui-react'
+import { Dropdown, Input, Button, Grid, Modal, List, Checkbox, Rating, Label } from 'semantic-ui-react'
 import { getCurrentUser,getRejectingMotives, adminAcceptPhoto, adminRejectPhoto, adminRedeemPhoto} from '../../../util/APIUtils';
 import { HomeHeader, PhotoList, AvatarImage, MultiSelect, ListComponent } from '../../../components'
 import PanAndZoomImage from '../../../PanAndZoomImage';
@@ -335,6 +335,9 @@ class PhotoContent extends Component
                                 <p>
                                   Descriptions: <b> {this.state.photo.description}</b>
                                 </p>
+                                <p>
+                                  FollowIGLink: <b> {this.state.photo.FollowIGLink}</b>
+                                </p>
                                 <div className='keywords'>
                                   <p>Keywords</p>
                                   {keywords}
@@ -355,7 +358,9 @@ class PhotoContent extends Component
                               </List>
                             </Grid.Column>
                             <Grid.Column className='actionButtonGroup buttonGroup' width='5'>
-                            Rating:<Rating maxRating={10} rating={this.state.rating} icon='star' size='tiny' onRate={this.handleRate} /><br /><br />
+
+                              <p><span>IG ADMIN LINK:</span><Input placeholder="IG ADMIN LINK" /></p>
+                              Rating:<Rating maxRating={10} rating={this.state.rating} icon='star' size='tiny' onRate={this.handleRate} /><br /><br />
                               {buttonGroup}
                             </Grid.Column>
                             <Grid.Column className='next_prevButtonGroup buttonGroup' width='6'>
