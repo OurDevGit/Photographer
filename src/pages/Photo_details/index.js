@@ -81,6 +81,7 @@ class Photo_details extends Component {
     })
     getPhotoDetail(id)
       .then(response=>{
+        window.scrollTo(0,0)
         console.log(response)
         this.setState({
           selImage: response.photoDto,
@@ -156,6 +157,17 @@ class Photo_details extends Component {
     this.is_like_photo(this.props.match.params.id);
     this.loadPhotoDetail(this.props.match.params.id);
   }
+
+  componentDidUpdate(prevProps){
+    if(this.props.match.params.id != prevProps.match.params.id)
+    {
+      this.is_like_photo(this.props.match.params.id);
+      this.loadPhotoDetail(this.props.match.params.id);
+      this.setState({
+        selImage: undefined
+      })
+    }
+ }
 
   handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
     localStorage.removeItem(ACCESS_TOKEN);

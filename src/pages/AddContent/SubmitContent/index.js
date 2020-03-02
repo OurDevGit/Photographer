@@ -46,7 +46,7 @@ class SubmitContent extends Component {
       selImage: {},
       selImageIDs:[],
       pageStatus: '',
-      photoOptions:{"idd":1},
+      photoOptions:{"ImageType":"Photo"},
       submit_status: 'TO_BE_SUBMITTED',
       activeMenuItem: "TO_BE_SUBMITTED",
       total: {},
@@ -1105,7 +1105,7 @@ handleChangeReleasename = (e, {value}) => {
                       <div class="label">Location(optional)</div>
                         <input type="text" placeholder='Location(optional)' name="Location" value={this.state.photoOptions['Location']} required onChange={this.handleSetPhotoOption}  disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'}/>
                         <Popup
-                          trigger={<Icon name='question circle' className="bottom" size="large"/>}
+                          trigger={<Icon name='question circle' className="bottom" size="large" color="grey"/>}
                           content={<span>Select the geographic location shown in your photo. Be specific: select neighborhoods, towns, or cities. In the future, location data will power new search and filtering options for customers. <a href="#">Learn more</a></span>}
                           position='bottom center'
                           on='click'
@@ -1127,7 +1127,7 @@ handleChangeReleasename = (e, {value}) => {
                         <Accordion.Content active={activeIndex === 0}>
                           <Select placeholder='Notes for reviewer' className="left fullwidth" name="NotesForReviewer" value={this.state.photoOptions['NotesForReviewer']} onChange={this.handleSetPhotoOption} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'} />
                           <div class="check">
-                            <Checkbox className="left fullwidth" label="Mature content" name="MatureContent" value={this.state.photoOptions['MatureContent']} onChange={this.handleCheck} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'}/>
+                            <Checkbox className="black left fullwidth" label="Mature content" name="MatureContent" value={this.state.photoOptions['MatureContent']} onChange={this.handleCheck} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'}/>
                             <Popup
                               trigger={<Icon name='question circle' className="center" size="large"/>}
                               content='Mature content contains nudity. sexual or suggestive content, or offensive language.'

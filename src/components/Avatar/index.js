@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
+import {Image} from 'semantic-ui-react'
 import './style.less'
 
 const colorSchema = {
@@ -23,6 +23,7 @@ const AvartarBadge = ({ status }) => (
 const Avartar = ({ fullname, status }) => (
   <div className="avatar">
     <div className="avatar-main">
+    {/* <Image avatar src="https://picktur.s3.eu-central-1.amazonaws.com/AV_1583170156800-images_(3).jpg" /> */}
       <div className="short-username">{fullname[0]}</div>
       <AvartarBadge status={status || 'online'} />
     </div>

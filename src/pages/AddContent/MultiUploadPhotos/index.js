@@ -4,6 +4,7 @@ import {Input} from 'semantic-ui-react'
 import './style.less'
 import { API_BASE_URL, ACCESS_TOKEN } from '../../../constants';
 import LoadingIndicator  from '../../../common/LoadingIndicator';
+import {AnimateButton} from '../../../components'
 import {Progress} from 'semantic-ui-react'
 import {notification} from 'antd'
 
@@ -182,10 +183,16 @@ export default class MultipleImageUploadComponent extends Component {
                             {/* <input type="file" accept="image/*" className="form-control select_files" name="file" onChange={this.uploadMultipleFiles} multiple /> */}
                         {/* </div> */}
                         {/* <button type="button" disabled={this.state.disabled} className="btn btn-danger btn-block upload_button" onClick={this.uploadFiles}>Next</button> */}
-                        <button type="button" disabled={this.state.disabled} class="ui icon right btn btn-danger labeled button goSubmitButton" onClick={this.handleClickUpload}>
+                        {/* <button type="button" disabled={this.state.disabled} class="ui icon right btn btn-danger labeled button goSubmitButton" onClick={this.handleClickUpload}>
                             <i aria-hidden="true" class="right arrow icon"></i>
                             Upload Photo
-                        </button>
+                        </button> */}
+                        <a disabled={this.state.disabled} className="goSubmitButton" onClick={this.handleClickUpload}>
+                            <AnimateButton
+                                content="Upload Photo"
+                                IconName="arrow right"
+                            />
+                        </a>
                         <div className='collection'>
                             {/* <b>Collection: </b> <Select placeholder='Collection' options={this.state.categories} name="Collection" onChange={this.handleSetCollection}/> */}
                             <b>Collection: </b> <Input placeholder='Collection' value={this.state.Collection} name="Collection" onChange={this.handleSetCollection}/>

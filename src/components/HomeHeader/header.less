@@ -4,7 +4,8 @@
   left: 0;
   width: 100%;
   z-index: 101;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.95), transparent) !important;
+  // background: linear-gradient(0deg, rgba(0, 0, 0, 0.95), transparent) !important;
+  background: rgba(0,0,0,0.15);
   position: sticky;
   top: 0;
   .header{
@@ -69,7 +70,7 @@
   }
   .desktop-menu-style {
     padding: 4px 0px;
-    background: transparent;
+    background: transparent !important;
     box-shadow: none;
 
     .logo.image.ui {  
@@ -91,6 +92,9 @@
     font-size: 16px;
     line-height: 20px;
     padding: 12px 20px;
+  }
+  .ui.menu.mobile-navmenu{
+    background: rgba(0,0,0,0);
   }
 
   /* Small Width Computer Menu */
@@ -156,7 +160,7 @@
 
 
   .mobile-navbar {
-    margin-top: 114px;
+//    margin-top: 114px;
     padding: 0 6px !important;
 
     &.open {
@@ -164,7 +168,7 @@
       height: 100vh;
       display: block !important;
       z-index: 1000;
-      background: white;
+      background: transparent;
       position: fixed !important;
       left: 0;
       top: 0;
@@ -172,12 +176,14 @@
 
       .ui.menu.mobile-navmenu {
         box-shadow: none;
+        background: rgba(0,0,0,0.75);
       }
     }
 
     .vertical.menu {
+      background: rgba(0,0,0,0.75);
       text-align: center;
-      margin-top: 60px;
+      margin-top: 50px;
       .myAccount{
         display: none;
       }

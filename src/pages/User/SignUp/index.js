@@ -49,20 +49,20 @@ class SignUp extends Component {
 
   handleSubmit(event) {
       event.preventDefault();
-
       const signupRequest = {
           name: this.state.name.value,
           email: this.state.email.value,
           username: this.state.username.value,
           password: this.state.password.value
       };
+
       signup(signupRequest)
       .then(response => {
           notification.success({
               message: 'Photoing App',
               description: "Thank you! You're successfully registered. Please Login to continue!",
           });
-          this.props.history.push("/user/login");
+          this.props.onSuccess();
       }).catch(error => {
           notification.error({
               message: 'Photoing App',
@@ -135,6 +135,7 @@ class SignUp extends Component {
                       size='large' 
                       type='submit'
                       disabled={this.isFormInvalid()}
+                      onClick ={this.handleSubmit}
               >
                 Sign Up
               </Button>

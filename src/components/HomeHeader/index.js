@@ -159,7 +159,8 @@ class HomeHeader extends React.Component {
             <Grid.Column width={16}>
               <Menu borderless className="mobile-navmenu">
                 <Menu.Item header as={NavLink} to="/">
-                  <Image src={logoPng} style={{ width: 130 }} />
+                  {/* <Image src={logoPng} style={{ width: 130 }} /> */}
+                  <h2 className="header">Picktur</h2>
                 </Menu.Item>
                 <Menu.Item position="right" style={style.noPaddingStyle}>
                   {

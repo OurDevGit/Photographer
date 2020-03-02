@@ -106,7 +106,7 @@ class AddContent extends Component {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column width={16}>              
-              <Footer />
+              {/* <Footer /> */}
             </Grid.Column>
           </Grid.Row>
         </Grid>

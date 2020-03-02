@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import MetaTags from 'react-meta-tags'
-import { Grid, Form, Input, Select, TextArea, Button, Image} from 'semantic-ui-react'
+import { Grid, Form, Input, Select, Icon, Button, Image, Tab} from 'semantic-ui-react'
 import { Redirect } from 'react-router-dom'
 import { API_BASE_URL, ACCESS_TOKEN} from '../../../constants';
-import { getUserProfile, getCurrentUser } from '../../../util/APIUtils';
-import {  Tabs } from 'antd';
+import { getUserProfile, getCurrentUser, getUserDetail } from '../../../util/APIUtils';
 import { getAvatarColor } from '../../../util/Colors';
 import { formatDate } from '../../../util/Helpers';
 import LoadingIndicator  from '../../../common/LoadingIndicator';
@@ -16,8 +15,10 @@ import Footer from '../Footer'
 import {
     AvatarDefault
   } from '../../../assets/images/homepage'
-import {getUserDetail} from '../../../util/APIUtils'
-const TabPane = Tabs.TabPane;
+import PersonalInfo from './PersonalInfo'
+import Security from './Security'
+import Social from './Social'
+import Friends from './Friends'
 class Profile extends Component {
     constructor(props) {
         super(props);
@@ -135,6 +136,14 @@ class Profile extends Component {
     }
 
     render() {
+
+        const panes = [
+            { menuItem: 'Personal Info', render: () => <Tab.Pane><PersonalInfo user={this.state.user} /></Tab.Pane> },
+            { menuItem: 'Security', render: () => <Tab.Pane><Security user={this.state.user}/></Tab.Pane> },
+            { menuItem: 'Social', render: () => <Tab.Pane><Social user={this.state.user} /></Tab.Pane> },
+            { menuItem: 'friends', render: () => <Tab.Pane><Friends user={this.state.user} /></Tab.Pane> },
+            { menuItem: 'chart', render: () => <Tab.Pane>Tab 2 Content</Tab.Pane> },
+          ]
         if(this.state.isLoading) {
             return <LoadingIndicator />;
         }
@@ -151,10 +160,6 @@ class Profile extends Component {
         {
             // return <Redirect to='/user/LoginAndSignUp' />
         }
-
-        const tabBarStyle = {
-            textAlign: 'center'
-        };
 
         return (
             <div className="profile">
@@ -185,56 +190,8 @@ class Profile extends Component {
                                     <Image src={this.state.user.avatar ? this.state.user.avatar : AvatarDefault} className={this.state.isAvatarLoading ? 'avatar_image':''} circular />
                                 </div>
                             </Grid.Column>
-                            <Grid.Column width={12}>              
-                                <Form>
-                                    <Form.Group widths='equal'>
-                                    <Form.Field
-                                        id='form-input-control-first-name'
-                                        control={Input}
-                                        label='First name'
-                                        placeholder='First name'
-                                        value= {this.state.user.username}
-                                    />
-                                    <Form.Field
-                                        id='form-input-control-last-name'
-                                        control={Input}
-                                        label='Last name'
-                                        placeholder='Last name'
-                                        value= {this.state.user.surname}
-                                    />
-                                    <Form.Field
-                                        control={Select}
-                                        // options={genderOptions}
-                                        label={{ children: 'Gender', htmlFor: 'form-select-control-gender' }}
-                                        placeholder='Gender'
-                                        search
-                                        searchInput={{ id: 'form-select-control-gender' }}
-                                    />
-                                    </Form.Group>
-
-                                    <Form.Field
-                                        id='form-input-control-error-email'
-                                        control={Input}
-                                        label='Email'
-                                        placeholder='joe@schmoe.com'
-                                        error={{
-                                            content: 'Please enter a valid email address',
-                                            pointing: 'below',
-                                        }}
-                                        value= {this.state.user.email}
-                                    />
-                                    <Form.Field
-                                        id='form-textarea-control-opinion'
-                                        control={TextArea}
-                                        label='About me'
-                                        placeholder='About me'
-                                    />
-                                    <Form.Field
-                                        id='form-button-control-public'
-                                        control={Button}
-                                        content='Save'
-                                    />
-                                </Form>
+                            <Grid.Column width={12}>
+                                <Tab panes={panes} />          
                             </Grid.Column>
                           </Grid.Row>
                           {/* <Grid.Row>

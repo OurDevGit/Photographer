@@ -9,6 +9,7 @@ import InfiniteScroll from 'react-infinite-scroller'
 import {updateChoosedForHome, getNotChoosenForHome, getPhotoLists} from '../../../util/APIUtils' 
 import {PHOTO_LIST_SIZE} from '../../../constants'
 import {notification} from 'antd'
+import { compose } from "redux";
 
 export default class OrderingPhotoForHome extends Component {
 
@@ -35,6 +36,8 @@ export default class OrderingPhotoForHome extends Component {
       }
     ]
   }
+
+  total_page = -1
   
     constructor(props)
     {
@@ -90,10 +93,8 @@ export default class OrderingPhotoForHome extends Component {
     loadNotChoosenForHome(page, size){
       getNotChoosenForHome(page, size)
       .then(response=>{
-        var i=page * size;
         console.log(response)
         response.content.forEach(photo => {
-          i++;
           var card = {
             'id': photo.id,
             'photoid':photo.id + '',
@@ -107,22 +108,38 @@ export default class OrderingPhotoForHome extends Component {
           }
           this.imageData.lanes[0].cards.push(card)
         });
-        this.imageData.lanes[0].label = i
+        this.imageData.lanes[0].label = response.totalElements
 
         this.setState({
           NotChoosenForHome: response.content,
         })
-        if(!this.state.totalPages ){
-          this.setState({
-            totalPages: response.totalPages
-          })
+        // if(!this.state.totalPages ){
+        //   this.setState({
+        //     totalPages: response.totalPages
+        //   })
+        //   console.log("b")
+        // }else
+        // {
+        //   console.log("bb")
+        //   if(this.state.totalPages < response.totalPages)
+        //   {
+        //     this.setState({
+        //       totalPages: response.totalPages
+        //     })
+        //   }
+        //   this.setState({
+        //       hasMore: true
+        //   })
+        // }
+        if(this.total_page == -1){
+          this.total_page =  response.totalPages
+          console.log("b")
         }else
         {
-          if(this.state.totalPages < response.totalPages)
+          console.log("bb")
+          if(this.total_page < response.totalPages)
           {
-            this.setState({
-              totalPages: response.totalPages
-            })
+            this.total_page =  response.totalPages
           }
           this.setState({
               hasMore: true
@@ -138,10 +155,8 @@ export default class OrderingPhotoForHome extends Component {
     loadHomeList(page, size){
       getPhotoLists(page, size)
       .then(response=>{
-        // console.log(response)
-        var i=page * size;
+        console.log(response)
         response.content.forEach(photo => {
-          i++;
           var card = {
             'id': photo.id,
             'photoid':photo.id + '',
@@ -155,22 +170,38 @@ export default class OrderingPhotoForHome extends Component {
           }
           this.imageData.lanes[1].cards.push(card)
         });
-        this.imageData.lanes[1].label = i
+        this.imageData.lanes[1].label = response.totalElements + ''
         this.setState({
             photosForHome: response.content
         })
 
-        if(!this.state.totalPages ){
-          this.setState({
-            totalPages: response.totalPages
-          })
+        // if(!this.state.totalPages ){
+        //   this.setState({
+        //     totalPages: response.totalPages
+        //   })
+        //   console.log("a")
+        // }else
+        // {
+        //   console.log("aa")
+        //   if(this.state.totalPages < response.totalPages)
+        //   {
+        //     this.setState({
+        //       totalPages: response.totalPages
+        //     })
+        //   }
+        //   this.setState({
+        //       hasMore: true
+        //   })
+        // }
+        if(this.total_page == -1){
+          this.total_page = response.totalPages
+          console.log("a")
         }else
         {
-          if(this.state.totalPages < response.totalPages)
+          console.log("aa")
+          if(this.total_page < response.totalPages)
           {
-            this.setState({
-              totalPages: response.totalPages
-            })
+            this.total_page =  response.totalPages
           }
           this.setState({
               hasMore: true
@@ -224,13 +255,14 @@ export default class OrderingPhotoForHome extends Component {
       this.setState({
           page: page,
       })
-      if(page >= this.state.totalPages)
+      if(page >= this.total_page)
       {
           this.setState({
               hasMore: false
           })
       }else{
         this.loadHomeList(page, PHOTO_LIST_SIZE)
+        this.loadNotChoosenForHome(page, PHOTO_LIST_SIZE)
       }
       console.log("page", page)
 
@@ -241,7 +273,7 @@ export default class OrderingPhotoForHome extends Component {
     render(){
       const {visible} =  this.props;
       console.log("total",this.state.totalPages)
-      console.log("total",this.state.hasMore)
+      console.log("total",this.imageData)
         return (
           <div>
             <div className={visible ? 'visible': 'disable'} id='order_list_home'>

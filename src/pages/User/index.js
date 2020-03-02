@@ -25,6 +25,13 @@ class LoginAndSignUp extends Component{
     }
     this.handleFBLogin = this.handleFBLogin.bind(this);
     this.handleTabChange =  this.handleTabChange.bind(this)
+    this.OpenLoginTab =  this.OpenLoginTab.bind(this)
+  }
+
+  OpenLoginTab(){
+    this.setState({
+      activeIndex: 0
+    })
   }
 
   handleTabChange(e, data){
@@ -32,12 +39,14 @@ class LoginAndSignUp extends Component{
       if(data.activeIndex == 0)
       {
           this.setState({
-              title: "Login to your account"
+              title: "Login to your account",
+              activeIndex: 0
           })
       }else if(data.activeIndex == 1)
       {
           this.setState({
-              title: "SignUp with your account"
+              title: "SignUp with your account",
+              activeIndex: 1
           })
       }
   }
@@ -92,7 +101,7 @@ class LoginAndSignUp extends Component{
   render(){
     const panes = [
         { menuItem: 'Login', render: () => <Tab.Pane><Login /></Tab.Pane> },
-        { menuItem: 'SignUp', render: () => <Tab.Pane><SignUp /></Tab.Pane> },
+        { menuItem: 'SignUp', render: () => <Tab.Pane><SignUp onSuccess={this.OpenLoginTab} /></Tab.Pane> },
       ]
     if(this.state.flag){
       return(
@@ -106,7 +115,7 @@ class LoginAndSignUp extends Component{
             <Header as='h2' color='teal' textAlign='center'>
                 {this.state.title}
             </Header>
-            <Tab panes={panes} onTabChange={this.handleTabChange}/>
+            <Tab panes={panes} activeIndex={this.state.activeIndex} onTabChange={this.handleTabChange}/>
             {/* <FacebookLoginWithButton
                   appId="222223435486606"
                   // appId = '2719403554847722'
