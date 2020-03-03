@@ -1,6 +1,8 @@
 import React, {Component, useState, useEffect } from "react";
 import {Popup, Button, Icon, Label} from 'semantic-ui-react';
 import { Heart_Icon, Plus_Icon, Zoom_Icon} from '../../../assets/icons'
+import { AvatarImage} from '../../../components'
+import { AvatarDefault } from '../../../assets/images/homepage'
 var MouseOverFlag;
 const style = {
     borderRadius: 0,
@@ -27,10 +29,16 @@ class PhotoBox extends Component {
         this.addToBucket = this.addToBucket.bind(this)
         this.onMouseOver =  this.onMouseOver.bind(this)
         this.onMouseOut = this.onMouseOut.bind(this)
+        this.handleViewOwner =  this.handleViewOwner.bind(this)
     }
 
     handleImageClick(e){
         this.props.onClickImage(e)
+    }
+
+    handleViewOwner(){
+        console.log(this.props.photo.ownerId)
+        this.props.viewOwner(this.props.photo.ownerId)
     }
 
     quickView(){
@@ -55,6 +63,7 @@ class PhotoBox extends Component {
                 <a target='blank' onClick={this.quickView}><Zoom_Icon className="detail_Icon Zoom-icon" /></a>
                 <Heart_Icon className="detail_Icon Heart-icon" />
                 <a onClick={this.addToBucket}><Plus_Icon className="detail_Icon Plus-icon" /></a> 
+                <p className="owner_content" onClick={this.handleViewOwner}><AvatarImage url={this.props.photo.ownerIcon ? this.props.photo.ownerIcon : AvatarDefault} name={this.props.photo.owner}/></p>
                 <Popup
                     content='Popup will hide in 500ms after leaving mouse.'
                     mouseEnterDelay={500}

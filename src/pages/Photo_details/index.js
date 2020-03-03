@@ -3,12 +3,13 @@ import { Grid, Button, Icon, Label, GridRow } from 'semantic-ui-react'
 import MetaTags from 'react-meta-tags'
 import { NavLink, Redirect } from 'react-router-dom'
 import { getCurrentUser, getAllCategories, getPhotoDetail, addToLike, removeToLike, is_liked, getLikeAmount, getDownloadAmount, getViewsAmount } from '../../util/APIUtils';
-import { ACCESS_TOKEN } from '../../constants';
-import { HomeHeader, SearchBar, PhotoList, AnimateButton } from '../../components'
+import { ACCESS_TOKEN, } from '../../constants';
+import { HomeHeader, AvatarImage, PhotoList, AnimateButton } from '../../components'
 import PanAndZoomImage from '../../PanAndZoomImage';
 import ImageCarousel from  './ImageCarousel'
 import  Bucket from '../Home/Bucket'
 import { Heart_Icon, Plus_Icon, Zoom_Icon, CloseIcon} from '../../assets/icons'
+import { AvatarDefault } from '../../assets/images/homepage'
 import './style.less'
 import {notification} from 'antd'
 import LoadingIndicator  from '../../common/LoadingIndicator';
@@ -283,7 +284,8 @@ class Photo_details extends Component {
               <div className='zoomImage'>
                   <a target='blank' href={url}><Zoom_Icon className="detail_Icon Zoom-icon" /></a>
                   <a onClick={this.addLike}><Heart_Icon className="detail_Icon Heart-icon"/></a>
-                  <a onClick={this.addToBucket}><Plus_Icon className="detail_Icon Plus-icon" /></a>  
+                  <a onClick={this.addToBucket}><Plus_Icon className="detail_Icon Plus-icon" /></a>
+                  <a className="owner" href={"/user/profile/" + selImage.ownerId}><AvatarImage url={selImage.ownerIcon ? selImage.ownerIcon : AvatarDefault} name={selImage.owner}/></a>  
                   <Bucket 
                     show={this.state.BucketShow}
                     photo = {selImage}

@@ -35,6 +35,7 @@ class Home extends Component {
     this.addToBucket = this.addToBucket.bind(this);
     this.onChangePage =  this.onChangePage.bind(this);
     this.quickView = this.quickView.bind(this)
+    this.viewOwner =  this.viewOwner.bind(this)
   }
 
   loadCurrentUser() {
@@ -131,6 +132,10 @@ class Home extends Component {
     })
   }
 
+  viewOwner(ownerId){
+    this.props.history.push("/user/profile/" + ownerId)
+  }
+
   quickView(e){
     this.setState({
       ImageShow: true,
@@ -185,6 +190,7 @@ class Home extends Component {
                 activePage = {this.state.activePage}
                 totalPages = {this.state.totalPages}
                 quickView = {this.quickView}
+                viewOwner = {this.viewOwner}
               />
                {/* <Gallery photos={photos}  /> */}
               <PhotoDetails 

@@ -3,7 +3,7 @@ import MetaTags from 'react-meta-tags'
 import { Grid, Form, Input, Select, Icon, Button, Image, Tab} from 'semantic-ui-react'
 import { Redirect } from 'react-router-dom'
 import { API_BASE_URL, ACCESS_TOKEN} from '../../../constants';
-import { getUserProfile, getCurrentUser, getUserDetail } from '../../../util/APIUtils';
+import { update_user, getCurrentUser, getUserDetail } from '../../../util/APIUtils';
 import { getAvatarColor } from '../../../util/Colors';
 import { formatDate } from '../../../util/Helpers';
 import LoadingIndicator  from '../../../common/LoadingIndicator';
@@ -35,18 +35,20 @@ class Profile extends Component {
         this.loadUserProfile = this.loadUserProfile.bind(this);
         this.loadCurrentUser = this.loadCurrentUser.bind(this);
         this.uploadAvatar =  this.uploadAvatar.bind(this)
+        this.update_userData =  this.update_userData.bind(this)
     }
 
-    loadCurrentUser() {
+    loadCurrentUser(userId) {
         this.setState({
           isLoading: true
         });
         getCurrentUser()
         .then(response => {
+          this.loadUserProfile(userId)
           this.setState({
             currentUser: response,
             isAuthenticated: true,
-            isLoading: false
+            // isLoading: false
           });
         }).catch(error => {
           this.setState({
@@ -57,7 +59,7 @@ class Profile extends Component {
 
     loadUserProfile(userId) {
         this.setState({
-            isLoading: true
+            // isLoading: true
         });
 
         getUserDetail(userId)
@@ -122,11 +124,22 @@ class Profile extends Component {
               });
             });    
     }
+
+    update_userData(e){
+      console.log(e)
+      update_user(e)
+      .then(response=>{
+        console.log(response)
+      })
+      .catch(error=>{
+        console.log(error)
+      })
+    }
       
     componentDidMount() {
         const userId = this.props.match.params.id;
-        this.loadUserProfile(userId);
-        this.loadCurrentUser();
+        // this.loadUserProfile(userId);
+        this.loadCurrentUser(userId);
     }
 
     componentDidUpdate(nextProps) {
@@ -136,9 +149,10 @@ class Profile extends Component {
     }
 
     render() {
+      console.log(this.state.currentUser)
 
         const panes = [
-            { menuItem: 'Personal Info', render: () => <Tab.Pane><PersonalInfo user={this.state.user} /></Tab.Pane> },
+            { menuItem: 'Personal Info', render: () => <Tab.Pane><PersonalInfo user={this.state.user} update_userData={this.update_userData} /></Tab.Pane> },
             { menuItem: 'Security', render: () => <Tab.Pane><Security user={this.state.user}/></Tab.Pane> },
             { menuItem: 'Social', render: () => <Tab.Pane><Social user={this.state.user} /></Tab.Pane> },
             { menuItem: 'friends', render: () => <Tab.Pane><Friends user={this.state.user} /></Tab.Pane> },
@@ -176,29 +190,46 @@ class Profile extends Component {
                           onLogout={this.handleLogout}
                         />
                         <Grid className="pages page-index profile_page">
-                          <Grid.Row>
-                            <Grid.Column width={4}>              
-                                {/* <UserCard className='UserAvata' user={this.state.user} /> */}
-                                <div className='avatar'>
-                                    {
-                                        this.state.isAvatarLoading ? <LoadingIndicator />
-                                         :  <div className='avatarUpload'>
-                                                <input type="file" accept="image/*" className="imageUpload input" name="file" onChange={this.uploadAvatar} />
-                                                <Button className='imageUpload button'>{this.state.uploadLabel}</Button>
-                                            </div>
-                                    }
-                                    <Image src={this.state.user.avatar ? this.state.user.avatar : AvatarDefault} className={this.state.isAvatarLoading ? 'avatar_image':''} circular />
-                                </div>
-                            </Grid.Column>
-                            <Grid.Column width={12}>
-                                <Tab panes={panes} />          
-                            </Grid.Column>
-                          </Grid.Row>
-                          {/* <Grid.Row>
-                            <Grid.Column width={16}>              
-                              <Footer />
-                            </Grid.Column>
-                          </Grid.Row> */}
+                          {
+                            this.state.currentUser && this.state.user.id == this.state.currentUser.id ? 
+                              <Grid.Row>
+                                <Grid.Column width={4}>              
+                                    {/* <UserCard className='UserAvata' user={this.state.user} /> */}
+                                    <div className='avatar'>
+                                        {
+                                            this.state.isAvatarLoading ? <LoadingIndicator />
+                                            :  <div className='avatarUpload'>
+                                                    <input type="file" accept="image/*" className="imageUpload input" name="file" onChange={this.uploadAvatar} />
+                                                    <Button className='imageUpload button'>{this.state.uploadLabel}</Button>
+                                                </div>
+                                        }
+                                        <Image src={this.state.user.avatar ? this.state.user.avatar : AvatarDefault} className={this.state.isAvatarLoading ? 'avatar_image':''} circular />
+                                    </div>
+                                </Grid.Column>
+                                <Grid.Column width={12}>
+                                    <Tab panes={panes} />          
+                                </Grid.Column>
+                              </Grid.Row>
+                              : 
+                              <Grid.Row>
+                                <Grid.Column width={4}>              
+                                    {/* <UserCard className='UserAvata' user={this.state.user} /> */}
+                                    <div className='avatar'>
+                                        {
+                                            this.state.isAvatarLoading ? <LoadingIndicator />
+                                            :  <div className='avatarUpload'>
+                                                    <input type="file" accept="image/*" className="imageUpload input" name="file" onChange={this.uploadAvatar} />
+                                                    <Button className='imageUpload button'>{this.state.uploadLabel}</Button>
+                                                </div>
+                                        }
+                                        <Image src={this.state.user.avatar ? this.state.user.avatar : AvatarDefault} className={this.state.isAvatarLoading ? 'avatar_image':''} circular />
+                                    </div>
+                                </Grid.Column>
+                                <Grid.Column width={12}>
+                                    {/* <Tab panes={panes} />           */}
+                                </Grid.Column>
+                              </Grid.Row>
+                          }
                         </Grid>
                       </>
                     ): null               

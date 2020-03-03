@@ -44,6 +44,7 @@ class HomeHeader extends React.Component {
     const { mobileMenuOpen } = this.state
     const {currentUser} = this.props
     let menuItems;
+
     if(currentUser) {
       if(currentUser.authorities.length == 2)
       {
@@ -61,7 +62,7 @@ class HomeHeader extends React.Component {
             My submitted Photos
           </Menu.Item>,
           <Menu.Item className="myAccount" >
-            <Avatar fullname={currentUser.name} status="online" />
+            <Avatar fullname={currentUser.username} status="online" />
               <Dropdown item >
                 <Dropdown.Menu>
                   <Dropdown.Item as={NavLink} to={'/user/profile/' + currentUser.id}>My account</Dropdown.Item>
@@ -83,7 +84,7 @@ class HomeHeader extends React.Component {
               My submitted Photos
             </Menu.Item>,
             <Menu.Item className="myAccount">
-              <Avatar fullname={currentUser.name} status="online" />
+              <Avatar fullname={currentUser.username} status="online" />
                 <Dropdown item >
                   <Dropdown.Menu>
                     <Dropdown.Item as={NavLink} to={'/user/profile/' + currentUser.id}>My account</Dropdown.Item>
@@ -100,7 +101,7 @@ class HomeHeader extends React.Component {
               AdminDashboard
             </Menu.Item>,
             <Menu.Item className="myAccount">
-              <Avatar fullname={currentUser.name} status="online" />
+              <Avatar fullname={currentUser.username} status="online" />
                 <Dropdown item >
                   <Dropdown.Menu>
                     <Dropdown.Item as={NavLink} to={'/user/profile/' + currentUser.id}>My account</Dropdown.Item>
@@ -166,7 +167,7 @@ class HomeHeader extends React.Component {
                   {
                     currentUser ? 
                       <Menu.Item className="myAccountMobile">
-                        <Avatar fullname={currentUser.name} status="online" />
+                        <Avatar fullname={currentUser.username} status="online" />
                           <Dropdown item floating >
                             <Dropdown.Menu>
                               <Dropdown.Item as={NavLink} to={'/user/profile/' + currentUser.id}>My account</Dropdown.Item>

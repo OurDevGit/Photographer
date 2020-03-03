@@ -256,6 +256,10 @@ class PhotoList extends Component {
         this.props.onClickImage(e.target)
     }
 
+    viewOwner(e){
+        this.props.viewOwner(e)
+    }
+
     onMouseUp(){
     }
 
@@ -269,6 +273,7 @@ class PhotoList extends Component {
         onClickImage={this.photoClick}
         quickView={this.props.quickView}
         addToBucket = {this.props.addToBucket}
+        viewOwner =  {this.props.viewOwner}
     />
     )
     render() {

@@ -415,6 +415,23 @@ export function getUserDetail(id){
     })
 }
 
+export function update_user(Request){
+    return request1({
+        url: API_BASE_URL + "/public/users/update_user",
+        method: 'POST',
+        body: JSON.stringify(Request)
+    })
+}
+
+export function getPublicUsers(page, size){
+    return request({
+        url: API_BASE_URL + "/public/users/getUserList?page=" + page + "&size=" + size,
+        method: 'GET',
+    })
+}
+
+
+
 
 export function FBLogin(){
     return request1({
