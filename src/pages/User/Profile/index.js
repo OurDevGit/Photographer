@@ -154,7 +154,6 @@ class Profile extends Component {
         const panes = [
             { menuItem: 'Personal Info', render: () => <Tab.Pane><PersonalInfo user={this.state.user} update_userData={this.update_userData} /></Tab.Pane> },
             { menuItem: 'Security', render: () => <Tab.Pane><Security user={this.state.user}/></Tab.Pane> },
-            { menuItem: 'Social', render: () => <Tab.Pane><Social user={this.state.user} /></Tab.Pane> },
             { menuItem: 'friends', render: () => <Tab.Pane><Friends user={this.state.user} /></Tab.Pane> },
             { menuItem: 'chart', render: () => <Tab.Pane>Tab 2 Content</Tab.Pane> },
           ]

@@ -44,13 +44,13 @@ class Friends extends Component {
     render() {
         return (
           <>
-          <a>Followed Users</a>
+          <a><h3>Followed Users</h3></a>
           {
             this.state.followUsers.length > 0 ? 
               <UserCard users={this.state.followUsers} status="followed"></UserCard>
             : <LoadingIndicator />
           }
-          <a>UnFollowedUsers</a>
+          <a><h3>Suggest Users</h3></a>
           {
             this.state.followUsers.length > 0 ? 
               <UserCard users={this.state.followUsers} status="unfollowed"></UserCard>
