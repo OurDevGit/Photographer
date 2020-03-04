@@ -17,6 +17,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-bootstrap": "^1.0.0-beta.12",
+    "react-charts": "^2.0.0-beta.6",
     "react-dom": "^16.8.6",
     "react-dropzone": "^10.2.1",
     "react-facebook-login": "^4.1.1",

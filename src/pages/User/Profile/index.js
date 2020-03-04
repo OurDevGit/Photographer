@@ -17,8 +17,8 @@ import {
   } from '../../../assets/images/homepage'
 import PersonalInfo from './PersonalInfo'
 import Security from './Security'
-import Social from './Social'
 import Friends from './Friends'
+import Analyse from './Analyse'
 class Profile extends Component {
     constructor(props) {
         super(props);
@@ -154,8 +154,9 @@ class Profile extends Component {
         const panes = [
             { menuItem: 'Personal Info', render: () => <Tab.Pane><PersonalInfo user={this.state.user} update_userData={this.update_userData} /></Tab.Pane> },
             { menuItem: 'Security', render: () => <Tab.Pane><Security user={this.state.user}/></Tab.Pane> },
-            { menuItem: 'friends', render: () => <Tab.Pane><Friends user={this.state.user} /></Tab.Pane> },
-            { menuItem: 'chart', render: () => <Tab.Pane>Tab 2 Content</Tab.Pane> },
+            { menuItem: 'Follow', render: () => <Tab.Pane><Friends user={this.state.user} /></Tab.Pane> },
+            { menuItem: 'Analyse', render: () => <Tab.Pane><Analyse user={this.state.user} /></Tab.Pane> },
+            { menuItem: 'Photos', render: () => <Tab.Pane>Tab 2 Content</Tab.Pane> },
           ]
         if(this.state.isLoading) {
             return <LoadingIndicator />;

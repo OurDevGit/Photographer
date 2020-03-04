@@ -1322,7 +1322,7 @@ handleChangeReleasename = (e, {value}) => {
               <div className={this.state.showOptions[1]}>
                 <Grid.Row className="imageOption_Blank">
                   <h3>Select an item to add details</h3>
-                  <p>Tip: Select multiple items by holding "Shift" or</p>
+                  <p>Tip: Select multiple items by</p>
                   <p> "Command/Control".</p>
                 </Grid.Row>
               </div>

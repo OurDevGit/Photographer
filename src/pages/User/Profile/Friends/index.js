@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Form, Input, Select, TextArea, Button} from 'semantic-ui-react'
 import {UserCard} from '../../../../components'
 import {getPublicUsers} from '../../../../util/APIUtils'
 import LoadingIndicator  from '../../../../common/LoadingIndicator';
