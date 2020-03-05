@@ -38,32 +38,40 @@ class Analyse extends Component {
     render() {
       const data = [
         {
-          label: 'Series 1',
-          data: [["down", 10], [1, 2], [2, 4], [3, 2], [4, 7]]
+          label: 'downloads',
+          data: [[1, 2], [2, 4], [3, 2], [4, 7],[5, 10], [6, 2], [7, 4], [8, 2], [9, 7],[10, 15], [11, 12], [12, 7]]
         },
         {
-          label: 'Series 2',
-          data: [["down", 3], [1, 1], [2, 5], [3, 6], [4, 4]]
+          label: 'views',
+          data: [[1, 6], [2, 14], [3, 5], [4, 21],[5, 19], [6, 5], [7, 8], [8, 12], [9, 9],[10, 16], [11, 19], [12, 16]]
         },
         {
-          label: 'Series 3',
-          data: [['down', 3], [1, 5], [2, 5], [3, 6], [4, 4]]
-        }
+          data:[[1,0]]        }
       ]
         const axes = [
           { primary: true, type: 'ordinal', position: 'bottom' },
-          { type: 'linear', position: 'left', stacked: false}
+          { type: 'linear', position: 'left', min:10
+          }
         ]
 
         const series = {
           type: 'bar'
         }
 
+        const ViewMode = [
+          { key: 'day', value: 'day', text: 'Daily' },
+          { key: 'week', value: 'week', text: 'Weekly' },
+          { key: 'month', value: 'month', text: 'Monthly' },
+        ]
+
       console.log(data)
         return (
             <>
-            <Chart data={data} axes={axes} series={series} />
-
+            {/* <Select placeholder='Select view mode' options={ViewMode} /> */}
+            <a>ViewMode:</a> <Select placeholder='Select view mode' options={ViewMode} />
+            <div>
+            <Chart data={data} axes={axes} tooltip/>
+            </div>
             </>
         );
     }

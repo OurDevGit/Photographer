@@ -207,7 +207,8 @@ class Profile extends Component {
                                     </div>
                                 </Grid.Column>
                                 <Grid.Column width={12}>
-                                    <Tab panes={panes} />          
+                                    <Tab panes={panes} />    
+                                    {/* <Tab panes={panes} menu={{ fluid: true, vertical: true, tabular: true }} />       */}
                                 </Grid.Column>
                               </Grid.Row>
                               : 
