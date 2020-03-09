@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Input, Select, TextArea, Button, Icon} from 'semantic-ui-react'
-
+import LoadingIndicator  from '../../../../common/LoadingIndicator';
 class PersonalInfo extends Component {
     constructor(props) {
       super(props);
@@ -36,6 +36,13 @@ class PersonalInfo extends Component {
     }
 
     render() {
+      if(this.props.isUpdateLoading)
+      {
+        return(
+          <LoadingIndicator />
+        )
+        
+      }
         return (
           <>
             {
@@ -47,7 +54,7 @@ class PersonalInfo extends Component {
                       control={Input}
                       label='First name'
                       placeholder='First name'
-                      name="username"
+                      name="name"
                       value= {this.state.user ? this.state.user.name : null}
                       onChange = {this.handleInputChange}
                     />

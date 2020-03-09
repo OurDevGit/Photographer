@@ -41,6 +41,23 @@ const request1 = (options) => {
     );
 };
 
+const request_text = (options) => {
+    const headers = new Headers({
+        'Access-Control-Allow-Origin':'*',
+        "Content-Type": "text/plain"
+    })
+    if(localStorage.getItem(ACCESS_TOKEN)) {
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
+    }
+    const defaults = {headers: headers};
+    options = Object.assign({}, defaults, options);
+    return fetch(options.url, options)
+    .then(response => {
+        return response
+    }
+    );
+};
+
 export function getAllPhotos(page, size) {
     page = page || 0;
     size = size || PHOTO_LIST_SIZE;
@@ -423,14 +440,36 @@ export function update_user(Request){
     })
 }
 
+export function update_password(Request){
+    return request1({
+        url: API_BASE_URL + "/public/users/update_password",
+        method: 'POST',
+        body: JSON.stringify(Request)
+    })
+}
+
+export function update_password_end(Request){
+    return request1({
+        url: API_BASE_URL + "/public/users/update_password_end",
+        method: 'POST',
+        body: JSON.stringify(Request)
+    })
+}
+
+export function request_new_password(Request){
+    return request_text({
+        url: API_BASE_URL + "/public/users/request_new_password",
+        method: 'POST',
+        body: Request
+    })
+}
+
 export function getPublicUsers(page, size){
     return request({
         url: API_BASE_URL + "/public/users/getUserList?page=" + page + "&size=" + size,
         method: 'GET',
     })
 }
-
-
 
 
 export function FBLogin(){

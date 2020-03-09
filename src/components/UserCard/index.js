@@ -23,10 +23,10 @@ const cardDetail = (users, status) =>{
                 </Card.Content>
                 <Card.Content extra>
                   <div className='ui two buttons'>
-                    <Button basic color='green'>
+                    <Button inverted color='green'>
                       {status == "followed" ? "Following" : "Follow"}
                     </Button>
-                    <Button basic color='green'>
+                    <Button inverted color='blue'>
                       View
                     </Button>
                   </div>

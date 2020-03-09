@@ -19,6 +19,8 @@ import PersonalInfo from './PersonalInfo'
 import Security from './Security'
 import Friends from './Friends'
 import Analyse from './Analyse'
+import Myphotos from './Myphotos'
+import {notification} from 'antd'
 class Profile extends Component {
     constructor(props) {
         super(props);
@@ -29,7 +31,8 @@ class Profile extends Component {
             isAuthenticated: false,
             isAvatarLoading: false,
             user_avatar_url: AvatarDefault,
-            uploadLabel: 'Upload your photo'
+            uploadLabel: 'Upload your photo',
+            isUpdateLoading: false
         }
 
         this.loadUserProfile = this.loadUserProfile.bind(this);
@@ -126,12 +129,39 @@ class Profile extends Component {
     }
 
     update_userData(e){
-      console.log(e)
+      console.log("update",e)
+      this.setState({
+        isUpdateLoading: true
+      })
       update_user(e)
       .then(response=>{
+        if(response.ok){
+          this.setState({
+            user: e
+          })
+        notification.success({
+          message: 'Photoing App',
+          description: "Successfully Updated your Information",
+        });
+        }else{
+          notification.error({
+            message: 'Photoing App',
+            description: "Sorry. There are some problems to update. Please try again",
+          });
+        }
+        this.setState({
+          isUpdateLoading: false
+        })
         console.log(response)
       })
       .catch(error=>{
+        this.setState({
+          isUpdateLoading: false
+        })
+        notification.error({
+          message: 'Photoing App',
+          description: "Sorry. There are some problems to update. Please try again",
+        });
         console.log(error)
       })
     }
@@ -152,11 +182,12 @@ class Profile extends Component {
       console.log(this.state.currentUser)
 
         const panes = [
-            { menuItem: 'Personal Info', render: () => <Tab.Pane><PersonalInfo user={this.state.user} update_userData={this.update_userData} /></Tab.Pane> },
+            { menuItem: 'Personal Info', render: () => <Tab.Pane><PersonalInfo user={this.state.user} isUpdateLoading={this.state.isUpdateLoading} update_userData={this.update_userData} /></Tab.Pane> },
             { menuItem: 'Security', render: () => <Tab.Pane><Security user={this.state.user}/></Tab.Pane> },
             { menuItem: 'Follow', render: () => <Tab.Pane><Friends user={this.state.user} /></Tab.Pane> },
             { menuItem: 'Analyse', render: () => <Tab.Pane><Analyse user={this.state.user} /></Tab.Pane> },
-            { menuItem: 'Photos', render: () => <Tab.Pane>Tab 2 Content</Tab.Pane> },
+            { menuItem: 'Photos', render: () => <Tab.Pane><Myphotos user={this.state.user} /></Tab.Pane> },
+            { menuItem: 'Messages', render: () => <Tab.Pane><Myphotos user={this.state.user} /></Tab.Pane> },
           ]
         if(this.state.isLoading) {
             return <LoadingIndicator />;
@@ -192,25 +223,46 @@ class Profile extends Component {
                         <Grid className="pages page-index profile_page">
                           {
                             this.state.currentUser && this.state.user.id == this.state.currentUser.id ? 
-                              <Grid.Row>
-                                <Grid.Column width={4}>              
-                                    {/* <UserCard className='UserAvata' user={this.state.user} /> */}
-                                    <div className='avatar'>
-                                        {
-                                            this.state.isAvatarLoading ? <LoadingIndicator />
-                                            :  <div className='avatarUpload'>
-                                                    <input type="file" accept="image/*" className="imageUpload input" name="file" onChange={this.uploadAvatar} />
-                                                    <Button className='imageUpload button'>{this.state.uploadLabel}</Button>
-                                                </div>
-                                        }
-                                        <Image src={this.state.user.avatar ? this.state.user.avatar : AvatarDefault} className={this.state.isAvatarLoading ? 'avatar_image':''} circular />
-                                    </div>
-                                </Grid.Column>
-                                <Grid.Column width={12}>
-                                    <Tab panes={panes} />    
-                                    {/* <Tab panes={panes} menu={{ fluid: true, vertical: true, tabular: true }} />       */}
-                                </Grid.Column>
-                              </Grid.Row>
+                              <>
+                                <Grid.Row only="computer" >
+                                  <Grid.Column width={4}>              
+                                      {/* <UserCard className='UserAvata' user={this.state.user} /> */}
+                                      <div className='avatar'>
+                                          {
+                                              this.state.isAvatarLoading ? <LoadingIndicator />
+                                              :  <div className='avatarUpload'>
+                                                      <input type="file" accept="image/*" className="imageUpload input" name="file" onChange={this.uploadAvatar} />
+                                                      <Button className='imageUpload button'>{this.state.uploadLabel}</Button>
+                                                  </div>
+                                          }
+                                          <Image src={this.state.user.avatar ? this.state.user.avatar : AvatarDefault} className={this.state.isAvatarLoading ? 'avatar_image':''} circular />
+                                      </div>
+                                  </Grid.Column>
+                                  <Grid.Column width={12}>
+                                      <Tab panes={panes} />    
+                                      {/* <Tab panes={panes} menu={{ fluid: true, vertical: true, tabular: true }} />  */}
+                                  </Grid.Column>
+                                </Grid.Row>
+                                <Grid.Row only="mobile tablet" >
+                                  <Grid.Column width={16}>              
+                                      {/* <UserCard className='UserAvata' user={this.state.user} /> */}
+                                      <div className='avatar'>
+                                          {
+                                              this.state.isAvatarLoading ? <LoadingIndicator />
+                                              :  <div className='avatarUpload'>
+                                                      <input type="file" accept="image/*" className="imageUpload input" name="file" onChange={this.uploadAvatar} />
+                                                      <Button className='imageUpload button'>{this.state.uploadLabel}</Button>
+                                                  </div>
+                                          }
+                                          <Image src={this.state.user.avatar ? this.state.user.avatar : AvatarDefault} className={this.state.isAvatarLoading ? 'avatar_image':''} circular />
+                                      </div>
+                                  </Grid.Column>
+                                  <Grid.Column width={16}>
+                                      <Tab panes={panes} />    
+                                      {/* <Tab panes={panes} menu={{ fluid: true, vertical: true, tabular: true }} />       */}
+                                  </Grid.Column>
+                                </Grid.Row>
+                              </>
                               : 
                               <Grid.Row>
                                 <Grid.Column width={4}>              

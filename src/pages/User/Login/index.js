@@ -127,10 +127,12 @@ class Login extends Component{
                         fluid 
                         size='large' 
                         type='submit'
+                        className="LoginButton"
                         onClick={this.handleSubmit}
                 >
                   Login
                 </Button>
+                <a className="forgotPass" href="/user/ForgotPass">Forgot Password?</a>
         </div>
       )
     }

@@ -83,6 +83,9 @@ class HomeHeader extends React.Component {
               <PaperPlaneIcon className="paper-plane-icon" />
               My submitted Photos
             </Menu.Item>,
+            <Menu.Item as={NavLink} to='/'>
+              <Icon name="alarm" />
+            </Menu.Item>,
             <Menu.Item className="myAccount">
               <Avatar fullname={currentUser.username} status="online" />
                 <Dropdown item >
