@@ -371,12 +371,21 @@ class Photo_details extends Component {
                     photo = {selImage}
                     handleClose={this.CloseBucketModal}
                   />
-                  <a target='blank' href={ this.state.isFollower ? downloadUrl : this.state.followerUrl} className="ImageButton followAndDownload">
+                  
+                <PanAndZoomImage src={downloadUrl}>
+  
+                </PanAndZoomImage>
+              </div>
+              </Grid.Column>
+              <Grid.Column className="mobileButtonGroup" width={16}>
+                <a target='blank' href={ this.state.isFollower ? downloadUrl : this.state.followerUrl} className="ImageButton followAndDownload">
                     <AnimateButton 
                       content="Follow and Download"
                       IconName="download"
                     />
-                  </a>
+                </a>
+              </Grid.Column>
+              <Grid.Column className="mobileButtonGroup" width={16}>
                   <Button as='div' className='love ImageButton' labelPosition='right'>
                     <Button color='red'>
                       <Icon name='heart' />
@@ -405,10 +414,6 @@ class Photo_details extends Component {
                       {this.state.views}
                     </Label>
                   </Button>
-                <PanAndZoomImage src={downloadUrl}>
-  
-                </PanAndZoomImage>
-              </div>
               </Grid.Column>
               <Grid.Column width={16}>    
               <div className='photoDetail'>

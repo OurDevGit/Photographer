@@ -10,6 +10,7 @@ import Photo_details from '../Photo_details'
 import LoginAndSignUp from '../User'
 import ForgotPass from '../User/ForgotPassword'
 import ResetPassword from '../User/ResetPassword'
+import FBLogin from '../User/FBLogin'
 const routes = (
   <Switch>
     <Route path="/" exact component={Home} />
@@ -21,6 +22,7 @@ const routes = (
     <Route path="/Photo_details/:id" exact component={Photo_details}/>
     <Route path="/user/ForgotPass" exact component={ForgotPass} />
     <Route path="/confirm_new_password" exact component={ResetPassword} />
+    <Route path="/fb" exact component={FBLogin} />
     {/* <Redirect path="*" to="/" /> */}
   </Switch>
 )

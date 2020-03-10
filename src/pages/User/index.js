@@ -5,8 +5,6 @@ import { login, FBLogin } from '../../util/APIUtils';
 import { ACCESS_TOKEN } from '../../constants';
 import './style.less'
 import {notification } from 'antd';
-import FacebookLoginWithButton from 'react-facebook-login'
-import InstagramLogin from 'react-instagram-login'
 import Login from './Login'
 import SignUp from './SignUp'
 
@@ -21,11 +19,12 @@ class LoginAndSignUp extends Component{
           value: ''
       },
       title: "Login to your account",
-      falg: false
+      falg: false,
+      isLoading: false
     }
-    this.handleFBLogin = this.handleFBLogin.bind(this);
     this.handleTabChange =  this.handleTabChange.bind(this)
     this.OpenLoginTab =  this.OpenLoginTab.bind(this)
+    this.SocialLogin = this.SocialLogin.bind(this)
   }
 
   OpenLoginTab(){
@@ -51,50 +50,10 @@ class LoginAndSignUp extends Component{
       }
   }
 
-
-
-  handleFBLogin(){
-    console.log("dd")
-    FBLogin()
-    .then(response =>{
-      console.log("ddd",response)
-      if(response.ok)
-      {
-        response.text().then(result => {
-          console.log(result.slice(9))
-          const headers = new Headers({
-            'Access-Control-Allow-Origin':'*',
-          })
-          var requestOptions = {
-            method: 'GET',
-            header: headers,
-            redirect: 'follow'
-          };
-          fetch(result.slice(9), requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
-        //   window.location.assign(result.slice(9));
-        
-      })
-      }
+  SocialLogin(){
+    this.setState({
+      isLoading: true
     })
-    .catch(error=>{
-      console.log(error)
-    })
-  }
-
-
-  responseFacebook = (response) => {
-    console.log(response);
-  }
-  
-  componentClicked = () => {
-    console.log( "Clicked!" )
-  }
-
-  responseInstagram = (response) => {
-    console.log(response);
   }
 
 
@@ -116,24 +75,9 @@ class LoginAndSignUp extends Component{
                 {this.state.title}
             </Header>
             <Tab panes={panes} activeIndex={this.state.activeIndex} onTabChange={this.handleTabChange}/>
-            {/* <FacebookLoginWithButton
-                  appId="222223435486606"
-                  // appId = '2719403554847722'
-                  fields="name,email,picture"
-                  onClick={this.componentClicked}
-                  callback={this.responseFacebook}
-                  icon="fa-facebook"/> */}
-                {/* <div  className='InstagramButton'>
-                    <InstagramLogin
-                      clientId="2dfb02f4699b400bc1d6129e53344ee7"
-                      buttonText="Login"
-                      onSuccess={this.responseInstagram}
-                      onFailure={this.responseInstagram}
-                    />
-                </div> */}
-            <Button className='social face' color='facebook' fluid size='large' onClick={this.handleFBLogin}>
+            <a href="https://api.picktur.com/api/user_social_management/fb_login" onClick={this.SocialLogin}><Button loading={this.state.isLoading} className='social face' color='facebook' fluid size='large'>
                 <Icon name='facebook' /> Facebook Login
-            </Button>
+            </Button></a>
             <Button className='social insta' color='instagram' fluid size='large'>
                 <Icon name='instagram' /> Instagram Login
             </Button>

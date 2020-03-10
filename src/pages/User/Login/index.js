@@ -18,11 +18,11 @@ class Login extends Component{
       password: {
           value: ''
       },
-      falg: false
+      falg: false,
+      isLoading: false
     }
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleFBLogin = this.handleFBLogin.bind(this);
   }
   handleInputChange(event){
     const target = event.target;
@@ -43,12 +43,13 @@ class Login extends Component{
         usernameOrEmail: this.state.usernameOrEmail.value,
         password: this.state.password.value
     };
-
+    this.setState({isLoading: true});
     login(loginRequest)
     .then(response => {
         localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-        this.setState({flag: true});
+        this.setState({flag: true, isLoading: false});
     }).catch(error => {
+        this.setState({isLoading: false})
         if(error.status === 401) {
             notification.error({
                 message: 'Photoing App',
@@ -61,37 +62,6 @@ class Login extends Component{
             });                                            
         }
     });
-  }
-
-  handleFBLogin(){
-    console.log("dd")
-    FBLogin()
-    .then(response =>{
-      console.log(response)
-      if(response.ok)
-      {
-        response.text().then(result => {
-          console.log(result.slice(9))
-          window.location.assign(result.slice(9));
-      })
-      }
-    })
-    .catch(error=>{
-      console.log(error)
-    })
-  }
-
-
-  responseFacebook = (response) => {
-    console.log(response);
-  }
-  
-  componentClicked = () => {
-    console.log( "Clicked!" )
-  }
-
-  responseInstagram = (response) => {
-    console.log(response);
   }
 
 
@@ -129,6 +99,7 @@ class Login extends Component{
                         type='submit'
                         className="LoginButton"
                         onClick={this.handleSubmit}
+                        loading={this.state.isLoading}
                 >
                   Login
                 </Button>
