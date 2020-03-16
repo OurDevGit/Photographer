@@ -23,7 +23,8 @@ class Home extends Component {
       selImage:{},
       totalPages:0,
       activePage: 1,
-      BucketShow: false
+      BucketShow: false,
+      searchOptions: []
     }
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -36,6 +37,7 @@ class Home extends Component {
     this.onChangePage =  this.onChangePage.bind(this);
     this.quickView = this.quickView.bind(this)
     this.viewOwner =  this.viewOwner.bind(this)
+    this.clickSearch = this.clickSearch.bind(this)
   }
 
   loadCurrentUser() {
@@ -161,6 +163,13 @@ class Home extends Component {
     })
   }
 
+  clickSearch(e){
+    console.log("sfasdfsadfsafsafasf",e)
+    this.setState({
+      searchOptions: e
+    })
+  }
+
   render() {
     console.log("user",this.state.currentUser)
     return (
@@ -176,7 +185,7 @@ class Home extends Component {
         <Grid className="pages page-index homeContent">
           <Grid.Row>
             <Grid.Column width={16}>
-              <SearchBar />
+              <SearchBar clickSearch={this.clickSearch} />
             </Grid.Column>
             {/* <GridColumn only='computer' width={16}>
               <CategoryCarousel categories={this.state.categories} />
@@ -191,6 +200,7 @@ class Home extends Component {
                 totalPages = {this.state.totalPages}
                 quickView = {this.quickView}
                 viewOwner = {this.viewOwner}
+                searchOptions = {this.state.searchOptions}
               />
                {/* <Gallery photos={photos}  /> */}
               <PhotoDetails 

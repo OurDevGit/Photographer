@@ -22,14 +22,14 @@ const UpArrowIcon = ({ className }) => (
 const LeftArrowIcon = ({ stroke="#05ACFF" }) => (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect x="16" width="16" height="16" transform="rotate(90 16 0)" fill="white"/>
-    <path d="M10 4L6 8L10 12" stroke={stroke} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M10 4L6 8L10 12" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
 )
 
 const RightArrowIcon = ({ stroke = "#00D1C1" }) => (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect y="16" width="16" height="16" transform="rotate(-90 0 16)" fill="white"/>
-    <path d="M6 12L10 8L6 4" stroke={stroke} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M6 12L10 8L6 4" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
 
 )
@@ -225,7 +225,7 @@ Heart_Icon.propTypes = {
 }
 
 const Plus_Icon = ({ className }) => (
-  <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <line x1="12" y1="5" x2="12" y2="19"></line>
     <line x1="5" y1="12" x2="19" y2="12"></line>
   </svg>
@@ -236,7 +236,7 @@ Plus_Icon.propTypes = {
 }
 
 const Zoom_Icon = ({ className }) => (
-  <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" strokeLinecap="round" stroke-linejoin="round">
+  <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="11" cy="11" r="8"></circle>
     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
     <line x1="11" y1="8" x2="11" y2="14"></line>

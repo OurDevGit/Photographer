@@ -15,3 +15,4 @@ export { default as ListComponent} from './List';
 export { default as Pagination_Component} from './Pagenation'
 export { default as ConfirmModal} from './Modal/ConformModal'
 export { default as AnimateButton} from './Button/AnimateButton'
+export { default as Comments} from './Comments'

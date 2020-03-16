@@ -237,6 +237,7 @@ export default class OrderingPhotoForHome extends Component {
           }
         }
       }
+      console.log(HomeList);
       updateChoosedForHome(HomeList)
        .then(response => {
          console.log(response)
@@ -282,7 +283,7 @@ export default class OrderingPhotoForHome extends Component {
                   pageStart={0}
                   loadMore={this.loadFunc}
                   hasMore={this.state.hasMore}
-                  loader={<div className="loader" key={0}>Loading ...</div>}
+                  loader={<div className="loader">Loading ...</div>}
               >
                 <Board data={this.imageData} draggable components={{Card: customImageCard}} onDataChange={this.datachange} />
               </InfiniteScroll>

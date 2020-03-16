@@ -1,6 +1,6 @@
 import React, { Component, useCallback } from 'react';
 import Gallery from "react-photo-gallery";
-import { getAllPhotos, getUserCreatedPhotos, getUserVotedPhotos, getPhotoLists, getSubmitPhotos, getAdminPublicationPhotoList } from '../../../util/APIUtils';
+import { getAllPhotos, getUserCreatedPhotos, getUserVotedPhotos, getPhotoLists, getSubmitPhotos, getAdminPublicationPhotoList, getPhotoListsForSearch } from '../../../util/APIUtils';
 import Photo from '../Photo';
 import { castVote } from '../../../util/APIUtils';
 import LoadingIndicator  from '../../../common/LoadingIndicator';
@@ -26,7 +26,7 @@ class PhotoList extends Component {
             size: 10,
             totalElements: 0,
             totalPages: 0,
-            last: true,
+            last: false,
             currentVotes: [],
             hasMore:true,
             isLoading: false
@@ -50,9 +50,24 @@ class PhotoList extends Component {
                 promise = getSubmitPhotos()
             } else if(this.props.type == 'admin_photolist'){
                 promise = getAdminPublicationPhotoList(this.props.status)
+            }else{
+                if(this.props.searchOptions && this.props.searchOptions.length>0)
+                {
+                    promise = getPhotoListsForSearch(page, size, this.props.searchOptions)
+                    console.log("DDDDDDDDDDDDDD")
+                }else{
+                    promise = getPhotoLists(page, size);
+                }
             }
         } else {
-            promise = getPhotoLists(page, size);
+            
+            if(this.props.searchOptions && this.props.searchOptions.length>0)
+            {
+                promise = getPhotoListsForSearch(page, size, this.props.searchOptions)
+                console.log("DDDDDDDDDDDDDD")
+            }else{
+                promise = getPhotoLists(page, size);
+            }
         }
 
         if(!promise) {
@@ -105,6 +120,7 @@ class PhotoList extends Component {
             .then(response => {
                 const photos = this.state.photos.slice();
                 const currentVotes = this.state.currentVotes.slice();
+                console.log("DDDD", response)
                 this.setState({
                     photos: photos.concat(response.content),
                     photo_list: photos.concat(response.content),
@@ -139,7 +155,7 @@ class PhotoList extends Component {
                 size: 10,
                 totalElements: 0,
                 totalPages: 0,
-                last: true,
+                last: false,
                 currentVotes: [],
                 isLoading: false
             });    
@@ -154,7 +170,7 @@ class PhotoList extends Component {
                 size: 10,
                 totalElements: 0,
                 totalPages: 0,
-                last: true,
+                last: false,
                 currentVotes: [],
                 isLoading: false
             });
@@ -179,11 +195,28 @@ class PhotoList extends Component {
                 photos: [],
                 page: 0,
                 totalElements: 0,
-                last: true,
+                last: false,
                 currentVotes: [],
                 isLoading: false
             });  
             this.loadPhotoList(this.props.activePage -1, PHOTO_LIST_SIZE);
+        }
+        if(this.props.searchOptions != prevProps.searchOptions){
+            console.log("SearchOPtionsfrsfafwefwef", this.props.searchOptions)
+            this.setState({
+                photos: [],
+                photo_list:[],
+                page: 0,
+                totalElements: 0,
+                totalPages: 0,
+                last: false,
+                currentVotes: [],
+                isLoading: false,
+                hasMore: true
+            }); 
+            this.state.photo_list =  [];
+            this.state.totalPages = 0;
+            this.loadPhotoList()
         }
     }
 
@@ -240,15 +273,24 @@ class PhotoList extends Component {
     }
 
     loadFunc(page){
+        console.log("DDDD@@@@@", this.state.totalPages)
+        console.log("DDDD~~~~~~~~~~", page)
+        console.log("DDDD~~~~~~~~~~", this.state.last)
         this.setState({
             page: page,
         })
-        if(page == this.props.totalPages)
+        if(page == this.state.totalPages -1 || this.state.totalPages == 1)
         {
             this.setState({
                 hasMore: false
             })
         }
+        // if(this.state.last)
+        // {
+        //     this.setState({
+        //         hasMore: false
+        //     })
+        // }
         this.loadPhotoList(page, PHOTO_LIST_SIZE)
     }
 
@@ -325,7 +367,7 @@ class PhotoList extends Component {
             <div className="photos-container">
                 {/* {photoViews} */}
                 {
-                    this.props.type == 'home_list' && this.props.totalPages > 0 ?(
+                    this.props.type == 'home_list' && this.state.totalPages > 0 ?(
                         <div className="infiniteScroll">
                             <InfiniteScroll
                                 pageStart={0}

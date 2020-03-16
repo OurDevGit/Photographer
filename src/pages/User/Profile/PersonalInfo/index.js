@@ -55,7 +55,7 @@ class PersonalInfo extends Component {
                       label='First name'
                       placeholder='First name'
                       name="name"
-                      value= {this.state.user ? this.state.user.name : null}
+                      value= {this.state.user ? this.state.user.name : ''}
                       onChange = {this.handleInputChange}
                     />
                     <Form.Field
@@ -64,7 +64,7 @@ class PersonalInfo extends Component {
                       label='Last name'
                       name='surname'
                       placeholder='Last name'
-                      value= {this.state.user ?  this.state.user.surname : null}
+                      value= {this.state.user ?  this.state.user.surname : ''}
                       onChange = {this.handleInputChange}
                     />
                     <Form.Field

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Input, Select, Icon, Button} from 'semantic-ui-react'
 import { Chart } from 'react-charts'
+import { get_data_for_diagram, get_all_data_for_user_diagram } from '../../../../util/APIUtils'
 
 class Analyse extends Component {
     constructor(props) {
@@ -11,6 +12,7 @@ class Analyse extends Component {
             activeMode:"day"
         }
         this.handleChangeMode = this.handleChangeMode.bind(this)
+        this.loadDataForUserDiagram =  this.loadDataForUserDiagram.bind(this)
     }
 
     componentDidMount() {
@@ -18,6 +20,24 @@ class Analyse extends Component {
         user: this.props.user
       })
       // this.MyChart();
+      var Request = {
+        "type":"VIEW",
+        "grouping": "DAY",
+        "start": "2020-03-01",
+        "end": "2020-03-10",
+        "userId": "802152"
+      }
+      this.loadDataForUserDiagram(Request);
+    }
+
+    loadDataForUserDiagram(Request){
+      get_all_data_for_user_diagram(Request)
+      .then(response=>{
+        console.log(response)
+      })
+      .catch(error=>{
+        console.log(error)
+      })
     }
 
     handleChangeMode(e, {value}){

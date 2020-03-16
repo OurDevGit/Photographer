@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { Grid, Button, Icon, Label, GridRow } from 'semantic-ui-react'
+import { Grid, Button, Icon, Label, Comment, TextArea } from 'semantic-ui-react'
 import MetaTags from 'react-meta-tags'
 import { NavLink, Redirect } from 'react-router-dom'
-import { getCurrentUser, getAllCategories, getPhotoDetail, addToLike, removeToLike, is_liked, getLikeAmount, getDownloadAmount, getViewsAmount } from '../../util/APIUtils';
+import { getCurrentUser, getAllCategories, getPhotoDetail, addToLike, removeToLike, is_liked, getLikeAmount, getDownloadAmount, getViewsAmount, add_comment } from '../../util/APIUtils';
 import { ACCESS_TOKEN, } from '../../constants';
-import { HomeHeader, AvatarImage, PhotoList, AnimateButton } from '../../components'
+import { HomeHeader, AvatarImage, PhotoList, AnimateButton, Comments } from '../../components'
 import PanAndZoomImage from '../../PanAndZoomImage';
 import ImageCarousel from  './ImageCarousel'
 import  Bucket from '../Home/Bucket'
@@ -29,7 +29,9 @@ class Photo_details extends Component {
       likeFlag: false,
       BucketShow: false,
       isFollower: false,
-      followerUrl: "https://www.instagram.com/plutus_in_fabula/"
+      followerUrl: "https://www.instagram.com/plutus_in_fabula/",
+      commentContent:"",
+      commitFlag: false
     }
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -43,6 +45,9 @@ class Photo_details extends Component {
     this.addLike = this.addLike.bind(this);
     this.goBack =  this.goBack.bind(this)
     this.handleImageClick = this.handleImageClick.bind(this)
+    this.replyComment =  this.replyComment.bind(this)
+    this.handleChangeComment = this.handleChangeComment.bind(this)
+    this.addComment = this.addComment.bind(this)
   }
 
   loadCurrentUser() {
@@ -165,7 +170,8 @@ class Photo_details extends Component {
       this.is_like_photo(this.props.match.params.id);
       this.loadPhotoDetail(this.props.match.params.id);
       this.setState({
-        selImage: undefined
+        selImage: undefined,
+        commentContent: ""
       })
     }
  }
@@ -247,6 +253,52 @@ class Photo_details extends Component {
     this.props.history.push('/Photo_details/'+e.id);
   }
 
+  replyComment(){
+    console.log("ddd")
+  }
+
+  handleChangeComment(e, {value})
+  {
+    console.log("value", value)
+    this.setState({
+      commentContent: value
+    })
+  }
+
+  addComment(){
+    var Request = {
+      "photo": this.props.match.params.id,
+      "user": this.state.currentUser.id,
+      "content": this.state.commentContent
+    }
+    this.setState({
+      isSendCommentLoading: true
+    })
+    // console.log(Request)
+    add_comment(Request)
+    .then(response=>{
+      if(response.ok)
+      {
+        this.setState({
+          commitFlag: !this.state.commitFlag,
+          isSendCommentLoading: false,
+          commentContent:""
+        })
+      }else{
+        this.setState({
+          isSendCommentLoading: false
+        })
+      }
+      console.log(response)
+    })
+    .catch(error=>{
+      console.log(error)
+      this.setState({
+        isSendCommentLoading: false
+      })
+    })
+  }
+
   render() {
     const {selImage, similarPhotos} = this.state;
     const keywords = [];
@@ -277,7 +329,7 @@ class Photo_details extends Component {
             onLogout={this.handleLogout}
             Back = {this.goBack}
           />
-          <Grid className="photo_details" verticalAlign='middle'>
+          <Grid className="photo_details" verticalAlign=''>
             <Grid.Row only="computer" className='photo_details_row'>
               <Grid.Column width={12}>
               {/* <Button content='Back to List' icon='arrow left' labelPosition='left' color='green' className="BackToList"/> */}
@@ -325,9 +377,24 @@ class Photo_details extends Component {
                     </Label>
                   </Button>
                   <a>Zoom : Shift + scroll</a>
-                <PanAndZoomImage src={downloadUrl}>
-  
-                </PanAndZoomImage>
+                <PanAndZoomImage src={downloadUrl} />
+              </div>
+              <div className="CommentBox">
+              <Comments className="CommentList" photoId={this.props.match.params.id} flag={this.state.commitFlag} photo={selImage}/>
+              <Comment.Group>
+                <Comment className="commitText">
+                  <Comment.Avatar src={selImage.ownerIcon ? selImage.ownerIcon : AvatarDefault} />
+                  <Comment.Content>
+                    <TextArea rows={1} value={this.state.commentContent} placeholder='add comments' onChange={this.handleChangeComment} />
+                    {
+                      this.state.isSendCommentLoading ? 
+                        <Icon name="spinner" className="sending" />
+                      : <Icon name="send" className="sending" disabled={this.state.commentContent == "" ? true : false} onClick={this.addComment}/>
+                    }
+                  </Comment.Content>
+                </Comment>
+              </Comment.Group>
+
               </div>
               </Grid.Column>
               <Grid.Column width={4}>    
@@ -335,20 +402,24 @@ class Photo_details extends Component {
                 <p>
                   This Content is created by <a href=""><b>{selImage.owner}</b></a>.
                 </p>
-                <p>
+                {/* <p>
                   Image# <a href=""><b>{url.split('/')[url.split('/').length-1]}</b></a>.
-                </p>
+                </p> */}
                 <p>
                   uploaded: <b> June 18, 2018 11:14 AM</b>
                 </p>
                 <p>
                   Releases: <b> Has {selImage.authorizations ? selImage.authorizations.length : ''}  model release</b>
                 </p>
-                <p>
-                  Descriptions: <b>{selImage.description}</b>
-                </p>
+                {
+                  selImage.description ? 
+                    <p>
+                      Descriptions: <b>{selImage.description}</b>
+                    </p>
+                  : null
+                }
                 <div className='keywords'>
-                  <p>Keywords</p>    
+                  <p>Keywords:</p>    
                   {keywords}                
                 </div>
               </div>
@@ -423,9 +494,9 @@ class Photo_details extends Component {
                 <p>
                   Image# <a href=""><b>{url.split('/')[url.split('/').length-1]}</b></a>.
                 </p>
-                <p>
+                {/* <p>
                   uploaded: <b> June 18, 2018 11:14 AM</b>
-                </p>
+                </p> */}
                 <p>
                   Releases: <b> Has {selImage.authorizations ? selImage.authorizations.length : ''}  model release</b>
                 </p>

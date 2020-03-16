@@ -5,8 +5,6 @@ import { login, FBLogin } from '../../../util/APIUtils';
 import { ACCESS_TOKEN } from '../../../constants';
 import './style.less'
 import {notification } from 'antd';
-import FacebookLoginWithButton from 'react-facebook-login'
-import InstagramLogin from 'react-instagram-login'
 
 class Login extends Component{
   constructor(props) {

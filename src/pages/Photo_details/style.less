@@ -120,6 +120,41 @@
     margin: 30px;
     color: red;
   }
+
+  .CommentBox{
+    .CommentList{
+      max-height: 200px;
+      overflow-y: scroll;
+    }
+    margin: 20px;
+    .content{
+      background: white;
+      border-radius: 20px;
+      padding: 5px 15px;
+    }
+    .commitText{
+      .content{
+        background: transparent;
+        padding: 0;
+        textarea{
+          border-radius: 20px;
+          font-size: 16px;
+          padding: 10px 30px 10px 10px;
+          color: black;
+          width: 100%;
+        }
+        .sending{
+          font-size: 25px;
+          color: #23bbf9;
+          position: absolute;
+          right: 10px;
+          top: 10px;
+          cursor: pointer;
+        }
+      }
+      
+    }
+  }
   @media (max-width: 600px) {
     overflow: hidden;
     .ImageButton{

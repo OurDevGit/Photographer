@@ -75,6 +75,17 @@ export function getPhotoLists(page, size) {
     });
 }
 
+export function getPhotoListsForSearch(page, size, Request) {
+    var searchOptions = ""
+    Request.forEach(t => {
+      searchOptions = searchOptions + "&" + t.label + "=" + t.value;
+    });
+    return request({
+        url: API_BASE_URL + "/public/lists/search_photos?page="+ page + "&size=" +  size + searchOptions,
+        method: 'GET'
+    });
+}
+
 export function getNotChoosenForHome() {
     return request({
         url: API_BASE_URL + "/public/lists/not_choosen_for_Home",
@@ -471,10 +482,40 @@ export function getPublicUsers(page, size){
     })
 }
 
-
 export function FBLogin(){
     return request1({
         url: API_BASE_URL + "/user_social_management/fb_login",
         method: 'GET'
+    })
+}
+
+export function get_comments_list(param){
+    return request({
+        url: API_BASE_URL + "/social_comments/get_comments_for_photo?photoId=" + param,
+        method: 'GET',
+    })    
+}
+
+export function add_comment(Request){
+    return request1({
+        url: API_BASE_URL + "/social_comments/add_comment",
+        method: 'POST',
+        body: JSON.stringify(Request)
+    })
+}
+
+export function get_data_for_diagram(Request){
+    return request({
+        url: API_BASE_URL + "/public/diagrams/get_data_for_diagram",
+        method: 'POST',
+        body: JSON.stringify(Request)
+    })
+}
+
+export function get_all_data_for_user_diagram(Request){
+    return request({
+        url: API_BASE_URL + "/public/diagrams/get_all_data_for_user_diagram",
+        method: 'GET',
+        body: JSON.stringify(Request)
     })
 }

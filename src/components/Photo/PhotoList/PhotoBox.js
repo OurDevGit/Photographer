@@ -63,9 +63,8 @@ class PhotoBox extends Component {
                 <a target='blank' onClick={this.quickView}><Zoom_Icon className="detail_Icon Zoom-icon" /></a>
                 <Heart_Icon className="detail_Icon Heart-icon" />
                 <a onClick={this.addToBucket}><Plus_Icon className="detail_Icon Plus-icon" /></a> 
-                <p className="owner_content" onClick={this.handleViewOwner}><AvatarImage url={this.props.photo.ownerIcon ? this.props.photo.ownerIcon : AvatarDefault} name={this.props.photo.owner}/></p>
+                <div className="owner_content" onClick={this.handleViewOwner}><AvatarImage url={this.props.photo.ownerIcon ? this.props.photo.ownerIcon : AvatarDefault} name={this.props.photo.owner}/></div>
                 <Popup
-                    content='Popup will hide in 500ms after leaving mouse.'
                     mouseEnterDelay={500}
                     on='hover'
                     position='right center'
@@ -111,7 +110,7 @@ class PhotoBox extends Component {
                             <Button color='grey'>
                             <Icon name='eye' />
                             </Button>
-                            <Label as='a' basic color='gray' pointing='left'>
+                            <Label as='a' basic color='grey' pointing='left'>
                             {this.props.photo.viewed}
                             </Label>
                         </Button>
