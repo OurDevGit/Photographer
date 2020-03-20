@@ -86,9 +86,9 @@ export function getPhotoListsForSearch(page, size, Request) {
     });
 }
 
-export function getNotChoosenForHome() {
+export function getNotChoosenForHome(page, size) {
     return request({
-        url: API_BASE_URL + "/public/lists/not_choosen_for_Home",
+        url: API_BASE_URL + "/public/lists/not_choosen_for_Home?page="+ page + "&size=" +  size,
         method: 'GET'
     });
 }
@@ -515,7 +515,7 @@ export function get_data_for_diagram(Request){
 export function get_all_data_for_user_diagram(Request){
     return request({
         url: API_BASE_URL + "/public/diagrams/get_all_data_for_user_diagram",
-        method: 'GET',
+        method: 'POST',
         body: JSON.stringify(Request)
     })
 }

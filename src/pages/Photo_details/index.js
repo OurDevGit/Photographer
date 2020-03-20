@@ -447,6 +447,23 @@ class Photo_details extends Component {
   
                 </PanAndZoomImage>
               </div>
+              <div className="CommentBox">
+                <Comments className="CommentList" photoId={this.props.match.params.id} flag={this.state.commitFlag} photo={selImage}/>
+                <Comment.Group>
+                  <Comment className="commitText">
+                    <Comment.Avatar src={selImage.ownerIcon ? selImage.ownerIcon : AvatarDefault} />
+                    <Comment.Content>
+                      <TextArea rows={1} value={this.state.commentContent} placeholder='add comments' onChange={this.handleChangeComment} />
+                      {
+                        this.state.isSendCommentLoading ? 
+                          <Icon name="spinner" className="sending" />
+                        : <Icon name="send" className="sending" disabled={this.state.commentContent == "" ? true : false} onClick={this.addComment}/>
+                      }
+                    </Comment.Content>
+                  </Comment>
+                </Comment.Group>
+
+              </div>
               </Grid.Column>
               <Grid.Column className="mobileButtonGroup" width={16}>
                 <a target='blank' href={ this.state.isFollower ? downloadUrl : this.state.followerUrl} className="ImageButton followAndDownload">
