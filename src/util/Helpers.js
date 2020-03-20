@@ -43,6 +43,26 @@ export function ISOFormatDate(date) {
   return [year, month, day].join('-');
 }
 
+export function DotFormatDate(type, date) {
+  var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+  if (month.length < 2) 
+    month = '0' + month;
+  if (day.length < 2) 
+    day = '0' + day;
+
+  var out ="";
+  if(type === "MONTH"){
+    out = [month, year].join('.')
+  }else if(type === "DAY"){
+    out = [day, month, year].join('.')
+  }
+  return out;
+}
+
 export function PrevMonthDate(date) {
   var d = new Date(date);
   var newMonth = d.getMonth() - 1;
@@ -54,8 +74,39 @@ export function PrevMonthDate(date) {
   return d;
 }
 
-export function PrevYearDate(date) {
+
+export function CalFirstDay(type, date){
   var d = new Date(date);
-  d.setYear(d.getFullYear() - 1);
+  if(type === "DAY")
+  {
+    d.setDate(d.getDate() - 30);
+  }else if(type === "MONTH"){
+    d.setDate("01");
+    d.setMonth((d.getMonth() + 1) % 12)
+    d.setYear(d.getFullYear() - 1);
+  }
+  return d;
+}
+
+export function nextDay(date){
+  var d =  new Date(date);
+  d.setDate(d.getDate() + 1)
+  return d;
+}
+
+export function prevDay(date){
+  var d =  new Date(date);
+  d.setDate(d.getDate() - 1)
+  return d;
+}
+
+export function nextMonth(date) {
+  var d = new Date(date);
+  var newMonth = d.getMonth() + 1;
+  if(newMonth == 12 ){
+      newMonth = 0;
+      d.setYear(d.getFullYear() + 1);
+  }
+  d.setMonth(newMonth);
   return d;
 }

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Form, Input, Select, Icon, Button} from 'semantic-ui-react'
 import { Chart } from 'react-charts'
+import { Line } from 'react-chartjs-2';
 import { get_data_for_diagram, get_all_data_for_user_diagram } from '../../../../util/APIUtils'
-import {ISOFormatDate, PrevMonthDate, PrevYearDate} from '../../../../util/Helpers'
+import {ISOFormatDate, formatDate, PrevYearDate, CalFirstDay, nextDay,nextMonth, DotFormatDate} from '../../../../util/Helpers'
+import { DIAGRAM_DATA_TYPE } from '../../../../constants'
 import LoadingIndicator  from '../../../../common/LoadingIndicator';
 class Analyse extends Component {
     constructor(props) {
@@ -10,26 +12,25 @@ class Analyse extends Component {
         this.state = {
             user: null,
             isLoading: true,
-            activeMode:"day",
+            activeMode:"DAY",
+            data:{},
+            today: new Date()
         }
         this.handleChangeMode = this.handleChangeMode.bind(this)
         this.loadDataForUserDiagram =  this.loadDataForUserDiagram.bind(this)
+        this.setDiagramData =  this.setDiagramData.bind(this)
     }
 
     componentDidMount() {
-      
+      console.log("diagram", DIAGRAM_DATA_TYPE)
       this.setState({
         user: this.props.user
       })
-      var today =  new Date();
-      console.log("D",ISOFormatDate(PrevYearDate(today)))
-      var start = ISOFormatDate(PrevMonthDate(today));
-      var end = ISOFormatDate(today);
+      var start = ISOFormatDate(CalFirstDay(this.state.activeMode,this.state.today));
       var Request = {
-        "type":"VIEW",
         "grouping": "DAY",
         "start": start,
-        "end": end,
+        "end": ISOFormatDate(this.state.today),
         "userId": "641634"
       }
       this.loadDataForUserDiagram(Request);
@@ -41,11 +42,11 @@ class Analyse extends Component {
       })
       get_all_data_for_user_diagram(Request)
       .then(response=>{
+        this.setDiagramData(Request,response)
         this.setState({
-          data: response,
           isLoading: false
         })
-        console.log(response)
+        console.log(response.viewedList['15.03.2020'])
       })
       .catch(error=>{
         console.log(error)
@@ -55,11 +56,125 @@ class Analyse extends Component {
       })
     }
 
+    setDiagramData(Request,dataList){
+      var data = {
+        labels: [],
+        datasets: [
+          {
+            label: 'like',
+            fill: false,
+            lineTension: 0.1,
+            backgroundColor: 'rgba(75,192,192,0.4)',
+            borderColor: 'rgba(255,0,0,1)',
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: 'rgba(75,192,192,1)',
+            pointBackgroundColor: '#fff',
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+            pointHoverBorderColor: 'rgba(220,220,220,1)',
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: []
+          },
+          {
+            label: 'View',
+            fill: false,
+            lineTension: 0.1,
+            backgroundColor: 'rgba(100,255,150,0.4)',
+            borderColor: 'rgba(100,255,150,1)',
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: 'rgba(75,192,192,1)',
+            pointBackgroundColor: '#fff',
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: 'rgba(100,255,150,1)',
+            pointHoverBorderColor: 'rgba(100,255,150,1)',
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: []
+          },
+          {
+            label: 'Download',
+            fill: false,
+            lineTension: 0.1,
+            backgroundColor: 'rgba(75,192,192,0.4)',
+            borderColor: 'rgba(75,192,192,1)',
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: 'rgba(75,192,192,1)',
+            pointBackgroundColor: '#fff',
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+            pointHoverBorderColor: 'rgba(220,220,220,1)',
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: []
+          }
+        ]
+      };
+
+      if(Request.grouping === "DAY"){
+        var start = Request.start;
+        for(var i=0; i<30; i++){
+          start = nextDay(start);
+          data.labels.push(DotFormatDate("DAY", start))
+          if(dataList.likedList[DotFormatDate("DAY", start)])
+          {
+            data.datasets[0].data.push(dataList.likedList[DotFormatDate("DAY", start)])
+          }else{
+            data.datasets[0].data.push("0")
+          }
+          if(dataList.viewedList[DotFormatDate("DAY", start)])
+          {
+            data.datasets[1].data.push(dataList.viewedList[DotFormatDate("DAY", start)])
+          }else{
+            data.datasets[1].data.push("0")
+          }
+          if(dataList.downloadedList[DotFormatDate("DAY", start)])
+          {
+            data.datasets[2].data.push(dataList.downloadedList[DotFormatDate("DAY", start)])
+          }else{
+            data.datasets[2].data.push("0")
+          }
+        }
+      }else if(Request.grouping === "MONTH"){
+        var start = Request.start;
+        for(var i=0; i<12; i++)
+        {
+          
+          data.labels.push(formatDate(start))
+          start = nextMonth(start);
+        }
+      }
+      console.log(data)
+      this.setState({data: data})
+    }
+
     handleChangeMode(e, {value}){
       this.setState({
         activeMode: value
       })
-      console.log(value)
+      var start = ISOFormatDate(CalFirstDay(value,this.state.today));
+      var Request = {
+        "grouping": value,
+        "start": start,
+        "end": ISOFormatDate(this.state.today),
+        "userId": "641634"
+      }
+      this.loadDataForUserDiagram(Request);
     }
 
     componentDidUpdate(nextProps) {
@@ -67,51 +182,6 @@ class Analyse extends Component {
     }
 
     render() {
-
-      // const Daydata = [
-      //   {
-      //     label: 'downloads',
-      //     data: 
-      //   },
-      //   {
-      //     label: 'views',
-      //     data: [[1, 6], [2, 14], [3, 5], [4, 21],[5, 19], [6, 5], [7, 8], [10, 16], [11, 19], [12, 16], [13, 12], [14, 17],[15, 14], [16, 5], [17, 14], [18, 22], [19, 27],[20, 25], [21, 22], [22, 17],[23, 12], [24, 17],[25, 20], [26, 9], [27, 24], [28, 22], [29, 27],[30, 45]]
-      //   }
-      // ]
-      const Daydata = [
-        {
-          label: 'downloads',
-          data: [[1, 2], [2, 4], [3, 2], [4, 7],[5, 10], [6, 2], [7, 4],[8,0] ,[10, 15], [11, 12], [12, 7],[13, 2], [14, 7],[15, 10], [16, 2], [17, 4], [18, 2], [19, 7],[20, 15], [21, 12], [22, 7],[23, 2], [24, 7],[25, 10], [26, 2], [27, 4], [28, 2], [29, 7],[30, 15]]
-        },
-        {
-          label: 'views',
-          data: [[1, 6], [2, 14], [3, 5], [4, 21],[5, 19], [6, 5], [7, 8], [10, 16], [11, 19], [12, 16], [13, 12], [14, 17],[15, 14], [16, 5], [17, 14], [18, 22], [19, 27],[20, 25], [21, 22], [22, 17],[23, 12], [24, 17],[25, 20], [26, 9], [27, 24], [28, 22], [29, 27],[30, 45]]
-        }
-      ]
-
-      const Monthdata = [
-        {
-          label: 'downloads',
-          data: [['Jan 2020', 2], ['Feb 2020', 4], ['Mar 2020', 2], ['Apr 2020', 7],['May 2020', 10], ['Jun 2020', 2], ['Jul 2020', 4], ['Aug 2020', 2], ['Sep 2020', 7],['Oct 2020', 15], ['Nov 2020', 12], ['Dec 2020', 7]]
-        },
-        {
-          label: 'views',
-          data: [['Jan 2020', 5], ['Feb 2020', 22], ['Mar 2020', 15], ['Apr 2020', 12],['May 2020', 15], ['Jun 2020', 6], ['Jul 2020', 8], ['Aug 2020', 10], ['Sep 2020', 12],['Oct 2020', 20], ['Nov 2020', 15], ['Dec 2020', 17]]
-        },
-        {
-          label:'',
-          data:[["Jan 2020",0]]        }
-      ]
-        const axes = [
-          { primary: true, type: 'linear', position: 'bottom' },
-          { type: 'linear', position: 'left', min:10
-          }
-        ]
-
-        const series = {
-          type: 'bar'
-        }
-
         const ViewMode = [
           { key: 'day', value: 'DAY', text: 'Daily' },
           { key: 'week', value: 'WEEK', text: 'Weekly' },
@@ -125,7 +195,9 @@ class Analyse extends Component {
             <>
             <a>ViewMode:</a> <Select placeholder='Select view mode' value={this.state.activeMode} options={ViewMode} onChange={this.handleChangeMode} />
             <div>
-            <Chart data={this.state.activeMode ==  "day" ? Daydata : Monthdata} axes={axes} tooltip/>
+            {/* <Chart data={this.state.activeMode ==  "day" ? Daydata : Monthdata} axes={axes} tooltip/>
+             */}
+             <Line ref="chart" data={this.state.data} />
             </div>
             </>
         );
