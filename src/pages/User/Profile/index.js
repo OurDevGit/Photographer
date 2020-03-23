@@ -1,25 +1,20 @@
 import React, { Component } from 'react';
 import MetaTags from 'react-meta-tags'
-import { Grid, Form, Input, Select, Icon, Button, Image, Tab} from 'semantic-ui-react'
-import { Redirect } from 'react-router-dom'
+import { Grid, Icon, Button, Image, Tab} from 'semantic-ui-react'
 import { API_BASE_URL, ACCESS_TOKEN} from '../../../constants';
 import { update_user, getCurrentUser, getUserDetail } from '../../../util/APIUtils';
-import { getAvatarColor } from '../../../util/Colors';
-import { formatDate } from '../../../util/Helpers';
 import LoadingIndicator  from '../../../common/LoadingIndicator';
 import './style.less';
 import NotFound from '../../../common/NotFound';
 import ServerError from '../../../common/ServerError';
-import {Avatar, UserCard, HomeHeader, HomeFooter} from '../../../components'
-import Footer from '../Footer'
-import {
-    AvatarDefault
-  } from '../../../assets/images/homepage'
+import { HomeHeader } from '../../../components'
+import { AvatarDefault } from '../../../assets/images/homepage'
 import PersonalInfo from './PersonalInfo'
 import Security from './Security'
 import Friends from './Friends'
 import Analyse from './Analyse'
 import Myphotos from './Myphotos'
+import Collections from './Collections'
 import {notification} from 'antd'
 class Profile extends Component {
     constructor(props) {
@@ -34,7 +29,6 @@ class Profile extends Component {
             uploadLabel: 'Upload your photo',
             isUpdateLoading: false
         }
-
         this.loadUserProfile = this.loadUserProfile.bind(this);
         this.loadCurrentUser = this.loadCurrentUser.bind(this);
         this.uploadAvatar =  this.uploadAvatar.bind(this)
@@ -175,19 +169,23 @@ class Profile extends Component {
     componentDidUpdate(nextProps) {
         // if(this.props.match.params.username !== nextProps.match.params.username) {
         //     this.loadUserProfile(nextProps.match.params.username);
-        // }        
+        // }
     }
 
     render() {
       console.log(this.state.currentUser)
 
-        const panes = [
+        const panes_me = [
             { menuItem: 'Personal Info', render: () => <Tab.Pane><PersonalInfo user={this.state.user} isUpdateLoading={this.state.isUpdateLoading} update_userData={this.update_userData} /></Tab.Pane> },
             { menuItem: 'Security', render: () => <Tab.Pane><Security user={this.state.user}/></Tab.Pane> },
             { menuItem: 'Follow', render: () => <Tab.Pane><Friends user={this.state.user} /></Tab.Pane> },
             { menuItem: 'Analyse', render: () => <Tab.Pane><Analyse user={this.state.user} /></Tab.Pane> },
             { menuItem: 'Photos', render: () => <Tab.Pane><Myphotos user={this.state.user} /></Tab.Pane> },
             { menuItem: 'Messages', render: () => <Tab.Pane><Myphotos user={this.state.user} /></Tab.Pane> },
+          ];
+        const panes_user = [
+            { menuItem: 'Photos', render: () => <Tab.Pane><Myphotos user={this.state.user} /></Tab.Pane> },
+            { menuItem: 'Collections', render: () => <Tab.Pane><Collections user={this.state.user} /></Tab.Pane> },
           ]
         if(this.state.isLoading) {
             return <LoadingIndicator />;
@@ -226,7 +224,6 @@ class Profile extends Component {
                               <>
                                 <Grid.Row only="computer" >
                                   <Grid.Column width={4}>              
-                                      {/* <UserCard className='UserAvata' user={this.state.user} /> */}
                                       <div className='avatar'>
                                           {
                                               this.state.isAvatarLoading ? <LoadingIndicator />
@@ -239,13 +236,11 @@ class Profile extends Component {
                                       </div>
                                   </Grid.Column>
                                   <Grid.Column width={12}>
-                                      <Tab panes={panes} />    
-                                      {/* <Tab panes={panes} menu={{ fluid: true, vertical: true, tabular: true }} />  */}
+                                      <Tab panes={panes_me} />    
                                   </Grid.Column>
                                 </Grid.Row>
                                 <Grid.Row only="mobile tablet" >
                                   <Grid.Column width={16}>              
-                                      {/* <UserCard className='UserAvata' user={this.state.user} /> */}
                                       <div className='avatar'>
                                           {
                                               this.state.isAvatarLoading ? <LoadingIndicator />
@@ -258,28 +253,37 @@ class Profile extends Component {
                                       </div>
                                   </Grid.Column>
                                   <Grid.Column width={16}>
-                                      <Tab panes={panes} />    
-                                      {/* <Tab panes={panes} menu={{ fluid: true, vertical: true, tabular: true }} />       */}
+                                      <Tab panes={panes_me} />    
                                   </Grid.Column>
                                 </Grid.Row>
                               </>
                               : 
                               <Grid.Row>
-                                <Grid.Column width={4}>              
-                                    {/* <UserCard className='UserAvata' user={this.state.user} /> */}
+                                <Grid.Column width={5}>              
+                                  <div className="userName">
+                                      <h2>{this.state.user.name + " "} {this.state.user.surname ? this.state.user.surname : ""}</h2>
+                                      <h3>{this.state.user.description ? this.state.user.description :  ""}</h3>
+                                      <Button icon labelPosition='left' color="black">
+                                        <Icon name='user plus'/>
+                                        Follow
+                                      </Button>
+                                  </div>
+                                </Grid.Column>
+                                <Grid.Column width={6}>              
                                     <div className='avatar'>
-                                        {
-                                            this.state.isAvatarLoading ? <LoadingIndicator />
-                                            :  <div className='avatarUpload'>
-                                                    <input type="file" accept="image/*" className="imageUpload input" name="file" onChange={this.uploadAvatar} />
-                                                    <Button className='imageUpload button'>{this.state.uploadLabel}</Button>
-                                                </div>
-                                        }
-                                        <Image src={this.state.user.avatar ? this.state.user.avatar : AvatarDefault} className={this.state.isAvatarLoading ? 'avatar_image':''} circular />
+                                      <Image src={this.state.user.avatar ? this.state.user.avatar : AvatarDefault} className={this.state.isAvatarLoading ? 'avatar_image':''} circular />
                                     </div>
                                 </Grid.Column>
-                                <Grid.Column width={12}>
-                                    {/* <Tab panes={panes} />           */}
+                                <Grid.Column width={5}>  
+                                  <div className="userDetails">
+                                    <h3><a><Icon name="user" />30 followers</a></h3>
+                                    <h3><a><Icon name="picture" />20 Assets </a></h3>
+                                    <span className="social"><Icon name="facebook official" link/></span>
+                                    <span className="social"><Icon name="instagram" link/></span>
+                                  </div>            
+                                </Grid.Column>
+                                <Grid.Column width="16">
+                                  <Tab panes={panes_user} className="user_photos_tab" /> 
                                 </Grid.Column>
                               </Grid.Row>
                           }

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Select, Icon, Button} from 'semantic-ui-react'
-import { Chart } from 'react-charts'
+import { Select } from 'semantic-ui-react'
 import { Line } from 'react-chartjs-2';
 import { get_data_for_diagram, get_all_data_for_user_diagram } from '../../../../util/APIUtils'
 import {ISOFormatDate, formatDate, PrevYearDate, CalFirstDay, nextDay,nextMonth, DotFormatDate} from '../../../../util/Helpers'
@@ -155,7 +154,25 @@ class Analyse extends Component {
         for(var i=0; i<12; i++)
         {
           
-          data.labels.push(formatDate(start))
+          data.labels.push(formatDate(start));
+          if(dataList.likedList[DotFormatDate("MONTH", start)])
+          {
+            data.datasets[0].data.push(dataList.likedList[DotFormatDate("MONTH", start)])
+          }else{
+            data.datasets[0].data.push("0")
+          }
+          if(dataList.viewedList[DotFormatDate("MONTH", start)])
+          {
+            data.datasets[1].data.push(dataList.viewedList[DotFormatDate("MONTH", start)])
+          }else{
+            data.datasets[1].data.push("0")
+          }
+          if(dataList.downloadedList[DotFormatDate("MONTH", start)])
+          {
+            data.datasets[2].data.push(dataList.downloadedList[DotFormatDate("MONTH", start)])
+          }else{
+            data.datasets[2].data.push("0")
+          }
           start = nextMonth(start);
         }
       }
@@ -184,7 +201,7 @@ class Analyse extends Component {
     render() {
         const ViewMode = [
           { key: 'day', value: 'DAY', text: 'Daily' },
-          { key: 'week', value: 'WEEK', text: 'Weekly' },
+          // { key: 'week', value: 'WEEK', text: 'Weekly' },
           { key: 'month', value: 'MONTH', text: 'Monthly' },
         ]
         if(this.state.isLoading)

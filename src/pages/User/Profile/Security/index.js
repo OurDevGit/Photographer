@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Select, Icon, Button} from 'semantic-ui-react'
+import { Form, Input, Icon, Button} from 'semantic-ui-react'
 import {notification} from 'antd'
 import {update_password} from '../../../../util/APIUtils'
 import LoadingIndicator  from '../../../../common/LoadingIndicator';

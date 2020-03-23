@@ -14,7 +14,6 @@ class Myphotos extends Component {
       this.setState({
         user: this.props.user
       })
-      // this.MyChart();
     }
 
     componentDidUpdate(nextProps) {
