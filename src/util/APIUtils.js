@@ -436,7 +436,7 @@ export function getListBasketsContent(Request) {
 }
 
 export function addNewBasketForUser(Request) {
-  return request({
+  return request_text({
     url:
       API_BASE_URL +
       "/user_actions/photo_actions_controller/add_new_basket_for_user",

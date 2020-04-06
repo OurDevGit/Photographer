@@ -5,7 +5,7 @@ import { API_BASE_URL, ACCESS_TOKEN } from "../../../constants";
 import {
   update_user,
   getCurrentUser,
-  getUserDetail
+  getUserDetail,
 } from "../../../util/APIUtils";
 import LoadingIndicator from "../../../common/LoadingIndicator";
 import "./style.less";
@@ -19,6 +19,7 @@ import Friends from "./Friends";
 import Analyse from "./Analyse";
 import Myphotos from "./Myphotos";
 import Collections from "./Collections";
+import Baskets from "./Baskets";
 import { notification } from "antd";
 class Profile extends Component {
   constructor(props) {
@@ -31,7 +32,7 @@ class Profile extends Component {
       isAvatarLoading: false,
       user_avatar_url: AvatarDefault,
       uploadLabel: "Upload your photo",
-      isUpdateLoading: false
+      isUpdateLoading: false,
     };
     this.loadUserProfile = this.loadUserProfile.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -41,21 +42,21 @@ class Profile extends Component {
 
   loadCurrentUser(userId) {
     this.setState({
-      isLoading: true
+      isLoading: true,
     });
     getCurrentUser()
-      .then(response => {
-        console.log("RES~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",response)
+      .then((response) => {
+        console.log("RES~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", response);
         this.loadUserProfile(userId);
         this.setState({
           currentUser: response,
-          isAuthenticated: true
+          isAuthenticated: true,
           // isLoading: false
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
-          isLoading: false
+          isLoading: false,
         });
       });
   }
@@ -66,24 +67,24 @@ class Profile extends Component {
     });
 
     getUserDetail(userId)
-      .then(response => {
+      .then((response) => {
         console.log("userdeta", response);
         this.setState({
           user: response,
-          isLoading: false
+          isLoading: false,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.status === 404) {
           this.setState({
             notFound: true,
-            isLoading: false
+            isLoading: false,
           });
         } else {
-          console.log(error)
+          console.log(error);
           this.setState({
             serverError: true,
-            isLoading: false
+            isLoading: false,
           });
         }
       });
@@ -91,7 +92,7 @@ class Profile extends Component {
 
   uploadAvatar(e) {
     this.setState({
-      isAvatarLoading: true
+      isAvatarLoading: true,
     });
     var url = URL.createObjectURL(e.target.files[0]);
     var myHeaders = new Headers({});
@@ -108,27 +109,27 @@ class Profile extends Component {
       method: "POST",
       headers: myHeaders,
       body: formData,
-      redirect: "follow"
+      redirect: "follow",
     };
     fetch(API_BASE_URL + "/public/users/submitMultiplePhoto", requestOptions)
-      .then(response => {
+      .then((response) => {
         if (response.ok) {
           this.state.user.avatar = url;
           this.setState({
             user: this.state.user,
             isAvatarLoading: false,
-            uploadLabel: "Change your photo"
+            uploadLabel: "Change your photo",
           });
           this.setState({
-            isAvatarLoading: false
+            isAvatarLoading: false,
           });
           console.log("uploadAvatar", response);
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log("error", error);
         this.setState({
-          isAvatarLoading: false
+          isAvatarLoading: false,
         });
       });
   }
@@ -136,38 +137,38 @@ class Profile extends Component {
   update_userData(e) {
     console.log("update", e);
     this.setState({
-      isUpdateLoading: true
+      isUpdateLoading: true,
     });
     update_user(e)
-      .then(response => {
+      .then((response) => {
         if (response.ok) {
           this.setState({
-            user: e
+            user: e,
           });
           notification.success({
             message: "Photoing App",
-            description: "Successfully Updated your Information"
+            description: "Successfully Updated your Information",
           });
         } else {
           notification.error({
             message: "Photoing App",
             description:
-              "Sorry. There are some problems to update. Please try again"
+              "Sorry. There are some problems to update. Please try again",
           });
         }
         this.setState({
-          isUpdateLoading: false
+          isUpdateLoading: false,
         });
         console.log(response);
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
-          isUpdateLoading: false
+          isUpdateLoading: false,
         });
         notification.error({
           message: "Photoing App",
           description:
-            "Sorry. There are some problems to update. Please try again"
+            "Sorry. There are some problems to update. Please try again",
         });
         console.log(error);
       });
@@ -180,9 +181,9 @@ class Profile extends Component {
   }
 
   componentDidUpdate(nextProps) {
-    // if(this.props.match.params.username !== nextProps.match.params.username) {
-    //     this.loadUserProfile(nextProps.match.params.username);
-    // }
+    if (this.props.match.params.id !== nextProps.match.params.id) {
+      this.loadCurrentUser(nextProps.match.params.id);
+    }
   }
 
   render() {
@@ -199,7 +200,7 @@ class Profile extends Component {
               update_userData={this.update_userData}
             />
           </Tab.Pane>
-        )
+        ),
       },
       {
         menuItem: "Security",
@@ -207,7 +208,7 @@ class Profile extends Component {
           <Tab.Pane>
             <Security user={this.state.user} />
           </Tab.Pane>
-        )
+        ),
       },
       {
         menuItem: "Follow",
@@ -215,7 +216,7 @@ class Profile extends Component {
           <Tab.Pane>
             <Friends user={this.state.user} />
           </Tab.Pane>
-        )
+        ),
       },
       {
         menuItem: "Analyse",
@@ -223,7 +224,7 @@ class Profile extends Component {
           <Tab.Pane>
             <Analyse user={this.state.user} />
           </Tab.Pane>
-        )
+        ),
       },
       {
         menuItem: "Photos",
@@ -231,7 +232,7 @@ class Profile extends Component {
           <Tab.Pane>
             <Myphotos user={this.state.user} />
           </Tab.Pane>
-        )
+        ),
       },
       {
         menuItem: "Messages",
@@ -239,8 +240,24 @@ class Profile extends Component {
           <Tab.Pane>
             <Myphotos user={this.state.user} />
           </Tab.Pane>
-        )
-      }
+        ),
+      },
+      {
+        menuItem: "Collections",
+        render: () => (
+          <Tab.Pane>
+            <Collections user={this.state.user} />
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: "Baskets",
+        render: () => (
+          <Tab.Pane>
+            <Baskets user={this.state.user} />
+          </Tab.Pane>
+        ),
+      },
     ];
     const panes_user = [
       {
@@ -249,7 +266,7 @@ class Profile extends Component {
           <Tab.Pane>
             <Myphotos user={this.state.user} />
           </Tab.Pane>
-        )
+        ),
       },
       {
         menuItem: "Collections",
@@ -257,8 +274,8 @@ class Profile extends Component {
           <Tab.Pane>
             <Collections user={this.state.user} />
           </Tab.Pane>
-        )
-      }
+        ),
+      },
     ];
     if (this.state.isLoading) {
       return <LoadingIndicator />;
