@@ -453,8 +453,8 @@ export function addToBasketForPhoto(Request) {
   });
 }
 
-export function removeToBasketForUser(Request) {
-  return request({
+export function removeBasketForUser(Request) {
+  return request1({
     url:
       API_BASE_URL +
       "/user_actions/photo_actions_controller/remove_basket_for_user/" +
