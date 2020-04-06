@@ -7,6 +7,7 @@ import AddContent from '../AddContent'
 import SubmitContent from '../AddContent/SubmitContent'
 import Admin from '../Admin'
 import Photo_details from '../Photo_details'
+import PhotoModify  from '../PhotoModify'
 import LoginAndSignUp from '../User'
 import ForgotPass from '../User/ForgotPassword'
 import ResetPassword from '../User/ResetPassword'
@@ -20,6 +21,7 @@ const routes = (
     <Route path="/submitcontent" exact component={SubmitContent} />
     <Route path="/admin" exact component={Admin} />
     <Route path="/Photo_details/:id" exact component={Photo_details}/>
+    <Route path="/photomodify" exact component={PhotoModify} />
     <Route path="/user/ForgotPass" exact component={ForgotPass} />
     <Route path="/confirm_new_password" exact component={ResetPassword} />
     <Route path="/fb" exact component={FBLogin} />

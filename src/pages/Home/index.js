@@ -1,16 +1,25 @@
-import React, { Component } from 'react'
-import { Grid, GridColumn, Image, Divider } from 'semantic-ui-react'
-import MetaTags from 'react-meta-tags'
+import React, { Component } from "react";
+import { Grid, GridColumn, Image, Divider } from "semantic-ui-react";
+import MetaTags from "react-meta-tags";
 import Gallery from "react-photo-gallery";
-import { getCurrentUser, getAllCategories, getPhotoLists } from '../../util/APIUtils';
-import { ACCESS_TOKEN, PHOTO_LIST_SIZE } from '../../constants';
-import { HomeHeader, SearchBar, PhotoList, Pagination_Component } from '../../components'
-import Footer from './Footer'
-import CategoryCarousel from  './CategoryCarousel'
-import PhotoDetails from './PhotoDetails'
-import Bucket from './Bucket'
-import './style.less'
-import {notification} from 'antd'
+import {
+  getCurrentUser,
+  getAllCategories,
+  getPhotoLists
+} from "../../util/APIUtils";
+import { ACCESS_TOKEN, PHOTO_LIST_SIZE } from "../../constants";
+import {
+  HomeHeader,
+  SearchBar,
+  PhotoList,
+  Pagination_Component
+} from "../../components";
+import Footer from "./Footer";
+import CategoryCarousel from "./CategoryCarousel";
+import PhotoDetails from "./PhotoDetails";
+import Bucket from "./Bucket";
+import "./style.less";
+import { notification } from "antd";
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -20,12 +29,12 @@ class Home extends Component {
       isLoading: false,
       categories: [],
       ImageShow: false,
-      selImage:{},
-      totalPages:0,
+      selImage: {},
+      totalPages: 0,
       activePage: 1,
       BucketShow: false,
       searchOptions: []
-    }
+    };
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
     this.loadAllCategories = this.loadAllCategories.bind(this);
@@ -34,10 +43,10 @@ class Home extends Component {
     this.CloseImageModal = this.CloseImageModal.bind(this);
     this.CloseBucketModal = this.CloseBucketModal.bind(this);
     this.addToBucket = this.addToBucket.bind(this);
-    this.onChangePage =  this.onChangePage.bind(this);
-    this.quickView = this.quickView.bind(this)
-    this.viewOwner =  this.viewOwner.bind(this)
-    this.clickSearch = this.clickSearch.bind(this)
+    this.onChangePage = this.onChangePage.bind(this);
+    this.quickView = this.quickView.bind(this);
+    this.viewOwner = this.viewOwner.bind(this);
+    this.clickSearch = this.clickSearch.bind(this);
   }
 
   loadCurrentUser() {
@@ -45,43 +54,45 @@ class Home extends Component {
       isLoading: true
     });
     getCurrentUser()
-    .then(response => {
-      this.setState({
-        currentUser: response,
-        isAuthenticated: true,
-        isLoading: false
+      .then(response => {
+        this.setState({
+          currentUser: response,
+          isAuthenticated: true,
+          isLoading: false
+        });
+      })
+      .catch(error => {
+        this.setState({
+          isLoading: false
+        });
       });
-    }).catch(error => {
-      this.setState({
-        isLoading: false
-      });  
-    });
   }
 
   loadAllCategories() {
     getAllCategories()
-    .then(response => {
-      this.setState({
-        categories: response.categories,
+      .then(response => {
+        this.setState({
+          categories: response.categories
+        });
+      })
+      .catch(error => {
+        this.setState({
+          isLoading: false
+        });
       });
-    }).catch(error => {
-      this.setState({
-        isLoading: false
-      });  
-    });
   }
 
-  getTotalpages(){
+  getTotalpages() {
     getPhotoLists(0, PHOTO_LIST_SIZE)
-      .then(response=>{
+      .then(response => {
         this.setState({
           totalPages: response.totalPages,
           photos: response.content
-        })
+        });
       })
-      .catch(error=>{
-        console.log("error", error)
-      })
+      .catch(error => {
+        console.log("error", error);
+      });
   }
 
   componentDidMount() {
@@ -90,7 +101,11 @@ class Home extends Component {
     this.getTotalpages();
   }
 
-  handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
+  handleLogout(
+    redirectTo = "/",
+    notificationType = "success",
+    description = "You're successfully logged out."
+  ) {
     localStorage.removeItem(ACCESS_TOKEN);
     this.setState({
       currentUser: null,
@@ -98,88 +113,86 @@ class Home extends Component {
     });
 
     this.props.history.push(redirectTo);
-    
+
     notification[notificationType]({
-      message: 'Photoing App',
-      description: description,
+      message: "Photoing App",
+      description: description
     });
   }
 
   handleLogin() {
     notification.success({
-      message: 'Photoing App',
-      description: "You're successfully logged in.",
+      message: "Photoing App",
+      description: "You're successfully logged in."
     });
     this.loadCurrentUser();
     this.props.history.push("/");
   }
 
-  handleImageClick(e){
-    if(this.state.currentUser)
-    {
+  handleImageClick(e) {
+    if (this.state.currentUser) {
       this.setState({
         // ImageShow: true,
         selImage: e
-      })
-      this.props.history.push('/Photo_details/'+e.id);
-    }else{
-      this.props.history.push('/user/LoginAndSignUp');
+      });
+      this.props.history.push("/Photo_details/" + e.id);
+    } else {
+      this.props.history.push("/user/LoginAndSignUp");
     }
-
   }
 
-  CloseImageModal(flag){
+  CloseImageModal(flag) {
     this.setState({
       ImageShow: flag
-    })
+    });
   }
 
-  viewOwner(ownerId){
-    this.props.history.push("/user/profile/" + ownerId)
+  viewOwner(ownerId) {
+    this.props.history.push("/user/profile/" + ownerId);
   }
 
-  quickView(e){
+  quickView(e) {
     this.setState({
       ImageShow: true,
       selImage: e
-    })
+    });
   }
-  CloseBucketModal(flag){
+  CloseBucketModal(flag) {
     this.setState({
       BucketShow: flag
-    })
+    });
   }
 
-  addToBucket(e, flag){
+  addToBucket(e, flag) {
     this.setState({
       selImage: e,
       BucketShow: true
-    })
+    });
   }
 
-  onChangePage(activePage){
+  onChangePage(activePage) {
     this.setState({
       activePage: activePage
-    })
+    });
   }
 
-  clickSearch(e){
-    console.log("sfasdfsadfsafsafasf",e)
+  clickSearch(e) {
+    console.log("sfasdfsadfsafsafasf", e);
     this.setState({
       searchOptions: e
-    })
+    });
   }
 
   render() {
-    console.log("user",this.state.currentUser)
+    console.log("user", this.state.currentUser);
     return (
       <>
         <MetaTags>
           <title>Photographer - Image Platform</title>
         </MetaTags>
-        <HomeHeader 
-          isAuthenticated={this.state.isAuthenticated} 
-          currentUser={this.state.currentUser} 
+        <HomeHeader
+          isAuthenticated={this.state.isAuthenticated}
+          currentUser={this.state.currentUser}
           onLogout={this.handleLogout}
         />
         <Grid className="pages page-index homeContent">
@@ -190,44 +203,42 @@ class Home extends Component {
             {/* <GridColumn only='computer' width={16}>
               <CategoryCarousel categories={this.state.categories} />
             </GridColumn> */}
-            
-            <Grid.Column width={16}>              
-              <PhotoList 
-                type="home_list" 
-                onClickImage = {this.handleImageClick}
-                addToBucket = {this.addToBucket}
-                activePage = {this.state.activePage}
-                totalPages = {this.state.totalPages}
-                quickView = {this.quickView}
-                viewOwner = {this.viewOwner}
-                searchOptions = {this.state.searchOptions}
+
+            <Grid.Column width={16}>
+              <PhotoList
+                type="home_list"
+                onClickImage={this.handleImageClick}
+                addToBucket={this.addToBucket}
+                activePage={this.state.activePage}
+                totalPages={this.state.totalPages}
+                quickView={this.quickView}
+                viewOwner={this.viewOwner}
+                searchOptions={this.state.searchOptions}
               />
-               {/* <Gallery photos={photos}  /> */}
-              <PhotoDetails 
+              {/* <Gallery photos={photos}  /> */}
+              <PhotoDetails
                 show={this.state.ImageShow}
-                photo = {this.state.selImage}
+                photo={this.state.selImage}
                 handleClose={this.CloseImageModal}
-                addToBucket = {this.addToBucket}
+                addToBucket={this.addToBucket}
               />
-              <Bucket 
+              <Bucket
                 show={this.state.BucketShow}
-                photo = {this.state.selImage}
+                photo={this.state.selImage}
                 handleClose={this.CloseBucketModal}
               />
             </Grid.Column>
-            <Grid.Column className='PageNation' width='16'>
+            <Grid.Column className="PageNation" width="16">
               {/* <Pagination_Component 
                 totalPages = {this.state.totalPages}
                 onChangePage = {this.onChangePage}
               /> */}
             </Grid.Column>
-            <Grid.Column width='16'>
-              {/* <Footer /> */}
-            </Grid.Column>
+            <Grid.Column width="16">{/* <Footer /> */}</Grid.Column>
           </Grid.Row>
         </Grid>
       </>
-    )
+    );
   }
 }
-export default Home
+export default Home;

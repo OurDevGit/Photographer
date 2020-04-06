@@ -1,50 +1,51 @@
 /* eslint-disable react/no-this-in-sfc */
 /* eslint-disable no-return-assign */
-import React, { Component } from 'react'
-import { Image, Header, Grid, Icon } from 'semantic-ui-react'
-import Slider from 'react-slick'
-import { getCurrentUser, getAllCategories } from '../../../util/APIUtils';
+import React, { Component } from "react";
+import { Image, Header, Grid, Icon } from "semantic-ui-react";
+import Slider from "react-slick";
+import { getCurrentUser, getAllCategories } from "../../../util/APIUtils";
 
-import './style.less'
-
-
+import "./style.less";
 
 class CategoryCarousel extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
       isLoading: false,
-      categories:[]
-    }
+      categories: []
+    };
   }
 
   componentDidMount() {
     setTimeout(() => {
-      document.querySelector('.category-carousel-section').classList.add('animation')
-      this.slider.slickPlay()
-    }, 500)
+      document
+        .querySelector(".category-carousel-section")
+        .classList.add("animation");
+      this.slider.slickPlay();
+    }, 500);
   }
 
-  afterChange = (id) => {
+  afterChange = id => {
     if (id === this.slider.props.children.length - 1) {
-      this.slider.slickPause()
-      document.querySelector('.category-carousel-section').classList.remove('animation')
+      this.slider.slickPause();
+      document
+        .querySelector(".category-carousel-section")
+        .classList.remove("animation");
     }
-  }
+  };
 
   render() {
     const settings = {
-      dots           : false,
-      infinite       : true,
-      speed          : 500,
-      slidesToShow   : 5,
-      slidesToScroll : 1,
-      autoplay       : true,
-      autoplaySpeed  : 8000,
-      pauseOnHover   : false,
+      dots: false,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 5,
+      slidesToScroll: 1,
+      autoplay: true,
+      autoplaySpeed: 8000,
+      pauseOnHover: false,
       afterChange: this.afterChange
-    }
+    };
     return (
       <section id="learn-more" className="category-carousel-section">
         <Grid container>
@@ -54,7 +55,7 @@ class CategoryCarousel extends React.Component {
                 {this.props.categories.map((slide, index) => (
                   <div key={index}>
                     <div className="category_content">
-                      <a href='/'>{slide.value}</a>
+                      <a href="/">{slide.value}</a>
                     </div>
                   </div>
                 ))}
@@ -63,8 +64,8 @@ class CategoryCarousel extends React.Component {
           </Grid.Row>
         </Grid>
       </section>
-    )
+    );
   }
 }
 
-export default CategoryCarousel
+export default CategoryCarousel;
