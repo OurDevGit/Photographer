@@ -5,14 +5,14 @@ import Gallery from "react-photo-gallery";
 import {
   getCurrentUser,
   getAllCategories,
-  getPhotoLists
+  getPhotoLists,
 } from "../../util/APIUtils";
 import { ACCESS_TOKEN, PHOTO_LIST_SIZE } from "../../constants";
 import {
   HomeHeader,
   SearchBar,
   PhotoList,
-  Pagination_Component
+  Pagination_Component,
 } from "../../components";
 import Footer from "./Footer";
 import CategoryCarousel from "./CategoryCarousel";
@@ -33,7 +33,8 @@ class Home extends Component {
       totalPages: 0,
       activePage: 1,
       BucketShow: false,
-      searchOptions: []
+      searchOptions: [],
+      isCtrlKey: false,
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -51,46 +52,46 @@ class Home extends Component {
 
   loadCurrentUser() {
     this.setState({
-      isLoading: true
+      isLoading: true,
     });
     getCurrentUser()
-      .then(response => {
+      .then((response) => {
         this.setState({
           currentUser: response,
           isAuthenticated: true,
-          isLoading: false
+          isLoading: false,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
-          isLoading: false
+          isLoading: false,
         });
       });
   }
 
   loadAllCategories() {
     getAllCategories()
-      .then(response => {
+      .then((response) => {
         this.setState({
-          categories: response.categories
+          categories: response.categories,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
-          isLoading: false
+          isLoading: false,
         });
       });
   }
 
   getTotalpages() {
     getPhotoLists(0, PHOTO_LIST_SIZE)
-      .then(response => {
+      .then((response) => {
         this.setState({
           totalPages: response.totalPages,
-          photos: response.content
+          photos: response.content,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log("error", error);
       });
   }
@@ -99,7 +100,25 @@ class Home extends Component {
     this.loadCurrentUser();
     this.loadAllCategories();
     this.getTotalpages();
+    window.addEventListener("keydown", this.keydown);
+    window.addEventListener("keyup", this.keyup);
   }
+
+  keydown = (e) => {
+    if (e.keyCode == 17) {
+      this.setState({
+        isCtrlKey: true,
+      });
+    }
+  };
+
+  keyup = (e) => {
+    if (e.keyCode == 17) {
+      this.setState({
+        isCtrlKey: false,
+      });
+    }
+  };
 
   handleLogout(
     redirectTo = "/",
@@ -109,21 +128,21 @@ class Home extends Component {
     localStorage.removeItem(ACCESS_TOKEN);
     this.setState({
       currentUser: null,
-      isAuthenticated: false
+      isAuthenticated: false,
     });
 
     this.props.history.push(redirectTo);
 
     notification[notificationType]({
       message: "Photoing App",
-      description: description
+      description: description,
     });
   }
 
   handleLogin() {
     notification.success({
       message: "Photoing App",
-      description: "You're successfully logged in."
+      description: "You're successfully logged in.",
     });
     this.loadCurrentUser();
     this.props.history.push("/");
@@ -132,10 +151,13 @@ class Home extends Component {
   handleImageClick(e) {
     if (this.state.currentUser) {
       this.setState({
-        // ImageShow: true,
-        selImage: e
+        selImage: e,
       });
-      this.props.history.push("/Photo_details/" + e.id);
+      if (this.state.isCtrlKey) {
+        window.open("/Photo_details/" + e.id, "_blank");
+      } else {
+        this.props.history.push("/Photo_details/" + e.id);
+      }
     } else {
       this.props.history.push("/user/LoginAndSignUp");
     }
@@ -143,7 +165,7 @@ class Home extends Component {
 
   CloseImageModal(flag) {
     this.setState({
-      ImageShow: flag
+      ImageShow: flag,
     });
   }
 
@@ -154,32 +176,32 @@ class Home extends Component {
   quickView(e) {
     this.setState({
       ImageShow: true,
-      selImage: e
+      selImage: e,
     });
   }
   CloseBucketModal(flag) {
     this.setState({
-      BucketShow: flag
+      BucketShow: flag,
     });
   }
 
   addToBucket(e, flag) {
     this.setState({
       selImage: e,
-      BucketShow: true
+      BucketShow: true,
     });
   }
 
   onChangePage(activePage) {
     this.setState({
-      activePage: activePage
+      activePage: activePage,
     });
   }
 
   clickSearch(e) {
     console.log("sfasdfsadfsafsafasf", e);
     this.setState({
-      searchOptions: e
+      searchOptions: e,
     });
   }
 

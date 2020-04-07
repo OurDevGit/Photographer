@@ -21,7 +21,7 @@ import {
   getViewsAmount,
   add_comment
 } from "../../util/APIUtils";
-import { ACCESS_TOKEN } from "../../constants";
+import { ACCESS_TOKEN, HOST_URL } from "../../constants";
 import {
   HomeHeader,
   AvatarImage,
@@ -60,7 +60,8 @@ class Photo_details extends Component {
       isFollower: false,
       followerUrl: "https://www.instagram.com/plutus_in_fabula/",
       commentContent: "",
-      commitFlag: false
+      commitFlag: false,
+      isCtrlKey: false
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -119,7 +120,6 @@ class Photo_details extends Component {
     getPhotoDetail(id)
       .then(response => {
         window.scrollTo(0, 0);
-        console.log(response);
         this.setState({
           selImage: response.photoDto,
           similarPhotos: response.similarPhotos.content,
@@ -139,7 +139,6 @@ class Photo_details extends Component {
   is_like_photo(id) {
     is_liked(id)
       .then(response => {
-        console.log("res", response);
         this.setState({
           likeFlag: response
         });
@@ -152,7 +151,6 @@ class Photo_details extends Component {
   loadLikeAmount(id) {
     getLikeAmount(id)
       .then(response => {
-        console.log("amoutn", response);
         this.setState({
           likes: response
         });
@@ -165,7 +163,6 @@ class Photo_details extends Component {
   loadDownloadAmount(id) {
     getDownloadAmount(id)
       .then(response => {
-        console.log("amoutn", response);
         this.setState({
           downloads: response
         });
@@ -178,7 +175,6 @@ class Photo_details extends Component {
   loadViewsAmount(id) {
     getViewsAmount(id)
       .then(response => {
-        console.log("amoutn", response);
         this.setState({
           views: response
         });
@@ -193,6 +189,8 @@ class Photo_details extends Component {
     this.loadAllCategories();
     this.is_like_photo(this.props.match.params.id);
     this.loadPhotoDetail(this.props.match.params.id);
+    window.addEventListener('keydown', this.keydown);
+    window.addEventListener('keyup', this.keyup);
   }
 
   componentDidUpdate(prevProps) {
@@ -203,6 +201,22 @@ class Photo_details extends Component {
         selImage: undefined,
         commentContent: ""
       });
+    }
+  }
+
+  keydown = (e) => {
+    if(e.keyCode == 17){
+      this.setState({
+        isCtrlKey: true
+      })
+    }
+  }
+
+  keyup = (e) => {
+    if(e.keyCode == 17){
+      this.setState({
+        isCtrlKey: false
+      })
     }
   }
 
@@ -259,7 +273,6 @@ class Photo_details extends Component {
     if (this.state.likeFlag == false) {
       addToLike(this.props.match.params.id)
         .then(response => {
-          console.log(response);
           this.state.likes = this.state.likes + 1;
           this.setState({
             likes: this.state.likes,
@@ -282,7 +295,13 @@ class Photo_details extends Component {
       // ImageShow: true,
       selImage: e
     });
-    this.props.history.push("/Photo_details/" + e.id);
+    if(this.state.isCtrlKey)
+    {
+      window.open(e.id, "_blank"); 
+    }else{
+      this.props.history.push("/Photo_details/" + e.id);
+    }
+    
   }
 
   replyComment() {
@@ -290,7 +309,6 @@ class Photo_details extends Component {
   }
 
   handleChangeComment(e, { value }) {
-    console.log("value", value);
     this.setState({
       commentContent: value
     });
@@ -305,7 +323,6 @@ class Photo_details extends Component {
     this.setState({
       isSendCommentLoading: true
     });
-    // console.log(Request)
     add_comment(Request)
       .then(response => {
         if (response.ok) {
@@ -319,7 +336,6 @@ class Photo_details extends Component {
             isSendCommentLoading: false
           });
         }
-        console.log(response);
       })
       .catch(error => {
         console.log(error);
@@ -696,7 +712,7 @@ class Photo_details extends Component {
               </Grid.Column>
             </Grid.Row>
             <Grid.Row>
-              <Grid.Column>
+              <Grid.Column className="relatedPhotos">
                 <a className="relatedPhotosLabel">Related Photos</a>{" "}
                 <a>See All</a>
                 {/* <ImageCarousel 

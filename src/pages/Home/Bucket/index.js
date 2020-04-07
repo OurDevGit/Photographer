@@ -8,18 +8,18 @@ import {
   Modal,
   Label,
   Dropdown,
-  Input
+  Input,
 } from "semantic-ui-react";
 import {
   Heart_Icon,
   Plus_Icon,
   Zoom_Icon,
-  CloseIcon
+  CloseIcon,
 } from "../../../assets/icons";
 import {
   getListOfBaskets,
   addNewBasketForUser,
-  addToBasketForPhoto
+  addToBasketForPhoto,
 } from "../../../util/APIUtils";
 import "./style.less";
 
@@ -38,14 +38,14 @@ class Bucket extends Component {
     { key: "na", value: "Native American", text: "Native American" },
     { key: "pi", value: "Pacific Islander", text: "Pacific Islander" },
     { key: "sa", value: "South Asian", text: "South Asian" },
-    { key: "sea", value: "Southeast Asian", text: "Southeast Asian" }
+    { key: "sea", value: "Southeast Asian", text: "Southeast Asian" },
   ];
   constructor(props) {
     super(props);
     this.state = {
       rating: 108,
       baskets: [],
-      currentBucketValues: []
+      currentBucketValues: [],
     };
     this.loadBasketsForUser = this.loadBasketsForUser.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -62,23 +62,23 @@ class Bucket extends Component {
 
   loadBasketsForUser() {
     getListOfBaskets()
-      .then(response => {
-        let basketlist = response.map(basket => {
+      .then((response) => {
+        let basketlist = response.map((basket) => {
           return {
             key: basket.id,
             value: basket.value,
-            text: basket.value
+            text: basket.value,
           };
         });
         this.setState({
           baskets: basketlist,
-          isLoading: false
+          isLoading: false,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log("error", error);
         this.setState({
-          isLoading: false
+          isLoading: false,
         });
       });
   }
@@ -89,23 +89,23 @@ class Bucket extends Component {
 
   addToPreferred() {
     this.setState({
-      rating: this.state.rating + 1
+      rating: this.state.rating + 1,
     });
   }
 
   addNewBasket(newBasket) {
     addNewBasketForUser(newBasket)
-      .then(response => {
+      .then((response) => {
         console.log("ADDBASket", response);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log("error", error);
       });
   }
 
   handleMultiSelectAddition = (e, { value }) => {
-    this.setState(prevState => ({
-      baskets: [{ text: value, value }, ...prevState.baskets]
+    this.setState((prevState) => ({
+      baskets: [{ text: value, value }, ...prevState.baskets],
     }));
   };
 
@@ -123,20 +123,20 @@ class Bucket extends Component {
     }
     this.state.currentBucketValues = value;
     this.setState({
-      currentBucketValues: value
+      currentBucketValues: value,
     });
   };
 
   addToBasket() {
     var Request = {
       photoId: this.props.photo.id,
-      baskets: this.state.currentBucketValues
+      baskets: this.state.currentBucketValues,
     };
     addToBasketForPhoto(Request)
-      .then(response => {
+      .then((response) => {
         console.log(response);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
