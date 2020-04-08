@@ -1,11 +1,7 @@
-/* eslint-disable react/no-this-in-sfc */
-/* eslint-disable no-return-assign */
 import React, { Component } from "react";
 import { Image, Header, Grid, Icon } from "semantic-ui-react";
 import Slider from "react-slick";
-import { getCurrentUser, getAllCategories } from "../../../util/APIUtils";
 import { Photo } from "../../../components";
-
 import "./style.less";
 
 class ImageCarousel extends React.Component {
@@ -13,7 +9,6 @@ class ImageCarousel extends React.Component {
     super(props);
     this.state = {
       isLoading: false,
-      categories: []
     };
   }
 
@@ -26,7 +21,7 @@ class ImageCarousel extends React.Component {
     }, 500);
   }
 
-  afterChange = id => {
+  afterChange = (id) => {
     if (id === this.slider.props.children.length - 1) {
       this.slider.slickPause();
       document
@@ -45,14 +40,14 @@ class ImageCarousel extends React.Component {
       autoplay: true,
       autoplaySpeed: 8000,
       pauseOnHover: false,
-      afterChange: this.afterChange
+      afterChange: this.afterChange,
     };
     return (
       <section id="learn-more" className="image-carousel-section">
         <Grid>
           <Grid.Row>
             <Grid.Column width={16}>
-              <Slider {...settings} ref={c => (this.slider = c)}>
+              <Slider {...settings} ref={(c) => (this.slider = c)}>
                 {this.props.photo.map((photo, index) => (
                   <div key={index}>
                     <div className="category_content">

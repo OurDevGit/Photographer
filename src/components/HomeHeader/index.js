@@ -1,53 +1,53 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/no-webpack-loader-syntax */
-import React from 'react'
-import { Menu, Grid, Image, Button, Dropdown, Icon } from 'semantic-ui-react'
-import { NavLink } from 'react-router-dom'
-import Avatar from '../Avatar'
-import QuestionSVG from '-!svg-react-loader!../../assets/images/question.svg'
-import logoPng from '../../assets/images/logo.PNG'
-import mobileMenuPng from '../../assets/images/mobile-menu.png'
-import mobileCloseMenuPng from '../../assets/images/cross.png'
-import { PaperPlaneIcon, StarIcon, HeartIcon } from '../../assets/icons'
-import './header.less'
+import React from "react";
+import { Menu, Grid, Image, Button, Dropdown, Icon } from "semantic-ui-react";
+import { NavLink } from "react-router-dom";
+import Avatar from "../Avatar";
+import QuestionSVG from "-!svg-react-loader!../../assets/images/question.svg";
+import logoPng from "../../assets/images/logo.PNG";
+import mobileMenuPng from "../../assets/images/mobile-menu.png";
+import mobileCloseMenuPng from "../../assets/images/cross.png";
+import logo from "../../assets/images/OpenShoots.jpg";
+import { PaperPlaneIcon, StarIcon, HeartIcon } from "../../assets/icons";
+import "./header.less";
 
 const style = {
   noPaddingStyle: {
     padding: 0,
   },
-}
+};
 
 class HomeHeader extends React.Component {
   constructor(props) {
-      super(props);   
-      this.handleMenuClick = this.handleMenuClick.bind(this);   
+    super(props);
+    this.handleMenuClick = this.handleMenuClick.bind(this);
   }
   state = {
     mobileMenuOpen: false,
-  }
+  };
 
   openMobileMenu = (status) => {
-    this.setState({ mobileMenuOpen: status })
-  }
+    this.setState({ mobileMenuOpen: status });
+  };
 
   openContactUsModal = () => {
-    window.Intercom('showNewMessage')
-  }
+    window.Intercom("showNewMessage");
+  };
 
   handleMenuClick({ key }) {
-    if(key === "logout") {
+    if (key === "logout") {
       this.props.onLogout();
     }
   }
 
   render() {
-    const { mobileMenuOpen } = this.state
-    const {currentUser} = this.props
+    const { mobileMenuOpen } = this.state;
+    const { currentUser } = this.props;
     let menuItems;
 
-    if(currentUser) {
-      if(currentUser.authorities.length == 2)
-      {
+    if (currentUser) {
+      if (currentUser.authorities.length == 2) {
         menuItems = [
           <Menu.Item as={NavLink} to="/admin">
             <StarIcon className="star-icon" />
@@ -56,56 +56,68 @@ class HomeHeader extends React.Component {
           <Menu.Item as={NavLink} to="/addContent">
             <StarIcon className="star-icon" />
             AddContent
-          </Menu.Item>,  
-          <Menu.Item as={NavLink} to='/submitContent'>
+          </Menu.Item>,
+          <Menu.Item as={NavLink} to="/submitContent">
             <PaperPlaneIcon className="paper-plane-icon" />
             My submitted Photos
           </Menu.Item>,
-          <Menu.Item as={NavLink} to='/photomodify'>
+          <Menu.Item as={NavLink} to="/photomodify">
             <PaperPlaneIcon className="paper-plane-icon" />
             My Photos
           </Menu.Item>,
-          <Menu.Item className="myAccount" >
+          <Menu.Item className="myAccount">
             <Avatar fullname={currentUser.username} status="online" />
-              <Dropdown item >
-                <Dropdown.Menu>
-                  <Dropdown.Item as={NavLink} to={'/user/profile/' + currentUser.id}>My account</Dropdown.Item>
-                  <Dropdown.Item><a onClick={this.props.onLogout}>Logout</a></Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-          </Menu.Item>
-        ]; 
-      }else{
-        if(currentUser.authorities[0].authority == 'ROLE_USER')
-        {
+            <Dropdown item>
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  as={NavLink}
+                  to={"/user/profile/" + currentUser.id}
+                >
+                  My account
+                </Dropdown.Item>
+                <Dropdown.Item>
+                  <a onClick={this.props.onLogout}>Logout</a>
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </Menu.Item>,
+        ];
+      } else {
+        if (currentUser.authorities[0].authority == "ROLE_USER") {
           menuItems = [
             <Menu.Item as={NavLink} to="/addContent">
               <StarIcon className="star-icon" />
               AddContent
-            </Menu.Item>,  
-            <Menu.Item as={NavLink} to='/submitContent'>
+            </Menu.Item>,
+            <Menu.Item as={NavLink} to="/submitContent">
               <PaperPlaneIcon className="paper-plane-icon" />
               My submitted Photos
             </Menu.Item>,
-            <Menu.Item as={NavLink} to='/photomodify'>
+            <Menu.Item as={NavLink} to="/photomodify">
               <PaperPlaneIcon className="paper-plane-icon" />
               My Photos
             </Menu.Item>,
-            <Menu.Item as={NavLink} to='/'>
+            <Menu.Item as={NavLink} to="/">
               <Icon name="alarm" />
             </Menu.Item>,
             <Menu.Item className="myAccount">
               <Avatar fullname={currentUser.username} status="online" />
-                <Dropdown item >
-                  <Dropdown.Menu>
-                    <Dropdown.Item as={NavLink} to={'/user/profile/' + currentUser.id}>My account</Dropdown.Item>
-                    <Dropdown.Item><a onClick={this.props.onLogout}>Logout</a></Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-            </Menu.Item>
-          ]; 
-        }else if(currentUser.authorities[0].authority == 'ROLE_ADMIN')
-        {
+              <Dropdown item>
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    as={NavLink}
+                    to={"/user/profile/" + currentUser.id}
+                  >
+                    My account
+                  </Dropdown.Item>
+                  <Dropdown.Item>
+                    <a onClick={this.props.onLogout}>Logout</a>
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Menu.Item>,
+          ];
+        } else if (currentUser.authorities[0].authority == "ROLE_ADMIN") {
           menuItems = [
             <Menu.Item as={NavLink} to="/admin">
               <StarIcon className="star-icon" />
@@ -113,17 +125,23 @@ class HomeHeader extends React.Component {
             </Menu.Item>,
             <Menu.Item className="myAccount">
               <Avatar fullname={currentUser.username} status="online" />
-                <Dropdown item >
-                  <Dropdown.Menu>
-                    <Dropdown.Item as={NavLink} to={'/user/profile/' + currentUser.id}>My account</Dropdown.Item>
-                    <Dropdown.Item><a onClick={this.props.onLogout}>Logout</a></Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-            </Menu.Item>
-          ]; 
+              <Dropdown item>
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    as={NavLink}
+                    to={"/user/profile/" + currentUser.id}
+                  >
+                    My account
+                  </Dropdown.Item>
+                  <Dropdown.Item>
+                    <a onClick={this.props.onLogout}>Logout</a>
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Menu.Item>,
+          ];
         }
       }
-      
     } else {
       menuItems = [
         <Button
@@ -144,7 +162,7 @@ class HomeHeader extends React.Component {
         // >
         //   Sign Up
         // </Button>
-      ]
+      ];
     }
     return (
       <div className="home-header">
@@ -152,62 +170,86 @@ class HomeHeader extends React.Component {
           <Grid.Row only="computer">
             <Grid.Column>
               <Menu borderless className="desktop-menu-style">
-                {/* <NavLink to="/"><Image src={logoPng} className="logo" /></NavLink> */}
-                {
-                  this.props.Back ? 
-                    <Menu.Item as="a" className="BackIcon" style={style.noPaddingStyle}>
-                      <Icon name="arrow left" size="large" onClick={this.props.Back} />
-                    </Menu.Item>
-                  :null
-                }
-                <NavLink to="/"><h2 className="header">Picktur</h2></NavLink> 
+                {this.props.Back ? (
+                  <Menu.Item
+                    as="a"
+                    className="BackIcon"
+                    style={style.noPaddingStyle}
+                  >
+                    <Icon
+                      name="arrow left"
+                      size="large"
+                      onClick={this.props.Back}
+                    />
+                  </Menu.Item>
+                ) : null}
+                <NavLink to="/">
+                  <Image src={logo} className="logo" />
+                </NavLink>
+                {/* <NavLink to="/"><h2 className="header">Picktur</h2></NavLink>  */}
                 <Menu.Item position="right" style={style.noPaddingStyle}>
-                    {menuItems}
+                  {menuItems}
                 </Menu.Item>
               </Menu>
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row only="mobile tablet" className={mobileMenuOpen ? 'mobile-navbar open' : 'mobile-navbar'}>
+          <Grid.Row
+            only="mobile tablet"
+            className={mobileMenuOpen ? "mobile-navbar open" : "mobile-navbar"}
+          >
             <Grid.Column width={16}>
               <Menu borderless className="mobile-navmenu">
                 <Menu.Item header as={NavLink} to="/">
-                  {/* <Image src={logoPng} style={{ width: 130 }} /> */}
-                  <h2 className="header">Picktur</h2>
+                  <Image src={logo} style={{ width: 130 }} />
+                  {/* <h2 className="header">Picktur</h2> */}
                 </Menu.Item>
                 <Menu.Item position="right" style={style.noPaddingStyle}>
-                  {
-                    currentUser ? 
-                      <Menu.Item className="myAccountMobile">
-                        <Avatar fullname={currentUser.username} status="online" />
-                          <Dropdown item floating >
-                            <Dropdown.Menu>
-                              <Dropdown.Item as={NavLink} to={'/user/profile/' + currentUser.id}>My account</Dropdown.Item>
-                              <Dropdown.Item><a onClick={this.props.onLogout}>Logout</a></Dropdown.Item>
-                            </Dropdown.Menu>
-                          </Dropdown>
-                      </Menu.Item>
-                    : null
-                  }
-                  <Menu.Item onClick={() => this.openMobileMenu(!mobileMenuOpen)}>
-                    {!mobileMenuOpen && <Image src={mobileMenuPng} style={{ width: 36 }} />}
-                    {mobileMenuOpen && <Image src={mobileCloseMenuPng} style={{ width: 36 }} />}
+                  {currentUser ? (
+                    <Menu.Item className="myAccountMobile">
+                      <Avatar fullname={currentUser.username} status="online" />
+                      <Dropdown item floating>
+                        <Dropdown.Menu>
+                          <Dropdown.Item
+                            as={NavLink}
+                            to={"/user/profile/" + currentUser.id}
+                          >
+                            My account
+                          </Dropdown.Item>
+                          <Dropdown.Item>
+                            <a onClick={this.props.onLogout}>Logout</a>
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </Menu.Item>
+                  ) : null}
+                  <Menu.Item
+                    onClick={() => this.openMobileMenu(!mobileMenuOpen)}
+                  >
+                    {!mobileMenuOpen && (
+                      <Image src={mobileMenuPng} style={{ width: 36 }} />
+                    )}
+                    {mobileMenuOpen && (
+                      <Image src={mobileCloseMenuPng} style={{ width: 36 }} />
+                    )}
                   </Menu.Item>
                 </Menu.Item>
               </Menu>
             </Grid.Column>
-            {mobileMenuOpen
-              && (
-                <Grid.Column width={16} onClick={() => this.openMobileMenu(false)}>
-                  <Menu borderless vertical>
-                    {menuItems}
-                  </Menu>
-                </Grid.Column>
-              )}
+            {mobileMenuOpen && (
+              <Grid.Column
+                width={16}
+                onClick={() => this.openMobileMenu(false)}
+              >
+                <Menu borderless vertical>
+                  {menuItems}
+                </Menu>
+              </Grid.Column>
+            )}
           </Grid.Row>
         </Grid>
       </div>
-    )
+    );
   }
 }
 
-export default HomeHeader
+export default HomeHeader;

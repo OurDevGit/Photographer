@@ -97,7 +97,7 @@ class Admin extends Component {
     return (
       <>
         <MetaTags>
-          <title>Photographer - Image Platform</title>
+          <title>Openshoot</title>
         </MetaTags>
         <HomeHeader 
           isAuthenticated={this.state.isAuthenticated} 

@@ -5,7 +5,7 @@ import {
   Icon,
   Label,
   Comment,
-  TextArea
+  TextArea,
 } from "semantic-ui-react";
 import MetaTags from "react-meta-tags";
 import { NavLink, Redirect } from "react-router-dom";
@@ -19,7 +19,8 @@ import {
   getLikeAmount,
   getDownloadAmount,
   getViewsAmount,
-  add_comment
+  add_comment,
+  getSameCollection,
 } from "../../util/APIUtils";
 import { ACCESS_TOKEN, HOST_URL } from "../../constants";
 import {
@@ -27,7 +28,7 @@ import {
   AvatarImage,
   PhotoList,
   AnimateButton,
-  Comments
+  Comments,
 } from "../../components";
 import PanAndZoomImage from "../../PanAndZoomImage";
 import ImageCarousel from "./ImageCarousel";
@@ -36,7 +37,7 @@ import {
   Heart_Icon,
   Plus_Icon,
   Zoom_Icon,
-  CloseIcon
+  CloseIcon,
 } from "../../assets/icons";
 import { AvatarDefault } from "../../assets/images/homepage";
 import "./style.less";
@@ -61,7 +62,8 @@ class Photo_details extends Component {
       followerUrl: "https://www.instagram.com/plutus_in_fabula/",
       commentContent: "",
       commitFlag: false,
-      isCtrlKey: false
+      isCtrlKey: false,
+      sameCollectionPhotos: [],
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -78,47 +80,48 @@ class Photo_details extends Component {
     this.replyComment = this.replyComment.bind(this);
     this.handleChangeComment = this.handleChangeComment.bind(this);
     this.addComment = this.addComment.bind(this);
+    this.loadSameCollectionPhotos = this.loadSameCollectionPhotos.bind(this);
   }
 
   loadCurrentUser() {
     this.setState({
-      isLoading: true
+      isLoading: true,
     });
     getCurrentUser()
-      .then(response => {
+      .then((response) => {
         this.setState({
           currentUser: response,
           isAuthenticated: true,
-          isLoading: false
+          isLoading: false,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
-          isLoading: false
+          isLoading: false,
         });
       });
   }
 
   loadAllCategories() {
     getAllCategories()
-      .then(response => {
+      .then((response) => {
         this.setState({
-          categories: response.categories
+          categories: response.categories,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
-          isLoading: false
+          isLoading: false,
         });
       });
   }
 
   loadPhotoDetail(id) {
     this.setState({
-      isLoading: true
+      isLoading: true,
     });
     getPhotoDetail(id)
-      .then(response => {
+      .then((response) => {
         window.scrollTo(0, 0);
         this.setState({
           selImage: response.photoDto,
@@ -126,60 +129,77 @@ class Photo_details extends Component {
           likes: response.photoDto.likes,
           downloads: response.photoDto.downloads,
           views: response.photoDto.viewed,
-          isLoading: false
         });
+        this.loadSameCollectionPhotos(id);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log("error", error);
         this.setState({
-          isLoading: false
+          isLoading: false,
         });
       });
   }
-  is_like_photo(id) {
-    is_liked(id)
-      .then(response => {
+
+  loadSameCollectionPhotos(id) {
+    getSameCollection(id)
+      .then((response) => {
         this.setState({
-          likeFlag: response
+          isLoading: false,
+          sameCollectionPhotos: response,
         });
       })
-      .catch(error => {
+      .catch((error) => {
+        console.log(error);
+        this.setState({
+          isLoading: false,
+        });
+      });
+  }
+
+  is_like_photo(id) {
+    is_liked(id)
+      .then((response) => {
+        this.setState({
+          likeFlag: response,
+        });
+      })
+      .catch((error) => {
         console.log("Error", error);
       });
   }
 
   loadLikeAmount(id) {
     getLikeAmount(id)
-      .then(response => {
+      .then((response) => {
         this.setState({
-          likes: response
+          likes: response,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log("error", error);
       });
   }
 
   loadDownloadAmount(id) {
     getDownloadAmount(id)
-      .then(response => {
+      .then((response) => {
         this.setState({
-          downloads: response
+          downloads: response,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log("error", error);
       });
   }
 
   loadViewsAmount(id) {
     getViewsAmount(id)
-      .then(response => {
+      .then((response) => {
         this.setState({
-          views: response
+          views: response,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log("error", error);
       });
   }
@@ -189,8 +209,8 @@ class Photo_details extends Component {
     this.loadAllCategories();
     this.is_like_photo(this.props.match.params.id);
     this.loadPhotoDetail(this.props.match.params.id);
-    window.addEventListener('keydown', this.keydown);
-    window.addEventListener('keyup', this.keyup);
+    window.addEventListener("keydown", this.keydown);
+    window.addEventListener("keyup", this.keyup);
   }
 
   componentDidUpdate(prevProps) {
@@ -199,26 +219,26 @@ class Photo_details extends Component {
       this.loadPhotoDetail(this.props.match.params.id);
       this.setState({
         selImage: undefined,
-        commentContent: ""
+        commentContent: "",
       });
     }
   }
 
   keydown = (e) => {
-    if(e.keyCode == 17){
+    if (e.keyCode == 17) {
       this.setState({
-        isCtrlKey: true
-      })
+        isCtrlKey: true,
+      });
     }
-  }
+  };
 
   keyup = (e) => {
-    if(e.keyCode == 17){
+    if (e.keyCode == 17) {
       this.setState({
-        isCtrlKey: false
-      })
+        isCtrlKey: false,
+      });
     }
-  }
+  };
 
   handleLogout(
     redirectTo = "/",
@@ -228,21 +248,21 @@ class Photo_details extends Component {
     localStorage.removeItem(ACCESS_TOKEN);
     this.setState({
       currentUser: null,
-      isAuthenticated: false
+      isAuthenticated: false,
     });
 
     this.props.history.push(redirectTo);
 
     notification[notificationType]({
       message: "Photoing App",
-      description: description
+      description: description,
     });
   }
 
   handleLogin() {
     notification.success({
       message: "Photoing App",
-      description: "You're successfully logged in."
+      description: "You're successfully logged in.",
     });
     this.loadCurrentUser();
     this.props.history.push("/");
@@ -250,19 +270,19 @@ class Photo_details extends Component {
 
   CloseImageModal(flag) {
     this.setState({
-      ImageShow: flag
+      ImageShow: flag,
     });
   }
 
   CloseBucketModal(flag) {
     this.setState({
-      BucketShow: flag
+      BucketShow: flag,
     });
   }
 
   addToBucket() {
     this.setState({
-      BucketShow: true
+      BucketShow: true,
     });
   }
   goBack() {
@@ -272,20 +292,20 @@ class Photo_details extends Component {
   addLike() {
     if (this.state.likeFlag == false) {
       addToLike(this.props.match.params.id)
-        .then(response => {
+        .then((response) => {
           this.state.likes = this.state.likes + 1;
           this.setState({
             likes: this.state.likes,
-            likeFlag: true
+            likeFlag: true,
           });
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("error", error);
         });
     } else {
       notification.success({
         message: "Photoing App",
-        description: "This photo is already your liked photo"
+        description: "This photo is already your liked photo",
       });
     }
   }
@@ -293,15 +313,13 @@ class Photo_details extends Component {
   handleImageClick(e) {
     this.setState({
       // ImageShow: true,
-      selImage: e
+      selImage: e,
     });
-    if(this.state.isCtrlKey)
-    {
-      window.open(e.id, "_blank"); 
-    }else{
+    if (this.state.isCtrlKey) {
+      window.open(e.id, "_blank");
+    } else {
       this.props.history.push("/Photo_details/" + e.id);
     }
-    
   }
 
   replyComment() {
@@ -310,7 +328,7 @@ class Photo_details extends Component {
 
   handleChangeComment(e, { value }) {
     this.setState({
-      commentContent: value
+      commentContent: value,
     });
   }
 
@@ -318,29 +336,29 @@ class Photo_details extends Component {
     var Request = {
       photo: this.props.match.params.id,
       user: this.state.currentUser.id,
-      content: this.state.commentContent
+      content: this.state.commentContent,
     };
     this.setState({
-      isSendCommentLoading: true
+      isSendCommentLoading: true,
     });
     add_comment(Request)
-      .then(response => {
+      .then((response) => {
         if (response.ok) {
           this.setState({
             commitFlag: !this.state.commitFlag,
             isSendCommentLoading: false,
-            commentContent: ""
+            commentContent: "",
           });
         } else {
           this.setState({
-            isSendCommentLoading: false
+            isSendCommentLoading: false,
           });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         this.setState({
-          isSendCommentLoading: false
+          isSendCommentLoading: false,
         });
       });
   }
@@ -364,7 +382,7 @@ class Photo_details extends Component {
       return (
         <>
           <MetaTags>
-            <title>Photographer - Image Platform</title>
+            <title>Openshoot</title>
           </MetaTags>
           <HomeHeader
             isAuthenticated={this.state.isAuthenticated}
@@ -713,11 +731,9 @@ class Photo_details extends Component {
             </Grid.Row>
             <Grid.Row>
               <Grid.Column className="relatedPhotos">
-                <a className="relatedPhotosLabel">Related Photos</a>{" "}
-                <a>See All</a>
-                {/* <ImageCarousel 
-                  photo =  {similarPhotos}
-                /> */}
+                <a className="relatedPhotosLabel">Same collection photos</a>
+                <ImageCarousel photo={this.state.sameCollectionPhotos} />
+                <a className="relatedPhotosLabel">Related Photos</a>
                 <PhotoList
                   type="home_list"
                   onClickImage={this.handleImageClick}
