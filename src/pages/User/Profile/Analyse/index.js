@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 import { Select } from "semantic-ui-react";
 import { Line } from "react-chartjs-2";
-import {
-  get_data_for_diagram,
-  get_all_data_for_user_diagram
-} from "../../../../util/APIUtils";
+import { get_data_for_user_diagram } from "../../../../util/APIUtils";
 import {
   ISOFormatDate,
   formatDate,
@@ -12,7 +9,7 @@ import {
   CalFirstDay,
   nextDay,
   nextMonth,
-  DotFormatDate
+  DotFormatDate,
 } from "../../../../util/Helpers";
 import { DIAGRAM_DATA_TYPE } from "../../../../constants";
 import LoadingIndicator from "../../../../common/LoadingIndicator";
@@ -24,7 +21,7 @@ class Analyse extends Component {
       isLoading: true,
       activeMode: "DAY",
       data: {},
-      today: new Date()
+      today: new Date(),
     };
     this.handleChangeMode = this.handleChangeMode.bind(this);
     this.loadDataForUserDiagram = this.loadDataForUserDiagram.bind(this);
@@ -34,7 +31,7 @@ class Analyse extends Component {
   componentDidMount() {
     console.log("diagram", DIAGRAM_DATA_TYPE);
     this.setState({
-      user: this.props.user
+      user: this.props.user,
     });
     var start = ISOFormatDate(
       CalFirstDay(this.state.activeMode, this.state.today)
@@ -43,27 +40,26 @@ class Analyse extends Component {
       grouping: "DAY",
       start: start,
       end: ISOFormatDate(this.state.today),
-      userId: "641634"
+      userId: this.props.user.id,
     };
     this.loadDataForUserDiagram(Request);
   }
 
   loadDataForUserDiagram(Request) {
     this.setState({
-      isLoading: true
+      isLoading: true,
     });
-    get_all_data_for_user_diagram(Request)
-      .then(response => {
+    get_data_for_user_diagram(Request)
+      .then((response) => {
         this.setDiagramData(Request, response);
         this.setState({
-          isLoading: false
+          isLoading: false,
         });
-        console.log(response.viewedList["15.03.2020"]);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         this.setState({
-          isLoading: false
+          isLoading: false,
         });
       });
   }
@@ -91,7 +87,7 @@ class Analyse extends Component {
           pointHoverBorderWidth: 2,
           pointRadius: 1,
           pointHitRadius: 10,
-          data: []
+          data: [],
         },
         {
           label: "View",
@@ -112,7 +108,7 @@ class Analyse extends Component {
           pointHoverBorderWidth: 2,
           pointRadius: 1,
           pointHitRadius: 10,
-          data: []
+          data: [],
         },
         {
           label: "Download",
@@ -133,9 +129,9 @@ class Analyse extends Component {
           pointHoverBorderWidth: 2,
           pointRadius: 1,
           pointHitRadius: 10,
-          data: []
-        }
-      ]
+          data: [],
+        },
+      ],
     };
 
     if (Request.grouping === "DAY") {
@@ -199,14 +195,14 @@ class Analyse extends Component {
 
   handleChangeMode(e, { value }) {
     this.setState({
-      activeMode: value
+      activeMode: value,
     });
     var start = ISOFormatDate(CalFirstDay(value, this.state.today));
     var Request = {
       grouping: value,
       start: start,
       end: ISOFormatDate(this.state.today),
-      userId: "641634"
+      userId: this.props.user.id,
     };
     this.loadDataForUserDiagram(Request);
   }
@@ -217,7 +213,7 @@ class Analyse extends Component {
     const ViewMode = [
       { key: "day", value: "DAY", text: "Daily" },
       // { key: 'week', value: 'WEEK', text: 'Weekly' },
-      { key: "month", value: "MONTH", text: "Monthly" }
+      { key: "month", value: "MONTH", text: "Monthly" },
     ];
     if (this.state.isLoading) {
       return <LoadingIndicator />;

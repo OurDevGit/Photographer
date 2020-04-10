@@ -75,7 +75,7 @@ class LoginAndSignUp extends Component{
                 {this.state.title}
             </Header>
             <Tab panes={panes} activeIndex={this.state.activeIndex} onTabChange={this.handleTabChange}/>
-            <a href="https://api.picktur.com/api/user_social_management/fb_login" onClick={this.SocialLogin}><Button loading={this.state.isLoading} className='social face' color='facebook' fluid size='large'>
+            <a href="https://api.openshoots.com/api/user_social_management/fb_login" onClick={this.SocialLogin}><Button loading={this.state.isLoading} className='social face' color='facebook' fluid size='large'>
                 <Icon name='facebook' /> Facebook Login
             </Button></a>
             <Button className='social insta' color='instagram' fluid size='large'>

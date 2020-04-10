@@ -227,7 +227,7 @@ class Profile extends Component {
         ),
       },
       {
-        menuItem: "Photos",
+        menuItem: "My Downloaded Photos",
         render: () => (
           <Tab.Pane>
             <Myphotos user={this.state.user} />

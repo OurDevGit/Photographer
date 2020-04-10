@@ -81,6 +81,7 @@ class Photo_details extends Component {
     this.handleChangeComment = this.handleChangeComment.bind(this);
     this.addComment = this.addComment.bind(this);
     this.loadSameCollectionPhotos = this.loadSameCollectionPhotos.bind(this);
+    this.sameTagPhotos = this.sameTagPhotos.bind(this);
   }
 
   loadCurrentUser() {
@@ -363,6 +364,11 @@ class Photo_details extends Component {
       });
   }
 
+  sameTagPhotos(e) {
+    console.log(e.target.id);
+    this.props.history.push("/?tag=" + e.target.id);
+  }
+
   render() {
     const { selImage, similarPhotos } = this.state;
     const keywords = [];
@@ -370,7 +376,11 @@ class Photo_details extends Component {
     var downloadUrl = "";
     if (selImage && selImage.tags) {
       for (let i = 0; i < selImage.tags.length; i++) {
-        keywords.push(<button>{selImage.tags[i].value}</button>);
+        keywords.push(
+          <button onClick={this.sameTagPhotos} id={selImage.tags[i].value}>
+            {selImage.tags[i].value}
+          </button>
+        );
       }
       url = selImage.url_fr + "";
       downloadUrl = selImage.url_hr + "";
@@ -450,16 +460,14 @@ class Photo_details extends Component {
                   <a
                     target="blank"
                     href={
-                      this.state.isFollower
-                        ? downloadUrl
-                        : this.state.followerUrl
+                      downloadUrl
+                      // this.state.isFollower
+                      //   ? downloadUrl
+                      //   : this.state.followerUrl
                     }
                     className="ImageButton followAndDownload"
                   >
-                    <AnimateButton
-                      content="Follow and Download"
-                      IconName="download"
-                    />
+                    <AnimateButton content="Download" IconName="download" />
                   </a>
                   <Button
                     as="div"

@@ -35,6 +35,7 @@ class Home extends Component {
       BucketShow: false,
       searchOptions: [],
       isCtrlKey: false,
+      tagSearch: null,
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -102,6 +103,7 @@ class Home extends Component {
     this.getTotalpages();
     window.addEventListener("keydown", this.keydown);
     window.addEventListener("keyup", this.keyup);
+    console.log(this.props.location.search.split("="))
   }
 
   keydown = (e) => {
@@ -206,7 +208,9 @@ class Home extends Component {
   }
 
   render() {
-    console.log("user", this.state.currentUser);
+    if(this.props.location.search.split("=")[0] === "?tag"){
+      var tagSearch = this.props.location.search.split("=")[1];
+    }
     return (
       <>
         <MetaTags>
@@ -236,6 +240,7 @@ class Home extends Component {
                 quickView={this.quickView}
                 viewOwner={this.viewOwner}
                 searchOptions={this.state.searchOptions}
+                tagSearch =  {tagSearch}
               />
               {/* <Gallery photos={photos}  /> */}
               <PhotoDetails

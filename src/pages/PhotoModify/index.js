@@ -16,8 +16,9 @@ import {
   Header,
   Modal,
   Input,
-  Radio
+  Radio,
 } from "semantic-ui-react";
+import { Line } from "react-chartjs-2";
 import { NavLink, Redirect } from "react-router-dom";
 import MetaTags from "react-meta-tags";
 import {
@@ -29,7 +30,8 @@ import {
   addAuthorizationToPhotoIDs,
   removeAuthorizationToPhotoIDs,
   addNewTag,
-  redeemMultiplePhoto
+  redeemMultiplePhoto,
+  get_data_for_foto_diagram,
 } from "../../util/APIUtils";
 import {
   API_BASE_URL,
@@ -39,22 +41,31 @@ import {
   sortOptions,
   age,
   gender,
-  ethnicity
+  ethnicity,
 } from "../../constants";
 import {
   HomeHeader,
   PhotoList,
   AvatarImage,
   ConfirmModal,
-  ListComponent
+  ListComponent,
 } from "../../components";
+import {
+  ISOFormatDate,
+  formatDate,
+  PrevYearDate,
+  CalFirstDay,
+  nextDay,
+  nextMonth,
+  DotFormatDate,
+} from "../../util/Helpers";
 import "./style.less";
 import { notification } from "antd";
 import LoadingIndicator from "../../common/LoadingIndicator";
 const style = {
   noPaddingStyle: {
-    padding: 0
-  }
+    padding: 0,
+  },
 };
 
 const arr_options = {};
@@ -75,6 +86,8 @@ class PhotoModify extends Component {
       containTags: [],
       activeIndex: 1,
       showOptions: ["unvisible", "visible"],
+      modifyAvailability: false,
+      photoSelectedFlag: false,
       selImage: {},
       selImageIDs: [],
       pageStatus: "",
@@ -96,7 +109,10 @@ class PhotoModify extends Component {
       releaseName: "",
       selRelease: [],
       ReleaseScore: [],
-      deleteAction: false
+      deleteAction: false,
+      activeMode: "DAY",
+      data: {},
+      today: new Date(),
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -130,6 +146,9 @@ class PhotoModify extends Component {
     this.confirmModalClose = this.confirmModalClose.bind(this);
     this.deletePhotos = this.deletePhotos.bind(this);
     this.deleteFun = this.deleteFun.bind(this);
+    this.loadDataForPhotoDiagram = this.loadDataForPhotoDiagram.bind(this);
+    this.modifyPhoto = this.modifyPhoto.bind(this);
+    this.handleChangeMode = this.handleChangeMode.bind(this);
   }
 
   componentDidMount() {
@@ -141,77 +160,77 @@ class PhotoModify extends Component {
 
   loadCurrentUser() {
     this.setState({
-      isLoading: true
+      isLoading: true,
     });
     getCurrentUser()
-      .then(response => {
+      .then((response) => {
         this.setState({
           currentUser: response,
           isAuthenticated: true,
-          isLoading: false
+          isLoading: false,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
-          isLoading: false
+          isLoading: false,
         });
       });
   }
 
   loadAllCategories() {
     getAllCategories()
-      .then(response => {
-        let categorylist = response.categories.map(category => {
+      .then((response) => {
+        let categorylist = response.categories.map((category) => {
           return {
             key: category.id,
             value: category.value,
-            text: category.value
+            text: category.value,
           };
         });
         this.setState({
           categories: categorylist,
           categories1: categorylist,
-          categories2: categorylist
+          categories2: categorylist,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
-          isLoading: false
+          isLoading: false,
         });
       });
   }
 
   loadAllTags() {
     getAllTags()
-      .then(response => {
-        let taglist = response.tags.map(tag => {
+      .then((response) => {
+        let taglist = response.tags.map((tag) => {
           return {
             key: tag.id,
             value: tag.value,
-            text: tag.value
+            text: tag.value,
           };
         });
         this.setState({
-          tags: taglist
+          tags: taglist,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
-          isLoading: false
+          isLoading: false,
         });
       });
   }
 
   getTotalNumberOfPhotos() {
     getNumberOfPhotos()
-      .then(response => {
+      .then((response) => {
         this.setState({
-          total: response
+          total: response,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
-          isLoading: false
+          isLoading: false,
         });
       });
   }
@@ -225,21 +244,21 @@ class PhotoModify extends Component {
 
     this.setState({
       currentUser: null,
-      isAuthenticated: false
+      isAuthenticated: false,
     });
 
     this.props.history.push(redirectTo);
 
     notification[notificationType]({
       message: "Photoing App",
-      description: description
+      description: description,
     });
   }
 
   handleLogin() {
     notification.success({
       message: "Photoing App",
-      description: "You're successfully logged in."
+      description: "You're successfully logged in.",
     });
     this.loadCurrentUser();
     this.props.history.push("/");
@@ -247,13 +266,13 @@ class PhotoModify extends Component {
 
   confirmModalShow() {
     this.setState({
-      confirmModalShow: true
+      confirmModalShow: true,
     });
   }
 
   confirmModalClose() {
     this.setState({
-      confirmModalShow: false
+      confirmModalShow: false,
     });
   }
 
@@ -261,7 +280,7 @@ class PhotoModify extends Component {
     getNumberOfPhotos();
     this.setState({
       confirmModalShow: false,
-      deleteAction: true
+      deleteAction: true,
     });
   }
 
@@ -270,7 +289,7 @@ class PhotoModify extends Component {
       deleteAction: false,
       showOptions: ["unvisible", "visible"],
       selImageIDs: [],
-      selImage: []
+      selImage: [],
     });
   }
 
@@ -283,8 +302,8 @@ class PhotoModify extends Component {
   };
 
   handleMultiSelectAddition = (e, { value }) => {
-    this.setState(prevState => ({
-      tags: [{ text: value, value }, ...prevState.tags]
+    this.setState((prevState) => ({
+      tags: [{ text: value, value }, ...prevState.tags],
     }));
   };
 
@@ -294,15 +313,15 @@ class PhotoModify extends Component {
     }
     this.state.currentTagValues.push(content);
     this.state.currentContainTags = this.state.currentContainTags.filter(
-      item => item != content
+      (item) => item != content
     );
     this.setState({
       currentTagValues: this.state.currentTagValues,
-      currentContainTags: this.state.currentContainTags
+      currentContainTags: this.state.currentContainTags,
     });
     // this.tagDropbox.current.target.focus()
     this.tagDropbox.current.setState({
-      focus: true
+      focus: true,
     });
     this.updatePhotoOptions("Tag");
   }
@@ -317,10 +336,10 @@ class PhotoModify extends Component {
     this.state.currentContainTags = [];
     this.setState({
       currentTagValues: this.state.currentTagValues,
-      currentContainTags: this.state.currentContainTags
+      currentContainTags: this.state.currentContainTags,
     });
     this.tagDropbox.current.setState({
-      focus: true
+      focus: true,
     });
     this.updatePhotoOptions("Tag");
   }
@@ -337,13 +356,13 @@ class PhotoModify extends Component {
     if (this.state.currentTagValues.length > value.length) {
       var RemoveItem = this.state.currentTagValues;
       for (let i = 0; i < value.length; i++) {
-        RemoveItem = RemoveItem.filter(item => item != value[i]);
+        RemoveItem = RemoveItem.filter((item) => item != value[i]);
       }
       for (let j = 0; j < this.state.containTags.length; j++) {
         if (RemoveItem[0] == this.state.containTags[j]) {
           this.state.currentContainTags.push(RemoveItem);
           this.setState({
-            currentContainTags: this.state.currentContainTags
+            currentContainTags: this.state.currentContainTags,
           });
           j = this.state.containTags.length;
         }
@@ -352,7 +371,7 @@ class PhotoModify extends Component {
       for (let k = 0; k < this.state.currentContainTags.length; k++) {
         if (this.state.currentContainTags[k] == value[value.length - 1]) {
           this.state.currentContainTags = this.state.currentContainTags.filter(
-            item => item != value[value.length - 1]
+            (item) => item != value[value.length - 1]
           );
         }
       }
@@ -364,15 +383,15 @@ class PhotoModify extends Component {
       });
       if (TagScore == 0) {
         addNewTag(value[value.length - 1])
-          .then(response => {
+          .then((response) => {
             console.log(response);
             this.state.tags.push({
               key: "",
               value: value[value.length - 1],
-              text: value[value.length - 1]
+              text: value[value.length - 1],
             });
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(error);
           });
       }
@@ -382,7 +401,7 @@ class PhotoModify extends Component {
       currentContainTags: this.state.currentContainTags,
       currentTagValues: value,
       changedTagValues: value,
-      errorMessage: this.state.errorMessage
+      errorMessage: this.state.errorMessage,
     });
     this.updatePhotoOptions("Tag");
   };
@@ -390,33 +409,33 @@ class PhotoModify extends Component {
   handleClickAttach(name, value) {
     const Request = {
       authorizationId: value + "",
-      authorizedPhotos: this.state.selImageIDs
+      authorizedPhotos: this.state.selImageIDs,
     };
     this.state.categories2 = this.state.categories;
     this.state.categories1 = this.state.categories;
     if (name == "attachAll" || name == "attach") {
       addAuthorizationToPhotoIDs(Request)
-        .then(response => {
+        .then((response) => {
           this.state.ReleaseScore[value] = 1;
           this.setState({
-            ReleaseScore: this.state.ReleaseScore
+            ReleaseScore: this.state.ReleaseScore,
           });
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("error", error);
         });
     } else if (name == "removeAll" || name == "attached") {
       removeAuthorizationToPhotoIDs(Request)
-        .then(response => {
+        .then((response) => {
           console.log(response);
           if (response.ok) {
             this.state.ReleaseScore[value] = null;
             this.setState({
-              ReleaseScore: this.state.ReleaseScore
+              ReleaseScore: this.state.ReleaseScore,
             });
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("error", error);
         });
     }
@@ -454,7 +473,7 @@ class PhotoModify extends Component {
     }
     this.setState({
       ReleaseScore,
-      ReleaseNameArray
+      ReleaseNameArray,
     });
   }
 
@@ -463,37 +482,48 @@ class PhotoModify extends Component {
   handleImageClick(e, flag) {
     this.setState({
       containTags: e.photo.containedTags,
-      currentContainTags: e.photo.containedTags
+      currentContainTags: e.photo.containedTags,
     });
     if (!this.state.selImage[e.photo.id]) {
       this.state.selImage[e.photo.id] = e.photo;
       this.setState({
-        selImage: this.state.selImage
+        selImage: this.state.selImage,
       });
     }
     // flag: check imgae or uncheck image when click Image
     if (flag) {
       this.state.selImageIDs.push(e.photo.id);
       this.setState({
-        selImageIDs: this.state.selImageIDs
+        selImageIDs: this.state.selImageIDs,
       });
     } else {
       this.state.selImageIDs = this.state.selImageIDs.filter(
-        item => item != e.photo.id
+        (item) => item != e.photo.id
       );
       this.setState({
-        selImageIDs: this.state.selImageIDs
+        selImageIDs: this.state.selImageIDs,
       });
     }
 
     // DisplayImageurl when click Image
     if (this.state.selImageIDs.length == 1) {
       this.setState({
-        DisplayImageUrl: this.state.selImage[this.state.selImageIDs[0]].url_fr
+        DisplayImageUrl: this.state.selImage[this.state.selImageIDs[0]].url_fr,
       });
+
+      var start = ISOFormatDate(
+        CalFirstDay(this.state.activeMode, this.state.today)
+      );
+      var Request = {
+        grouping: "DAY",
+        start: start,
+        end: ISOFormatDate(this.state.today),
+        photoId: e.photo.id,
+      };
+      this.loadDataForPhotoDiagram(Request);
     } else if (this.state.selImageIDs.length > 1) {
       this.setState({
-        DisplayImageUrl: this.state.selImage[this.state.selImageIDs[0]].url_fr
+        DisplayImageUrl: this.state.selImage[this.state.selImageIDs[0]].url_fr,
       });
     }
 
@@ -501,7 +531,8 @@ class PhotoModify extends Component {
     if (this.state.selImageIDs.length > 0) {
       // when there is images which checked
       this.setState({
-        showOptions: ["visible", "unvisible"]
+        showOptions: ["visible", "unvisible"],
+        photoSelectedFlag: true,
       });
       if (this.state.selImageIDs.length == 1) {
         var temp_image = this.state.selImage[this.state.selImageIDs[0]];
@@ -518,7 +549,7 @@ class PhotoModify extends Component {
         this.state.currentTagValues = temp_image.tags;
         this.setState({
           photoOptions: this.state.photoOptions,
-          currentTagValues: this.state.currentTagValues
+          currentTagValues: this.state.currentTagValues,
         });
       } else {
         var tag_flag = [];
@@ -605,13 +636,13 @@ class PhotoModify extends Component {
         this.setState({
           currentTagValues: common_tags,
           common_tag: common_tags,
-          photoOptions: this.state.photoOptions
+          photoOptions: this.state.photoOptions,
         });
       }
       if (this.state.photoOptions["Category1"]) {
         var Categories2 = [];
         var pos = this.state.categories2.findIndex(
-          v => v.value === this.state.photoOptions["Category1"]
+          (v) => v.value === this.state.photoOptions["Category1"]
         );
         Categories2 = this.state.categories2
           .slice(0, pos)
@@ -623,7 +654,7 @@ class PhotoModify extends Component {
       if (this.state.photoOptions["Category2"]) {
         var Categories1 = [];
         var pos = this.state.categories1.findIndex(
-          v => v.value === this.state.photoOptions["Category2"]
+          (v) => v.value === this.state.photoOptions["Category2"]
         );
         Categories1 = this.state.categories1
           .slice(0, pos)
@@ -635,7 +666,7 @@ class PhotoModify extends Component {
 
       this.setState({
         categories1: this.state.categories1,
-        categories2: this.state.categories2
+        categories2: this.state.categories2,
       });
 
       this.getCommonRelease(this.state.selImage, this.state.selImageIDs);
@@ -645,19 +676,169 @@ class PhotoModify extends Component {
       for (let t = 0; t < this.state.currentTagValues.length; t++) {
         if (e.photo.containedTags.includes(this.state.currentTagValues[t])) {
           e.photo.containedTags = e.photo.containedTags.filter(
-            item => item != this.state.currentTagValues[t]
+            (item) => item != this.state.currentTagValues[t]
           );
         }
       }
       this.setState({
-        currentContainTags: e.photo.containedTags
+        currentContainTags: e.photo.containedTags,
       });
     } else {
       // when there is not images which checked
       this.setState({
-        showOptions: ["unvisible", "visible"]
+        showOptions: ["unvisible", "visible"],
+        photoSelectedFlag: false,
+        modifyAvailability: false,
       });
     }
+  }
+
+  loadDataForPhotoDiagram(Request) {
+    this.setState({
+      isDiagramLoading: true,
+    });
+    get_data_for_foto_diagram(Request)
+      .then((response) => {
+        this.setDiagramData(Request, response);
+        this.setState({
+          isDiagramLoading: false,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setState({
+          isDiagramLoading: false,
+        });
+      });
+  }
+
+  setDiagramData(Request, dataList) {
+    var data = {
+      labels: [],
+      datasets: [
+        {
+          label: "like",
+          fill: false,
+          lineTension: 0.1,
+          backgroundColor: "rgba(75,192,192,0.4)",
+          borderColor: "rgba(255,0,0,1)",
+          borderCapStyle: "butt",
+          borderDash: [],
+          borderDashOffset: 0.0,
+          borderJoinStyle: "miter",
+          pointBorderColor: "rgba(75,192,192,1)",
+          pointBackgroundColor: "#fff",
+          pointBorderWidth: 1,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: "rgba(75,192,192,1)",
+          pointHoverBorderColor: "rgba(220,220,220,1)",
+          pointHoverBorderWidth: 2,
+          pointRadius: 1,
+          pointHitRadius: 10,
+          data: [],
+        },
+        {
+          label: "View",
+          fill: false,
+          lineTension: 0.1,
+          backgroundColor: "rgba(100,255,150,0.4)",
+          borderColor: "rgba(100,255,150,1)",
+          borderCapStyle: "butt",
+          borderDash: [],
+          borderDashOffset: 0.0,
+          borderJoinStyle: "miter",
+          pointBorderColor: "rgba(75,192,192,1)",
+          pointBackgroundColor: "#fff",
+          pointBorderWidth: 1,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: "rgba(100,255,150,1)",
+          pointHoverBorderColor: "rgba(100,255,150,1)",
+          pointHoverBorderWidth: 2,
+          pointRadius: 1,
+          pointHitRadius: 10,
+          data: [],
+        },
+        {
+          label: "Download",
+          fill: false,
+          lineTension: 0.1,
+          backgroundColor: "rgba(75,192,192,0.4)",
+          borderColor: "rgba(75,192,192,1)",
+          borderCapStyle: "butt",
+          borderDash: [],
+          borderDashOffset: 0.0,
+          borderJoinStyle: "miter",
+          pointBorderColor: "rgba(75,192,192,1)",
+          pointBackgroundColor: "#fff",
+          pointBorderWidth: 1,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: "rgba(75,192,192,1)",
+          pointHoverBorderColor: "rgba(220,220,220,1)",
+          pointHoverBorderWidth: 2,
+          pointRadius: 1,
+          pointHitRadius: 10,
+          data: [],
+        },
+      ],
+    };
+
+    if (Request.grouping === "DAY") {
+      var start = Request.start;
+      for (var i = 0; i < 30; i++) {
+        start = nextDay(start);
+        data.labels.push(DotFormatDate("DAY", start));
+        if (dataList.likedList[DotFormatDate("DAY", start)]) {
+          data.datasets[0].data.push(
+            dataList.likedList[DotFormatDate("DAY", start)]
+          );
+        } else {
+          data.datasets[0].data.push("0");
+        }
+        if (dataList.viewedList[DotFormatDate("DAY", start)]) {
+          data.datasets[1].data.push(
+            dataList.viewedList[DotFormatDate("DAY", start)]
+          );
+        } else {
+          data.datasets[1].data.push("0");
+        }
+        if (dataList.downloadedList[DotFormatDate("DAY", start)]) {
+          data.datasets[2].data.push(
+            dataList.downloadedList[DotFormatDate("DAY", start)]
+          );
+        } else {
+          data.datasets[2].data.push("0");
+        }
+      }
+    } else if (Request.grouping === "MONTH") {
+      var start = Request.start;
+      for (var i = 0; i < 12; i++) {
+        data.labels.push(formatDate(start));
+        if (dataList.likedList[DotFormatDate("MONTH", start)]) {
+          data.datasets[0].data.push(
+            dataList.likedList[DotFormatDate("MONTH", start)]
+          );
+        } else {
+          data.datasets[0].data.push("0");
+        }
+        if (dataList.viewedList[DotFormatDate("MONTH", start)]) {
+          data.datasets[1].data.push(
+            dataList.viewedList[DotFormatDate("MONTH", start)]
+          );
+        } else {
+          data.datasets[1].data.push("0");
+        }
+        if (dataList.downloadedList[DotFormatDate("MONTH", start)]) {
+          data.datasets[2].data.push(
+            dataList.downloadedList[DotFormatDate("MONTH", start)]
+          );
+        } else {
+          data.datasets[2].data.push("0");
+        }
+        start = nextMonth(start);
+      }
+    }
+    console.log(data);
+    this.setState({ data: data });
   }
 
   // Menu click
@@ -668,7 +849,7 @@ class PhotoModify extends Component {
       selImage: [],
       selImageIDs: [],
       common_tag: [],
-      showOptions: ["unvisible", "visible"]
+      showOptions: ["unvisible", "visible"],
     });
   };
 
@@ -683,7 +864,7 @@ class PhotoModify extends Component {
     if (name == "Category1") {
       this.state.categories2 = this.state.categories;
       var Categories2 = [];
-      var pos = this.state.categories2.findIndex(v => v.value === value);
+      var pos = this.state.categories2.findIndex((v) => v.value === value);
       Categories2 = this.state.categories2
         .slice(0, pos)
         .concat(
@@ -694,7 +875,7 @@ class PhotoModify extends Component {
     if (name == "Category2") {
       this.state.categories1 = this.state.categories;
       var Categories1 = [];
-      var pos = this.state.categories1.findIndex(v => v.value === value);
+      var pos = this.state.categories1.findIndex((v) => v.value === value);
       Categories1 = this.state.categories1
         .slice(0, pos)
         .concat(
@@ -708,7 +889,7 @@ class PhotoModify extends Component {
       changedPhotoOptions: this.state.changedPhotoOptions,
       errorMessage: this.state.errorMessage,
       categories1: this.state.categories1,
-      categories2: this.state.categories2
+      categories2: this.state.categories2,
     });
     // if(name == 'Category1' || name == 'Category2'){
     //   for(let i=0; i< this.state.categories.length; i++)
@@ -731,17 +912,17 @@ class PhotoModify extends Component {
     this.state.photoOptions[name] = this.isChecked;
     this.arr_options = this.state.photoOptions;
     this.setState({
-      photoOptions: this.arr_options
+      photoOptions: this.arr_options,
     });
   };
   handleRadioChange = (e, { value }) => {
     this.setState({
-      ReleaseTypevalue: value
+      ReleaseTypevalue: value,
     });
   };
   handleChangeReleasename = (e, { value }) => {
     this.setState({
-      releaseName: value
+      releaseName: value,
     });
   };
   // when click submit button
@@ -750,38 +931,38 @@ class PhotoModify extends Component {
     var updateRequest = [];
     for (let i = 0; i < this.state.selImageIDs.length; i++) {
       updateRequest.push({
-        photoDto: this.state.selImage[this.state.selImageIDs[i]]
+        photoDto: this.state.selImage[this.state.selImageIDs[i]],
       });
     }
 
     photo_update(updateRequest)
-      .then(response => {
+      .then((response) => {
         console.log(response);
         notification.success({
           message: "Photoing App",
-          description: "Successfully photos updated."
+          description: "Successfully photos updated.",
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         notification.error({
           message: "Photoing App",
-          description: "Something went wrong. Please try again!"
+          description: "Something went wrong. Please try again!",
         });
       });
   }
 
   handleRedeem() {
     redeemMultiplePhoto(this.state.selImageIDs)
-      .then(response => {
+      .then((response) => {
         console.log(response);
         this.getTotalNumberOfPhotos();
         this.setState({
-          activeMenuItem: "TO_BE_SUBMITTED"
+          activeMenuItem: "TO_BE_SUBMITTED",
           // total: this.state.total
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -793,7 +974,7 @@ class PhotoModify extends Component {
     //   focus: false
     // })
     this.setState({
-      common_tag: this.state.currentTagValues
+      common_tag: this.state.currentTagValues,
     });
     const updateRequest = [];
     for (let i = 0; i < this.state.selImageIDs.length; i++) {
@@ -820,7 +1001,7 @@ class PhotoModify extends Component {
         }
 
         temp_options.categories = temp_options.categories.filter(
-          item => item != null
+          (item) => item != null
         );
       }
 
@@ -841,13 +1022,13 @@ class PhotoModify extends Component {
                 temp_options.tags.push(this.state.currentTagValues[k]);
               } else {
                 tem_tag = tem_tag.filter(
-                  item => item != this.state.currentTagValues[k]
+                  (item) => item != this.state.currentTagValues[k]
                 );
               }
             }
             for (let h = 0; h < tem_tag.length; h++) {
               temp_options.tags = temp_options.tags.filter(
-                item => item != tem_tag[h]
+                (item) => item != tem_tag[h]
               );
             }
           } else {
@@ -887,7 +1068,7 @@ class PhotoModify extends Component {
       this.state.authorization.authorizedPhotosld = this.state.selImageIDs;
       this.state.authorization.authorizationKind = this.state.ReleaseTypevalue;
       this.setState({
-        authorization: this.state.authorization
+        authorization: this.state.authorization,
       });
       this.uploadAndJoinAuthorization(this.state.authorization);
     }
@@ -910,38 +1091,38 @@ class PhotoModify extends Component {
       method: "POST",
       headers: myHeaders,
       body: formData,
-      redirect: "follow"
+      redirect: "follow",
     };
     fetch(
       API_BASE_URL + "/authorization_controller/upload_authorization",
       requestOptions
     )
-      .then(response => {
+      .then((response) => {
         if (response.ok) {
           this.setState({
             NewReleaseModalOpen: false,
             isLoading: false,
-            ReleaseModalOpen: true
+            ReleaseModalOpen: true,
           });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log("error", error);
         this.setState({
-          isLoading: false
+          isLoading: false,
         });
       });
   }
 
   handleReleaseTypeChange(e, { name, value }) {
     this.setState({
-      ReleaseType: value
+      ReleaseType: value,
     });
   }
 
   handleSearchReleaseKeyChange(e, { value }) {
     this.setState({
-      searchReleaseKey: value
+      searchReleaseKey: value,
     });
   }
 
@@ -950,19 +1131,39 @@ class PhotoModify extends Component {
       ReleaseModalOpen: false,
       NewReleaseModalOpen: true,
       releaseFile: e.target.files[0],
-      releaseName: e.target.files[0].name.split(".")[0]
+      releaseName: e.target.files[0].name.split(".")[0],
     });
   }
   openReleaseModal() {
     this.setState({
-      ReleaseModalOpen: true
+      ReleaseModalOpen: true,
     });
   }
   onCloseModal() {
     this.setState({
       ReleaseModalOpen: false,
-      NewReleaseModalOpen: false
+      NewReleaseModalOpen: false,
     });
+  }
+
+  modifyPhoto() {
+    this.setState({
+      modifyAvailability: true,
+    });
+  }
+
+  handleChangeMode(e, { value }) {
+    this.setState({
+      activeMode: value,
+    });
+    var start = ISOFormatDate(CalFirstDay(value, this.state.today));
+    var Request = {
+      grouping: value,
+      start: start,
+      end: ISOFormatDate(this.state.today),
+      photoId: this.state.selImageIDs[0],
+    };
+    this.loadDataForPhotoDiagram(Request);
   }
 
   render() {
@@ -970,6 +1171,12 @@ class PhotoModify extends Component {
     const { activeIndex, activeItem } = this.state;
     const keywords = [];
     const commonReleases = [];
+
+    const ViewMode = [
+      { key: "day", value: "DAY", text: "Daily" },
+      // { key: 'week', value: 'WEEK', text: 'Weekly' },
+      { key: "month", value: "MONTH", text: "Monthly" },
+    ];
 
     this.state.ReleaseScore.forEach((Release, ReleaseIndex) => {
       if (Release > 0) {
@@ -1005,6 +1212,7 @@ class PhotoModify extends Component {
         return <Redirect to="/" />;
       }
     }
+    console.log("***************************", this.state.data);
     return (
       <>
         <MetaTags>
@@ -1015,7 +1223,7 @@ class PhotoModify extends Component {
           currentUser={this.state.currentUser}
           onLogout={this.handleLogout}
         />
-        <Grid className="pages page-index submit_page">
+        <Grid className="pages page-index modify_page">
           <Grid.Row className="content_title">
             <Grid.Column width="8">
               <h2>My Published Photos</h2>
@@ -1097,7 +1305,13 @@ class PhotoModify extends Component {
               </Grid.Row>
             </Grid.Column>
             <Grid.Column width={6} className="image_options">
-              <div className={this.state.showOptions[0]}>
+              <div
+                className={
+                  this.state.modifyAvailability && this.state.photoSelectedFlag
+                    ? "visible"
+                    : "unvisible"
+                }
+              >
                 <Grid.Row>
                   <Form>
                     <Grid.Column className="image_option" width={3}>
@@ -1612,8 +1826,45 @@ class PhotoModify extends Component {
                   </Button>
                 </Grid.Column>
               </div>
-              <div className={this.state.showOptions[1]}>
+              <div
+                className={
+                  this.state.modifyAvailability ? "unvisible" : "visible"
+                }
+              >
+                <Grid.Row
+                  className={
+                    this.state.selImageIDs.length === 1 ? "chart" : "unvisible"
+                  }
+                >
+                  <a>ViewMode:</a>{" "}
+                  <Select
+                    placeholder="Select view mode"
+                    value={this.state.activeMode}
+                    options={ViewMode}
+                    onChange={this.handleChangeMode}
+                  />
+                  {this.state.isDiagramLoading ? (
+                    <LoadingIndicator />
+                  ) : (
+                    <Line
+                      className={
+                        this.state.selImageIDs.length === 1
+                          ? "visible"
+                          : "invisible"
+                      }
+                      ref="chart"
+                      data={this.state.data}
+                    />
+                  )}
+                </Grid.Row>
                 <Grid.Row className="imageOption_Blank">
+                  <Button
+                    primary
+                    onClick={this.modifyPhoto}
+                    disabled={!this.state.photoSelectedFlag}
+                  >
+                    Modify
+                  </Button>
                   <h3>Select an item to add details</h3>
                   <p>Tip: Select multiple items by</p>
                   <p> "Command/Control".</p>
