@@ -5,6 +5,7 @@ import Home from "../Home";
 import Profile from "../User/Profile";
 import AddContent from "../AddContent";
 import SubmitContent from "../AddContent/SubmitContent";
+import Analyse from '../AddContent/Analyse';
 import Admin from "../Admin";
 import Photo_details from "../Photo_details";
 import PhotoModify from "../PhotoModify";
@@ -19,6 +20,7 @@ const routes = (
     <Route path="/user/Profile/:id" exact component={Profile} />
     <Route path="/addcontent" exact component={AddContent} />
     <Route path="/submitcontent" exact component={SubmitContent} />
+    <Route path="/analyse" exact component={Analyse} />
     <Route path="/admin" exact component={Admin} />
     <Route path="/Photo_details/:id" exact component={Photo_details} />
     <Route path="/photomodify" exact component={PhotoModify} />

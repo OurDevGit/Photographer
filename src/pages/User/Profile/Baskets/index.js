@@ -2,7 +2,10 @@ import React, { Component } from "react";
 import { PhotoList } from "../../../../components";
 import { Tab, Input, Button } from "semantic-ui-react";
 import Myphotos from "../Myphotos";
-import { addNewBasketForUser, removeBasketForUser } from "../../../../util/APIUtils";
+import {
+  addNewBasketForUser,
+  removeBasketForUser,
+} from "../../../../util/APIUtils";
 import { notification } from "antd";
 class Baskets extends Component {
   constructor(props) {
@@ -93,49 +96,48 @@ class Baskets extends Component {
     }
   }
 
-  removeBasket(e){
+  removeBasket(e) {
     this.setState({
-      isLoading: true
-    })
+      isLoading: true,
+    });
     removeBasketForUser(e)
-    .then(response=>{
-      if(response.ok){
-        notification.success({
-          message: "Photoing App",
-          description: "",
-        });
-        var temp = this.state.user.baskets;
-        this.state.user.baskets = [];
-        temp.forEach(t=>{
-          if(t.id !== e){
-            this.state.user.baskets.push(t);
-          }
-        });
-        this.setState({
-          user: this.state.user,
-          isLoading: false
-        })
-      }else{
+      .then((response) => {
+        if (response.ok) {
+          notification.success({
+            message: "Photoing App",
+            description: "",
+          });
+          var temp = this.state.user.baskets;
+          this.state.user.baskets = [];
+          temp.forEach((t) => {
+            if (t.id !== e) {
+              this.state.user.baskets.push(t);
+            }
+          });
+          this.setState({
+            user: this.state.user,
+            isLoading: false,
+          });
+        } else {
+          notification.error({
+            message: "Photoing App",
+            description: "Something went worng. Please try again",
+          });
+          this.setState({
+            isLoading: false,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
         notification.error({
           message: "Photoing App",
           description: "Something went worng. Please try again",
         });
         this.setState({
-          isLoading: false
-        })
-      }
-      
-    })
-    .catch(error=>{
-      console.log(error)
-      notification.error({
-        message: "Photoing App",
-        description: "Something went worng. Please try again",
+          isLoading: false,
+        });
       });
-      this.setState({
-        isLoading: false
-      })
-    })
   }
 
   render() {
@@ -148,7 +150,13 @@ class Baskets extends Component {
           render: () => (
             <Tab.Pane>
               <>
-              <Myphotos user={this.state.user} removeBasket={this.removeBasket} basketId={basket.id} type="basket" isLoading={this.state.isLoading} />
+                <Myphotos
+                  user={this.state.user}
+                  removeBasket={this.removeBasket}
+                  basketId={basket.id}
+                  type="basket"
+                  isLoading={this.state.isLoading}
+                />
               </>
             </Tab.Pane>
           ),

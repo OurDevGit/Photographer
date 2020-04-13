@@ -1,16 +1,16 @@
-import React, { Component } from 'react'
-import  { Redirect } from 'react-router-dom'
-import { Grid, GridColumn, Image, Divider, Button } from 'semantic-ui-react'
-import MetaTags from 'react-meta-tags'
-import { getCurrentUser } from '../../util/APIUtils';
-import { ACCESS_TOKEN } from '../../constants';
-import { HomeHeader} from '../../components'
-import UploadPhoto from './UploadPhoto'
-import Footer from './Footer'
-import MultiUploadPhotos from './MultiUploadPhotos'
-import './style.less'
-import {notification} from 'antd'
-import LoadingIndicator  from '../../common/LoadingIndicator';
+import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
+import { Grid, GridColumn, Image, Divider, Button } from "semantic-ui-react";
+import MetaTags from "react-meta-tags";
+import { getCurrentUser } from "../../util/APIUtils";
+import { ACCESS_TOKEN } from "../../constants";
+import { HomeHeader } from "../../components";
+import UploadPhoto from "./UploadPhoto";
+import Footer from "./Footer";
+import MultiUploadPhotos from "./MultiUploadPhotos";
+import "./style.less";
+import { notification } from "antd";
+import LoadingIndicator from "../../common/LoadingIndicator";
 
 class AddContent extends Component {
   constructor(props) {
@@ -18,61 +18,61 @@ class AddContent extends Component {
     this.state = {
       currentUser: null,
       isAuthenticated: false,
-      isLoading: true
-    }
+      isLoading: true,
+    };
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
   }
 
   loadCurrentUser() {
     this.setState({
-      isLoading: true
+      isLoading: true,
     });
     getCurrentUser()
-    .then(response => {
-      this.setState({
-        currentUser: response,
-        isAuthenticated: true,
-        isLoading: false
+      .then((response) => {
+        this.setState({
+          currentUser: response,
+          isAuthenticated: true,
+          isLoading: false,
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          isLoading: false,
+        });
       });
-    }).catch(error => {
-      this.setState({
-        isLoading: false
-      });  
-    });
   }
 
   componentDidMount() {
     this.loadCurrentUser();
   }
 
-  handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
+  handleLogout(
+    redirectTo = "/",
+    notificationType = "success",
+    description = "You're successfully logged out."
+  ) {
     localStorage.removeItem(ACCESS_TOKEN);
-    
+
     this.setState({
       currentUser: null,
-      isAuthenticated: false
+      isAuthenticated: false,
     });
 
     this.props.history.push(redirectTo);
-    
+
     notification[notificationType]({
-      message: 'Photoing App',
+      message: "Photoing App",
       description: description,
     });
   }
 
   render() {
-    if(this.state.isLoading){
-      return(
-          <LoadingIndicator /> 
-      )
-    }else{
-      if(!this.state.currentUser)
-      {
-        return(
-            <Redirect to='/' />
-        )
+    if (this.state.isLoading) {
+      return <LoadingIndicator />;
+    } else {
+      if (!this.state.currentUser) {
+        return <Redirect to="/" />;
       }
     }
     return (
@@ -80,39 +80,37 @@ class AddContent extends Component {
         <MetaTags>
           <title>Openshoot</title>
         </MetaTags>
-        <HomeHeader 
-          isAuthenticated={this.state.isAuthenticated} 
-          currentUser={this.state.currentUser} 
+        <HomeHeader
+          isAuthenticated={this.state.isAuthenticated}
+          currentUser={this.state.currentUser}
           onLogout={this.handleLogout}
         />
-        
+
         <Grid className="pages page-index content_page">
           <Grid.Row>
             <Grid.Column only="computer" width={16}>
-              <div className = "page_title">              
+              <div className="page_title">
                 <h2>Upload Your Content</h2>
               </div>
             </Grid.Column>
             <Grid.Column only="mobile tablet" width={16}>
-              <div className = "mobile_page_title">              
+              <div className="mobile_page_title">
                 <h2>Upload Your Content</h2>
               </div>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column width={16}>              
-                <MultiUploadPhotos />
+            <Grid.Column width={16}>
+              <MultiUploadPhotos />
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column width={16}>              
-              {/* <Footer /> */}
-            </Grid.Column>
+            <Grid.Column width={16}>{/* <Footer /> */}</Grid.Column>
           </Grid.Row>
         </Grid>
       </>
-    )
+    );
   }
 }
 
-export default AddContent
+export default AddContent;

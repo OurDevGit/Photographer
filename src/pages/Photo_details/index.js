@@ -208,7 +208,7 @@ class Photo_details extends Component {
   componentDidMount() {
     this.loadCurrentUser();
     this.loadAllCategories();
-    this.is_like_photo(this.props.match.params.id);
+    // this.is_like_photo(this.props.match.params.id);
     this.loadPhotoDetail(this.props.match.params.id);
     window.addEventListener("keydown", this.keydown);
     window.addEventListener("keyup", this.keyup);

@@ -27,7 +27,11 @@ class Myphotos extends Component {
     return (
       <div className="Myphotos">
         {this.props.type === "basket" ? (
-          <Button negative onClick={this.removeBasket} loading={this.props.isLoading}>
+          <Button
+            negative
+            onClick={this.removeBasket}
+            loading={this.props.isLoading}
+          >
             Remove Basket
           </Button>
         ) : null}

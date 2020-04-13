@@ -911,6 +911,7 @@ class PhotoModify extends Component {
     this.isChecked = !this.isChecked;
     this.state.photoOptions[name] = this.isChecked;
     this.arr_options = this.state.photoOptions;
+    console.log(this.state.photoOptions);
     this.setState({
       photoOptions: this.arr_options,
     });
@@ -929,12 +930,18 @@ class PhotoModify extends Component {
 
   handleSubmit() {
     var updateRequest = [];
+
     for (let i = 0; i < this.state.selImageIDs.length; i++) {
+      this.state.selImage[
+        this.state.selImageIDs[i]
+      ].published = this.state.photoOptions["published"];
+      this.setState({
+        selImage: this.state.selImage,
+      });
       updateRequest.push({
         photoDto: this.state.selImage[this.state.selImageIDs[i]],
       });
     }
-
     photo_update(updateRequest)
       .then((response) => {
         console.log(response);
@@ -1525,245 +1532,14 @@ class PhotoModify extends Component {
                           </Accordion>
                         </Form.Field>
                       </div>
-                      <div class="column">
-                        <Form.Field>
-                          <div class="Releases left">
-                            <h5>
-                              Releases
-                              <Modal
-                                open={this.state.ReleaseModalOpen}
-                                onOpen={this.openReleaseModal}
-                                size="small"
-                                className="Modalcenter"
-                                trigger={
-                                  this.state.activeMenuItem ==
-                                  "TO_BE_SUBMITTED" ? (
-                                    <Icon name="plus" />
-                                  ) : null
-                                }
-                              >
-                                <Modal.Content image>
-                                  <Modal.Description>
-                                    <Icon
-                                      className="ModalClose"
-                                      name="close"
-                                      size="large"
-                                      onClick={this.onCloseModal}
-                                    />
-                                    <Header>Attach releases</Header>
-                                    <div class="column">
-                                      <Form.Field>
-                                        <div class="label">Release Type</div>
-                                        <Select
-                                          fluid
-                                          placeholder="Release Type"
-                                          options={releaseOptions}
-                                          name="release"
-                                          value={this.state.ReleaseType}
-                                          onChange={
-                                            this.handleReleaseTypeChange
-                                          }
-                                        />
-                                      </Form.Field>
-                                    </div>
-                                    <div class="column">
-                                      <Form.Field>
-                                        <div class="label">Sort order</div>
-                                        <Select
-                                          fluid
-                                          placeholder="Sort Order"
-                                          options={sortOptions}
-                                          name="sort"
-                                        />
-                                      </Form.Field>
-                                    </div>
-                                    <div class="column">
-                                      <Form.Field>
-                                        <Input
-                                          fluid
-                                          placeholder="Search..."
-                                          name="search"
-                                          value={this.state.searchReleaseKey}
-                                          onChange={
-                                            this.handleSearchReleaseKeyChange
-                                          }
-                                        />
-                                      </Form.Field>
-                                    </div>
-                                    {/* <div class="releases column">
-                                    You don't have any active releases
-                                  </div> */}
-                                    <div class="column">
-                                      <ListComponent
-                                        type={this.state.ReleaseType}
-                                        searchKey={this.state.searchReleaseKey}
-                                        selImage={this.state.selImage}
-                                        selImageIDs={this.state.selImageIDs}
-                                        ReleaseScore={this.state.ReleaseScore}
-                                        handleClickAttach={
-                                          this.handleClickAttach
-                                        }
-                                      />
-                                    </div>
-                                    <div className="column">
-                                      <Button
-                                        className=""
-                                        fluid
-                                        negative
-                                        onClick={this.onCloseModal}
-                                      >
-                                        Done
-                                      </Button>
-                                    </div>
-                                    <div className="column">
-                                      <input
-                                        accept="image/*"
-                                        type="file"
-                                        class="hide_file"
-                                        onChange={this.onChangeFIle}
-                                      />
-                                      <Button type="submit" className="" fluid>
-                                        Upload a new relesase
-                                      </Button>
-                                    </div>
-                                  </Modal.Description>
-                                </Modal.Content>
-                              </Modal>
-                              <Modal
-                                open={this.state.NewReleaseModalOpen}
-                                size="tiny"
-                                className="Modalcenter"
-                              >
-                                <Modal.Content image>
-                                  <Modal.Description>
-                                    <Header>New releases</Header>
-                                    <div className="column newReleaseFile">
-                                      <label>
-                                        {this.state.releaseFile.name}
-                                      </label>
-                                      <Icon name="pencil" size="large" />
-                                      <input
-                                        accept="image/*"
-                                        type="file"
-                                        class="hide_file"
-                                        onChange={this.onChangeFIle}
-                                      />
-                                    </div>
-                                    <div class="column">
-                                      <Form.Field>
-                                        <label>Releasse name</label>
-                                        <Input
-                                          fluid
-                                          value={this.state.releaseName}
-                                          placeholder=""
-                                          onChange={
-                                            this.handleChangeReleasename
-                                          }
-                                        />
-                                      </Form.Field>
-                                    </div>
-                                    <div class="column">
-                                      <Form.Field>
-                                        <Radio
-                                          label="Model release"
-                                          name="radioGroup"
-                                          value="SUBJECT"
-                                          checked={
-                                            this.state.ReleaseTypevalue ===
-                                            "SUBJECT"
-                                          }
-                                          onChange={this.handleRadioChange}
-                                        />
-                                      </Form.Field>
-                                      <Form.Field>
-                                        <Radio
-                                          label="Property release"
-                                          name="radioGroup"
-                                          value="PROPERTY"
-                                          checked={
-                                            this.state.ReleaseTypevalue ===
-                                            "PROPERTY"
-                                          }
-                                          onChange={this.handleRadioChange}
-                                        />
-                                      </Form.Field>
-                                    </div>
-                                    <div
-                                      id="ReleaseDetail"
-                                      class={this.state.ReleaseTypevalue}
-                                    >
-                                      <div class="column">
-                                        <h3>Model details(optional)</h3>
-                                        <label>
-                                          Add model dtails to help customers
-                                          discover your work
-                                        </label>
-                                      </div>
-                                      <div class="column">
-                                        <Form.Field>
-                                          <div class="label">
-                                            Model echnicity
-                                          </div>
-                                          <Select
-                                            fluid
-                                            placeholder="Model echnicity"
-                                            options={ethnicity}
-                                            name="modelEthnicity"
-                                          />
-                                        </Form.Field>
-                                      </div>
-                                      <div class="column">
-                                        <Form.Field>
-                                          <div class="label">Model age</div>
-                                          <Select
-                                            fluid
-                                            placeholder="Model age"
-                                            options={age}
-                                            name="modelAge"
-                                          />
-                                        </Form.Field>
-                                      </div>
-                                      <div class="column">
-                                        <Form.Field>
-                                          <div class="label">Model gender</div>
-                                          <Select
-                                            fluid
-                                            placeholder="Model gender"
-                                            options={gender}
-                                            name="modelGender"
-                                          />
-                                        </Form.Field>
-                                      </div>
-                                    </div>
-                                    <div className="column">
-                                      <Button
-                                        className=""
-                                        fluid
-                                        negative
-                                        onClick={this.newReleaseUpload}
-                                      >
-                                        Save
-                                      </Button>
-                                    </div>
-                                    <div className="column">
-                                      <Button
-                                        className=""
-                                        fluid
-                                        onClick={this.onCloseModal}
-                                      >
-                                        cancel
-                                      </Button>
-                                    </div>
-                                  </Modal.Description>
-                                </Modal.Content>
-                              </Modal>
-                            </h5>
-                            <p>For recognizable people or property.</p>
-                            <a href="#">Download a release form</a>
-                            <br />
-                            {commonReleases}
-                          </div>
-                        </Form.Field>
+                      <div className="column">
+                        publish/unpublish:{" "}
+                        <Checkbox
+                          value={this.state.photoOptions["published"]}
+                          onChange={this.handleCheck}
+                          name="published"
+                          toggle
+                        />
                       </div>
                     </Grid.Column>
                     <Grid.Column className="image_option" width={3}>

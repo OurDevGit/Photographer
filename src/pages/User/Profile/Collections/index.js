@@ -7,19 +7,19 @@ class Collections extends Component {
     super(props);
     this.state = {
       user: null,
-      isLoading: true
+      isLoading: true,
     };
   }
 
   componentDidMount() {
     this.setState({
-      user: this.props.user
+      user: this.props.user,
     });
   }
 
   componentDidUpdate(nextProps) {}
 
-  ShowCollectionTab = id => {
+  ShowCollectionTab = (id) => {
     return (
       <div className="Myphotos">
         <PhotoList
@@ -36,7 +36,7 @@ class Collections extends Component {
 
   render() {
     const panes_collection = [];
-    this.props.user.collections.forEach(collection => {
+    this.props.user.collections.forEach((collection) => {
       console.log(collection.name);
       panes_collection.push({
         menuItem: collection.name,
@@ -44,7 +44,7 @@ class Collections extends Component {
           <Tab.Pane>
             <Myphotos user={this.state.user} />
           </Tab.Pane>
-        )
+        ),
       });
     });
 
