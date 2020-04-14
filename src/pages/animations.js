@@ -8,7 +8,7 @@ function stepsAnimation() {
     delay    : 5500,
     easing   : 'easeInOutQuad',
     complete() {
-      document.querySelector('.step1 .green-wave-circle').style.borderColor = '#00d1c155'
+      document.querySelector('.step1 .green-wave-circle').style.borderColor = '#FF01010255'
       anime({
         targets  : '.step1 .green-wave-circle',
         opacity  : [0.4, 0],
@@ -56,7 +56,7 @@ function stepsAnimation() {
     delay    : 10000,
     easing   : 'easeInOutQuad',
     complete() {
-      document.querySelector('.step2 .green-wave-circle').style.borderColor = '#00d1c155'
+      document.querySelector('.step2 .green-wave-circle').style.borderColor = '#FF01010255'
       anime({
         targets  : '.step2 .green-wave-circle',
         opacity  : [0.4, 0],
@@ -99,7 +99,7 @@ function stepsAnimation() {
     complete() {
       const waveCircle = document.querySelector('.step3 .green-wave-circle')
       const waveCirclestyle = waveCircle ? waveCircle.style : { borderColor: '' }
-      waveCirclestyle.borderColor = '#00d1c155'
+      waveCirclestyle.borderColor = '#FF01010255'
       anime({
         targets  : '.step3 .green-wave-circle',
         opacity  : [0.4, 0],

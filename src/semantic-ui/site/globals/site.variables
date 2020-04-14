@@ -2,7 +2,7 @@
      User Global Variables
 *******************************/
 
-@primaryColor: #00D1C1;
+@primaryColor: #FF010102;
 @pageBackground: #F7F7F7;
 @emSize: 14px;
 

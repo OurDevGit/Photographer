@@ -5,16 +5,16 @@
 @checkboxCheckFontSize: 12px;
 
 /* Pressed */
-@checkboxPressedBackground: #00D1C1;
-@checkboxPressedBorderColor: #00D1C1;
+@checkboxPressedBackground: #FF010102;
+@checkboxPressedBorderColor: #FF010102;
 @checkboxPressedColor: #fff;
 
 /* Active */
-@checkboxActiveBackground: #00D1C1;
-@checkboxActiveBorderColor: #00D1C1;
+@checkboxActiveBackground: #FF010102;
+@checkboxActiveBorderColor: #FF010102;
 @checkboxActiveCheckColor: #fff;
 @checkboxActiveCheckOpacity: 1;
 
-@checkboxActiveFocusBackground: #00D1C1;
-@checkboxActiveFocusBorderColor: #00D1C1;
+@checkboxActiveFocusBackground: #FF010102;
+@checkboxActiveFocusBorderColor: #FF010102;
 @checkboxActiveFocusCheckColor: #fff;

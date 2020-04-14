@@ -11,7 +11,7 @@ const colorSchema = {
   },
   online: {
     secondary : 'rgba(59, 232, 218, 0.4)',
-    primary   : '#00D1c1'
+    primary   : '#FF010102'
   }
 }
 

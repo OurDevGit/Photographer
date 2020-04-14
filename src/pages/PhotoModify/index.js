@@ -1634,7 +1634,7 @@ class PhotoModify extends Component {
                   )}
                 </Grid.Row>
                 <Grid.Row className="imageOption_Blank">
-                  <Button
+                  <Button className="modify_button"
                     primary
                     onClick={this.modifyPhoto}
                     disabled={!this.state.photoSelectedFlag}
