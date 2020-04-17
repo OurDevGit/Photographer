@@ -394,6 +394,27 @@ export function getSimilarPhotos(id) {
   });
 }
 
+export function getPublishedPhotos(id) {
+  return request({
+    url: API_BASE_URL + "/photo_details_controller/user_photos_published/" + id,
+    method: "GET",
+  });
+}
+
+export function getDownloadedPhotos(id) {
+  return request({
+    url: API_BASE_URL + "/photo_details_controller/user_photos_downloadeded/" + id,
+    method: "GET",
+  });
+}
+
+export function getPhotoAuthDownload(id) {
+  return request({
+    url: API_BASE_URL + "/photo_details_controller/photo_auth_download/" + id,
+    method: "GET",
+  });
+}
+
 export function getSameCollection(id) {
   return request({
     url: API_BASE_URL + "/photo_details_controller/same_collection/" + id,
@@ -505,6 +526,14 @@ export function removeToLike(Request) {
   });
 }
 
+export function download(Request) {
+  return request_text({
+    url: API_BASE_URL + "/user_actions/photo_actions_controller/download",
+    method: "POST",
+    body: Request,
+  });
+}
+
 export function getUsers(page, size) {
   return request({
     url:
@@ -561,6 +590,38 @@ export function getPublicUsers(page, size) {
     url:
       API_BASE_URL + "/public/users/getUserList?page=" + page + "&size=" + size,
     method: "GET",
+  });
+}
+
+export function get_followers() {
+  return request({
+    url:
+      API_BASE_URL + "/social/following/get_followers",
+    method: "GET",
+  });
+}
+
+export function get_suggested_followers() {
+  return request({
+    url:
+      API_BASE_URL + "/social/following/get_suggested_followers",
+    method: "GET",
+  });
+}
+
+export function add_follower(Request) {
+  return request_text({
+    url: API_BASE_URL + "/social/following/add_follower",
+    method: "POST",
+    body: Request,
+  });
+}
+
+export function remove_follower(Request) {
+  return request_text({
+    url: API_BASE_URL + "/social/following/remove_follower",
+    method: "POST",
+    body: Request,
   });
 }
 

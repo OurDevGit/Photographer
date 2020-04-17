@@ -219,14 +219,6 @@ class Profile extends Component {
         ),
       },
       {
-        menuItem: "Analyse",
-        render: () => (
-          <Tab.Pane>
-            <Analyse user={this.state.user} />
-          </Tab.Pane>
-        ),
-      },
-      {
         menuItem: "My Downloaded Photos",
         render: () => (
           <Tab.Pane>

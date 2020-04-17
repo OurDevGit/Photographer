@@ -13,7 +13,7 @@ export function formatDate(dateString) {
     "September",
     "October",
     "November",
-    "December"
+    "December",
   ];
 
   const monthIndex = date.getMonth();
@@ -37,7 +37,7 @@ export function formatDateTime(dateTimeString) {
     "Sep",
     "Oct",
     "Nov",
-    "Dec"
+    "Dec",
   ];
 
   const monthIndex = date.getMonth();

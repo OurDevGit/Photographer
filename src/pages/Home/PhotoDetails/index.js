@@ -5,7 +5,7 @@ import {
   Heart_Icon,
   Plus_Icon,
   Zoom_Icon,
-  CloseIcon
+  CloseIcon,
 } from "../../../assets/icons";
 import "./style.less";
 
@@ -13,7 +13,7 @@ class PhotoDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      rating: 108
+      rating: 108,
     };
     this.handleClose = this.handleClose.bind(this);
     this.addToPreferred = this.addToPreferred.bind(this);
@@ -25,7 +25,7 @@ class PhotoDetails extends Component {
 
   addToPreferred() {
     this.setState({
-      rating: this.state.rating + 1
+      rating: this.state.rating + 1,
     });
   }
 

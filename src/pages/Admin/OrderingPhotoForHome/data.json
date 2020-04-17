@@ -1,24 +1,23 @@
 {
-    "lanes": [
-      {
-        "id": "PLANNED",
-        "title": "Publicated Photos",
-        "label": "",
-        "style": {
-          "width": 400,
-          "border-right": "1px solid"
-        },
-        "cards": []
+  "lanes": [
+    {
+      "id": "PLANNED",
+      "title": "Publicated Photos",
+      "label": "",
+      "style": {
+        "width": 400,
+        "border-right": "1px solid"
       },
-      {
-        "id": "HOMELIST",
-        "title": "First",
-        "label": "",
-        "style": {
-          "width": 400
-        },
-        "cards": []
-      }
-    ]
-  }
-  
+      "cards": []
+    },
+    {
+      "id": "HOMELIST",
+      "title": "First",
+      "label": "",
+      "style": {
+        "width": 400
+      },
+      "cards": []
+    }
+  ]
+}

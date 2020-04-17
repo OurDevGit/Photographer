@@ -80,7 +80,11 @@ class HomeHeader extends React.Component {
             <PaperPlaneIcon className="paper-plane-icon" />
             <Dropdown text="My usage" icon="">
               <Dropdown.Menu>
-                <Dropdown.Item text="My Downloaded Photo" as={NavLink} to="/" />
+                <Dropdown.Item
+                  text="My Downloaded Photo"
+                  as={NavLink}
+                  to="/downloadedPhotos"
+                />
               </Dropdown.Menu>
             </Dropdown>
           </Menu.Item>,
@@ -91,6 +95,9 @@ class HomeHeader extends React.Component {
                 <Dropdown.Item text="My Follows" as={NavLink} to="/" />
               </Dropdown.Menu>
             </Dropdown>
+          </Menu.Item>,
+          <Menu.Item as={NavLink} to="/">
+            <Icon name="alarm" />
           </Menu.Item>,
           <Menu.Item className="myAccount">
             <Avatar fullname={currentUser.username} status="online" />
@@ -112,17 +119,48 @@ class HomeHeader extends React.Component {
       } else {
         if (currentUser.authorities[0].authority == "ROLE_USER") {
           menuItems = [
-            <Menu.Item as={NavLink} to="/addContent">
+            <Menu.Item>
               <StarIcon className="star-icon" />
-              My contributions
+              <Dropdown text="My contributions" icon="">
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    text="Add content"
+                    as={NavLink}
+                    to="/addContent"
+                  />
+                  <Dropdown.Item
+                    text="Submission Manager"
+                    as={NavLink}
+                    to="/submitContent"
+                  />
+                  <Dropdown.Item
+                    text="Published Photos"
+                    as={NavLink}
+                    to="/photomodify"
+                  />
+                  <Dropdown.Item text="Analyse" as={NavLink} to="/analyse" />
+                </Dropdown.Menu>
+              </Dropdown>
             </Menu.Item>,
-            <Menu.Item as={NavLink} to="/submitContent">
+            <Menu.Item>
               <PaperPlaneIcon className="paper-plane-icon" />
-              My submitted Photos
+              <Dropdown text="My usage" icon="">
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    text="My Downloaded Photo"
+                    as={NavLink}
+                    to="/downloadedPhotos"
+                  />
+                </Dropdown.Menu>
+              </Dropdown>
             </Menu.Item>,
-            <Menu.Item as={NavLink} to="/photomodify">
+            <Menu.Item>
               <PaperPlaneIcon className="paper-plane-icon" />
-              My Photos
+              <Dropdown text="My Community" icon="">
+                <Dropdown.Menu>
+                  <Dropdown.Item text="My Follows" as={NavLink} to="/" />
+                </Dropdown.Menu>
+              </Dropdown>
             </Menu.Item>,
             <Menu.Item as={NavLink} to="/">
               <Icon name="alarm" />

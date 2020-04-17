@@ -6,6 +6,7 @@ import {
   Label,
   Comment,
   TextArea,
+  Modal,
 } from "semantic-ui-react";
 import MetaTags from "react-meta-tags";
 import { NavLink, Redirect } from "react-router-dom";
@@ -21,6 +22,8 @@ import {
   getViewsAmount,
   add_comment,
   getSameCollection,
+  download,
+  getPhotoAuthDownload
 } from "../../util/APIUtils";
 import { ACCESS_TOKEN, HOST_URL } from "../../constants";
 import {
@@ -64,6 +67,7 @@ class Photo_details extends Component {
       commitFlag: false,
       isCtrlKey: false,
       sameCollectionPhotos: [],
+      opne: false
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -82,6 +86,9 @@ class Photo_details extends Component {
     this.addComment = this.addComment.bind(this);
     this.loadSameCollectionPhotos = this.loadSameCollectionPhotos.bind(this);
     this.sameTagPhotos = this.sameTagPhotos.bind(this);
+    this.photoDownload = this.photoDownload.bind(this);
+    this.modalclose =  this.modalclose.bind(this);
+    this.downloadPDF =  this.downloadPDF.bind(this);
   }
 
   loadCurrentUser() {
@@ -282,32 +289,48 @@ class Photo_details extends Component {
   }
 
   addToBucket() {
-    this.setState({
-      BucketShow: true,
-    });
+    if (this.state.currentUser) {
+      this.setState({
+        BucketShow: true,
+      });
+    } else {
+      notification.warning({
+        message: "Openshoots",
+        description: "Please login with your account.",
+      });
+      this.props.history.push("/user/LoginAndSignUp");
+    }
   }
   goBack() {
     this.props.history.goBack();
   }
 
   addLike() {
-    if (this.state.likeFlag == false) {
-      addToLike(this.props.match.params.id)
-        .then((response) => {
-          this.state.likes = this.state.likes + 1;
-          this.setState({
-            likes: this.state.likes,
-            likeFlag: true,
+    if (this.state.currentUser) {
+      if (this.state.likeFlag == false) {
+        addToLike(this.props.match.params.id)
+          .then((response) => {
+            this.state.likes = this.state.likes + 1;
+            this.setState({
+              likes: this.state.likes,
+              likeFlag: true,
+            });
+          })
+          .catch((error) => {
+            console.log("error", error);
           });
-        })
-        .catch((error) => {
-          console.log("error", error);
+      } else {
+        notification.success({
+          message: "Photoing App",
+          description: "This photo is already your liked photo",
         });
+      }
     } else {
-      notification.success({
-        message: "Photoing App",
-        description: "This photo is already your liked photo",
+      notification.warning({
+        message: "Openshoots",
+        description: "Please login with your account.",
       });
+      this.props.history.push("/user/LoginAndSignUp");
     }
   }
 
@@ -334,39 +357,94 @@ class Photo_details extends Component {
   }
 
   addComment() {
-    var Request = {
-      photo: this.props.match.params.id,
-      user: this.state.currentUser.id,
-      content: this.state.commentContent,
-    };
-    this.setState({
-      isSendCommentLoading: true,
-    });
-    add_comment(Request)
-      .then((response) => {
-        if (response.ok) {
-          this.setState({
-            commitFlag: !this.state.commitFlag,
-            isSendCommentLoading: false,
-            commentContent: "",
-          });
-        } else {
-          this.setState({
-            isSendCommentLoading: false,
-          });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        this.setState({
-          isSendCommentLoading: false,
-        });
+    if (this.state.currentUser) {
+      var Request = {
+        photo: this.props.match.params.id,
+        user: this.state.currentUser.id,
+        content: this.state.commentContent,
+      };
+      this.setState({
+        isSendCommentLoading: true,
       });
+      add_comment(Request)
+        .then((response) => {
+          if (response.ok) {
+            this.setState({
+              commitFlag: !this.state.commitFlag,
+              isSendCommentLoading: false,
+              commentContent: "",
+            });
+          } else {
+            this.setState({
+              isSendCommentLoading: false,
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          this.setState({
+            isSendCommentLoading: false,
+          });
+        });
+    } else {
+      notification.warning({
+        message: "Openshoots",
+        description: "Please login with your account.",
+      });
+      this.props.history.push("/user/LoginAndSignUp");
+    }
   }
 
   sameTagPhotos(e) {
     console.log(e.target.id);
     this.props.history.push("/?tag=" + e.target.id);
+  }
+
+  photoDownload() {
+    download(this.state.selImage.id)
+      .then((response) => {
+        console.log(response);
+        response.text().then((text) => {
+          if (response.ok) {
+            console.log(text);
+            // window.open(text)
+            this.Filedownload(text, "dddd");
+            this.setState({
+              open: true
+            })
+          }
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  Filedownload(filename, text) {
+    var element = document.createElement("a");
+    element.setAttribute("href", filename);
+    element.setAttribute("download", filename);
+    element.style.display = "none";
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  }
+
+  downloadPDF(){
+    getPhotoAuthDownload(this.state.selImage.id)
+    .then(response=>{
+      console.log(response)
+    })
+    .catch(error=>{
+      console.log(error)
+    })
+    this.modalclose();
+  }
+
+  modalclose(){
+    this.setState({
+      open: false
+    })
   }
 
   render() {
@@ -459,13 +537,8 @@ class Photo_details extends Component {
                   </Button>
                   <a
                     target="blank"
-                    href={
-                      downloadUrl
-                      // this.state.isFollower
-                      //   ? downloadUrl
-                      //   : this.state.followerUrl
-                    }
                     className="ImageButton followAndDownload"
+                    onClick={this.photoDownload}
                   >
                     <AnimateButton content="Download" IconName="download" />
                   </a>
@@ -753,6 +826,29 @@ class Photo_details extends Component {
               </Grid.Column>
             </Grid.Row>
           </Grid>
+          <Modal
+            open={this.state.open}
+            closeOnEscape={false}
+            closeOnDimmerClick={true}
+            onClose={this.modalclose}
+            className="Basicmodal"
+            basic
+            size="small"
+          >
+            <Modal.Content>
+              <p>
+                Do you want to download pdf?
+              </p>
+            </Modal.Content>
+            <Modal.Actions>
+              <Button basic color="red" inverted onClick={this.modalclose}>
+                <Icon name="remove" /> No
+              </Button>
+              <Button color="green" inverted onClick={this.downloadPDF}>
+                <Icon name="checkmark" /> Yes
+              </Button>
+            </Modal.Actions>
+          </Modal>
         </>
       );
     }

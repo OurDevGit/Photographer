@@ -6,7 +6,7 @@ class PersonalInfo extends Component {
     super(props);
     this.state = {
       user: null,
-      isLoading: true
+      isLoading: true,
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSave = this.handleSave.bind(this);
@@ -14,7 +14,7 @@ class PersonalInfo extends Component {
 
   componentDidMount() {
     this.setState({
-      user: this.props.user
+      user: this.props.user,
     });
   }
 
@@ -26,7 +26,7 @@ class PersonalInfo extends Component {
     console.log(name, this.state.user);
     this.state.user[name] = value;
     this.setState({
-      user: this.state.user
+      user: this.state.user,
     });
   }
 
@@ -66,7 +66,7 @@ class PersonalInfo extends Component {
                 // options={genderOptions}
                 label={{
                   children: "Gender",
-                  htmlFor: "form-select-control-gender"
+                  htmlFor: "form-select-control-gender",
                 }}
                 placeholder="Gender"
                 search

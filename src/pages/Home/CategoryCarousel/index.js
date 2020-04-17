@@ -12,7 +12,7 @@ class CategoryCarousel extends React.Component {
     super(props);
     this.state = {
       isLoading: false,
-      categories: []
+      categories: [],
     };
   }
 
@@ -25,7 +25,7 @@ class CategoryCarousel extends React.Component {
     }, 500);
   }
 
-  afterChange = id => {
+  afterChange = (id) => {
     if (id === this.slider.props.children.length - 1) {
       this.slider.slickPause();
       document
@@ -44,14 +44,14 @@ class CategoryCarousel extends React.Component {
       autoplay: true,
       autoplaySpeed: 8000,
       pauseOnHover: false,
-      afterChange: this.afterChange
+      afterChange: this.afterChange,
     };
     return (
       <section id="learn-more" className="category-carousel-section">
         <Grid container>
           <Grid.Row>
             <Grid.Column width={16}>
-              <Slider {...settings} ref={c => (this.slider = c)}>
+              <Slider {...settings} ref={(c) => (this.slider = c)}>
                 {this.props.categories.map((slide, index) => (
                   <div key={index}>
                     <div className="category_content">

@@ -9,6 +9,7 @@ import {
   getAdminPublicationPhotoList,
   getPhotoListsForSearch,
   getPhotoListsForSearchByTag,
+  getDownloadedPhotos,
 } from "../../../util/APIUtils";
 import Photo from "../Photo";
 import { castVote } from "../../../util/APIUtils";
@@ -58,7 +59,11 @@ class PhotoList extends Component {
         promise = getSubmitPhotos();
       } else if (this.props.type == "admin_photolist") {
         promise = getAdminPublicationPhotoList(this.props.status);
-      } else {
+      }
+       else if( this.props.type == "downloaded_photolist"){
+        promise = getDownloadedPhotos(this.props.currentUser.id)
+      }
+      else {
         if (this.props.searchOptions && this.props.searchOptions.length > 0) {
           promise = getPhotoListsForSearch(
             page,
@@ -120,9 +125,10 @@ class PhotoList extends Component {
             isLoading: false,
           });
         });
-    } else if (this.props.type == "admin_photolist") {
+    } else if (this.props.type == "admin_photolist" || this.props.type === "downloaded_photolist") {
       promise
         .then((response) => {
+          console.log("####################",response)
           this.setState({
             photos: response,
             photo_list: response,
@@ -401,7 +407,10 @@ class PhotoList extends Component {
             </InfiniteScroll>
           </div>
         ) : this.props.type == "home_list" &&
-          this.props.totalPages == 0 ? null : (
+          this.props.totalPages == 0 ? null : this.props.type ===
+          "downloaded_photolist" ? (
+          <Gallery photos={samphotosq} renderImage={this.ImageRender} />
+        ) : (
           photoViews
         )}
 

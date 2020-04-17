@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 import { Grid, GridColumn, Image, Divider } from "semantic-ui-react";
 import MetaTags from "react-meta-tags";
 import Gallery from "react-photo-gallery";
@@ -6,27 +7,24 @@ import {
   getCurrentUser,
   getAllCategories,
   getPhotoLists,
-} from "../../util/APIUtils";
-import { ACCESS_TOKEN, PHOTO_LIST_SIZE } from "../../constants";
+} from "../../../util/APIUtils";
+import { ACCESS_TOKEN, PHOTO_LIST_SIZE } from "../../../constants";
 import {
   HomeHeader,
   SearchBar,
   PhotoList,
   Pagination_Component,
-} from "../../components";
-import Footer from "./Footer";
-import CategoryCarousel from "./CategoryCarousel";
-import PhotoDetails from "./PhotoDetails";
-import Bucket from "./Bucket";
-import "./style.less";
+} from "../../../components";
+// import "./style.less";
 import { notification } from "antd";
-class Home extends Component {
+import LoadingIndicator from "../../../common/LoadingIndicator";
+class DownloadedPhotos extends Component {
   constructor(props) {
     super(props);
     this.state = {
       currentUser: null,
       isAuthenticated: false,
-      isLoading: false,
+      isLoading: true,
       categories: [],
       ImageShow: false,
       selImage: {},
@@ -99,11 +97,10 @@ class Home extends Component {
 
   componentDidMount() {
     this.loadCurrentUser();
-    this.loadAllCategories();
+    // this.loadAllCategories();
     this.getTotalpages();
     window.addEventListener("keydown", this.keydown);
     window.addEventListener("keyup", this.keyup);
-    console.log(this.props.location.search.split("="));
   }
 
   keydown = (e) => {
@@ -213,6 +210,13 @@ class Home extends Component {
     if (this.props.location.search.split("=")[0] === "?tag") {
       var tagSearch = this.props.location.search.split("=")[1];
     }
+    if (this.state.isLoading) {
+      return <LoadingIndicator />;
+    }
+    if (!this.state.isLoading && !this.state.currentUser) {
+      return <Redirect to="/" />;
+    }
+    console.log(this.state.currentUser);
     return (
       <>
         <MetaTags>
@@ -226,15 +230,8 @@ class Home extends Component {
         <Grid className="pages page-index homeContent">
           <Grid.Row>
             <Grid.Column width={16}>
-              <SearchBar clickSearch={this.clickSearch} />
-            </Grid.Column>
-            {/* <GridColumn only='computer' width={16}>
-              <CategoryCarousel categories={this.state.categories} />
-            </GridColumn> */}
-
-            <Grid.Column width={16}>
               <PhotoList
-                type="home_list"
+                type="downloaded_photolist"
                 onClickImage={this.handleImageClick}
                 addToBucket={this.addToBucket}
                 activePage={this.state.activePage}
@@ -243,31 +240,14 @@ class Home extends Component {
                 viewOwner={this.viewOwner}
                 searchOptions={this.state.searchOptions}
                 tagSearch={tagSearch}
-              />
-              {/* <Gallery photos={photos}  /> */}
-              <PhotoDetails
-                show={this.state.ImageShow}
-                photo={this.state.selImage}
-                handleClose={this.CloseImageModal}
-                addToBucket={this.addToBucket}
-              />
-              <Bucket
-                show={this.state.BucketShow}
-                photo={this.state.selImage}
-                handleClose={this.CloseBucketModal}
+                username={this.state.currentUser.username}
+                currentUser={this.state.currentUser}
               />
             </Grid.Column>
-            <Grid.Column className="PageNation" width="16">
-              {/* <Pagination_Component 
-                totalPages = {this.state.totalPages}
-                onChangePage = {this.onChangePage}
-              /> */}
-            </Grid.Column>
-            <Grid.Column width="16">{/* <Footer /> */}</Grid.Column>
           </Grid.Row>
         </Grid>
       </>
     );
   }
 }
-export default Home;
+export default DownloadedPhotos;

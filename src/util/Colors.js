@@ -21,7 +21,7 @@ const colors = [
   "#39bbb0",
   "#4CAF50",
   "#ffeb3b",
-  "#ffc107"
+  "#ffc107",
 ];
 
 export function getAvatarColor(name) {

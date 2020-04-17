@@ -12,10 +12,10 @@ class Security extends Component {
       InputType: {
         old: false,
         new: false,
-        confirm: false
+        confirm: false,
       },
       password: [],
-      ValidateFlag: []
+      ValidateFlag: [],
     };
     this.showPassword = this.showPassword.bind(this);
     this.handleChangeInput = this.handleChangeInput.bind(this);
@@ -24,14 +24,14 @@ class Security extends Component {
 
   componentDidMount() {
     this.setState({
-      user: this.props.user
+      user: this.props.user,
     });
   }
 
   showPassword(e, { value }) {
     this.state.InputType[value] = !this.state.InputType[value];
     this.setState({
-      InputType: this.state.InputType
+      InputType: this.state.InputType,
     });
   }
 
@@ -44,7 +44,7 @@ class Security extends Component {
     }
     this.setState({
       password: this.state.password,
-      ValidateFlag: this.state.ValidateFlag
+      ValidateFlag: this.state.ValidateFlag,
     });
     console.log(this.state.password);
   }
@@ -69,45 +69,45 @@ class Security extends Component {
     } else {
       var UpdatePassword = {
         newPassword: this.state.password["newPassword"],
-        oldPassword: this.state.password["oldPassword"]
+        oldPassword: this.state.password["oldPassword"],
       };
       this.setState({
-        isLoading: true
+        isLoading: true,
       });
       update_password(UpdatePassword)
-        .then(response => {
+        .then((response) => {
           console.log("response", response);
           this.setState({
             isLoading: false,
-            password: []
+            password: [],
           });
           if (response.ok) {
             notification.success({
               message: "Photoing App",
-              description: "Successfully changed your password"
+              description: "Successfully changed your password",
             });
           } else {
             notification.error({
               message: "Photoing App",
               description:
-                "Your old password is not correct. Please put correct your password."
+                "Your old password is not correct. Please put correct your password.",
             });
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("error", error);
           this.setState({
-            isLoading: false
+            isLoading: false,
           });
           notification.error({
             message: "Photoing App",
             description:
-              "Sorry. There are some problems to update. Please try again"
+              "Sorry. There are some problems to update. Please try again",
           });
         });
     }
     this.setState({
-      ValidateFlag: this.state.ValidateFlag
+      ValidateFlag: this.state.ValidateFlag,
     });
   }
 
@@ -142,7 +142,7 @@ class Security extends Component {
             this.state.ValidateFlag["oldPassword"]
               ? {
                   content: "This field is required",
-                  pointing: "below"
+                  pointing: "below",
                 }
               : null
           }
@@ -169,7 +169,7 @@ class Security extends Component {
             this.state.ValidateFlag["newPassword"]
               ? {
                   content: "This field is required",
-                  pointing: "below"
+                  pointing: "below",
                 }
               : null
           }
@@ -196,7 +196,7 @@ class Security extends Component {
             this.state.ValidateFlag["confirmPassword"]
               ? {
                   content: "Password is not matching. Please put again",
-                  pointing: "below"
+                  pointing: "below",
                 }
               : null
           }

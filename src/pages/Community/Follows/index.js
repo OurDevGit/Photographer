@@ -3,7 +3,7 @@ import { UserCard, HomeHeader } from "../../../components";
 import { getPublicUsers, getCurrentUser } from "../../../util/APIUtils";
 import LoadingIndicator from "../../../common/LoadingIndicator";
 import { Grid } from "semantic-ui-react";
-import './style.less'
+import "./style.less";
 class Follows extends Component {
   constructor(props) {
     super(props);
@@ -72,7 +72,7 @@ class Follows extends Component {
               />
               {/* </Grid.Column>
             <Grid.Column width='16'> */}
-              <div className='followersList'>
+              <div className="followersList">
                 <a>
                   <h3>Followed Users</h3>
                 </a>
