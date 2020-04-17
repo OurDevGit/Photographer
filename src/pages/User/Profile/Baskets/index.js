@@ -18,6 +18,7 @@ class Baskets extends Component {
     this.handleChangeBasketName = this.handleChangeBasketName.bind(this);
     this.addNewBasket = this.addNewBasket.bind(this);
     this.removeBasket = this.removeBasket.bind(this);
+    this.handleImageClick =  this.handleImageClick.bind(this)
   }
 
   componentDidMount() {
@@ -140,11 +141,15 @@ class Baskets extends Component {
       });
   }
 
+  handleImageClick(e){
+    this.props.handleImageClick(e);
+  }
+
   render() {
     const panes_basket = [];
     if (this.state.user) {
       this.props.user.baskets.forEach((basket) => {
-        console.log(basket.value);
+        console.log(basket);
         panes_basket.push({
           menuItem: basket.value,
           render: () => (
@@ -156,6 +161,7 @@ class Baskets extends Component {
                   basketId={basket.id}
                   type="basket"
                   isLoading={this.state.isLoading}
+                  handleImageClick = {this.handleImageClick}
                 />
               </>
             </Tab.Pane>

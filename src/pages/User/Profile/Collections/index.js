@@ -37,12 +37,12 @@ class Collections extends Component {
   render() {
     const panes_collection = [];
     this.props.user.collections.forEach((collection) => {
-      console.log(collection.name);
+      console.log(collection);
       panes_collection.push({
         menuItem: collection.name,
         render: () => (
           <Tab.Pane>
-            <Myphotos user={this.state.user} />
+            <Myphotos user={this.props.user} type='collection' />
           </Tab.Pane>
         ),
       });

@@ -26,6 +26,7 @@ class CategoriesAndTags extends Component {
       IconUrl: "",
       open: false,
       selected: {},
+      editValue: ""
     };
     this.loadAllCategories = this.loadAllCategories.bind(this);
     this.loadAllTags = this.loadAllTags.bind(this);
@@ -35,6 +36,7 @@ class CategoriesAndTags extends Component {
     this.handleClickTag = this.handleClickTag.bind(this);
     this.modalclose = this.modalclose.bind(this);
     this.handleFileUpload = this.handleFileUpload.bind(this);
+    this.handleInputEdit =  this.handleInputEdit.bind(this)
   }
   componentDidMount() {
     this.loadAllTags();
@@ -173,7 +175,14 @@ class CategoriesAndTags extends Component {
       open: true,
       selected: { type: "tag", object: this.state.tags[e.target.id] },
       IconUrl: this.state.tags[e.target.id].icon,
+      editValue: this.state.tags[e.target.id].value
     });
+  }
+
+  handleInputEdit(e, {value}){
+    this.setState({
+      editValue: value
+    })
   }
 
   modalclose() {
@@ -312,7 +321,8 @@ class CategoriesAndTags extends Component {
                   name="newTag"
                   placeholder="New Tag..."
                   action
-                  onChange={this.handleInputChange}
+                  onChange={this.handleInputEdit}
+                  value={this.state.editValue}
                 >
                   <input />
                   <Button type="button" onClick={this.handleEditTag}>

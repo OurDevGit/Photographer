@@ -71,7 +71,7 @@ class PhotoBox extends Component {
                     trigger={
                         <img
                             id={this.props.photo.id}
-                            src={this.props.photo.url_mr}
+                            src={this.props.photo.url_mr || this.props.photo.url_lr}
                             width={this.props.photo.width}
                             height={this.props.photo.height}
                             // {...this.props.photo}

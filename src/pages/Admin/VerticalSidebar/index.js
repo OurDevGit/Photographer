@@ -38,7 +38,7 @@ export default class VerticalSidebar extends Component {
         animation={animation}
         direction={direction}
         icon="labeled"
-        inverted
+        
         vertical
         visible={visible}
         // width='thin'

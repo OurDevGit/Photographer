@@ -22,6 +22,7 @@ import {
   addToBasketForPhoto,
 } from "../../../util/APIUtils";
 import "./style.less";
+import {notification} from 'antd'
 
 class Bucket extends Component {
   buckets = [
@@ -66,7 +67,7 @@ class Bucket extends Component {
         let basketlist = response.map((basket) => {
           return {
             key: basket.id,
-            value: basket.value,
+            value: basket.id,
             text: basket.value,
           };
         });
@@ -110,6 +111,8 @@ class Bucket extends Component {
   };
 
   handleMultiSelectChange = (e, { value }) => {
+    console.log("value", value)
+    console.log("baskets", this.state.currentBucketValues)
     if (value.length > this.state.currentBucketValues.length) {
       let i = 0;
       for (i = 0; i < this.state.baskets.length; i++) {
@@ -132,12 +135,28 @@ class Bucket extends Component {
       photoId: this.props.photo.id,
       baskets: this.state.currentBucketValues,
     };
+    console.log(Request)
     addToBasketForPhoto(Request)
       .then((response) => {
-        console.log(response);
+        if(response.ok)
+        {
+          notification.success({
+            message: "Openshoots",
+            description: "Successfully added photo to selected baskets!",
+          });
+          this.handleClose();
+        }else{
+          notification.error({
+            message: "Openshoots",
+            description: "Something went wrong. Please try again.",
+          });
+        }
       })
       .catch((error) => {
-        console.log(error);
+        notification.error({
+          message: "Openshoots",
+          description: "Something went wrong. Please try again.",
+        });
       });
   }
 

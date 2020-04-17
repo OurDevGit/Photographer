@@ -10,6 +10,7 @@ import {
   getPhotoListsForSearch,
   getPhotoListsForSearchByTag,
   getDownloadedPhotos,
+  getListBasketsContent,
 } from "../../../util/APIUtils";
 import Photo from "../Photo";
 import { castVote } from "../../../util/APIUtils";
@@ -59,11 +60,11 @@ class PhotoList extends Component {
         promise = getSubmitPhotos();
       } else if (this.props.type == "admin_photolist") {
         promise = getAdminPublicationPhotoList(this.props.status);
-      }
-       else if( this.props.type == "downloaded_photolist"){
-        promise = getDownloadedPhotos(this.props.currentUser.id)
-      }
-      else {
+      } else if (this.props.type == "downloaded_photolist") {
+        promise = getDownloadedPhotos(this.props.currentUser.id);
+      } else if (this.props.type === "basket") {
+        promise = getListBasketsContent(this.props.basketId);
+      } else {
         if (this.props.searchOptions && this.props.searchOptions.length > 0) {
           promise = getPhotoListsForSearch(
             page,
@@ -125,10 +126,14 @@ class PhotoList extends Component {
             isLoading: false,
           });
         });
-    } else if (this.props.type == "admin_photolist" || this.props.type === "downloaded_photolist") {
+    } else if (
+      this.props.type == "admin_photolist" ||
+      this.props.type === "downloaded_photolist" ||
+      this.props.type === "basket"
+    ) {
       promise
         .then((response) => {
-          console.log("####################",response)
+          console.log("####################", response);
           this.setState({
             photos: response,
             photo_list: response,
@@ -225,6 +230,22 @@ class PhotoList extends Component {
     }
     if (this.props.searchOptions != prevProps.searchOptions) {
       console.log("SearchOPtionsfrsfafwefwef", this.props.searchOptions);
+      this.setState({
+        photos: [],
+        photo_list: [],
+        page: 0,
+        totalElements: 0,
+        totalPages: 0,
+        last: false,
+        currentVotes: [],
+        isLoading: false,
+        hasMore: true,
+      });
+      this.state.photo_list = [];
+      this.state.totalPages = 0;
+      this.loadPhotoList();
+    }
+    if (this.props.basketId != prevProps.basketId) {
       this.setState({
         photos: [],
         photo_list: [],
@@ -386,7 +407,7 @@ class PhotoList extends Component {
         samphotosq[k].height = this.state.photo_list[k].lr_heigh;
       }
     }
-
+    console.log("%%%%%%%%%%%%%%%%%", samphotosq);
     return (
       <div className="photos-container">
         {/* {photoViews} */}
@@ -408,7 +429,7 @@ class PhotoList extends Component {
           </div>
         ) : this.props.type == "home_list" &&
           this.props.totalPages == 0 ? null : this.props.type ===
-          "downloaded_photolist" ? (
+            "downloaded_photolist" || this.props.type === "basket" ? (
           <Gallery photos={samphotosq} renderImage={this.ImageRender} />
         ) : (
           photoViews

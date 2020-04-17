@@ -23,7 +23,7 @@ import {
   add_comment,
   getSameCollection,
   download,
-  getPhotoAuthDownload
+  getPhotoAuthDownload,
 } from "../../util/APIUtils";
 import { ACCESS_TOKEN, HOST_URL } from "../../constants";
 import {
@@ -46,6 +46,7 @@ import { AvatarDefault } from "../../assets/images/homepage";
 import "./style.less";
 import { notification } from "antd";
 import LoadingIndicator from "../../common/LoadingIndicator";
+import PhotoDetails from "./PhotoDetails";
 class Photo_details extends Component {
   constructor(props) {
     super(props);
@@ -67,7 +68,9 @@ class Photo_details extends Component {
       commitFlag: false,
       isCtrlKey: false,
       sameCollectionPhotos: [],
-      opne: false
+      opne: false,
+      ImageShow: false,
+      modalImageDetail: {},
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -87,8 +90,10 @@ class Photo_details extends Component {
     this.loadSameCollectionPhotos = this.loadSameCollectionPhotos.bind(this);
     this.sameTagPhotos = this.sameTagPhotos.bind(this);
     this.photoDownload = this.photoDownload.bind(this);
-    this.modalclose =  this.modalclose.bind(this);
-    this.downloadPDF =  this.downloadPDF.bind(this);
+    this.modalclose = this.modalclose.bind(this);
+    this.downloadPDF = this.downloadPDF.bind(this);
+    this.viewOwner = this.viewOwner.bind(this);
+    this.quickView = this.quickView.bind(this);
   }
 
   loadCurrentUser() {
@@ -410,8 +415,8 @@ class Photo_details extends Component {
             // window.open(text)
             this.Filedownload(text, "dddd");
             this.setState({
-              open: true
-            })
+              open: true,
+            });
           }
         });
       })
@@ -430,21 +435,39 @@ class Photo_details extends Component {
     document.body.removeChild(element);
   }
 
-  downloadPDF(){
+  downloadPDF() {
     getPhotoAuthDownload(this.state.selImage.id)
-    .then(response=>{
-      console.log(response)
-    })
-    .catch(error=>{
-      console.log(error)
-    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     this.modalclose();
   }
 
-  modalclose(){
+  modalclose() {
     this.setState({
-      open: false
-    })
+      open: false,
+    });
+  }
+
+  viewOwner(ownerId) {
+    this.props.history.push("/user/profile/" + ownerId);
+  }
+
+  quickView(e) {
+    this.setState({
+      ImageShow: true,
+      modalImageDetail: e,
+    });
+    console.log(e);
+  }
+
+  CloseImageModal(flag) {
+    this.setState({
+      ImageShow: flag,
+    });
   }
 
   render() {
@@ -483,9 +506,9 @@ class Photo_details extends Component {
               <Grid.Column width={12}>
                 {/* <Button content='Back to List' icon='arrow left' labelPosition='left' color='green' className="BackToList"/> */}
                 <div className="zoomImage">
-                  <a target="blank" href={url}>
+                  {/* <a target="blank" href={url}>
                     <Zoom_Icon className="detail_Icon Zoom-icon" />
-                  </a>
+                  </a> */}
                   <a onClick={this.addLike}>
                     <Heart_Icon className="detail_Icon Heart-icon" />
                   </a>
@@ -822,6 +845,13 @@ class Photo_details extends Component {
                   activePage={this.state.activePage}
                   totalPages={5}
                   quickView={this.quickView}
+                  viewOwner={this.viewOwner}
+                />
+                <PhotoDetails
+                  show={this.state.ImageShow}
+                  photo={this.state.modalImageDetail}
+                  handleClose={this.CloseImageModal}
+                  addToBucket={this.addToBucket}
                 />
               </Grid.Column>
             </Grid.Row>
@@ -836,9 +866,7 @@ class Photo_details extends Component {
             size="small"
           >
             <Modal.Content>
-              <p>
-                Do you want to download pdf?
-              </p>
+              <p>Do you want to download pdf?</p>
             </Modal.Content>
             <Modal.Actions>
               <Button basic color="red" inverted onClick={this.modalclose}>

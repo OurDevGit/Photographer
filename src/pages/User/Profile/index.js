@@ -38,6 +38,7 @@ class Profile extends Component {
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
     this.uploadAvatar = this.uploadAvatar.bind(this);
     this.update_userData = this.update_userData.bind(this);
+    this.handleImageClick = this.handleImageClick.bind(this)
   }
 
   loadCurrentUser(userId) {
@@ -186,6 +187,11 @@ class Profile extends Component {
     }
   }
 
+  handleImageClick(e){
+    console.log(e)
+    this.props.history.push("/Photo_details/" + e.id);
+  }
+
   render() {
     console.log(this.state.currentUser);
 
@@ -211,30 +217,6 @@ class Profile extends Component {
         ),
       },
       {
-        menuItem: "Follow",
-        render: () => (
-          <Tab.Pane>
-            <Friends user={this.state.user} />
-          </Tab.Pane>
-        ),
-      },
-      {
-        menuItem: "My Downloaded Photos",
-        render: () => (
-          <Tab.Pane>
-            <Myphotos user={this.state.user} />
-          </Tab.Pane>
-        ),
-      },
-      {
-        menuItem: "Messages",
-        render: () => (
-          <Tab.Pane>
-            <Myphotos user={this.state.user} />
-          </Tab.Pane>
-        ),
-      },
-      {
         menuItem: "Collections",
         render: () => (
           <Tab.Pane>
@@ -246,20 +228,12 @@ class Profile extends Component {
         menuItem: "Baskets",
         render: () => (
           <Tab.Pane>
-            <Baskets user={this.state.user} />
+            <Baskets user={this.state.user} handleImageClick={this.handleImageClick} />
           </Tab.Pane>
         ),
       },
     ];
     const panes_user = [
-      {
-        menuItem: "Photos",
-        render: () => (
-          <Tab.Pane>
-            <Myphotos user={this.state.user} />
-          </Tab.Pane>
-        ),
-      },
       {
         menuItem: "Collections",
         render: () => (

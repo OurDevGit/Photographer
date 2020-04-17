@@ -481,7 +481,7 @@ export function addNewBasketForUser(Request) {
 }
 
 export function addToBasketForPhoto(Request) {
-  return request({
+  return request1({
     url: API_BASE_URL + "/user_actions/photo_actions_controller/add_to_basket",
     method: "POST",
     body: JSON.stringify(Request),

@@ -86,7 +86,7 @@
     height: 20px;
     margin-right: 0.5em;
   }
-  .investBtnStyle.ui.primary.button {
+  .investBtnStyle.ui.button {
     font-size: 1em;
     margin: 0 0.8em;
     font-weight: 600;
@@ -96,9 +96,20 @@
     font-size: 16px;
     line-height: 20px;
     padding: 12px 20px;
+    background: white;
   }
   .ui.menu.mobile-navmenu {
     background: linear-gradient(to bottom, white, 99%, rgba(255, 255, 255, 0));
+  }
+  .dropdown {
+    .text {
+      color: grey;
+    }
+  }
+  .dropdown:hover {
+    .text {
+      color: black;
+    }
   }
 
   /* Small Width Computer Menu */
@@ -133,7 +144,7 @@
       height: 20px;
       margin-right: 0.5em;
     }
-    .investBtnStyle.ui.primary.button {
+    .investBtnStyle.ui.button {
       font-size: 1em;
       margin: 0 0.8em;
       font-weight: 600;
@@ -141,6 +152,7 @@
       display: flex;
       align-items: center;
       line-height: 18px;
+      background: white;
     }
   }
 
@@ -182,7 +194,12 @@
     }
 
     .vertical.menu {
-      background: linear-gradient(to bottom, white, 99%, rgba(255, 255, 255, 0));
+      background: linear-gradient(
+        to bottom,
+        white,
+        99%,
+        rgba(255, 255, 255, 0)
+      );
       text-align: center;
       margin-top: 50px;
       .myAccount {

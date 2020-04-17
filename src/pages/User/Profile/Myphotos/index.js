@@ -9,6 +9,7 @@ class Myphotos extends Component {
       isLoading: true,
     };
     this.removeBasket = this.removeBasket.bind(this);
+    this.handleImageClick =  this.handleImageClick.bind(this)
   }
 
   componentDidMount() {
@@ -19,11 +20,15 @@ class Myphotos extends Component {
 
   componentDidUpdate(nextProps) {}
 
+  handleImageClick(e){
+    this.props.handleImageClick(e);
+  }
   removeBasket() {
     this.props.removeBasket(this.props.basketId);
   }
 
   render() {
+    console.log("dddd",this.props.user)
     return (
       <div className="Myphotos">
         {this.props.type === "basket" ? (
@@ -36,12 +41,14 @@ class Myphotos extends Component {
           </Button>
         ) : null}
         <PhotoList
-          type="home_list"
+          type={this.props.type}
           onClickImage={this.handleImageClick}
           addToBucket={this.addToBucket}
           activePage={this.state.activePage}
           totalPages={5}
           quickView={this.quickView}
+          basketId={this.props.basketId}
+          username={this.props.user.username}
         />
       </div>
     );

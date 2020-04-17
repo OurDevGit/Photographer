@@ -212,8 +212,6 @@ class HomeHeader extends React.Component {
         <Button
           as="a"
           href="/user/LoginAndSignUp"
-          primary
-          basic
           className="investBtnStyle login-btn"
         >
           Login or SignUp

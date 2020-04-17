@@ -1257,19 +1257,42 @@ class SubmitContent extends Component {
                           </div>
                         </Form.Field>
                       </div>
-                      {/* <div class="column">
-                      <Form.Field>
-                      <div class="label">Category 1</div>
-                        <Select placeholder='Category 1' options={this.state.categories1} name="Category1" value={this.state.photoOptions['Category1']} onChange={this.handleSetPhotoOption} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'}/>
-                        <div class='label error'>{this.state.errorMessage['Category1']}</div>
-                      </Form.Field>
-                    </div>
-                    <div class="column">
-                      <Form.Field>
-                      <div class="label">Category 2(optional)</div>
-                        <Select placeholder='Category 2(optional)' options={this.state.categories2} name="Category2" value={this.state.photoOptions['Category2']} onChange={this.handleSetPhotoOption} disabled={(this.state.photoOptions['Category1'] &&  this.state.activeMenuItem == 'TO_BE_SUBMITTED') ? false : true}/>
-                      </Form.Field>
-                    </div> */}
+                      <div class="column">
+                        <Form.Field>
+                          <div class="label">Category 1</div>
+                          <Select
+                            placeholder="Category 1"
+                            options={this.state.categories1}
+                            name="Category1"
+                            value={this.state.photoOptions["Category1"]}
+                            onChange={this.handleSetPhotoOption}
+                            disabled={
+                              this.state.activeMenuItem != "TO_BE_SUBMITTED"
+                            }
+                          />
+                          <div class="label error">
+                            {this.state.errorMessage["Category1"]}
+                          </div>
+                        </Form.Field>
+                      </div>
+                      <div class="column">
+                        <Form.Field>
+                          <div class="label">Category 2(optional)</div>
+                          <Select
+                            placeholder="Category 2(optional)"
+                            options={this.state.categories2}
+                            name="Category2"
+                            value={this.state.photoOptions["Category2"]}
+                            onChange={this.handleSetPhotoOption}
+                            disabled={
+                              this.state.photoOptions["Category1"] &&
+                              this.state.activeMenuItem == "TO_BE_SUBMITTED"
+                                ? false
+                                : true
+                            }
+                          />
+                        </Form.Field>
+                      </div>
                       <div class="column">
                         <Form.Field required>
                           <div class="label">Location(optional)</div>
