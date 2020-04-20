@@ -102,20 +102,25 @@
     }
     .keywords {
       button {
-        border: 1px solid #a3a3a3;
+        border: 0;
         padding: 4px 10px;
         border-radius: 20px;
         margin: 6px 8px 4px 0;
-        background: gray;
-        color: white;
+        background: white;
+        color: black;
         cursor: pointer;
+        box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.08);
+        font-size: 11px;
+      }
+      button:hover{
+        background: lightgrey;
       }
     }
   }
   .relatedPhotos {
     .PhotoBox img {
       max-height: 200px;
-      // width: auto;
+      width: auto;
       margin: 2px;
     }
   }

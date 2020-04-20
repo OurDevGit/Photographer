@@ -49,6 +49,7 @@ class Home extends Component {
     this.quickView = this.quickView.bind(this);
     this.viewOwner = this.viewOwner.bind(this);
     this.clickSearch = this.clickSearch.bind(this);
+    this.handleSearchTag =  this.handleSearchTag.bind(this)
   }
 
   loadCurrentUser() {
@@ -203,15 +204,20 @@ class Home extends Component {
   }
 
   clickSearch(e) {
-    console.log("sfasdfsadfsafsafasf", e);
     this.setState({
       searchOptions: e,
     });
   }
 
+  handleSearchTag(e){
+    console.log(e);
+    this.props.history.push("/?tag=" + e);
+  }
+
   render() {
     if (this.props.location.search.split("=")[0] === "?tag") {
       var tagSearch = this.props.location.search.split("=")[1];
+      console.log("dddd",tagSearch)
     }
     return (
       <>
@@ -226,7 +232,7 @@ class Home extends Component {
         <Grid className="pages page-index homeContent">
           <Grid.Row>
             <Grid.Column width={16}>
-              <SearchBar clickSearch={this.clickSearch} />
+              <SearchBar clickSearch={this.clickSearch} handleSearchTag={this.handleSearchTag} />
             </Grid.Column>
             {/* <GridColumn only='computer' width={16}>
               <CategoryCarousel categories={this.state.categories} />

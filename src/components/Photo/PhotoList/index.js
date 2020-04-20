@@ -261,6 +261,22 @@ class PhotoList extends Component {
       this.state.totalPages = 0;
       this.loadPhotoList();
     }
+    if(this.props.tagSearch !== prevProps.tagSearch){
+      this.setState({
+        photos: [],
+        photo_list: [],
+        page: 0,
+        totalElements: 0,
+        totalPages: 0,
+        last: false,
+        currentVotes: [],
+        isLoading: false,
+        hasMore: true,
+      });
+      this.state.photo_list = [];
+      this.state.totalPages = 0;
+      this.loadPhotoList();
+    }
   }
 
   handleLoadMore() {

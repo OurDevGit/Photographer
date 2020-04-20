@@ -22,11 +22,14 @@ class CategoriesAndTags extends Component {
       inputValue: [],
       tagIconFile: null,
       tagIconUrl: "",
+      categoryIconFile: null,
+      categoryIconUrl: "",
       IconFile: null,
       IconUrl: "",
       open: false,
       selected: {},
-      editValue: ""
+      editValue: "",
+      isButtonLoading: false,
     };
     this.loadAllCategories = this.loadAllCategories.bind(this);
     this.loadAllTags = this.loadAllTags.bind(this);
@@ -36,7 +39,10 @@ class CategoriesAndTags extends Component {
     this.handleClickTag = this.handleClickTag.bind(this);
     this.modalclose = this.modalclose.bind(this);
     this.handleFileUpload = this.handleFileUpload.bind(this);
-    this.handleInputEdit =  this.handleInputEdit.bind(this)
+    this.handleInputEdit = this.handleInputEdit.bind(this);
+    this.handleCategoryFileUpload = this.handleCategoryFileUpload.bind(this);
+    this.handleAddCategory = this.handleAddCategory.bind(this);
+    this.handleClickCategory = this.handleClickCategory.bind(this);
   }
   componentDidMount() {
     this.loadAllTags();
@@ -119,6 +125,9 @@ class CategoriesAndTags extends Component {
           body: formData,
           redirect: "follow",
         };
+        this.setState({
+          isButtonLoading: true,
+        });
         fetch(
           API_BASE_URL + "/tag_and_category/add_new_tag_with_icon",
           requestOptions
@@ -136,6 +145,12 @@ class CategoriesAndTags extends Component {
                 description: "Something went wrong. Please try again",
               });
             }
+            this.setState({
+              isButtonLoading: false,
+              tagIconFile: null,
+              tagIconUrl: "",
+              inputValue: [],
+            });
           })
           .catch((error) => {
             console.log(error);
@@ -143,10 +158,90 @@ class CategoriesAndTags extends Component {
               message: "Openshoots",
               description: "Something went wrong. Please try again",
             });
+            this.setState({
+              isButtonLoading: false,
+            });
           });
       }
     }
   }
+
+  handleAddCategory(e) {
+    if (
+      !this.state.inputValue["newCategory"] ||
+      this.state.inputValue["newCategory"] == ""
+    ) {
+      notification.error({
+        message: "Openshoots",
+        description: "Please input Category Name.",
+      });
+    } else {
+      if (!this.state.categoryIconFile) {
+        notification.error({
+          message: "Openshoots",
+          description: "Please select Icon file.",
+        });
+      } else {
+        var myHeaders = new Headers({});
+        if (localStorage.getItem(ACCESS_TOKEN)) {
+          myHeaders.append(
+            "Authorization",
+            "Bearer " + localStorage.getItem(ACCESS_TOKEN)
+          );
+        }
+        console.log("thi", this.state.inputValue["newCategory"]);
+        const formData = new FormData();
+        formData.append("categoryName", this.state.inputValue["newCategory"]);
+        formData.append("file", this.state.categoryIconFile);
+
+        var requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: formData,
+          redirect: "follow",
+        };
+
+        this.setState({
+          isButtonLoading: true,
+        });
+        fetch(
+          API_BASE_URL + "/tag_and_category/add_new_category_with_icon",
+          requestOptions
+        )
+          .then((response) => {
+            console.log(response);
+            if (response.ok) {
+              notification.success({
+                message: "Openshoots",
+                description: "Successfully add new Category",
+              });
+            } else {
+              notification.error({
+                message: "Openshoots",
+                description: "Something went wrong. Please try again",
+              });
+            }
+            this.setState({
+              isButtonLoading: false,
+              categoryIconFile: null,
+              categoryIconUrl: "",
+              inputValue: [],
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+            notification.error({
+              message: "Openshoots",
+              description: "Something went wrong. Please try again",
+            });
+            this.setState({
+              isButtonLoading: false,
+            });
+          });
+      }
+    }
+  }
+
   handleInputChange(e, { name, value }) {
     this.state.inputValue[name] = value;
     this.setState({
@@ -155,12 +250,18 @@ class CategoriesAndTags extends Component {
   }
 
   handleTagFileUpload(e) {
-    console.log(e.target.files);
     this.setState({
       tagIconFile: e.target.files[0],
       tagIconUrl: URL.createObjectURL(e.target.files[0]),
     });
   }
+  handleCategoryFileUpload(e) {
+    this.setState({
+      categoryIconFile: e.target.files[0],
+      categoryIconUrl: URL.createObjectURL(e.target.files[0]),
+    });
+  }
+
   handleFileUpload(e) {
     console.log(e.target.files);
     this.setState({
@@ -169,25 +270,35 @@ class CategoriesAndTags extends Component {
     });
   }
   handleClickTag(e) {
-    console.log(e.target.id);
-    console.log(this.state.tags[e.target.id]);
     this.setState({
       open: true,
       selected: { type: "tag", object: this.state.tags[e.target.id] },
       IconUrl: this.state.tags[e.target.id].icon,
-      editValue: this.state.tags[e.target.id].value
+      editValue: this.state.tags[e.target.id].value,
     });
   }
 
-  handleInputEdit(e, {value}){
+  handleClickCategory(e) {
     this.setState({
-      editValue: value
-    })
+      open: true,
+      selected: { type: "category", object: this.state.tags[e.target.id] },
+      IconUrl: this.state.categories[e.target.id].icon,
+      editValue: this.state.categories[e.target.id].value,
+    });
+  }
+
+  handleInputEdit(e, { value }) {
+    this.setState({
+      editValue: value,
+    });
   }
 
   modalclose() {
     this.setState({
       open: false,
+      selected: {},
+      IconUrl: "",
+      editValue: "",
     });
   }
 
@@ -213,7 +324,13 @@ class CategoriesAndTags extends Component {
     const categories = [];
     this.state.categories.forEach((category, categoryIndex) => {
       categories.push(
-        <Label as="a" className="value" image>
+        <Label
+          as="a"
+          className="value"
+          id={categoryIndex}
+          onClick={this.handleClickCategory}
+          image
+        >
           <img src={category.icon} />
           {category.value}
         </Label>
@@ -224,15 +341,36 @@ class CategoriesAndTags extends Component {
         <div className="column Category">
           <div className="AddCategory">
             <h3>
+              Category Icon:
+              <span className="IconUpload">
+                <Input
+                  type="file"
+                  name="tagIcon"
+                  className="fileUpload"
+                  onChange={this.handleCategoryFileUpload}
+                ></Input>
+                {!this.state.categoryIconFile ? (
+                  <button className="UploadButton">click</button>
+                ) : (
+                  <img src={this.state.categoryIconUrl} />
+                )}
+              </span>
               Add New Category :
               <Input
                 type="text"
+                name="newCategory"
                 placeholder="New Category..."
                 action
                 onChange={this.handleInputChange}
               >
                 <input />
-                <Button type="button">Add</Button>
+                <Button
+                  type="button"
+                  onClick={this.handleAddCategory}
+                  loading={this.state.isButtonLoading}
+                >
+                  Add
+                </Button>
               </Input>
             </h3>
           </div>

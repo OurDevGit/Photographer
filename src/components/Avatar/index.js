@@ -1,42 +1,48 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import {Image} from 'semantic-ui-react'
-import './style.less'
+import React from "react";
+import PropTypes from "prop-types";
+import { Image } from "semantic-ui-react";
+import "./style.less";
 
 const colorSchema = {
   offline: {
-    secondary : 'rgba(158, 158, 158, 0.6)',
-    primary   : '#EEEEEE'
+    secondary: "rgba(158, 158, 158, 0.6)",
+    primary: "#EEEEEE",
   },
   online: {
-    secondary : 'rgba(59, 232, 218, 0.4)',
-    primary   : '#FF010102'
-  }
-}
+    secondary: "rgba(59, 232, 218, 0.4)",
+    primary: "#FF010102",
+  },
+};
 
 const AvartarBadge = ({ status }) => (
-  <div className="badge" style={{ backgroundColor: colorSchema[status].secondary }}>
-    <div className="badge-inner" style={{ backgroundColor: colorSchema[status].primary }} />
+  <div
+    className="badge"
+    style={{ backgroundColor: colorSchema[status].secondary }}
+  >
+    <div
+      className="badge-inner"
+      style={{ backgroundColor: colorSchema[status].primary }}
+    />
   </div>
-)
+);
 
 const Avartar = ({ fullname, status }) => (
   <div className="avatar">
     <div className="avatar-main">
-    {/* <Image avatar src="https://picktur.s3.eu-central-1.amazonaws.com/AV_1583170156800-images_(3).jpg" /> */}
+      {/* <Image avatar src="https://picktur.s3.eu-central-1.amazonaws.com/AV_1583170156800-images_(3).jpg" /> */}
       <div className="short-username">{fullname[0].toUpperCase()}</div>
-      <AvartarBadge status={status || 'online'} />
+      <AvartarBadge status={status || "online"} />
     </div>
   </div>
-)
+);
 
 Avartar.propTypes = {
-  fullname : PropTypes.string.isRequired,
-  status    : PropTypes.string,
-}
+  fullname: PropTypes.string.isRequired,
+  status: PropTypes.string,
+};
 
 AvartarBadge.propTypes = {
-  status: PropTypes.string
-}
+  status: PropTypes.string,
+};
 
-export default Avartar
+export default Avartar;

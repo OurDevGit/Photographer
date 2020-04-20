@@ -1664,6 +1664,9 @@ class SubmitContent extends Component {
                                 name="plus"
                                 size="large"
                                 onClick={this.addAllContainTags}
+                                disabled={
+                                  this.state.activeMenuItem != "TO_BE_SUBMITTED"
+                                }
                               />
                             }
                             content="Add all contained tags"

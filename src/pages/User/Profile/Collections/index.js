@@ -42,7 +42,7 @@ class Collections extends Component {
         menuItem: collection.name,
         render: () => (
           <Tab.Pane>
-            <Myphotos user={this.props.user} type='collection' />
+            <Myphotos user={this.props.user} type="collection" />
           </Tab.Pane>
         ),
       });

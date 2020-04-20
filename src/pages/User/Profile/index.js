@@ -38,7 +38,7 @@ class Profile extends Component {
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
     this.uploadAvatar = this.uploadAvatar.bind(this);
     this.update_userData = this.update_userData.bind(this);
-    this.handleImageClick = this.handleImageClick.bind(this)
+    this.handleImageClick = this.handleImageClick.bind(this);
   }
 
   loadCurrentUser(userId) {
@@ -181,14 +181,18 @@ class Profile extends Component {
     this.loadCurrentUser(userId);
   }
 
-  componentDidUpdate(nextProps) {
-    if (this.props.match.params.id !== nextProps.match.params.id) {
-      this.loadCurrentUser(nextProps.match.params.id);
+  componentDidUpdate(prevProps) {
+    if (this.props.match.params.id !== prevProps.match.params.id) {
+      console.log("ddd", this.props.match.params.id);
+      this.setState({
+        user: null,
+      });
+      this.loadCurrentUser(this.props.match.params.id);
     }
   }
 
-  handleImageClick(e){
-    console.log(e)
+  handleImageClick(e) {
+    console.log(e);
     this.props.history.push("/Photo_details/" + e.id);
   }
 
@@ -228,7 +232,10 @@ class Profile extends Component {
         menuItem: "Baskets",
         render: () => (
           <Tab.Pane>
-            <Baskets user={this.state.user} handleImageClick={this.handleImageClick} />
+            <Baskets
+              user={this.state.user}
+              handleImageClick={this.handleImageClick}
+            />
           </Tab.Pane>
         ),
       },

@@ -9,7 +9,7 @@ class Myphotos extends Component {
       isLoading: true,
     };
     this.removeBasket = this.removeBasket.bind(this);
-    this.handleImageClick =  this.handleImageClick.bind(this)
+    this.handleImageClick = this.handleImageClick.bind(this);
   }
 
   componentDidMount() {
@@ -20,7 +20,7 @@ class Myphotos extends Component {
 
   componentDidUpdate(nextProps) {}
 
-  handleImageClick(e){
+  handleImageClick(e) {
     this.props.handleImageClick(e);
   }
   removeBasket() {
@@ -28,7 +28,7 @@ class Myphotos extends Component {
   }
 
   render() {
-    console.log("dddd",this.props.user)
+    console.log("dddd", this.props.user);
     return (
       <div className="Myphotos">
         {this.props.type === "basket" ? (

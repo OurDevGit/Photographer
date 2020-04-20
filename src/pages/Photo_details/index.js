@@ -727,9 +727,7 @@ class Photo_details extends Component {
               <Grid.Column className="mobileButtonGroup" width={16}>
                 <a
                   target="blank"
-                  href={
-                    this.state.isFollower ? downloadUrl : this.state.followerUrl
-                  }
+                  onClick={this.photoDownload}
                   className="ImageButton followAndDownload"
                 >
                   <AnimateButton
@@ -759,16 +757,7 @@ class Photo_details extends Component {
                   labelPosition="right"
                 >
                   <Button color="blue">
-                    <a
-                      target="blank"
-                      href={
-                        this.state.isFollower
-                          ? downloadUrl
-                          : this.state.followerUrl
-                      }
-                    >
                       <Icon name="download" onClick={this.downloadImage} />
-                    </a>
                   </Button>
                   <Label as="a" basic color="blue" pointing="left">
                     {this.state.downloads}

@@ -130,6 +130,20 @@ export function updateChoosedForHome(Request) {
   });
 }
 
+export function getTrendingTags() {
+  return request({
+    url: API_BASE_URL + "/public/lists/trending_tags",
+    method: "GET",
+  });
+}
+
+export function getRecentTags() {
+  return request({
+    url: API_BASE_URL + "/public/lists/recent_tags",
+    method: "GET",
+  });
+}
+
 export function getSubmitPhotos() {
   return request({
     url: API_BASE_URL + "/photo_submit/submitOperations",
@@ -403,13 +417,14 @@ export function getPublishedPhotos(id) {
 
 export function getDownloadedPhotos(id) {
   return request({
-    url: API_BASE_URL + "/photo_details_controller/user_photos_downloadeded/" + id,
+    url:
+      API_BASE_URL + "/photo_details_controller/user_photos_downloadeded/" + id,
     method: "GET",
   });
 }
 
 export function getPhotoAuthDownload(id) {
-  return request({
+  return request1({
     url: API_BASE_URL + "/photo_details_controller/photo_auth_download/" + id,
     method: "GET",
   });
@@ -593,18 +608,23 @@ export function getPublicUsers(page, size) {
   });
 }
 
+export function getBasketsForPhoto(id) {
+  return request({
+    url: API_BASE_URL + "/public/users/get_baskets_for_photo/" + id,
+    method: "GET",
+  });
+}
+
 export function get_followers() {
   return request({
-    url:
-      API_BASE_URL + "/social/following/get_followers",
+    url: API_BASE_URL + "/social/following/get_followers",
     method: "GET",
   });
 }
 
 export function get_suggested_followers() {
   return request({
-    url:
-      API_BASE_URL + "/social/following/get_suggested_followers",
+    url: API_BASE_URL + "/social/following/get_suggested_followers",
     method: "GET",
   });
 }
@@ -659,6 +679,38 @@ export function get_data_for_foto_diagram(Request) {
 export function get_data_for_user_diagram(Request) {
   return request({
     url: API_BASE_URL + "/public/diagrams/get_data_for_user_diagram",
+    method: "POST",
+    body: JSON.stringify(Request),
+  });
+}
+
+export function getCollections() {
+  return request({
+    url: API_BASE_URL + "/photo_collection_controller/get_collections",
+    method: "GET",
+  });
+}
+
+export function update_collection_name(Request) {
+  return request({
+    url: API_BASE_URL + "/photo_collection_controller/update_collection_name",
+    method: "POST",
+    body: JSON.stringify(Request),
+  });
+}
+
+export function change_collection_forPhoto(Request) {
+  return request({
+    url:
+      API_BASE_URL + "/photo_collection_controller/change_collection_forPhoto",
+    method: "POST",
+    body: JSON.stringify(Request),
+  });
+}
+
+export function add_collection(Request) {
+  return request({
+    url: API_BASE_URL + "/photo_collection_controller/add_collection",
     method: "POST",
     body: JSON.stringify(Request),
   });
