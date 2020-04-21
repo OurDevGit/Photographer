@@ -130,6 +130,7 @@ class SubmitContent extends Component {
     this.confirmModalClose = this.confirmModalClose.bind(this);
     this.deletePhotos = this.deletePhotos.bind(this);
     this.deleteFun = this.deleteFun.bind(this);
+    this.handleSearchTag =  this.handleSearchTag.bind(this)
   }
 
   componentDidMount() {
@@ -967,6 +968,11 @@ class SubmitContent extends Component {
     });
   }
 
+  handleSearchTag(e) {
+    console.log(e);
+    this.props.history.push("/?tag=" + e);
+  }
+
   render() {
     const { activeIndex, activeItem } = this.state;
     const keywords = [];
@@ -1015,6 +1021,8 @@ class SubmitContent extends Component {
           isAuthenticated={this.state.isAuthenticated}
           currentUser={this.state.currentUser}
           onLogout={this.handleLogout}
+          clickSearch={this.clickSearch}
+          handleSearchTag={this.handleSearchTag}
         />
         <Grid className="pages page-index submit_page">
           <Grid.Row className="content_title">

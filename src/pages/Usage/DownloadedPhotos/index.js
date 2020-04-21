@@ -47,6 +47,7 @@ class DownloadedPhotos extends Component {
     this.quickView = this.quickView.bind(this);
     this.viewOwner = this.viewOwner.bind(this);
     this.clickSearch = this.clickSearch.bind(this);
+    this.handleSearchTag =  this.handleSearchTag.bind(this)
   }
 
   loadCurrentUser() {
@@ -206,6 +207,11 @@ class DownloadedPhotos extends Component {
     });
   }
 
+  handleSearchTag(e) {
+    console.log(e);
+    this.props.history.push("/?tag=" + e);
+  }
+
   render() {
     if (this.props.location.search.split("=")[0] === "?tag") {
       var tagSearch = this.props.location.search.split("=")[1];
@@ -226,6 +232,8 @@ class DownloadedPhotos extends Component {
           isAuthenticated={this.state.isAuthenticated}
           currentUser={this.state.currentUser}
           onLogout={this.handleLogout}
+          clickSearch={this.clickSearch}
+          handleSearchTag={this.handleSearchTag}
         />
         <Grid className="pages page-index homeContent">
           <Grid.Row>

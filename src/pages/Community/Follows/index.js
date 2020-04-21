@@ -15,6 +15,7 @@ class Follows extends Component {
       followUsers: [],
     };
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
+    this.handleSearchTag =  this.handleSearchTag.bind(this)
   }
 
   componentDidMount() {
@@ -59,6 +60,11 @@ class Follows extends Component {
       });
   }
 
+  handleSearchTag(e) {
+    console.log(e);
+    this.props.history.push("/?tag=" + e);
+  }
+
   render() {
     return (
       <>
@@ -69,6 +75,8 @@ class Follows extends Component {
                 isAuthenticated={this.state.isAuthenticated}
                 currentUser={this.state.currentUser}
                 onLogout={this.handleLogout}
+                clickSearch={this.clickSearch}
+                handleSearchTag={this.handleSearchTag}
               />
               {/* </Grid.Column>
             <Grid.Column width='16'> */}

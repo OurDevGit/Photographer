@@ -39,6 +39,7 @@ class Profile extends Component {
     this.uploadAvatar = this.uploadAvatar.bind(this);
     this.update_userData = this.update_userData.bind(this);
     this.handleImageClick = this.handleImageClick.bind(this);
+    this.handleSearchTag =  this.handleSearchTag.bind(this)
   }
 
   loadCurrentUser(userId) {
@@ -196,6 +197,11 @@ class Profile extends Component {
     this.props.history.push("/Photo_details/" + e.id);
   }
 
+  handleSearchTag(e) {
+    console.log(e);
+    this.props.history.push("/?tag=" + e);
+  }
+
   render() {
     console.log(this.state.currentUser);
 
@@ -277,6 +283,8 @@ class Profile extends Component {
               isAuthenticated={this.state.isAuthenticated}
               currentUser={this.state.currentUser}
               onLogout={this.handleLogout}
+              clickSearch={this.clickSearch}
+              handleSearchTag={this.handleSearchTag}
             />
             <Grid className="pages page-index profile_page">
               {this.state.currentUser &&

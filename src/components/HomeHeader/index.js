@@ -10,6 +10,7 @@ import mobileMenuPng from "../../assets/images/mobile-menu.png";
 import mobileCloseMenuPng from "../../assets/images/cross.png";
 import logo from "../../assets/images/OpenShoots.gif";
 import { PaperPlaneIcon, StarIcon, HeartIcon } from "../../assets/icons";
+import SearchBar from '../SearchBar'
 import "./header.less";
 
 const style = {
@@ -253,6 +254,7 @@ class HomeHeader extends React.Component {
                 <Menu.Item position="right" style={style.noPaddingStyle}>
                   {menuItems}
                 </Menu.Item>
+                <SearchBar clickSearch={this.clickSearch} handleSearchTag={this.props.handleSearchTag} />
               </Menu>
             </Grid.Column>
           </Grid.Row>
@@ -297,6 +299,7 @@ class HomeHeader extends React.Component {
                   </Menu.Item>
                 </Menu.Item>
               </Menu>
+              <SearchBar clickSearch={this.clickSearch} handleSearchTag={this.props.handleSearchTag} />
             </Grid.Column>
             {mobileMenuOpen && (
               <Grid.Column
@@ -309,6 +312,7 @@ class HomeHeader extends React.Component {
               </Grid.Column>
             )}
           </Grid.Row>
+          
         </Grid>
       </div>
     );

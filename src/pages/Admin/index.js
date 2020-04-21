@@ -25,6 +25,7 @@ class Admin extends Component {
     this.loadAllCategories = this.loadAllCategories.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
     this.handleMenuClick = this.handleMenuClick.bind(this);
+    this.handleSearchTag =  this.handleSearchTag.bind(this);
   }
 
   loadCurrentUser() {
@@ -99,6 +100,11 @@ class Admin extends Component {
     });
   }
 
+  handleSearchTag(e) {
+    console.log(e);
+    this.props.history.push("/?tag=" + e);
+  }
+
   render() {
     return (
       <>
@@ -109,6 +115,8 @@ class Admin extends Component {
           isAuthenticated={this.state.isAuthenticated}
           currentUser={this.state.currentUser}
           onLogout={this.handleLogout}
+          clickSearch={this.clickSearch}
+          handleSearchTag={this.handleSearchTag}
         />
         <Grid className="pages page-index">
           <Grid.Row>

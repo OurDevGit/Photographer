@@ -49,7 +49,7 @@ class Home extends Component {
     this.quickView = this.quickView.bind(this);
     this.viewOwner = this.viewOwner.bind(this);
     this.clickSearch = this.clickSearch.bind(this);
-    this.handleSearchTag =  this.handleSearchTag.bind(this)
+    this.handleSearchTag = this.handleSearchTag.bind(this);
   }
 
   loadCurrentUser() {
@@ -209,7 +209,7 @@ class Home extends Component {
     });
   }
 
-  handleSearchTag(e){
+  handleSearchTag(e) {
     console.log(e);
     this.props.history.push("/?tag=" + e);
   }
@@ -217,7 +217,7 @@ class Home extends Component {
   render() {
     if (this.props.location.search.split("=")[0] === "?tag") {
       var tagSearch = this.props.location.search.split("=")[1];
-      console.log("dddd",tagSearch)
+      console.log("dddd", tagSearch);
     }
     return (
       <>
@@ -228,12 +228,11 @@ class Home extends Component {
           isAuthenticated={this.state.isAuthenticated}
           currentUser={this.state.currentUser}
           onLogout={this.handleLogout}
+          clickSearch={this.clickSearch}
+          handleSearchTag={this.handleSearchTag}
         />
         <Grid className="pages page-index homeContent">
           <Grid.Row>
-            <Grid.Column width={16}>
-              <SearchBar clickSearch={this.clickSearch} handleSearchTag={this.handleSearchTag} />
-            </Grid.Column>
             {/* <GridColumn only='computer' width={16}>
               <CategoryCarousel categories={this.state.categories} />
             </GridColumn> */}

@@ -7,6 +7,9 @@ import {
   Comment,
   TextArea,
   Modal,
+  Table,
+  Header,
+  Image,
 } from "semantic-ui-react";
 import MetaTags from "react-meta-tags";
 import { NavLink, Redirect } from "react-router-dom";
@@ -94,6 +97,8 @@ class Photo_details extends Component {
     this.downloadPDF = this.downloadPDF.bind(this);
     this.viewOwner = this.viewOwner.bind(this);
     this.quickView = this.quickView.bind(this);
+    this.handleSearchTag = this.handleSearchTag.bind(this);
+    this.showUserServiceDetail = this.showUserServiceDetail.bind(this);
   }
 
   loadCurrentUser() {
@@ -470,6 +475,15 @@ class Photo_details extends Component {
     });
   }
 
+  handleSearchTag(e) {
+    console.log(e);
+    this.props.history.push("/?tag=" + e);
+  }
+
+  showUserServiceDetail() {
+    this.props.history.push("/product_detail/1302804");
+  }
+
   render() {
     const { selImage, similarPhotos } = this.state;
     const keywords = [];
@@ -500,10 +514,12 @@ class Photo_details extends Component {
             currentUser={this.state.currentUser}
             onLogout={this.handleLogout}
             Back={this.goBack}
+            clickSearch={this.clickSearch}
+            handleSearchTag={this.handleSearchTag}
           />
           <Grid className="photo_details" verticalAlign="">
             <Grid.Row only="computer" className="photo_details_row">
-              <Grid.Column width={12}>
+              <Grid.Column width={8}>
                 {/* <Button content='Back to List' icon='arrow left' labelPosition='left' color='green' className="BackToList"/> */}
                 <div className="zoomImage">
                   {/* <a target="blank" href={url}>
@@ -620,8 +636,21 @@ class Photo_details extends Component {
                   </Comment.Group>
                 </div>
               </Grid.Column>
-              <Grid.Column width={4}>
+              <Grid.Column width={8}>
                 <div className="photoDetail">
+                  {/* <h2>Product Placement with one Model, exclusive shooting</h2>
+                  <h3 className="shared">
+                    <span className="social">
+                      <Icon name="youtube official" />
+                    </span>
+                    <span className="social">
+                      <Icon name="facebook official" />
+                    </span>
+                    <span className="social">
+                      <Icon name="instagram official" />
+                    </span>
+                    <span>Shared on:</span>
+                  </h3> */}
                   <p>
                     This Content is created by{" "}
                     <a href="">
@@ -654,6 +683,136 @@ class Photo_details extends Component {
                   <div className="keywords">
                     <p>Keywords:</p>
                     {keywords}
+                  </div>
+                  {/* <p className="Tax">
+                    <span> 1.000 $(Incl. Tax)</span>
+                    <span className="fee">
+                      <b>Fee: </b>
+                    </span>
+                  </p>
+                  <p className="Tax">
+                    <span> Available from firm</span>
+                    <span>
+                      <b>Invoice: </b>
+                    </span>
+                  </p>
+                  <div className="paymentButtons">
+                    <Button size="massive" color="blue">
+                      Reserve with Escrow
+                    </Button>
+                    <Button size="massive" color="blue">
+                      Contact the Seller
+                    </Button>
+                  </div> */}
+                  <h3>The User offers this services</h3>
+                  <div className="userServiceTable">
+                    <Table basic="very" selectable>
+                      <Table.Header>
+                        <Table.Row>
+                          <Table.HeaderCell></Table.HeaderCell>
+                          <Table.HeaderCell>Service:</Table.HeaderCell>
+                          <Table.HeaderCell>Platforms shared</Table.HeaderCell>
+                          <Table.HeaderCell>Price</Table.HeaderCell>
+                        </Table.Row>
+                      </Table.Header>
+
+                      <Table.Body>
+                        <Table.Row onClick={this.showUserServiceDetail}>
+                          <Table.Cell>
+                            <Image
+                              src="https://picktur.s3.eu-central-1.amazonaws.com/HR_1584239946119-balintathlete453k.jpg"
+                              rounded
+                              size="tiny"
+                            />
+                          </Table.Cell>
+                          <Table.Cell>
+                            <Header as="h4">
+                              <Header.Content>
+                                Dedicated Photoshoots with one Model
+                              </Header.Content>
+                            </Header>
+                          </Table.Cell>
+                          <Table.Cell></Table.Cell>
+                          <Table.Cell>1.000 $</Table.Cell>
+                        </Table.Row>
+                        <Table.Row onClick={this.showUserServiceDetail}>
+                          <Table.Cell>
+                            <Image
+                              src="https://picktur.s3.eu-central-1.amazonaws.com/HR_1584239946119-balintathlete453k.jpg"
+                              rounded
+                              size="tiny"
+                            />
+                          </Table.Cell>
+                          <Table.Cell>
+                            <Header as="h4">
+                              <Header.Content>
+                                Dedicated Photoshoots with two Models
+                              </Header.Content>
+                            </Header>
+                          </Table.Cell>
+                          <Table.Cell></Table.Cell>
+                          <Table.Cell>2.000 $</Table.Cell>
+                        </Table.Row>
+                        <Table.Row onClick={this.showUserServiceDetail}>
+                          <Table.Cell>
+                            <Image
+                              src="https://picktur.s3.eu-central-1.amazonaws.com/HR_1584239946119-balintathlete453k.jpg"
+                              rounded
+                              size="tiny"
+                            />
+                          </Table.Cell>
+                          <Table.Cell>
+                            <Header as="h4">
+                              <Header.Content>
+                                Product Placement with one Model, exclusive
+                                shooting
+                              </Header.Content>
+                            </Header>
+                          </Table.Cell>
+                          <Table.Cell>
+                            <span className="social">
+                              <Icon name="youtube official" />
+                            </span>
+                            <span className="social">
+                              <Icon name="facebook official" />
+                            </span>
+                            <span className="social">
+                              <Icon name="instagram official" />
+                            </span>
+                          </Table.Cell>
+                          <Table.Cell>1.000 $</Table.Cell>
+                        </Table.Row>
+                        <Table.Row onClick={this.showUserServiceDetail}>
+                          <Table.Cell>
+                            <Image
+                              src="https://picktur.s3.eu-central-1.amazonaws.com/HR_1584239946119-balintathlete453k.jpg"
+                              rounded
+                              size="tiny"
+                            />
+                          </Table.Cell>
+                          <Table.Cell>
+                            <Header as="h4">
+                              <Header.Content>
+                                Product Placement with one Model, SHared
+                                shooting
+                              </Header.Content>
+                            </Header>
+                          </Table.Cell>
+                          <Table.Cell>
+                            <span className="social">
+                              <Icon name="youtube official" />
+                            </span>
+                            <span className="social">
+                              <Icon name="facebook official" />
+                            </span>
+                            <span className="social">
+                              <Icon name="instagram official" />
+                            </span>
+                          </Table.Cell>
+                          <Table.Cell>500 $</Table.Cell>
+                        </Table.Row>
+                      </Table.Body>
+                    </Table>
                   </div>
                 </div>
                 {/* <div className='photoReleases'>
@@ -757,7 +916,7 @@ class Photo_details extends Component {
                   labelPosition="right"
                 >
                   <Button color="blue">
-                      <Icon name="download" onClick={this.downloadImage} />
+                    <Icon name="download" onClick={this.downloadImage} />
                   </Button>
                   <Label as="a" basic color="blue" pointing="left">
                     {this.state.downloads}
@@ -779,6 +938,19 @@ class Photo_details extends Component {
               </Grid.Column>
               <Grid.Column width={16}>
                 <div className="photoDetail">
+                  {/* <h3>Product Placement with one Model, exclusive shooting</h3>
+                  <h3 className="shared">
+                    <span className="social">
+                      <Icon name="youtube official" />
+                    </span>
+                    <span className="social">
+                      <Icon name="facebook official" />
+                    </span>
+                    <span className="social">
+                      <Icon name="instagram official" />
+                    </span>
+                    <span>Shared on:</span>
+                  </h3> */}
                   <p>
                     This Content is created by{" "}
                     <a href="">
@@ -786,16 +958,6 @@ class Photo_details extends Component {
                     </a>
                     .
                   </p>
-                  <p>
-                    Image#{" "}
-                    <a href="">
-                      <b>{url.split("/")[url.split("/").length - 1]}</b>
-                    </a>
-                    .
-                  </p>
-                  {/* <p>
-                  uploaded: <b> June 18, 2018 11:14 AM</b>
-                </p> */}
                   <p>
                     Releases:{" "}
                     <b>
@@ -813,6 +975,136 @@ class Photo_details extends Component {
                   <div className="keywords">
                     <p>Keywords</p>
                     {keywords}
+                  </div>
+                  {/* <p className="Tax">
+                    <span> 1.000 $(Incl. Tax)</span>
+                    <span className="fee">
+                      <b>Fee: </b>
+                    </span>
+                  </p>
+                  <p className="Tax">
+                    <span> Available from firm</span>
+                    <span>
+                      <b>Invoice: </b>
+                    </span>
+                  </p>
+                  <div className="paymentButtons">
+                    <Button size="huge" color="blue">
+                      Reserve with Escrow
+                    </Button>
+                    <Button size="huge" color="blue">
+                      Contact the Seller
+                    </Button>
+                  </div> */}
+                  <h3>The User offers this services</h3>
+                  <div className="userServiceTable">
+                    <Table basic="very" selectable>
+                      <Table.Header>
+                        <Table.Row>
+                          <Table.HeaderCell></Table.HeaderCell>
+                          <Table.HeaderCell>Service:</Table.HeaderCell>
+                          <Table.HeaderCell>Platforms shared</Table.HeaderCell>
+                          <Table.HeaderCell>Price</Table.HeaderCell>
+                        </Table.Row>
+                      </Table.Header>
+
+                      <Table.Body>
+                        <Table.Row onClick={this.showUserServiceDetail}>
+                          <Table.Cell>
+                            <Image
+                              src="https://picktur.s3.eu-central-1.amazonaws.com/HR_1584239946119-balintathlete453k.jpg"
+                              rounded
+                              size="tiny"
+                            />
+                          </Table.Cell>
+                          <Table.Cell>
+                            <Header as="h4">
+                              <Header.Content>
+                                Dedicated Photoshoots with one Model
+                              </Header.Content>
+                            </Header>
+                          </Table.Cell>
+                          <Table.Cell></Table.Cell>
+                          <Table.Cell>1.000 $</Table.Cell>
+                        </Table.Row>
+                        <Table.Row onClick={this.showUserServiceDetail}>
+                          <Table.Cell>
+                            <Image
+                              src="https://picktur.s3.eu-central-1.amazonaws.com/HR_1584239946119-balintathlete453k.jpg"
+                              rounded
+                              size="tiny"
+                            />
+                          </Table.Cell>
+                          <Table.Cell>
+                            <Header as="h4">
+                              <Header.Content>
+                                Dedicated Photoshoots with two Models
+                              </Header.Content>
+                            </Header>
+                          </Table.Cell>
+                          <Table.Cell></Table.Cell>
+                          <Table.Cell>2.000 $</Table.Cell>
+                        </Table.Row>
+                        <Table.Row onClick={this.showUserServiceDetail}>
+                          <Table.Cell>
+                            <Image
+                              src="https://picktur.s3.eu-central-1.amazonaws.com/HR_1584239946119-balintathlete453k.jpg"
+                              rounded
+                              size="tiny"
+                            />
+                          </Table.Cell>
+                          <Table.Cell>
+                            <Header as="h4">
+                              <Header.Content>
+                                Product Placement with one Model, exclusive
+                                shooting
+                              </Header.Content>
+                            </Header>
+                          </Table.Cell>
+                          <Table.Cell>
+                            <span className="social">
+                              <Icon name="youtube official" />
+                            </span>
+                            <span className="social">
+                              <Icon name="facebook official" />
+                            </span>
+                            <span className="social">
+                              <Icon name="instagram official" />
+                            </span>
+                          </Table.Cell>
+                          <Table.Cell>1.000 $</Table.Cell>
+                        </Table.Row>
+                        <Table.Row onClick={this.showUserServiceDetail}>
+                          <Table.Cell>
+                            <Image
+                              src="https://picktur.s3.eu-central-1.amazonaws.com/HR_1584239946119-balintathlete453k.jpg"
+                              rounded
+                              size="tiny"
+                            />
+                          </Table.Cell>
+                          <Table.Cell>
+                            <Header as="h4">
+                              <Header.Content>
+                                Product Placement with one Model, SHared
+                                shooting
+                              </Header.Content>
+                            </Header>
+                          </Table.Cell>
+                          <Table.Cell>
+                            <span className="social">
+                              <Icon name="youtube official" />
+                            </span>
+                            <span className="social">
+                              <Icon name="facebook official" />
+                            </span>
+                            <span className="social">
+                              <Icon name="instagram official" />
+                            </span>
+                          </Table.Cell>
+                          <Table.Cell>500 $</Table.Cell>
+                        </Table.Row>
+                      </Table.Body>
+                    </Table>
                   </div>
                 </div>
                 {/* <div className='photoReleases'>

@@ -33,6 +33,7 @@ class Analyse extends Component {
     this.loadDataForUserDiagram = this.loadDataForUserDiagram.bind(this);
     this.setDiagramData = this.setDiagramData.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
+    this.handleSearchTag =  this.handleSearchTag.bind(this);
   }
 
   componentDidMount() {
@@ -232,6 +233,11 @@ class Analyse extends Component {
 
   componentDidUpdate(nextProps) {}
 
+  handleSearchTag(e) {
+    console.log(e);
+    this.props.history.push("/?tag=" + e);
+  }
+
   render() {
     const ViewMode = [
       { key: "day", value: "DAY", text: "Daily" },
@@ -247,6 +253,8 @@ class Analyse extends Component {
           isAuthenticated={this.state.isAuthenticated}
           currentUser={this.state.currentUser}
           onLogout={this.handleLogout}
+          clickSearch={this.clickSearch}
+          handleSearchTag={this.handleSearchTag}
         />
         <Grid>
           <Grid.Row only="computer">

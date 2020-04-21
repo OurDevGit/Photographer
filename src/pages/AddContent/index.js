@@ -22,6 +22,7 @@ class AddContent extends Component {
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
+    this.handleSearchTag =  this.handleSearchTag.bind(this)
   }
 
   loadCurrentUser() {
@@ -66,6 +67,10 @@ class AddContent extends Component {
       description: description,
     });
   }
+  handleSearchTag(e) {
+    console.log(e);
+    this.props.history.push("/?tag=" + e);
+  }
 
   render() {
     if (this.state.isLoading) {
@@ -84,6 +89,8 @@ class AddContent extends Component {
           isAuthenticated={this.state.isAuthenticated}
           currentUser={this.state.currentUser}
           onLogout={this.handleLogout}
+          clickSearch={this.clickSearch}
+          handleSearchTag={this.handleSearchTag}
         />
 
         <Grid className="pages page-index content_page">

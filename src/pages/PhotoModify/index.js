@@ -149,6 +149,7 @@ class PhotoModify extends Component {
     this.loadDataForPhotoDiagram = this.loadDataForPhotoDiagram.bind(this);
     this.modifyPhoto = this.modifyPhoto.bind(this);
     this.handleChangeMode = this.handleChangeMode.bind(this);
+    this.handleSearchTag =  this.handleSearchTag.bind(this);
   }
 
   componentDidMount() {
@@ -1173,6 +1174,11 @@ class PhotoModify extends Component {
     this.loadDataForPhotoDiagram(Request);
   }
 
+  handleSearchTag(e) {
+    console.log(e);
+    this.props.history.push("/?tag=" + e);
+  }
+
   render() {
     console.log("Selected Photo", this.state.selImage);
     const { activeIndex, activeItem } = this.state;
@@ -1229,6 +1235,8 @@ class PhotoModify extends Component {
           isAuthenticated={this.state.isAuthenticated}
           currentUser={this.state.currentUser}
           onLogout={this.handleLogout}
+          clickSearch={this.clickSearch}
+          handleSearchTag={this.handleSearchTag}
         />
         <Grid className="pages page-index modify_page">
           <Grid.Row className="content_title">

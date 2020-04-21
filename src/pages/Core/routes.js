@@ -8,6 +8,7 @@ import SubmitContent from "../AddContent/SubmitContent";
 import Analyse from "../AddContent/Analyse";
 import Admin from "../Admin";
 import Photo_details from "../Photo_details";
+import product_detail from "../product_detail";
 import PhotoModify from "../PhotoModify";
 import Follows from "../Community/Follows";
 import DownloadedPhotos from "../Usage/DownloadedPhotos";
@@ -25,6 +26,7 @@ const routes = (
     <Route path="/analyse" exact component={Analyse} />
     <Route path="/admin" exact component={Admin} />
     <Route path="/Photo_details/:id" exact component={Photo_details} />
+    <Route path="/product_detail/:id" exact component={product_detail} />
     <Route path="/photomodify" exact component={PhotoModify} />
     <Route path="/follows" exact component={Follows} />
     <Route path="/downloadedPhotos" exact component={DownloadedPhotos} />
