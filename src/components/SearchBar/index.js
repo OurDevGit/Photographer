@@ -41,20 +41,21 @@ class SearchBar extends Component {
       trendingTags: [],
       recentTags: [],
       tags: [],
-      filteringTags:[],
+      filteringTags: [],
       selectTag: "",
       searchText: "",
-      open: false
+      open: false,
     };
     this.handleChangeSearchKey = this.handleChangeSearchKey.bind(this);
     this.handleClickSearch = this.handleClickSearch.bind(this);
     this.handleSelectOrder = this.handleSelectOrder.bind(this);
     this.loadTrendingTags = this.loadTrendingTags.bind(this);
     this.handleClickTag = this.handleClickTag.bind(this);
-    this.onSearchChange =  this.onSearchChange.bind(this);
-    this.handleClickOption =  this.handleClickOption.bind(this);
-    this.openDropdown =  this.openDropdown.bind(this);
+    this.onSearchChange = this.onSearchChange.bind(this);
+    this.handleClickOption = this.handleClickOption.bind(this);
+    this.openDropdown = this.openDropdown.bind(this);
     this.closeDropdown = this.closeDropdown.bind(this);
+    this.keypress = this.keypress.bind(this);
   }
 
   componentDidMount() {
@@ -89,7 +90,6 @@ class SearchBar extends Component {
         });
         this.setState({
           tags: taglist,
-          filteringTags: taglist
         });
       })
       .catch((error) => {
@@ -127,45 +127,73 @@ class SearchBar extends Component {
     this.setState({
       selectTag: e.target.id,
       searchText: e.target.id,
-      open: false
+      open: false,
     });
   }
 
-  onSearchChange(e, {data}){
+  onSearchChange(e, { data }) {
     var filteringTags = [];
-    this.state.tags.forEach(tag=>{
-      if(tag.value.includes(e.target.value)){
-        filteringTags.push(tag)
-      }
-    })
-    this.setState({
-      searchText: e.target.value,
-      filteringTags: filteringTags,
-      open: true
-    })
+    if (e.target.value === "") {
+      this.setState({
+        searchText: e.target.value,
+        filteringTags: [],
+        open: true,
+      });
+    } else {
+      this.state.tags.forEach((tag) => {
+        if (filteringTags.length < 5) {
+          if (tag.value.includes(e.target.value)) {
+            filteringTags.push(tag);
+          }
+        }
+      });
+      this.setState({
+        searchText: e.target.value,
+        filteringTags: filteringTags,
+        open: true,
+      });
+    }
   }
 
-  openDropdown(){
+  openDropdown() {
     this.setState({
-      open: true
-    })
+      open: true,
+    });
   }
 
-  closeDropdown(){
+  closeDropdown() {
     this.setState({
-      open: false
-    })
+      open: false,
+    });
   }
 
-  handleClickOption(e){
-    console.log(e.target)
+  handleClickOption(e) {
+    console.log(e.target);
   }
 
   handleChangeSearchKey(e, { value }) {
     this.setState({
       searchKey: value,
     });
-    console.log(value);
+  }
+
+  keypress(e) {
+    if (e.keyCode === 13) {
+      this.setState({
+        open: false,
+      });
+      if (this.state.searchText != "") {
+        var SearchOptions = [
+          {
+            label: "key",
+            value: this.state.searchText,
+          },
+        ];
+      } else {
+        var SearchOptions = [];
+      }
+      this.props.clickSearch(this.state.searchText);
+    }
   }
 
   handleClickSearch() {
@@ -191,8 +219,8 @@ class SearchBar extends Component {
     console.log(value);
   }
 
-  onChangeSearchDropdown(){
-    console.log("changed")
+  onChangeSearchDropdown() {
+    console.log("changed");
   }
 
   render() {
@@ -261,15 +289,23 @@ class SearchBar extends Component {
           options={this.state.tags}
           value={this.state.selectTag}
           onSearchChange={this.onSearchChange}
-          searchQuery = {this.state.searchText}
+          searchQuery={this.state.searchText}
           open={this.state.open}
           onFocus={this.openDropdown}
-          onBlur = {this.closeDropdown}
+          onBlur={this.closeDropdown}
+          placeholder="Search ..."
+          clearable
+          onKeyUp={this.keypress}
         >
           <Dropdown.Menu className="searchBoxContent">
             <Dropdown.Menu scrolling>
               {this.state.filteringTags.map((option) => (
-                <Dropdown.Item key={option.value} id={option.value} {...option} onClick={this.handleClickTag} />
+                <Dropdown.Item
+                  key={option.value}
+                  id={option.value}
+                  {...option}
+                  onClick={this.handleClickTag}
+                />
               ))}
             </Dropdown.Menu>
             <span>recent tags</span>

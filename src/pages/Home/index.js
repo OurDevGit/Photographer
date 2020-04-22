@@ -50,6 +50,7 @@ class Home extends Component {
     this.viewOwner = this.viewOwner.bind(this);
     this.clickSearch = this.clickSearch.bind(this);
     this.handleSearchTag = this.handleSearchTag.bind(this);
+    this.clickSearch = this.clickSearch.bind(this);
   }
 
   loadCurrentUser() {
@@ -204,9 +205,7 @@ class Home extends Component {
   }
 
   clickSearch(e) {
-    this.setState({
-      searchOptions: e,
-    });
+    this.props.history.push("/?key=" + e);
   }
 
   handleSearchTag(e) {
@@ -214,10 +213,22 @@ class Home extends Component {
     this.props.history.push("/?tag=" + e);
   }
 
+  clickSearch(e) {
+    this.props.history.push("/?key=" + e);
+  }
+
   render() {
     if (this.props.location.search.split("=")[0] === "?tag") {
       var tagSearch = this.props.location.search.split("=")[1];
       console.log("dddd", tagSearch);
+    } else if (this.props.location.search.split("=")[0] === "?key") {
+      var keySearch = this.props.location.search.split("=")[1];
+      var SearchOptions = [
+        {
+          label: "key",
+          value: keySearch,
+        },
+      ];
     }
     return (
       <>
@@ -246,7 +257,7 @@ class Home extends Component {
                 totalPages={this.state.totalPages}
                 quickView={this.quickView}
                 viewOwner={this.viewOwner}
-                searchOptions={this.state.searchOptions}
+                searchOptions={SearchOptions}
                 tagSearch={tagSearch}
               />
               {/* <Gallery photos={photos}  /> */}

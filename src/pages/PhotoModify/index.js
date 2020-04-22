@@ -149,7 +149,8 @@ class PhotoModify extends Component {
     this.loadDataForPhotoDiagram = this.loadDataForPhotoDiagram.bind(this);
     this.modifyPhoto = this.modifyPhoto.bind(this);
     this.handleChangeMode = this.handleChangeMode.bind(this);
-    this.handleSearchTag =  this.handleSearchTag.bind(this);
+    this.handleSearchTag = this.handleSearchTag.bind(this);
+    this.clickSearch = this.clickSearch.bind(this);
   }
 
   componentDidMount() {
@@ -1177,6 +1178,10 @@ class PhotoModify extends Component {
   handleSearchTag(e) {
     console.log(e);
     this.props.history.push("/?tag=" + e);
+  }
+
+  clickSearch(e) {
+    this.props.history.push("/?key=" + e);
   }
 
   render() {

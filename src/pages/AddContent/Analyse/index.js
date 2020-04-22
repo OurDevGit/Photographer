@@ -33,7 +33,8 @@ class Analyse extends Component {
     this.loadDataForUserDiagram = this.loadDataForUserDiagram.bind(this);
     this.setDiagramData = this.setDiagramData.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
-    this.handleSearchTag =  this.handleSearchTag.bind(this);
+    this.handleSearchTag = this.handleSearchTag.bind(this);
+    this.clickSearch = this.clickSearch.bind(this);
   }
 
   componentDidMount() {
@@ -236,6 +237,9 @@ class Analyse extends Component {
   handleSearchTag(e) {
     console.log(e);
     this.props.history.push("/?tag=" + e);
+  }
+  clickSearch(e) {
+    this.props.history.push("/?key=" + e);
   }
 
   render() {

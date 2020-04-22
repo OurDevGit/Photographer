@@ -130,7 +130,8 @@ class SubmitContent extends Component {
     this.confirmModalClose = this.confirmModalClose.bind(this);
     this.deletePhotos = this.deletePhotos.bind(this);
     this.deleteFun = this.deleteFun.bind(this);
-    this.handleSearchTag =  this.handleSearchTag.bind(this)
+    this.handleSearchTag = this.handleSearchTag.bind(this);
+    this.clickSearch = this.clickSearch.bind(this);
   }
 
   componentDidMount() {
@@ -971,6 +972,10 @@ class SubmitContent extends Component {
   handleSearchTag(e) {
     console.log(e);
     this.props.history.push("/?tag=" + e);
+  }
+
+  clickSearch(e) {
+    this.props.history.push("/?key=" + e);
   }
 
   render() {

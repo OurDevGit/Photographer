@@ -79,6 +79,7 @@ class product_detail extends Component {
     this.handleLogin = this.handleLogin.bind(this);
     this.goBack = this.goBack.bind(this);
     this.handleSearchTag = this.handleSearchTag.bind(this);
+    this.clickSearch = this.clickSearch.bind(this);
     this.showUserServiceDetail = this.showUserServiceDetail.bind(this);
   }
 
@@ -193,6 +194,10 @@ class product_detail extends Component {
   handleSearchTag(e) {
     console.log(e);
     this.props.history.push("/?tag=" + e);
+  }
+
+  clickSearch(e) {
+    this.props.history.push("/?key=" + e);
   }
 
   showUserServiceDetail() {

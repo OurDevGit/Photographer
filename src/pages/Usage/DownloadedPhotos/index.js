@@ -201,10 +201,7 @@ class DownloadedPhotos extends Component {
   }
 
   clickSearch(e) {
-    console.log("sfasdfsadfsafsafasf", e);
-    this.setState({
-      searchOptions: e,
-    });
+    this.props.history.push("/?key=" + e);
   }
 
   handleSearchTag(e) {

@@ -23,6 +23,7 @@ class HomeHeader extends React.Component {
   constructor(props) {
     super(props);
     this.handleMenuClick = this.handleMenuClick.bind(this);
+    this.clickSearch =  this.clickSearch.bind(this)
   }
   state = {
     mobileMenuOpen: false,
@@ -42,7 +43,12 @@ class HomeHeader extends React.Component {
     }
   }
 
+  clickSearch(e){
+    this.props.clickSearch(e)
+  }
+
   render() {
+    console.log(this.props)
     const { mobileMenuOpen } = this.state;
     const { currentUser } = this.props;
     let menuItems;

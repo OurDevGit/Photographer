@@ -98,6 +98,7 @@ class Photo_details extends Component {
     this.viewOwner = this.viewOwner.bind(this);
     this.quickView = this.quickView.bind(this);
     this.handleSearchTag = this.handleSearchTag.bind(this);
+    this.clickSearch =  this.clickSearch.bind(this);
     this.showUserServiceDetail = this.showUserServiceDetail.bind(this);
   }
 
@@ -478,6 +479,10 @@ class Photo_details extends Component {
   handleSearchTag(e) {
     console.log(e);
     this.props.history.push("/?tag=" + e);
+  }
+
+  clickSearch(e) {
+    this.props.history.push("/?key=" + e);
   }
 
   showUserServiceDetail() {

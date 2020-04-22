@@ -15,7 +15,8 @@ class Follows extends Component {
       followUsers: [],
     };
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
-    this.handleSearchTag =  this.handleSearchTag.bind(this)
+    this.handleSearchTag = this.handleSearchTag.bind(this);
+    this.clickSearch = this.clickSearch.bind(this);
   }
 
   componentDidMount() {
@@ -63,6 +64,10 @@ class Follows extends Component {
   handleSearchTag(e) {
     console.log(e);
     this.props.history.push("/?tag=" + e);
+  }
+
+  clickSearch(e) {
+    this.props.history.push("/?key=" + e);
   }
 
   render() {

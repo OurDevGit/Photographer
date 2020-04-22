@@ -25,7 +25,8 @@ class Admin extends Component {
     this.loadAllCategories = this.loadAllCategories.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
     this.handleMenuClick = this.handleMenuClick.bind(this);
-    this.handleSearchTag =  this.handleSearchTag.bind(this);
+    this.handleSearchTag = this.handleSearchTag.bind(this);
+    this.clickSearch = this.clickSearch.bind(this);
   }
 
   loadCurrentUser() {
@@ -103,6 +104,10 @@ class Admin extends Component {
   handleSearchTag(e) {
     console.log(e);
     this.props.history.push("/?tag=" + e);
+  }
+
+  clickSearch(e) {
+    this.props.history.push("/?key=" + e);
   }
 
   render() {

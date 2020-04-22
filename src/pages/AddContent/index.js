@@ -22,7 +22,8 @@ class AddContent extends Component {
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
-    this.handleSearchTag =  this.handleSearchTag.bind(this)
+    this.handleSearchTag =  this.handleSearchTag.bind(this);
+    this.clickSearch =  this.clickSearch.bind(this);
   }
 
   loadCurrentUser() {
@@ -70,6 +71,9 @@ class AddContent extends Component {
   handleSearchTag(e) {
     console.log(e);
     this.props.history.push("/?tag=" + e);
+  }
+  clickSearch(e) {
+    this.props.history.push("/?key=" + e);
   }
 
   render() {

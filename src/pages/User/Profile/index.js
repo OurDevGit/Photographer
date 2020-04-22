@@ -39,7 +39,8 @@ class Profile extends Component {
     this.uploadAvatar = this.uploadAvatar.bind(this);
     this.update_userData = this.update_userData.bind(this);
     this.handleImageClick = this.handleImageClick.bind(this);
-    this.handleSearchTag =  this.handleSearchTag.bind(this)
+    this.handleSearchTag = this.handleSearchTag.bind(this);
+    this.clickSearch = this.clickSearch.bind(this);
   }
 
   loadCurrentUser(userId) {
@@ -200,6 +201,10 @@ class Profile extends Component {
   handleSearchTag(e) {
     console.log(e);
     this.props.history.push("/?tag=" + e);
+  }
+
+  clickSearch(e) {
+    this.props.history.push("/?key=" + e);
   }
 
   render() {
