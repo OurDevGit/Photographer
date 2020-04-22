@@ -237,7 +237,7 @@ class product_detail extends Component {
             clickSearch={this.clickSearch}
             handleSearchTag={this.handleSearchTag}
           />
-          <Grid className="photo_details" verticalAlign="">
+          <Grid className="product_details" verticalAlign="">
             <Grid.Row only="computer" className="photo_details_row">
               <Grid.Column width={6}>
                 <img src="https://picktur.s3.eu-central-1.amazonaws.com/HR_1584239946119-balintathlete453k.jpg" />

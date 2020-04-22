@@ -98,7 +98,7 @@ class Photo_details extends Component {
     this.viewOwner = this.viewOwner.bind(this);
     this.quickView = this.quickView.bind(this);
     this.handleSearchTag = this.handleSearchTag.bind(this);
-    this.clickSearch =  this.clickSearch.bind(this);
+    this.clickSearch = this.clickSearch.bind(this);
     this.showUserServiceDetail = this.showUserServiceDetail.bind(this);
   }
 
@@ -491,6 +491,7 @@ class Photo_details extends Component {
 
   render() {
     const { selImage, similarPhotos } = this.state;
+    console.log("~~~~~~~~~~~~~~~~~~~", selImage);
     const keywords = [];
     var url = "";
     var downloadUrl = "";
@@ -598,8 +599,10 @@ class Photo_details extends Component {
                       {this.state.views}
                     </Label>
                   </Button>
-                  <a>Zoom : Shift + scroll</a>
-                  <PanAndZoomImage src={downloadUrl} />
+                  {/* <a>Zoom : Shift + scroll</a> */}
+                  {/* <PanAndZoomImage src={downloadUrl} /> */}
+                  <h3>{selImage.title || "The Title of this Image"}</h3>
+                  <img src={downloadUrl} />
                 </div>
                 <div className="CommentBox">
                   <Comments
@@ -643,34 +646,37 @@ class Photo_details extends Component {
               </Grid.Column>
               <Grid.Column width={8}>
                 <div className="photoDetail">
-                  {/* <h2>Product Placement with one Model, exclusive shooting</h2>
-                  <h3 className="shared">
-                    <span className="social">
-                      <Icon name="youtube official" />
-                    </span>
-                    <span className="social">
-                      <Icon name="facebook official" />
-                    </span>
-                    <span className="social">
-                      <Icon name="instagram official" />
-                    </span>
-                    <span>Shared on:</span>
-                  </h3> */}
-                  <p>
-                    This Content is created by{" "}
+                  <p className="ownerName">
                     <a href="">
-                      <b>{selImage.owner}</b>
+                      <b>
+                        <AvatarImage
+                          url={
+                            selImage.ownerIcon
+                              ? selImage.ownerIcon
+                              : AvatarDefault
+                          }
+                          name={selImage.owner}
+                        />
+                      </b>
                     </a>
-                    .
+                    <a>
+                      <span className="social">
+                        <Icon name="facebook official" />
+                      </span>
+                    </a>
+                    <a>
+                      <span className="social">
+                        <Icon name="instagram official" />
+                      </span>
+                    </a>
                   </p>
                   {/* <p>
                   Image# <a href=""><b>{url.split('/')[url.split('/').length-1]}</b></a>.
                 </p> */}
                   <p>
-                    uploaded: <b> June 18, 2018 11:14 AM</b>
+                    <b> June 18, 2018 11:14 AM</b>
                   </p>
                   <p>
-                    Releases:{" "}
                     <b>
                       {" "}
                       Has{" "}
@@ -682,34 +688,14 @@ class Photo_details extends Component {
                   </p>
                   {selImage.description ? (
                     <p>
-                      Descriptions: <b>{selImage.description}</b>
+                      <b>{selImage.description}</b>
                     </p>
                   ) : null}
                   <div className="keywords">
-                    <p>Keywords:</p>
+                    {/* <p>Keywords:</p> */}
                     {keywords}
                   </div>
-                  {/* <p className="Tax">
-                    <span> 1.000 $(Incl. Tax)</span>
-                    <span className="fee">
-                      <b>Fee: </b>
-                    </span>
-                  </p>
-                  <p className="Tax">
-                    <span> Available from firm</span>
-                    <span>
-                      <b>Invoice: </b>
-                    </span>
-                  </p>
-                  <div className="paymentButtons">
-                    <Button size="massive" color="blue">
-                      Reserve with Escrow
-                    </Button>
-                    <Button size="massive" color="blue">
-                      Contact the Seller
-                    </Button>
-                  </div> */}
-                  <h3>The User offers this services</h3>
+                  <h3>{selImage.owner} offers this services</h3>
                   <div className="userServiceTable">
                     <Table basic="very" selectable>
                       <Table.Header>
@@ -846,7 +832,9 @@ class Photo_details extends Component {
                     handleClose={this.CloseBucketModal}
                   />
 
-                  <PanAndZoomImage src={downloadUrl}></PanAndZoomImage>
+                  {/* <PanAndZoomImage src={downloadUrl}></PanAndZoomImage> */}
+                  <h3>{selImage.title || "The Title of this Image"}</h3>
+                  <img src={downloadUrl} />
                 </div>
                 <div className="CommentBox">
                   <Comments
@@ -943,28 +931,22 @@ class Photo_details extends Component {
               </Grid.Column>
               <Grid.Column width={16}>
                 <div className="photoDetail">
-                  {/* <h3>Product Placement with one Model, exclusive shooting</h3>
-                  <h3 className="shared">
-                    <span className="social">
-                      <Icon name="youtube official" />
-                    </span>
-                    <span className="social">
-                      <Icon name="facebook official" />
-                    </span>
-                    <span className="social">
-                      <Icon name="instagram official" />
-                    </span>
-                    <span>Shared on:</span>
-                  </h3> */}
                   <p>
-                    This Content is created by{" "}
                     <a href="">
-                      <b>{selImage.owner}</b>
+                      <b>
+                        <AvatarImage
+                          url={
+                            selImage.ownerIcon
+                              ? selImage.ownerIcon
+                              : AvatarDefault
+                          }
+                          name={selImage.owner}
+                        />
+                      </b>
                     </a>
                     .
                   </p>
                   <p>
-                    Releases:{" "}
                     <b>
                       {" "}
                       Has{" "}
@@ -975,33 +957,13 @@ class Photo_details extends Component {
                     </b>
                   </p>
                   <p>
-                    Descriptions: <b>{selImage.description}</b>
+                    <b>{selImage.description}</b>
                   </p>
                   <div className="keywords">
-                    <p>Keywords</p>
+                    {/* <p>Keywords</p> */}
                     {keywords}
                   </div>
-                  {/* <p className="Tax">
-                    <span> 1.000 $(Incl. Tax)</span>
-                    <span className="fee">
-                      <b>Fee: </b>
-                    </span>
-                  </p>
-                  <p className="Tax">
-                    <span> Available from firm</span>
-                    <span>
-                      <b>Invoice: </b>
-                    </span>
-                  </p>
-                  <div className="paymentButtons">
-                    <Button size="huge" color="blue">
-                      Reserve with Escrow
-                    </Button>
-                    <Button size="huge" color="blue">
-                      Contact the Seller
-                    </Button>
-                  </div> */}
-                  <h3>The User offers this services</h3>
+                  <h3>{selImage.owner} offers this services</h3>
                   <div className="userServiceTable">
                     <Table basic="very" selectable>
                       <Table.Header>

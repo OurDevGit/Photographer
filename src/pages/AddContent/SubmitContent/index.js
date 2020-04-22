@@ -1215,6 +1215,24 @@ class SubmitContent extends Component {
 
                       </Form.Field>
                     </div> */}
+                    <div class="column">
+                        <Form.Field>
+                          <div class="label">Title</div>
+                          <Input
+                            placeholder="please put title of photo"
+                            name="title"
+                            value={this.state.photoOptions["title"]}
+                            required
+                            onChange={this.handleSetPhotoOption}
+                            disabled={
+                              this.state.activeMenuItem != "TO_BE_SUBMITTED"
+                            }
+                          />
+                          <div class="label error">
+                            {this.state.errorMessage["Description"]}
+                          </div>
+                        </Form.Field>
+                      </div>
                       <div class="column">
                         <Form.Field>
                           <div class="label">Description</div>

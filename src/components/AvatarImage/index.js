@@ -3,10 +3,10 @@ import { Image } from 'semantic-ui-react'
 import './style.less'
 
 const AvatarImage = ({url, name}) => (
-  <div className="avatarSection">
+  <a className="avatarSection">
     <Image src={url} className="avatar" avatar />
       <span>{name}</span>
-  </div>
+  </a>
 )
 
 export default AvatarImage
