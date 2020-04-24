@@ -72,7 +72,6 @@ class Photo_details extends Component {
       isCtrlKey: false,
       sameCollectionPhotos: [],
       opne: false,
-      ImageShow: false,
       modalImageDetail: {},
     };
     this.handleLogout = this.handleLogout.bind(this);
@@ -445,9 +444,20 @@ class Photo_details extends Component {
     getPhotoAuthDownload(this.state.selImage.id)
       .then((response) => {
         console.log(response);
+        response.blob().then((blob) => {
+          let url = window.URL.createObjectURL(blob);
+          let a = document.createElement("a");
+          a.href = url;
+          a.download = "";
+          a.click();
+        });
       })
       .catch((error) => {
         console.log(error);
+        notification.error({
+          message: "Openshoots",
+          description: "Something went wrong. Please try again.",
+        });
       });
     this.modalclose();
   }
@@ -498,9 +508,19 @@ class Photo_details extends Component {
     if (selImage && selImage.tags) {
       for (let i = 0; i < selImage.tags.length; i++) {
         keywords.push(
-          <button onClick={this.sameTagPhotos} id={selImage.tags[i].value}>
+          // <button onClick={this.sameTagPhotos} id={selImage.tags[i].value}>
+          //   {selImage.tags[i].value}
+          // </button>
+          <Label
+            as="a"
+            className="value"
+            onClick={this.sameTagPhotos}
+            id={selImage.tags[i].value}
+            image
+          >
+            <img src={selImage.tags[i].icon} />
             {selImage.tags[i].value}
-          </button>
+          </Label>
         );
       }
       url = selImage.url_fr + "";
@@ -601,7 +621,7 @@ class Photo_details extends Component {
                   </Button>
                   {/* <a>Zoom : Shift + scroll</a> */}
                   {/* <PanAndZoomImage src={downloadUrl} /> */}
-                  <h3>{selImage.title || "The Title of this Image"}</h3>
+                  <h3>{selImage.title}</h3>
                   <img src={downloadUrl} />
                 </div>
                 <div className="CommentBox">
@@ -647,7 +667,7 @@ class Photo_details extends Component {
               <Grid.Column width={8}>
                 <div className="photoDetail">
                   <p className="ownerName">
-                    <a href="">
+                    <a href={"/user/profile/" + selImage.ownerId}>
                       <b>
                         <AvatarImage
                           url={
@@ -833,7 +853,7 @@ class Photo_details extends Component {
                   />
 
                   {/* <PanAndZoomImage src={downloadUrl}></PanAndZoomImage> */}
-                  <h3>{selImage.title || "The Title of this Image"}</h3>
+                  <h3>{selImage.title}</h3>
                   <img src={downloadUrl} />
                 </div>
                 <div className="CommentBox">
@@ -932,7 +952,7 @@ class Photo_details extends Component {
               <Grid.Column width={16}>
                 <div className="photoDetail">
                   <p>
-                    <a href="">
+                    <a href={"/user/profile/" + selImage.ownerId}>
                       <b>
                         <AvatarImage
                           url={

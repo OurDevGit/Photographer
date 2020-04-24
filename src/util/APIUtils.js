@@ -423,6 +423,14 @@ export function getDownloadedPhotos(id) {
   });
 }
 
+export function getUserPhotos(id) {
+  return request({
+    url:
+      API_BASE_URL + "/photo_details_controller/user_photos/" + id,
+    method: "GET",
+  });
+}
+
 export function getPhotoAuthDownload(id) {
   return request1({
     url: API_BASE_URL + "/photo_details_controller/photo_auth_download/" + id,

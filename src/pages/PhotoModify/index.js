@@ -482,10 +482,10 @@ class PhotoModify extends Component {
   //Multiple Image click event
 
   handleImageClick(e, flag) {
-    this.setState({
-      containTags: e.photo.containedTags,
-      currentContainTags: e.photo.containedTags,
-    });
+    // this.setState({
+    //   containTags: e.photo.containedTags,
+    //   currentContainTags: e.photo.containedTags,
+    // });
     if (!this.state.selImage[e.photo.id]) {
       this.state.selImage[e.photo.id] = e.photo;
       this.setState({
@@ -675,16 +675,16 @@ class PhotoModify extends Component {
       this.state.currentTagValues = this.state.currentTagValues
         ? this.state.currentTagValues
         : [];
-      for (let t = 0; t < this.state.currentTagValues.length; t++) {
-        if (e.photo.containedTags.includes(this.state.currentTagValues[t])) {
-          e.photo.containedTags = e.photo.containedTags.filter(
-            (item) => item != this.state.currentTagValues[t]
-          );
-        }
-      }
-      this.setState({
-        currentContainTags: e.photo.containedTags,
-      });
+      // for (let t = 0; t < this.state.currentTagValues.length; t++) {
+      //   if (e.photo.containedTags.includes(this.state.currentTagValues[t])) {
+      //     e.photo.containedTags = e.photo.containedTags.filter(
+      //       (item) => item != this.state.currentTagValues[t]
+      //     );
+      //   }
+      // }
+      // this.setState({
+      //   currentContainTags: e.photo.containedTags,
+      // });
     } else {
       // when there is not images which checked
       this.setState({
@@ -1317,10 +1317,11 @@ class PhotoModify extends Component {
                 <PhotoList
                   onClickImage={this.handleImageClick}
                   username={this.state.currentUser.username}
-                  type="Submit_operation"
+                  type="userPhoto"
                   status={this.state.activeMenuItem}
                   delete={this.state.deleteAction}
                   deleteFun={this.deleteFun}
+                  currentUser={this.state.currentUser}
                 />
               </Grid.Row>
             </Grid.Column>

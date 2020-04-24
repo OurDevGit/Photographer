@@ -41,7 +41,7 @@ class Photo extends Component {
   }
 
   handleCheck() {
-    if (this.props.type == "Submit_operation") {
+    if (this.props.type === "Submit_operation" || this.props.type === "userPhoto") {
       this.state.isChecked = !this.state.isChecked;
       this.setState({
         isChecked: this.state.isChecked,
@@ -76,7 +76,7 @@ class Photo extends Component {
           id={index == active ? "active" : ""}
         >
           {/* <div className="photo-header"> */}
-          {type == "Submit_operation" ? (
+          {(type == "Submit_operation" || type == 'userPhoto') ? (
             <Checkbox
               value={this.state.isChecked}
               className="ddd"

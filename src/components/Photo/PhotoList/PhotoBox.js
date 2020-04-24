@@ -3,6 +3,8 @@ import { Popup, Button, Icon, Label } from "semantic-ui-react";
 import { Heart_Icon, Plus_Icon, Zoom_Icon } from "../../../assets/icons";
 import { AvatarImage } from "../../../components";
 import { AvatarDefault } from "../../../assets/images/homepage";
+import { addToLike, removeToLike, is_liked } from "../../../util/APIUtils";
+import { notification } from "antd";
 var MouseOverFlag;
 const style = {
   borderRadius: 0,
@@ -23,6 +25,7 @@ class PhotoBox extends Component {
       currentVotes: [],
       hasMore: true,
       isLoading: false,
+      islike: 0
     };
     this.handleImageClick = this.handleImageClick.bind(this);
     this.quickView = this.quickView.bind(this);
@@ -30,6 +33,7 @@ class PhotoBox extends Component {
     this.onMouseOver = this.onMouseOver.bind(this);
     this.onMouseOut = this.onMouseOut.bind(this);
     this.handleViewOwner = this.handleViewOwner.bind(this);
+    this.addLike = this.addLike.bind(this);
   }
 
   handleImageClick(e) {
@@ -54,9 +58,45 @@ class PhotoBox extends Component {
   onMouseOut() {
     clearTimeout(this.MouseOverFlag);
   }
+  addLike() {
+    is_liked(this.props.photo.id)
+      .then((response) => {
+        if (response) {
+          notification.error({
+            message: "Openshoots",
+            description: "This photo is already your liked photo",
+          });
+        } else {
+          addToLike(this.props.photo.id)
+            .then((response) => {
+              if (response.ok) {
+                this.setState({
+                  islike: 1
+                })
+              } else {
+                notification.error({
+                  message: "Openshoots",
+                  description: "Something went wrong. Please try again.",
+                });
+              }
+            })
+            .catch((error) => {
+              notification.error({
+                message: "Openshoots",
+                description: "Something went wrong. Please try again.",
+              });
+            });
+        }
+      })
+      .catch((error) => {
+        notification.error({
+          message: "Openshoots",
+          description: "Something went wrong. Please try again.",
+        });
+      });
+  }
 
   render() {
-    // console.log(this.props.photo)
     var releaseNum = this.props.photo.authorizations
       ? this.props.photo.authorizations.length
       : 0;
@@ -65,7 +105,9 @@ class PhotoBox extends Component {
         <a target="blank" onClick={this.quickView}>
           <Zoom_Icon className="detail_Icon Zoom-icon" />
         </a>
-        <Heart_Icon className="detail_Icon Heart-icon" />
+        <a onClick={this.addLike}>
+          <Heart_Icon className="detail_Icon Heart-icon" />
+        </a>
         <a onClick={this.addToBucket}>
           <Plus_Icon className="detail_Icon Plus-icon" />
         </a>
@@ -108,7 +150,7 @@ class PhotoBox extends Component {
                 {/* Like */}
               </Button>
               <Label as="a" basic color="red" pointing="left">
-                {this.props.photo.likes}
+                {this.props.photo.likes +  this.state.islike}
               </Label>
             </Button>
 

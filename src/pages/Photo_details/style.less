@@ -21,13 +21,14 @@
     margin: 30px;
     .zoomImage {
       background: #ffffff;
-      border: 1px solid gray;
       border-radius: 10px;
       padding: 10px;
       text-align: center;
       img {
         max-height: 500px;
         min-width: 0px !important;
+        max-width: 100%;
+        border-radius: 20px;
       }
     }
     .zoomImage {
@@ -102,7 +103,7 @@
     }
     .keywords {
       margin-bottom: 30px;
-      button {
+      .value {
         border: 0;
         padding: 4px 8px;
         border-radius: 20px;
@@ -112,8 +113,13 @@
         cursor: pointer;
         box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.08);
         font-size: 11px;
+        img{
+          width: 20px !important;
+          height: 20px !important;
+          vertical-align: inherit !important;
+        }
       }
-      button:hover{
+      .value:hover{
         background: lightgrey;
       }
     }

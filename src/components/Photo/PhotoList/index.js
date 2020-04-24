@@ -11,6 +11,7 @@ import {
   getPhotoListsForSearchByTag,
   getDownloadedPhotos,
   getListBasketsContent,
+  getUserPhotos
 } from "../../../util/APIUtils";
 import Photo from "../Photo";
 import { castVote } from "../../../util/APIUtils";
@@ -64,6 +65,8 @@ class PhotoList extends Component {
         promise = getDownloadedPhotos(this.props.currentUser.id);
       } else if (this.props.type === "basket") {
         promise = getListBasketsContent(this.props.basketId);
+      } else if(this.props.type === 'userPhoto'){
+        promise = getUserPhotos(this.props.currentUser.id)
       } else {
         if (this.props.searchOptions && this.props.searchOptions.length > 0) {
           promise = getPhotoListsForSearch(
@@ -129,7 +132,8 @@ class PhotoList extends Component {
     } else if (
       this.props.type == "admin_photolist" ||
       this.props.type === "downloaded_photolist" ||
-      this.props.type === "basket"
+      this.props.type === "basket" ||
+      this.props.type === "userPhoto"
     ) {
       promise
         .then((response) => {
