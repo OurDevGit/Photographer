@@ -67,6 +67,7 @@ export default class MultipleImageUploadComponent extends Component {
       );
     }
     const formData = new FormData();
+
     formData.append("collection", this.state.Collection);
     formData.append("files", this.state.files[fileNo]);
 
@@ -103,11 +104,27 @@ export default class MultipleImageUploadComponent extends Component {
             (this.state.uploadedFileNumber * 100) / len
           );
           if (this.state.uploadedFileNumber == len) {
-            this.setState({
-              isLoading: false,
-              uploadStatus: true,
-            });
+            if (
+              this.state.uploadFailedNumber == this.state.uploadedFileNumber
+            ) {
+              this.setState({
+                isLoading: false,
+              });
+              notification.error({
+                message: "Openshoots",
+                description:
+                  "Sorry!" +
+                  this.state.uploadFailedNumber +
+                  "files uploading are failed. Please try again!",
+              });
+            } else {
+              this.setState({
+                isLoading: false,
+                uploadStatus: true,
+              });
+            }
           }
+
           this.setState({
             uploadedFileNumber: this.state.uploadedFileNumber,
             uploadFailedNumber: this.state.uploadFailedNumber,
@@ -136,16 +153,16 @@ export default class MultipleImageUploadComponent extends Component {
   }
 
   handleClickUpload() {
-    if (this.state.Collection === "") {
-      notification.error({
-        message: "Photoing App",
-        description: "Please input collection",
-      });
-    } else {
-      for (let i = 0; i < this.state.files.length; i++) {
-        this.uploadFiles(i, this.state.files.length);
-      }
+    // if (this.state.Collection === "") {
+    //   notification.error({
+    //     message: "Photoing App",
+    //     description: "Please input collection",
+    //   });
+    // } else {
+    for (let i = 0; i < this.state.files.length; i++) {
+      this.uploadFiles(i, this.state.files.length);
     }
+    // }
   }
 
   goSubmitContent() {

@@ -676,6 +676,7 @@ class SubmitContent extends Component {
   // when change some photoptions
 
   handleSetPhotoOption = (e, { name, value }) => {
+    console.log("__________________________________",name)
     this.arr_options = this.state.photoOptions;
     this.arr_options[name] = value;
     this.state.errorMessage[name] = "";
@@ -1325,14 +1326,13 @@ class SubmitContent extends Component {
                         </Form.Field>
                       </div>
                       <div class="column">
-                        <Form.Field required>
+                        <Form.Field>
                           <div class="label">Location(optional)</div>
-                          <input
+                          <Input
                             type="text"
                             placeholder="Location(optional)"
                             name="Location"
                             value={this.state.photoOptions["Location"]}
-                            required
                             onChange={this.handleSetPhotoOption}
                             disabled={
                               this.state.activeMenuItem != "TO_BE_SUBMITTED"

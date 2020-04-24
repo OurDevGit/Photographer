@@ -4,12 +4,10 @@ import React from "react";
 import { Menu, Grid, Image, Button, Dropdown, Icon } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 import Avatar from "../Avatar";
-import QuestionSVG from "-!svg-react-loader!../../assets/images/question.svg";
-import logoPng from "../../assets/images/logo.PNG";
 import mobileMenuPng from "../../assets/images/mobile-menu.png";
 import mobileCloseMenuPng from "../../assets/images/cross.png";
 import logo from "../../assets/images/OpenShoots.gif";
-import { PaperPlaneIcon, StarIcon, HeartIcon } from "../../assets/icons";
+import { PaperPlaneIcon, StarIcon } from "../../assets/icons";
 import SearchBar from '../SearchBar'
 import "./header.less";
 
@@ -48,7 +46,6 @@ class HomeHeader extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     const { mobileMenuOpen } = this.state;
     const { currentUser } = this.props;
     let menuItems;

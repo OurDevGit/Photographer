@@ -68,7 +68,7 @@ class Photo extends Component {
     }
 
     return (
-      <div className={status == "REJECTED" ? "rejectedPhoto" : ""}>
+      <div className={status == "REJECTED" ? "rejectedPhoto" : "photo_div"}>
         <div
           className={
             this.state.isChecked ? "photo-content active" : "photo-content"
