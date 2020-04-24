@@ -11,7 +11,7 @@ const HomeFooter = () => (
       <Grid.Row>
         <div>
           {/* <Image src={WhiteLogo} className="logo" /> */}
-          <h2 className="logo">Picktur</h2>
+          <h2 className="logo">Openshoots</h2>
         </div>
         <div>
           <Menu borderless>

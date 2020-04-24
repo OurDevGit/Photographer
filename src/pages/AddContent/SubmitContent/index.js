@@ -97,6 +97,7 @@ class SubmitContent extends Component {
       selRelease: [],
       ReleaseScore: [],
       deleteAction: false,
+      isButtonLoading: false,
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -465,6 +466,7 @@ class SubmitContent extends Component {
     this.setState({
       containTags: e.photo.containedTags,
       currentContainTags: e.photo.containedTags,
+      collection: e.photo.collection,
     });
     if (!this.state.selImage[e.photo.id]) {
       this.state.selImage[e.photo.id] = e.photo;
@@ -676,7 +678,6 @@ class SubmitContent extends Component {
   // when change some photoptions
 
   handleSetPhotoOption = (e, { name, value }) => {
-    console.log("__________________________________",name)
     this.arr_options = this.state.photoOptions;
     this.arr_options[name] = value;
     this.state.errorMessage[name] = "";
@@ -747,6 +748,9 @@ class SubmitContent extends Component {
   // when click submit button
 
   handleSubmit() {
+    this.setState({
+      isButtonLoading: true,
+    });
     submitMultiplePhoto(this.state.selImageIDs)
       .then((response) => {
         console.log(response);
@@ -755,28 +759,37 @@ class SubmitContent extends Component {
           activeMenuItem: "SUBMITTED",
           selImage: [],
           selImageIDs: [],
+          isButtonLoading: false,
           // total: this.state.total
         });
       })
       .catch((error) => {
         this.setState({
           isLoading: false,
+          isButtonLoading: false,
         });
       });
   }
 
   handleRedeem() {
+    this.setState({
+      isButtonLoading: true
+    })
     redeemMultiplePhoto(this.state.selImageIDs)
       .then((response) => {
         console.log(response);
         this.getTotalNumberOfPhotos();
         this.setState({
           activeMenuItem: "TO_BE_SUBMITTED",
+          isButtonLoading: false
           // total: this.state.total
         });
       })
       .catch((error) => {
         console.log(error);
+        this.setState({
+          isButtonLoading: false
+        })
       });
   }
 
@@ -794,6 +807,8 @@ class SubmitContent extends Component {
       var temp_options = this.state.selImage[this.state.selImageIDs[i]];
       if (name == "Description") {
         temp_options.description = this.state.photoOptions["Description"];
+      } else if (name === "title") {
+        temp_options.title = this.state.photoOptions["title"];
       }
       // update categories
       else if (name == "Category1" || name == "Category2") {
@@ -1216,7 +1231,7 @@ class SubmitContent extends Component {
 
                       </Form.Field>
                     </div> */}
-                    <div class="column">
+                      <div class="column">
                         <Form.Field>
                           <div class="label">Title</div>
                           <Input
@@ -1276,7 +1291,7 @@ class SubmitContent extends Component {
                           <div class="label">Collection</div>
                           <Select
                             placeholder="Collection"
-                            options={this.state.categories}
+                            options={this.state.collection}
                             name="Category1"
                             value={this.state.photoOptions["Collection"]}
                             onChange={this.handleSetPhotoOption}
@@ -1720,16 +1735,19 @@ class SubmitContent extends Component {
                       onClick={this.handleSubmit}
                       fluid
                       negative
+                      loading={this.state.isButtonLoading}
                     >
                       Submit
                     </Button>
                   ) : null}
-                  {this.state.activeMenuItem == "REJECTED" ? (
+                  {this.state.activeMenuItem == "REJECTED" ||
+                  this.state.activeMenuItem == "SUBMITTED" ? (
                     <Button
                       className="submitButton"
                       onClick={this.handleRedeem}
                       fluid
                       negative
+                      loading={this.state.isButtonLoading}
                     >
                       Redeem
                     </Button>

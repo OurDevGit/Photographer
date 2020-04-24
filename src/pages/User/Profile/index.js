@@ -235,7 +235,7 @@ class Profile extends Component {
         menuItem: "Collections",
         render: () => (
           <Tab.Pane>
-            <Collections user={this.state.user} />
+            <Collections user={this.state.user} type="currentUser" />
           </Tab.Pane>
         ),
       },

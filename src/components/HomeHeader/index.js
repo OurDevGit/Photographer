@@ -253,7 +253,6 @@ class HomeHeader extends React.Component {
                 <NavLink to="/">
                   <Image src={logo} className="logo" />
                 </NavLink>
-                {/* <NavLink to="/"><h2 className="header">Picktur</h2></NavLink>  */}
                 <Menu.Item position="right" style={style.noPaddingStyle}>
                   {menuItems}
                 </Menu.Item>
@@ -269,7 +268,6 @@ class HomeHeader extends React.Component {
               <Menu borderless className="mobile-navmenu">
                 <Menu.Item header as={NavLink} to="/">
                   <Image src={logo} style={{ width: 130 }} />
-                  {/* <h2 className="header">Picktur</h2> */}
                 </Menu.Item>
                 <Menu.Item position="right" style={style.noPaddingStyle}>
                   {currentUser ? (

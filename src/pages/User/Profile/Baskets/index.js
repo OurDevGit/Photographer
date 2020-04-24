@@ -146,6 +146,7 @@ class Baskets extends Component {
   }
 
   render() {
+    console.log(this.props.user)
     const panes_basket = [];
     if (this.state.user) {
       this.props.user.baskets.forEach((basket) => {

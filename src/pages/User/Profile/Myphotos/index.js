@@ -48,6 +48,7 @@ class Myphotos extends Component {
           totalPages={5}
           quickView={this.quickView}
           basketId={this.props.basketId}
+          collectionId={this.props.collectionId}
           username={this.props.user.username}
         />
       </div>

@@ -29,7 +29,6 @@ const AvartarBadge = ({ status }) => (
 const Avartar = ({ fullname, status }) => (
   <div className="avatar">
     <div className="avatar-main">
-      {/* <Image avatar src="https://picktur.s3.eu-central-1.amazonaws.com/AV_1583170156800-images_(3).jpg" /> */}
       <div className="short-username">{fullname[0].toUpperCase()}</div>
       <AvartarBadge status={status || "online"} />
     </div>

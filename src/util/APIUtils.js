@@ -623,6 +623,13 @@ export function getBasketsForPhoto(id) {
   });
 }
 
+export function getPhotosInCollection(id) {
+  return request({
+    url: API_BASE_URL + "/public/users/get_photo_in_collection/" + id,
+    method: "GET",
+  });
+}
+
 export function get_followers() {
   return request({
     url: API_BASE_URL + "/social/following/get_followers",

@@ -11,7 +11,8 @@ import {
   getPhotoListsForSearchByTag,
   getDownloadedPhotos,
   getListBasketsContent,
-  getUserPhotos
+  getUserPhotos,
+  getPhotosInCollection,
 } from "../../../util/APIUtils";
 import Photo from "../Photo";
 import { castVote } from "../../../util/APIUtils";
@@ -65,8 +66,10 @@ class PhotoList extends Component {
         promise = getDownloadedPhotos(this.props.currentUser.id);
       } else if (this.props.type === "basket") {
         promise = getListBasketsContent(this.props.basketId);
-      } else if(this.props.type === 'userPhoto'){
-        promise = getUserPhotos(this.props.currentUser.id)
+      } else if (this.props.type === "collection") {
+        promise = getPhotosInCollection(this.props.collectionId);
+      } else if (this.props.type === "userPhoto") {
+        promise = getUserPhotos(this.props.currentUser.id);
       } else {
         if (this.props.searchOptions && this.props.searchOptions.length > 0) {
           promise = getPhotoListsForSearch(
@@ -133,6 +136,7 @@ class PhotoList extends Component {
       this.props.type == "admin_photolist" ||
       this.props.type === "downloaded_photolist" ||
       this.props.type === "basket" ||
+      this.props.type === "collection" ||
       this.props.type === "userPhoto"
     ) {
       promise
@@ -265,7 +269,23 @@ class PhotoList extends Component {
       this.state.totalPages = 0;
       this.loadPhotoList();
     }
-    if(this.props.tagSearch !== prevProps.tagSearch){
+    if (this.props.collectionId != prevProps.collectionId) {
+      this.setState({
+        photos: [],
+        photo_list: [],
+        page: 0,
+        totalElements: 0,
+        totalPages: 0,
+        last: false,
+        currentVotes: [],
+        isLoading: false,
+        hasMore: true,
+      });
+      this.state.photo_list = [];
+      this.state.totalPages = 0;
+      this.loadPhotoList();
+    }
+    if (this.props.tagSearch !== prevProps.tagSearch) {
       this.setState({
         photos: [],
         photo_list: [],
@@ -449,7 +469,7 @@ class PhotoList extends Component {
           </div>
         ) : this.props.type == "home_list" &&
           this.props.totalPages == 0 ? null : this.props.type ===
-            "downloaded_photolist" || this.props.type === "basket" ? (
+            "downloaded_photolist" || this.props.type === "basket" || this.props.type === "collection" ? (
           <Gallery photos={samphotosq} renderImage={this.ImageRender} />
         ) : (
           photoViews
