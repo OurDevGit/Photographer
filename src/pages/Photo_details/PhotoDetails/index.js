@@ -1,10 +1,6 @@
-import _ from "lodash";
 import React, { Component } from "react";
-import { Button, Header, Icon, Image, Modal, Label } from "semantic-ui-react";
+import { Button, Header, Icon, Image, Modal } from "semantic-ui-react";
 import {
-  Heart_Icon,
-  Plus_Icon,
-  Zoom_Icon,
   CloseIcon,
 } from "../../../assets/icons";
 import "./style.less";
@@ -40,7 +36,6 @@ class PhotoDetails extends Component {
     tags.forEach((tag, tagIndex) => {
       keywords.push(<button>{tag}</button>);
     });
-    var url = photo.url_fr + "";
     var releaseNum = photo.authorizations ? photo.authorizations.length : 0;
     return (
       <Modal

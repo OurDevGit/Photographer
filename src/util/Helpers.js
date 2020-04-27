@@ -123,7 +123,7 @@ export function prevDay(date) {
 export function nextMonth(date) {
   var d = new Date(date);
   var newMonth = d.getMonth() + 1;
-  if (newMonth == 12) {
+  if (newMonth === 12) {
     newMonth = 0;
     d.setYear(d.getFullYear() + 1);
   }

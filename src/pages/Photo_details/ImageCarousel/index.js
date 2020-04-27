@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { Image, Header, Grid, Icon } from "semantic-ui-react";
+import { Grid } from "semantic-ui-react";
 import Slider from "react-slick";
 import { Photo } from "../../../components";
 import "./style.less";
 
-class ImageCarousel extends React.Component {
+class ImageCarousel extends Component {
   constructor(props) {
     super(props);
     this.state = {

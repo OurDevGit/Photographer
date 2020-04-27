@@ -1,16 +1,11 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { Component } from "react";
 import { Popup, Button, Icon, Label } from "semantic-ui-react";
 import { Heart_Icon, Plus_Icon, Zoom_Icon } from "../../../assets/icons";
 import { AvatarImage } from "../../../components";
 import { AvatarDefault } from "../../../assets/images/homepage";
-import { addToLike, removeToLike, is_liked } from "../../../util/APIUtils";
+import { addToLike, is_liked } from "../../../util/APIUtils";
 import { notification } from "antd";
-var MouseOverFlag;
-const style = {
-  borderRadius: 0,
-  opacity: 0.7,
-  padding: "2em",
-};
+
 class PhotoBox extends Component {
   constructor(props) {
     super(props);

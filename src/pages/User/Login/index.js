@@ -2,14 +2,7 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import {
   Button,
-  Form,
-  Grid,
-  Header,
-  Image,
-  Message,
-  Segment,
-  Icon,
-  Input,
+  Input
 } from "semantic-ui-react";
 import { login, FBLogin } from "../../../util/APIUtils";
 import { ACCESS_TOKEN } from "../../../constants";

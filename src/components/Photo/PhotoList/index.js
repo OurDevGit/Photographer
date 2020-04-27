@@ -1,7 +1,6 @@
-import React, { Component, useCallback } from "react";
+import React, { Component } from "react";
 import Gallery from "react-photo-gallery";
 import {
-  getAllPhotos,
   getUserCreatedPhotos,
   getUserVotedPhotos,
   getPhotoLists,
@@ -17,17 +16,12 @@ import {
 import Photo from "../Photo";
 import { castVote } from "../../../util/APIUtils";
 import LoadingIndicator from "../../../common/LoadingIndicator";
-import { Button, Icon, notification } from "antd";
+import { notification } from "antd";
 import { PHOTO_LIST_SIZE } from "../../../constants";
 import InfiniteScroll from "react-infinite-scroller";
 import PhotoBox from "./PhotoBox";
 import "./style.less";
 
-const photos = [
-  {
-    id: 1,
-  },
-];
 class PhotoList extends Component {
   constructor(props) {
     super(props);
@@ -60,9 +54,9 @@ class PhotoList extends Component {
         promise = getUserVotedPhotos(this.props.username, page, size);
       } else if (this.props.type == "Submit_operation") {
         promise = getSubmitPhotos();
-      } else if (this.props.type == "admin_photolist") {
+      } else if (this.props.type === "admin_photolist") {
         promise = getAdminPublicationPhotoList(this.props.status);
-      } else if (this.props.type == "downloaded_photolist") {
+      } else if (this.props.type === "downloaded_photolist") {
         promise = getDownloadedPhotos(this.props.currentUser.id);
       } else if (this.props.type === "basket") {
         promise = getListBasketsContent(this.props.basketId);
@@ -108,11 +102,13 @@ class PhotoList extends Component {
     if (!promise) {
       return;
     }
+    if (this.props.type !== "home_list") {
+      this.setState({
+        isLoading: true,
+      });
+    }
 
-    this.setState({
-      isLoading: true,
-    });
-    if (this.props.type == "Submit_operation") {
+    if (this.props.type === "Submit_operation") {
       promise
         .then((response) => {
           const photos = this.state.photos.slice();
@@ -133,7 +129,7 @@ class PhotoList extends Component {
           });
         });
     } else if (
-      this.props.type == "admin_photolist" ||
+      this.props.type === "admin_photolist" ||
       this.props.type === "downloaded_photolist" ||
       this.props.type === "basket" ||
       this.props.type === "collection" ||
@@ -141,7 +137,6 @@ class PhotoList extends Component {
     ) {
       promise
         .then((response) => {
-          console.log("####################", response);
           this.setState({
             photos: response,
             photo_list: response,
@@ -158,7 +153,11 @@ class PhotoList extends Component {
         .then((response) => {
           const photos = this.state.photos.slice();
           const currentVotes = this.state.currentVotes.slice();
-          console.log("DDDD", response);
+          if (response.last) {
+            this.setState({
+              hasMore: false,
+            });
+          }
           this.setState({
             photos: photos.concat(response.content),
             photo_list: photos.concat(response.content),
@@ -182,7 +181,9 @@ class PhotoList extends Component {
   }
 
   componentDidMount() {
-    this.loadPhotoList();
+    if (this.props.type !== "home_list") {
+      this.loadPhotoList();
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -213,19 +214,19 @@ class PhotoList extends Component {
         isLoading: false,
       });
       this.loadPhotoList();
-      if (this.props.type == "Submit_operation") {
+      if (this.props.type === "Submit_operation") {
         this.props.deleteFun();
       }
     }
 
-    if (this.props.publish != prevProps.publish) {
+    if (this.props.publish !== prevProps.publish) {
       this.state.photo_list.splice(this.props.active, 1);
 
       this.setState({
         photo_list: this.state.photo_list,
       });
     }
-    if (this.props.activePage != prevProps.activePage) {
+    if (this.props.activePage !== prevProps.activePage) {
       this.setState({
         photos: [],
         page: 0,
@@ -236,7 +237,7 @@ class PhotoList extends Component {
       });
       this.loadPhotoList(this.props.activePage - 1, PHOTO_LIST_SIZE);
     }
-    if (this.props.searchOptions != prevProps.searchOptions) {
+    if (this.props.searchOptions !== prevProps.searchOptions) {
       console.log("SearchOPtionsfrsfafwefwef", this.props.searchOptions);
       this.setState({
         photos: [],
@@ -253,7 +254,7 @@ class PhotoList extends Component {
       this.state.totalPages = 0;
       this.loadPhotoList();
     }
-    if (this.props.basketId != prevProps.basketId) {
+    if (this.props.basketId !== prevProps.basketId) {
       this.setState({
         photos: [],
         photo_list: [],
@@ -269,7 +270,7 @@ class PhotoList extends Component {
       this.state.totalPages = 0;
       this.loadPhotoList();
     }
-    if (this.props.collectionId != prevProps.collectionId) {
+    if (this.props.collectionId !== prevProps.collectionId) {
       this.setState({
         photos: [],
         photo_list: [],
@@ -361,23 +362,6 @@ class PhotoList extends Component {
   }
 
   loadFunc(page) {
-    console.log("DDDD@@@@@", this.state.totalPages);
-    console.log("DDDD~~~~~~~~~~", page);
-    console.log("DDDD~~~~~~~~~~", this.state.last);
-    this.setState({
-      page: page,
-    });
-    if (page == this.state.totalPages - 1 || this.state.totalPages == 1) {
-      this.setState({
-        hasMore: false,
-      });
-    }
-    // if(this.state.last)
-    // {
-    //     this.setState({
-    //         hasMore: false
-    //     })
-    // }
     this.loadPhotoList(page, PHOTO_LIST_SIZE);
   }
 
@@ -419,21 +403,7 @@ class PhotoList extends Component {
           publish={this.props.publish}
           status={this.props.status}
           quickView={this.props.quickView}
-          // currentVote={this.state.currentVotes[photoIndex]}
-          // handleVoteChange={(event) => this.handleVoteChange(event, photoIndex)}
-          // handleVoteSubmit={(event) => this.handleVoteSubmit(event, photoIndex)}
         />
-      );
-    });
-
-    var items = [];
-    this.state.photo_list.map((track, i) => {
-      items.push(
-        <div className="track" key={i}>
-          <a href={track.url_fr} target="_blank">
-            <img src={track.url_fr} width="150" height="150" />
-          </a>
-        </div>
       );
     });
 
@@ -447,48 +417,40 @@ class PhotoList extends Component {
         samphotosq[k].height = this.state.photo_list[k].lr_heigh;
       }
     }
-    console.log("%%%%%%%%%%%%%%%%%", samphotosq);
+    if (this.state.isLoading) {
+      return <LoadingIndicator />;
+    }
+    if (
+      this.props.type !== "home_list" &&
+      !this.state.isLoading &&
+      this.state.photos.length === 0
+    ) {
+      return (
+        <div className="no-photos-found">
+          <span>No Photos Found.</span>
+        </div>
+      );
+    }
     return (
       <div className="photos-container">
-        {/* {photoViews} */}
-        {this.props.type == "home_list" && this.state.totalPages > 0 ? (
+        {this.props.type === "home_list" ? (
           <div className="infiniteScroll">
             <InfiniteScroll
-              pageStart={0}
+              pageStart={-1}
               loadMore={this.loadFunc}
               hasMore={this.state.hasMore}
-              loader={
-                <div className="loader" key={0}>
-                  Loading ...
-                </div>
-              }
+              loader={<LoadingIndicator />}
             >
-              {/* {photoViews} */}
               <Gallery photos={samphotosq} renderImage={this.ImageRender} />
             </InfiniteScroll>
           </div>
-        ) : this.props.type == "home_list" &&
-          this.props.totalPages == 0 ? null : this.props.type ===
-            "downloaded_photolist" || this.props.type === "basket" || this.props.type === "collection" ? (
+        ) : this.props.type === "downloaded_photolist" ||
+          this.props.type === "basket" ||
+          this.props.type === "collection" ? (
           <Gallery photos={samphotosq} renderImage={this.ImageRender} />
         ) : (
           photoViews
         )}
-
-        {!this.state.isLoading && this.state.photos.length === 0 ? (
-          <div className="no-photos-found">
-            <span>No Photos Found.</span>
-          </div>
-        ) : null}
-        {/* {
-                    !this.state.isLoading && !this.state.last ? (
-                        <div className="load-more-photos">
-                            <Button type="dashed" onClick={this.handleLoadMore} disabled={this.state.isLoading}>
-                                <Icon type="plus" /> Load more
-                            </Button>
-                        </div>): null
-                }               */}
-        {this.state.isLoading ? <LoadingIndicator /> : null}
       </div>
     );
   }

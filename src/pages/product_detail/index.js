@@ -1,50 +1,9 @@
 import React, { Component } from "react";
-import {
-  Grid,
-  Button,
-  Icon,
-  Label,
-  Comment,
-  TextArea,
-  Modal,
-  Table,
-  Header,
-  Image,
-} from "semantic-ui-react";
+import { Grid, Button, Icon, Table, Header, Image } from "semantic-ui-react";
 import MetaTags from "react-meta-tags";
-import { NavLink, Redirect } from "react-router-dom";
-import {
-  getCurrentUser,
-  getAllCategories,
-  getPhotoDetail,
-  addToLike,
-  removeToLike,
-  is_liked,
-  getLikeAmount,
-  getDownloadAmount,
-  getViewsAmount,
-  add_comment,
-  getSameCollection,
-  download,
-  getPhotoAuthDownload,
-} from "../../util/APIUtils";
-import { ACCESS_TOKEN, HOST_URL } from "../../constants";
-import {
-  HomeHeader,
-  AvatarImage,
-  PhotoList,
-  AnimateButton,
-  Comments,
-} from "../../components";
-import PanAndZoomImage from "../../PanAndZoomImage";
-import Bucket from "../Home/Bucket";
-import {
-  Heart_Icon,
-  Plus_Icon,
-  Zoom_Icon,
-  CloseIcon,
-} from "../../assets/icons";
-import { AvatarDefault } from "../../assets/images/homepage";
+import { getCurrentUser, getPhotoDetail } from "../../util/APIUtils";
+import { ACCESS_TOKEN } from "../../constants";
+import { HomeHeader } from "../../components";
 import "./style.less";
 import { notification } from "antd";
 import LoadingIndicator from "../../common/LoadingIndicator";

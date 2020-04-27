@@ -8,14 +8,12 @@ import {
 import {
   ISOFormatDate,
   formatDate,
-  PrevYearDate,
   CalFirstDay,
   nextDay,
   nextMonth,
   DotFormatDate,
 } from "../../../util/Helpers";
 import { HomeHeader } from "../../../components";
-import { DIAGRAM_DATA_TYPE } from "../../../constants";
 import LoadingIndicator from "../../../common/LoadingIndicator";
 class Analyse extends Component {
   constructor(props) {
@@ -245,7 +243,6 @@ class Analyse extends Component {
   render() {
     const ViewMode = [
       { key: "day", value: "DAY", text: "Daily" },
-      // { key: 'week', value: 'WEEK', text: 'Weekly' },
       { key: "month", value: "MONTH", text: "Monthly" },
     ];
     if (this.state.isLoading) {
@@ -273,8 +270,6 @@ class Analyse extends Component {
                   onChange={this.handleChangeMode}
                 />
                 <div>
-                  {/* <Chart data={this.state.activeMode ==  "day" ? Daydata : Monthdata} axes={axes} tooltip/>
-                   */}
                   <Line ref="chart" data={this.state.data} />
                 </div>
               </div>
@@ -292,8 +287,6 @@ class Analyse extends Component {
                   onChange={this.handleChangeMode}
                 />
                 <div>
-                  {/* <Chart data={this.state.activeMode ==  "day" ? Daydata : Monthdata} axes={axes} tooltip/>
-                   */}
                   <Line ref="chart" data={this.state.data} />
                 </div>
               </div>

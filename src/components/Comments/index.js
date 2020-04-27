@@ -25,7 +25,7 @@ class Comments extends Component {
   }
   componentDidUpdate(prevProps) {
     console.log(this.props.flag, prevProps.flag);
-    if (this.props.flag != prevProps.flag) {
+    if (this.props.flag !== prevProps.flag) {
       this.getCommentList(this.props.photoId);
     }
   }
@@ -40,7 +40,6 @@ class Comments extends Component {
           comments: response,
           isLoading: false,
         });
-        console.log("FFHSJKFHKJEHFKJEWHFK", response);
       })
       .catch((error) => {
         this.setState({
@@ -139,7 +138,7 @@ class Comments extends Component {
           </Comment.Content>
           <Comment.Group
             className={
-              this.state.activeReply == comment.id ? "show" : "disable"
+              this.state.activeReply === comment.id ? "show" : "disable"
             }
           >
             <Comment className="commitText">
@@ -163,7 +162,7 @@ class Comments extends Component {
                   <Icon
                     name="send"
                     className="sending"
-                    disabled={this.state.replyComment == "" ? true : false}
+                    disabled={this.state.replyComment === "" ? true : false}
                     onClick={this.replyToComment}
                   />
                 )}

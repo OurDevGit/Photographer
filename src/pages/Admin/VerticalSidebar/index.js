@@ -1,14 +1,7 @@
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 import {
-  Button,
-  Checkbox,
-  Grid,
-  Header,
   Icon,
-  Image,
   Menu,
-  Segment,
   Sidebar,
 } from "semantic-ui-react";
 import "./style.less";
@@ -48,7 +41,7 @@ export default class VerticalSidebar extends Component {
           as="a"
           value="list_submitted_photos"
           className={
-            this.state.activeMentItem == "list_submitted_photos" ? "active" : ""
+            this.state.activeMentItem === "list_submitted_photos" ? "active" : ""
           }
           onClick={this.handleMenuClick}
         >
@@ -70,7 +63,7 @@ export default class VerticalSidebar extends Component {
           as="a"
           value="list_rejected_photos"
           className={
-            this.state.activeMentItem == "list_rejected_photos" ? "active" : ""
+            this.state.activeMentItem === "list_rejected_photos" ? "active" : ""
           }
           onClick={this.handleMenuClick}
         >
@@ -81,7 +74,7 @@ export default class VerticalSidebar extends Component {
           as="a"
           value="order_photo_home"
           className={
-            this.state.activeMentItem == "order_photo_home" ? "active" : ""
+            this.state.activeMentItem === "order_photo_home" ? "active" : ""
           }
           onClick={this.handleMenuClick}
         >
@@ -96,7 +89,7 @@ export default class VerticalSidebar extends Component {
           as="a"
           value="CategoriesAndTags"
           className={
-            this.state.activeMentItem == "CategoriesAndTags" ? "active" : ""
+            this.state.activeMentItem === "CategoriesAndTags" ? "active" : ""
           }
           onClick={this.handleMenuClick}
         >
@@ -106,7 +99,7 @@ export default class VerticalSidebar extends Component {
         <Menu.Item
           as="a"
           value="Users"
-          className={this.state.activeMentItem == "Users" ? "active" : ""}
+          className={this.state.activeMentItem === "Users" ? "active" : ""}
           onClick={this.handleMenuClick}
         >
           <Icon name="users" />

@@ -1,13 +1,12 @@
 /* eslint-disable react/no-this-in-sfc */
 /* eslint-disable no-return-assign */
 import React, { Component } from "react";
-import { Image, Header, Grid, Icon } from "semantic-ui-react";
+import {Grid } from "semantic-ui-react";
 import Slider from "react-slick";
-import { getCurrentUser, getAllCategories } from "../../../util/APIUtils";
 
 import "./style.less";
 
-class CategoryCarousel extends React.Component {
+class CategoryCarousel extends Component {
   constructor(props) {
     super(props);
     this.state = {

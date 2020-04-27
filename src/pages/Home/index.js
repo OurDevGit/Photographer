@@ -1,25 +1,18 @@
 import React, { Component } from "react";
-import { Grid, GridColumn, Image, Divider } from "semantic-ui-react";
+import { Grid } from "semantic-ui-react";
 import MetaTags from "react-meta-tags";
-import Gallery from "react-photo-gallery";
 import {
   getCurrentUser,
   getAllCategories,
   getPhotoLists,
 } from "../../util/APIUtils";
 import { ACCESS_TOKEN, PHOTO_LIST_SIZE } from "../../constants";
-import {
-  HomeHeader,
-  SearchBar,
-  PhotoList,
-  Pagination_Component,
-} from "../../components";
-import Footer from "./Footer";
-import CategoryCarousel from "./CategoryCarousel";
+import { HomeHeader, PhotoList } from "../../components";
 import PhotoDetails from "./PhotoDetails";
 import Bucket from "./Bucket";
 import "./style.less";
 import { notification } from "antd";
+import LoadingIndicator from "../../common/LoadingIndicator";
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -36,6 +29,8 @@ class Home extends Component {
       searchOptions: [],
       isCtrlKey: false,
       tagSearch: null,
+      photos: [],
+      hasMoreItems: false,
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -48,9 +43,9 @@ class Home extends Component {
     this.onChangePage = this.onChangePage.bind(this);
     this.quickView = this.quickView.bind(this);
     this.viewOwner = this.viewOwner.bind(this);
-    this.clickSearch = this.clickSearch.bind(this);
     this.handleSearchTag = this.handleSearchTag.bind(this);
     this.clickSearch = this.clickSearch.bind(this);
+    this.LoadPhotos = this.LoadPhotos.bind(this);
   }
 
   loadCurrentUser() {
@@ -61,8 +56,9 @@ class Home extends Component {
       .then((response) => {
         this.setState({
           currentUser: response,
-          isAuthenticated: true,
+          // isAuthenticated: true,
           isLoading: false,
+          hasMoreItems: true
         });
       })
       .catch((error) => {
@@ -86,6 +82,27 @@ class Home extends Component {
       });
   }
 
+  LoadPhotos(page) {
+    console.log(page);
+    getPhotoLists(page, 30)
+      .then((response) => {
+        const photos = this.state.photos.slice();
+        console.log("res" + page, response);
+        if (response.last) {
+          this.setState({
+            hasMoreItems: false,
+          });
+        } else {
+          this.setState({
+            photos: photos.concat(response.content),
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   getTotalpages() {
     getPhotoLists(0, PHOTO_LIST_SIZE)
       .then((response) => {
@@ -101,15 +118,15 @@ class Home extends Component {
 
   componentDidMount() {
     this.loadCurrentUser();
-    this.loadAllCategories();
-    this.getTotalpages();
+    // this.loadAllCategories();
+    // this.getTotalpages();
     window.addEventListener("keydown", this.keydown);
     window.addEventListener("keyup", this.keyup);
     console.log(this.props.location.search.split("="));
   }
 
   keydown = (e) => {
-    if (e.keyCode == 17) {
+    if (e.keyCode === 17) {
       this.setState({
         isCtrlKey: true,
       });
@@ -117,7 +134,7 @@ class Home extends Component {
   };
 
   keyup = (e) => {
-    if (e.keyCode == 17) {
+    if (e.keyCode === 17) {
       this.setState({
         isCtrlKey: false,
       });
@@ -213,11 +230,8 @@ class Home extends Component {
     this.props.history.push("/?tag=" + e);
   }
 
-  clickSearch(e) {
-    this.props.history.push("/?key=" + e);
-  }
-
   render() {
+    console.log("dd", this.state.photos)
     if (this.props.location.search.split("=")[0] === "?tag") {
       var tagSearch = this.props.location.search.split("=")[1];
       console.log("dddd", tagSearch);
@@ -230,6 +244,24 @@ class Home extends Component {
         },
       ];
     }
+
+    const loader = <div className="loader">Loading ...</div>;
+
+    var items = [];
+    this.state.photos.map((track, i) => {
+      items.push(
+        <div className="track" key={i}>
+          <a>
+            <img src={track.url_lr} width="150" height="150" />
+            <p className="title">{track.id}</p>
+          </a>
+        </div>
+      );
+    });
+    if(this.state.isLoading){
+      return <LoadingIndicator />
+    }
+
     return (
       <>
         <MetaTags>
@@ -249,12 +281,13 @@ class Home extends Component {
             </GridColumn> */}
 
             <Grid.Column width={16}>
+              
               <PhotoList
                 type="home_list"
                 onClickImage={this.handleImageClick}
                 addToBucket={this.addToBucket}
-                activePage={this.state.activePage}
-                totalPages={this.state.totalPages}
+                // activePage={this.state.activePage}
+                // totalPages={this.state.totalPages}
                 quickView={this.quickView}
                 viewOwner={this.viewOwner}
                 searchOptions={SearchOptions}

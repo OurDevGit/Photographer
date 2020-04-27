@@ -15,9 +15,6 @@ import { HomeHeader } from "../../../components";
 import { AvatarDefault } from "../../../assets/images/homepage";
 import PersonalInfo from "./PersonalInfo";
 import Security from "./Security";
-import Friends from "./Friends";
-import Analyse from "./Analyse";
-import Myphotos from "./Myphotos";
 import Collections from "./Collections";
 import Baskets from "./Baskets";
 import { notification } from "antd";
@@ -293,7 +290,7 @@ class Profile extends Component {
             />
             <Grid className="pages page-index profile_page">
               {this.state.currentUser &&
-              this.state.user.id == this.state.currentUser.id ? (
+              this.state.user.id === this.state.currentUser.id ? (
                 <>
                   <Grid.Row only="computer">
                     <Grid.Column width={4}>

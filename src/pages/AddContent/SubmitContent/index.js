@@ -512,6 +512,9 @@ class SubmitContent extends Component {
         this.state.photoOptions["Description"] = temp_image.description
           ? temp_image.description
           : "";
+        this.state.photoOptions["title"] = temp_image.title
+          ? temp_image.title
+          : "";
         this.state.photoOptions["Category1"] = temp_image.categories
           ? temp_image.categories[0]
           : null;
@@ -530,6 +533,7 @@ class SubmitContent extends Component {
         var common_tags = [];
         var common_category = [null, null];
         var desScore = 0;
+        var titScore =  0;
         for (var i = 0; i < this.state.selImageIDs.length; i++) {
           // common descriptions
           if (
@@ -538,6 +542,14 @@ class SubmitContent extends Component {
               this.state.selImage[this.state.selImageIDs[i]].description
           ) {
             desScore++;
+          }
+          // common title
+          if (
+            i > 0 &&
+            this.state.selImage[this.state.selImageIDs[i - 1]].title ==
+              this.state.selImage[this.state.selImageIDs[i]].title
+          ) {
+            titScore++;
           }
           // common tags
           var temp_tag = this.state.selImage[this.state.selImageIDs[i]].tags;
@@ -602,6 +614,13 @@ class SubmitContent extends Component {
           ].description;
         } else {
           this.state.photoOptions["Description"] = "";
+        }
+        if (titScore == this.state.selImageIDs.length - 1) {
+          this.state.photoOptions["title"] = this.state.selImage[
+            this.state.selImageIDs[0]
+          ].title;
+        } else {
+          this.state.photoOptions["title"] = "";
         }
         // set state common category and tags
         this.state.currentTagValues = common_tags;
@@ -773,23 +792,23 @@ class SubmitContent extends Component {
 
   handleRedeem() {
     this.setState({
-      isButtonLoading: true
-    })
+      isButtonLoading: true,
+    });
     redeemMultiplePhoto(this.state.selImageIDs)
       .then((response) => {
         console.log(response);
         this.getTotalNumberOfPhotos();
         this.setState({
           activeMenuItem: "TO_BE_SUBMITTED",
-          isButtonLoading: false
+          isButtonLoading: false,
           // total: this.state.total
         });
       })
       .catch((error) => {
         console.log(error);
         this.setState({
-          isButtonLoading: false
-        })
+          isButtonLoading: false,
+        });
       });
   }
 

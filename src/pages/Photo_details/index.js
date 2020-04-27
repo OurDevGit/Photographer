@@ -12,13 +12,11 @@ import {
   Image,
 } from "semantic-ui-react";
 import MetaTags from "react-meta-tags";
-import { NavLink, Redirect } from "react-router-dom";
 import {
   getCurrentUser,
   getAllCategories,
   getPhotoDetail,
   addToLike,
-  removeToLike,
   is_liked,
   getLikeAmount,
   getDownloadAmount,
@@ -28,7 +26,7 @@ import {
   download,
   getPhotoAuthDownload,
 } from "../../util/APIUtils";
-import { ACCESS_TOKEN, HOST_URL } from "../../constants";
+import { ACCESS_TOKEN } from "../../constants";
 import {
   HomeHeader,
   AvatarImage,
@@ -36,15 +34,9 @@ import {
   AnimateButton,
   Comments,
 } from "../../components";
-import PanAndZoomImage from "../../PanAndZoomImage";
 import ImageCarousel from "./ImageCarousel";
 import Bucket from "../Home/Bucket";
-import {
-  Heart_Icon,
-  Plus_Icon,
-  Zoom_Icon,
-  CloseIcon,
-} from "../../assets/icons";
+import { Heart_Icon, Plus_Icon, Zoom_Icon } from "../../assets/icons";
 import { AvatarDefault } from "../../assets/images/homepage";
 import "./style.less";
 import { notification } from "antd";
@@ -232,7 +224,7 @@ class Photo_details extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.id != prevProps.match.params.id) {
+    if (this.props.match.params.id !== prevProps.match.params.id) {
       this.is_like_photo(this.props.match.params.id);
       this.loadPhotoDetail(this.props.match.params.id);
       this.setState({
@@ -243,7 +235,7 @@ class Photo_details extends Component {
   }
 
   keydown = (e) => {
-    if (e.keyCode == 17) {
+    if (e.keyCode === 17) {
       this.setState({
         isCtrlKey: true,
       });
@@ -251,7 +243,7 @@ class Photo_details extends Component {
   };
 
   keyup = (e) => {
-    if (e.keyCode == 17) {
+    if (e.keyCode === 17) {
       this.setState({
         isCtrlKey: false,
       });
@@ -317,7 +309,7 @@ class Photo_details extends Component {
 
   addLike() {
     if (this.state.currentUser) {
-      if (this.state.likeFlag == false) {
+      if (this.state.likeFlag === false) {
         addToLike(this.props.match.params.id)
           .then((response) => {
             this.state.likes = this.state.likes + 1;
@@ -654,7 +646,7 @@ class Photo_details extends Component {
                             name="send"
                             className="sending"
                             disabled={
-                              this.state.commentContent == "" ? true : false
+                              this.state.commentContent === "" ? true : false
                             }
                             onClick={this.addComment}
                           />
@@ -886,7 +878,7 @@ class Photo_details extends Component {
                             name="send"
                             className="sending"
                             disabled={
-                              this.state.commentContent == "" ? true : false
+                              this.state.commentContent === "" ? true : false
                             }
                             onClick={this.addComment}
                           />

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
-import { Grid, Button, Form, Input } from "semantic-ui-react";
+import { Grid, Button, Form } from "semantic-ui-react";
 import { update_password_end } from "../../../util/APIUtils";
 import "./style.less";
 import { PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from "../../../constants";

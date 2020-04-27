@@ -1,21 +1,14 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import { Grid, GridColumn, Image, Divider } from "semantic-ui-react";
+import { Grid } from "semantic-ui-react";
 import MetaTags from "react-meta-tags";
-import Gallery from "react-photo-gallery";
 import {
   getCurrentUser,
   getAllCategories,
   getPhotoLists,
 } from "../../../util/APIUtils";
 import { ACCESS_TOKEN, PHOTO_LIST_SIZE } from "../../../constants";
-import {
-  HomeHeader,
-  SearchBar,
-  PhotoList,
-  Pagination_Component,
-} from "../../../components";
-// import "./style.less";
+import { HomeHeader, PhotoList } from "../../../components";
 import { notification } from "antd";
 import LoadingIndicator from "../../../common/LoadingIndicator";
 class DownloadedPhotos extends Component {
@@ -47,7 +40,7 @@ class DownloadedPhotos extends Component {
     this.quickView = this.quickView.bind(this);
     this.viewOwner = this.viewOwner.bind(this);
     this.clickSearch = this.clickSearch.bind(this);
-    this.handleSearchTag =  this.handleSearchTag.bind(this)
+    this.handleSearchTag = this.handleSearchTag.bind(this);
   }
 
   loadCurrentUser() {
@@ -105,7 +98,7 @@ class DownloadedPhotos extends Component {
   }
 
   keydown = (e) => {
-    if (e.keyCode == 17) {
+    if (e.keyCode === 17) {
       this.setState({
         isCtrlKey: true,
       });
@@ -113,7 +106,7 @@ class DownloadedPhotos extends Component {
   };
 
   keyup = (e) => {
-    if (e.keyCode == 17) {
+    if (e.keyCode === 17) {
       this.setState({
         isCtrlKey: false,
       });

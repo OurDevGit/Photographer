@@ -1,12 +1,7 @@
 import React, { Component } from "react";
 import {
   Button,
-  Form,
-  Grid,
-  Header,
-  Image,
-  Message,
-  Segment,
+  Form
 } from "semantic-ui-react";
 import {
   signup,

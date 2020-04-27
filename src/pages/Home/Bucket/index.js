@@ -1,4 +1,3 @@
-import _ from "lodash";
 import React, { Component } from "react";
 import {
   Button,
@@ -6,15 +5,10 @@ import {
   Icon,
   Image,
   Modal,
-  Label,
   Dropdown,
-  Input,
 } from "semantic-ui-react";
 import {
-  Heart_Icon,
-  Plus_Icon,
-  Zoom_Icon,
-  CloseIcon,
+  CloseIcon
 } from "../../../assets/icons";
 import {
   getListOfBaskets,
@@ -116,11 +110,11 @@ class Bucket extends Component {
     if (value.length > this.state.currentBucketValues.length) {
       let i = 0;
       for (i = 0; i < this.state.baskets.length; i++) {
-        if (this.state.baskets[i].value == value[value.length - 1]) {
+        if (this.state.baskets[i].value === value[value.length - 1]) {
           i = this.state.baskets.length + 10;
         }
       }
-      if (i == this.state.baskets.length) {
+      if (i === this.state.baskets.length) {
         this.addNewBasket(value[value.length - 1]);
       }
     }

@@ -1,5 +1,3 @@
-import MultiSelect from './MultiSelect';
-
 /* eslint-disable import/no-cycle */
 export { default as LoadingSpinner } from './LoadingSpinner';
 export { default as HomeFooter } from './HomeFooter';

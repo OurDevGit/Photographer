@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import {
   Grid,
-  GridColumn,
-  Menu,
   Dropdown,
   Icon,
   Message,
@@ -13,13 +11,10 @@ import {
   Accordion,
   Checkbox,
   Popup,
-  Header,
-  Modal,
   Input,
-  Radio,
 } from "semantic-ui-react";
 import { Line } from "react-chartjs-2";
-import { NavLink, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import MetaTags from "react-meta-tags";
 import {
   getCurrentUser,
@@ -35,25 +30,17 @@ import {
 } from "../../util/APIUtils";
 import {
   API_BASE_URL,
-  PHOTO_LIST_SIZE,
-  ACCESS_TOKEN,
-  releaseOptions,
-  sortOptions,
-  age,
-  gender,
-  ethnicity,
+  ACCESS_TOKEN
 } from "../../constants";
 import {
   HomeHeader,
   PhotoList,
   AvatarImage,
   ConfirmModal,
-  ListComponent,
 } from "../../components";
 import {
   ISOFormatDate,
   formatDate,
-  PrevYearDate,
   CalFirstDay,
   nextDay,
   nextMonth,
@@ -62,14 +49,6 @@ import {
 import "./style.less";
 import { notification } from "antd";
 import LoadingIndicator from "../../common/LoadingIndicator";
-const style = {
-  noPaddingStyle: {
-    padding: 0,
-  },
-};
-
-const arr_options = {};
-const isChecked = false;
 
 class PhotoModify extends Component {
   constructor(props) {
@@ -100,7 +79,6 @@ class PhotoModify extends Component {
       currentContainTags: [],
       loginStatus: true,
       errorMessage: [],
-      // common_tag: [],
       DisplayImageUrl: "",
       ReleaseModalOpen: false,
       NewReleaseModalOpen: false,
@@ -310,12 +288,12 @@ class PhotoModify extends Component {
   };
 
   addFromContainedTags(e, { content }) {
-    if (this.state.currentTagValues == null) {
+    if (this.state.currentTagValues === null) {
       this.state.currentTagValues = [];
     }
     this.state.currentTagValues.push(content);
     this.state.currentContainTags = this.state.currentContainTags.filter(
-      (item) => item != content
+      (item) => item !== content
     );
     this.setState({
       currentTagValues: this.state.currentTagValues,
@@ -329,7 +307,7 @@ class PhotoModify extends Component {
   }
 
   addAllContainTags() {
-    if (this.state.currentTagValues == null) {
+    if (this.state.currentTagValues === null) {
       this.state.currentTagValues = [];
     }
     this.state.currentTagValues = this.state.currentTagValues.concat(
@@ -352,16 +330,16 @@ class PhotoModify extends Component {
     } else {
       this.state.errorMessage["tags"] = "";
     }
-    if (this.state.currentTagValues == null) {
+    if (this.state.currentTagValues === null) {
       this.state.currentTagValues = [];
     }
     if (this.state.currentTagValues.length > value.length) {
       var RemoveItem = this.state.currentTagValues;
       for (let i = 0; i < value.length; i++) {
-        RemoveItem = RemoveItem.filter((item) => item != value[i]);
+        RemoveItem = RemoveItem.filter((item) => item !== value[i]);
       }
       for (let j = 0; j < this.state.containTags.length; j++) {
-        if (RemoveItem[0] == this.state.containTags[j]) {
+        if (RemoveItem[0] === this.state.containTags[j]) {
           this.state.currentContainTags.push(RemoveItem);
           this.setState({
             currentContainTags: this.state.currentContainTags,
@@ -371,19 +349,19 @@ class PhotoModify extends Component {
       }
     } else {
       for (let k = 0; k < this.state.currentContainTags.length; k++) {
-        if (this.state.currentContainTags[k] == value[value.length - 1]) {
+        if (this.state.currentContainTags[k] === value[value.length - 1]) {
           this.state.currentContainTags = this.state.currentContainTags.filter(
-            (item) => item != value[value.length - 1]
+            (item) => item !== value[value.length - 1]
           );
         }
       }
       var TagScore = 0;
       this.state.tags.forEach((tag, tagindex) => {
-        if (tag.value == value[value.length - 1]) {
+        if (tag.value === value[value.length - 1]) {
           TagScore = 1;
         }
       });
-      if (TagScore == 0) {
+      if (TagScore === 0) {
         addNewTag(value[value.length - 1])
           .then((response) => {
             console.log(response);
@@ -415,7 +393,7 @@ class PhotoModify extends Component {
     };
     this.state.categories2 = this.state.categories;
     this.state.categories1 = this.state.categories;
-    if (name == "attachAll" || name == "attach") {
+    if (name === "attachAll" || name === "attach") {
       addAuthorizationToPhotoIDs(Request)
         .then((response) => {
           this.state.ReleaseScore[value] = 1;
@@ -426,7 +404,7 @@ class PhotoModify extends Component {
         .catch((error) => {
           console.log("error", error);
         });
-    } else if (name == "removeAll" || name == "attached") {
+    } else if (name === "removeAll" || name === "attached") {
       removeAuthorizationToPhotoIDs(Request)
         .then((response) => {
           console.log(response);
@@ -446,7 +424,7 @@ class PhotoModify extends Component {
   getCommonRelease(images, IDs) {
     var ReleaseScore = [];
     var ReleaseNameArray = [];
-    if (IDs.length == 1) {
+    if (IDs.length === 1) {
       var authorizations = images[IDs[0]].authorizations;
       for (let j = 0; j < authorizations.length; j++) {
         ReleaseScore[authorizations[j].id] = 1;
@@ -455,15 +433,15 @@ class PhotoModify extends Component {
     } else {
       for (let i = 0; i < IDs.length; i++) {
         var authorizations = images[IDs[i]].authorizations;
-        if (authorizations.length == 0) {
+        if (authorizations.length === 0) {
           for (let k = 0; k < ReleaseScore.length; k++) {
-            if (ReleaseScore[k] == i - 1) {
+            if (ReleaseScore[k] === i - 1) {
               ReleaseScore[k] = 0;
             }
           }
         }
         for (let j = 0; j < authorizations.length; j++) {
-          if (ReleaseScore[authorizations[j].id] == i - 1) {
+          if (ReleaseScore[authorizations[j].id] === i - 1) {
             ReleaseScore[authorizations[j].id] = i;
             ReleaseNameArray[authorizations[j].id] = authorizations[j].caption;
           } else {
@@ -500,7 +478,7 @@ class PhotoModify extends Component {
       });
     } else {
       this.state.selImageIDs = this.state.selImageIDs.filter(
-        (item) => item != e.photo.id
+        (item) => item !== e.photo.id
       );
       this.setState({
         selImageIDs: this.state.selImageIDs,
@@ -508,7 +486,7 @@ class PhotoModify extends Component {
     }
 
     // DisplayImageurl when click Image
-    if (this.state.selImageIDs.length == 1) {
+    if (this.state.selImageIDs.length === 1) {
       this.setState({
         DisplayImageUrl: this.state.selImage[this.state.selImageIDs[0]].url_fr,
       });
@@ -536,7 +514,7 @@ class PhotoModify extends Component {
         showOptions: ["visible", "unvisible"],
         photoSelectedFlag: true,
       });
-      if (this.state.selImageIDs.length == 1) {
+      if (this.state.selImageIDs.length === 1) {
         var temp_image = this.state.selImage[this.state.selImageIDs[0]];
 
         this.state.photoOptions["Description"] = temp_image.description
@@ -564,7 +542,7 @@ class PhotoModify extends Component {
           // common descriptions
           if (
             i > 0 &&
-            this.state.selImage[this.state.selImageIDs[i - 1]].description ==
+            this.state.selImage[this.state.selImageIDs[i - 1]].description ===
               this.state.selImage[this.state.selImageIDs[i]].description
           ) {
             desScore++;
@@ -573,12 +551,12 @@ class PhotoModify extends Component {
           var temp_tag = this.state.selImage[this.state.selImageIDs[i]].tags;
           if (temp_tag) {
             for (var j = 0; j < temp_tag.length; j++) {
-              if (tag_flag[temp_tag[j]] == i - 1) {
+              if (tag_flag[temp_tag[j]] === i - 1) {
                 tag_flag[temp_tag[j]] = i;
               } else {
                 tag_flag[temp_tag[j]] = 0;
               }
-              if (tag_flag[temp_tag[j]] == this.state.selImageIDs.length - 1) {
+              if (tag_flag[temp_tag[j]] === this.state.selImageIDs.length - 1) {
                 common_tags.push(temp_tag[j]);
               }
             }
@@ -588,13 +566,13 @@ class PhotoModify extends Component {
             .categories;
           if (temp_category) {
             if (temp_category[0]) {
-              if (category_flag1[temp_category[0]] == i - 1) {
+              if (category_flag1[temp_category[0]] === i - 1) {
                 category_flag1[temp_category[0]] = i;
               } else {
                 category_flag1[temp_category[0]] = 0;
               }
               if (
-                category_flag1[temp_category[0]] ==
+                category_flag1[temp_category[0]] ===
                 this.state.selImageIDs.length - 1
               ) {
                 common_category[0] = temp_category[0];
@@ -602,13 +580,13 @@ class PhotoModify extends Component {
             }
 
             if (temp_category[1]) {
-              if (category_flag2[temp_category[1]] == i - 1) {
+              if (category_flag2[temp_category[1]] === i - 1) {
                 category_flag2[temp_category[1]] = i;
               } else {
                 category_flag2[temp_category[1]] = 0;
               }
               if (
-                category_flag2[temp_category[1]] ==
+                category_flag2[temp_category[1]] ===
                 this.state.selImageIDs.length - 1
               ) {
                 common_category[1] = temp_category[1];
@@ -616,17 +594,17 @@ class PhotoModify extends Component {
             }
           }
         }
-        if (common_category.length == 2) {
+        if (common_category.length === 2) {
           this.state.photoOptions["Category1"] = common_category[0];
           this.state.photoOptions["Category2"] = common_category[1];
-        } else if (common_category.length == 1) {
+        } else if (common_category.length === 1) {
           this.state.photoOptions["Category1"] = common_category[0];
           this.state.photoOptions["Category2"] = null;
         } else {
           this.state.photoOptions["Category1"] = null;
           this.state.photoOptions["Category2"] = null;
         }
-        if (desScore == this.state.selImageIDs.length - 1) {
+        if (desScore === this.state.selImageIDs.length - 1) {
           this.state.photoOptions["Description"] = this.state.selImage[
             this.state.selImageIDs[0]
           ].description;
@@ -863,7 +841,7 @@ class PhotoModify extends Component {
     this.state.changedPhotoOptions[name] = value;
     this.state.errorMessage[name] = "";
 
-    if (name == "Category1") {
+    if (name === "Category1") {
       this.state.categories2 = this.state.categories;
       var Categories2 = [];
       var pos = this.state.categories2.findIndex((v) => v.value === value);
@@ -874,7 +852,7 @@ class PhotoModify extends Component {
         );
       this.state.categories2 = Categories2;
     }
-    if (name == "Category2") {
+    if (name === "Category2") {
       this.state.categories1 = this.state.categories;
       var Categories1 = [];
       var pos = this.state.categories1.findIndex((v) => v.value === value);
@@ -988,11 +966,11 @@ class PhotoModify extends Component {
     const updateRequest = [];
     for (let i = 0; i < this.state.selImageIDs.length; i++) {
       var temp_options = this.state.selImage[this.state.selImageIDs[i]];
-      if (name == "Description") {
+      if (name === "Description") {
         temp_options.description = this.state.photoOptions["Description"];
       }
       // update categories
-      else if (name == "Category1" || name == "Category2") {
+      else if (name === "Category1" || name === "Category2") {
         if (!temp_options.categories) {
           temp_options.categories = [];
           temp_options.categories.push(this.state.photoOptions["Category1"]);
@@ -1010,12 +988,12 @@ class PhotoModify extends Component {
         }
 
         temp_options.categories = temp_options.categories.filter(
-          (item) => item != null
+          (item) => item !== null
         );
       }
 
       //update tags
-      else if (name == "Tag") {
+      else if (name === "Tag") {
         var temp_flags = [];
         var tem_tag = this.state.common_tag;
         if (!tem_tag) {
@@ -1027,17 +1005,17 @@ class PhotoModify extends Component {
             }
 
             for (let k = 0; k < this.state.currentTagValues.length; k++) {
-              if (temp_flags[this.state.currentTagValues[k]] != 1) {
+              if (temp_flags[this.state.currentTagValues[k]] !== 1) {
                 temp_options.tags.push(this.state.currentTagValues[k]);
               } else {
                 tem_tag = tem_tag.filter(
-                  (item) => item != this.state.currentTagValues[k]
+                  (item) => item !== this.state.currentTagValues[k]
                 );
               }
             }
             for (let h = 0; h < tem_tag.length; h++) {
               temp_options.tags = temp_options.tags.filter(
-                (item) => item != tem_tag[h]
+                (item) => item !== tem_tag[h]
               );
             }
           } else {
@@ -1047,7 +1025,7 @@ class PhotoModify extends Component {
             if (!this.state.currentTagValues) {
               this.state.currentTagValues = [];
             }
-            if (this.state.selImageIDs.length == 1) {
+            if (this.state.selImageIDs.length === 1) {
               temp_options.tags = [];
             }
             for (
@@ -1068,7 +1046,7 @@ class PhotoModify extends Component {
   }
 
   newReleaseUpload() {
-    if (this.state.releaseName == "") {
+    if (this.state.releaseName === "") {
       alert("Put Release caption");
     } else if (!this.state.ReleaseTypevalue) {
       alert("select Release Type");
@@ -1249,7 +1227,7 @@ class PhotoModify extends Component {
               <h2>My Published Photos</h2>
             </Grid.Column>
             {this.state.selImageIDs.length > 0 &&
-            this.state.activeMenuItem != "ACCEPTED" ? (
+            this.state.activeMenuItem !== "ACCEPTED" ? (
               <Grid.Column className="selectedShowContent right" width="8">
                 <span>{this.state.selImageIDs.length} selected files</span>
                 <Button negative onClick={this.confirmModalShow}>
@@ -1302,7 +1280,7 @@ class PhotoModify extends Component {
                 </Grid.Column>
               </Grid.Row> */}
               <Grid.Row>
-                {this.state.activeMenuItem == "TO_BE_SUBMITTED" ? (
+                {this.state.activeMenuItem === "TO_BE_SUBMITTED" ? (
                   <Message attached="top" className="welcomeMessage" positive>
                     <Icon name="check circle" />
                     Welcome! Let's get your content approved. Select an item to
@@ -1363,7 +1341,7 @@ class PhotoModify extends Component {
                           </label>
                           <Button
                             id={
-                              this.state.photoOptions["ImageType"] == "Photo"
+                              this.state.photoOptions["ImageType"] === "Photo"
                                 ? "activate"
                                 : ""
                             }
@@ -1376,7 +1354,7 @@ class PhotoModify extends Component {
                           </Button>
                           <Button
                             id={
-                              this.state.photoOptions["ImageType"] ==
+                              this.state.photoOptions["ImageType"] ===
                               "Illustration"
                                 ? "activate"
                                 : ""
@@ -1597,7 +1575,7 @@ class PhotoModify extends Component {
                           />
                         </div>
                         <div className="suggestKeywords">
-                          {this.state.activeMenuItem == "TO_BE_SUBMITTED"
+                          {this.state.activeMenuItem === "TO_BE_SUBMITTED"
                             ? keywords
                             : null}
                         </div>

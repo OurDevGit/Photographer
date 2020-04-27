@@ -5,7 +5,6 @@ import { get_data_for_user_diagram } from "../../../../util/APIUtils";
 import {
   ISOFormatDate,
   formatDate,
-  PrevYearDate,
   CalFirstDay,
   nextDay,
   nextMonth,
@@ -29,7 +28,6 @@ class Analyse extends Component {
   }
 
   componentDidMount() {
-    console.log("diagram", DIAGRAM_DATA_TYPE);
     this.setState({
       user: this.props.user,
     });
