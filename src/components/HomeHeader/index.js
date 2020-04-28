@@ -49,7 +49,7 @@ class HomeHeader extends React.Component {
     const { mobileMenuOpen } = this.state;
     const { currentUser } = this.props;
     let menuItems;
-
+    console.log("currentUser",currentUser)
     if (currentUser) {
       if (currentUser.authorities.length == 2) {
         menuItems = [

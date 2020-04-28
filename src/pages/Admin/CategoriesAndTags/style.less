@@ -44,15 +44,23 @@
     border-bottom: 1px dotted;
     padding: 30px;
     .value {
-      border: 1px solid #7d7d7d;
-      color: gray;
+      border: 0;
+      padding: 8px 8px;
       border-radius: 20px;
-      margin: 5px;
+      margin: 6px 6px 6px 0;
+      background: white;
+      color: black;
+      cursor: pointer;
+      box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.08);
+      font-size: 11px;
       img {
-        border-radius: 50% !important;
         width: 25px !important;
         height: 25px !important;
+        vertical-align: inherit !important;
       }
+    }
+    .value:hover {
+      background: lightgrey;
     }
   }
 }

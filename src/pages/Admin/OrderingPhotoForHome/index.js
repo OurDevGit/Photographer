@@ -277,6 +277,7 @@ export default class OrderingPhotoForHome extends Component {
             labelPosition="left"
             positive
             size="large"
+            className='saveButton'
             onClick={this.handleSave}
           />
           <InfiniteScroll
