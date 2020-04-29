@@ -8,7 +8,7 @@ import mobileMenuPng from "../../assets/images/mobile-menu.png";
 import mobileCloseMenuPng from "../../assets/images/cross.png";
 import logo from "../../assets/images/OpenShoots.gif";
 import { PaperPlaneIcon, StarIcon } from "../../assets/icons";
-import SearchBar from '../SearchBar'
+import SearchBar from "../SearchBar";
 import "./header.less";
 
 const style = {
@@ -21,7 +21,7 @@ class HomeHeader extends React.Component {
   constructor(props) {
     super(props);
     this.handleMenuClick = this.handleMenuClick.bind(this);
-    this.clickSearch =  this.clickSearch.bind(this)
+    this.clickSearch = this.clickSearch.bind(this);
   }
   state = {
     mobileMenuOpen: false,
@@ -41,23 +41,22 @@ class HomeHeader extends React.Component {
     }
   }
 
-  clickSearch(e){
-    this.props.clickSearch(e)
+  clickSearch(e) {
+    this.props.clickSearch(e);
   }
 
   render() {
     const { mobileMenuOpen } = this.state;
     const { currentUser } = this.props;
     let menuItems;
-    console.log("currentUser",currentUser)
     if (currentUser) {
       if (currentUser.authorities.length == 2) {
         menuItems = [
-          <Menu.Item as={NavLink} to="/admin">
+          <Menu.Item key="1" as={NavLink} to="/admin">
             <StarIcon className="star-icon" />
             AdminDashboard
           </Menu.Item>,
-          <Menu.Item>
+          <Menu.Item key="2">
             <StarIcon className="star-icon" />
             <Dropdown text="My contributions" icon="">
               <Dropdown.Menu>
@@ -80,7 +79,7 @@ class HomeHeader extends React.Component {
               </Dropdown.Menu>
             </Dropdown>
           </Menu.Item>,
-          <Menu.Item>
+          <Menu.Item key="3">
             <PaperPlaneIcon className="paper-plane-icon" />
             <Dropdown text="My usage" icon="">
               <Dropdown.Menu>
@@ -92,7 +91,7 @@ class HomeHeader extends React.Component {
               </Dropdown.Menu>
             </Dropdown>
           </Menu.Item>,
-          <Menu.Item>
+          <Menu.Item key="4">
             <PaperPlaneIcon className="paper-plane-icon" />
             <Dropdown text="My Community" icon="">
               <Dropdown.Menu>
@@ -100,11 +99,11 @@ class HomeHeader extends React.Component {
               </Dropdown.Menu>
             </Dropdown>
           </Menu.Item>,
-          <Menu.Item as={NavLink} to="/">
+          <Menu.Item key="5" as={NavLink} to="/">
             <Icon name="alarm" />
           </Menu.Item>,
-          <Menu.Item className="myAccount">
-            <Avatar fullname={currentUser.username} status="online" />
+          <Menu.Item key="6" className="myAccount">
+            <Avatar fullname={currentUser.username} avartarUrl={currentUser.avatar} status="online" />
             <Dropdown item>
               <Dropdown.Menu>
                 <Dropdown.Item
@@ -123,7 +122,7 @@ class HomeHeader extends React.Component {
       } else {
         if (currentUser.authorities[0].authority == "ROLE_USER") {
           menuItems = [
-            <Menu.Item>
+            <Menu.Item key="2">
               <StarIcon className="star-icon" />
               <Dropdown text="My contributions" icon="">
                 <Dropdown.Menu>
@@ -146,7 +145,7 @@ class HomeHeader extends React.Component {
                 </Dropdown.Menu>
               </Dropdown>
             </Menu.Item>,
-            <Menu.Item>
+            <Menu.Item key="3">
               <PaperPlaneIcon className="paper-plane-icon" />
               <Dropdown text="My usage" icon="">
                 <Dropdown.Menu>
@@ -158,7 +157,7 @@ class HomeHeader extends React.Component {
                 </Dropdown.Menu>
               </Dropdown>
             </Menu.Item>,
-            <Menu.Item>
+            <Menu.Item key="4">
               <PaperPlaneIcon className="paper-plane-icon" />
               <Dropdown text="My Community" icon="">
                 <Dropdown.Menu>
@@ -166,10 +165,10 @@ class HomeHeader extends React.Component {
                 </Dropdown.Menu>
               </Dropdown>
             </Menu.Item>,
-            <Menu.Item as={NavLink} to="/">
+            <Menu.Item key="5" as={NavLink} to="/">
               <Icon name="alarm" />
             </Menu.Item>,
-            <Menu.Item className="myAccount">
+            <Menu.Item key="6" className="myAccount">
               <Avatar fullname={currentUser.username} status="online" />
               <Dropdown item>
                 <Dropdown.Menu>
@@ -188,11 +187,11 @@ class HomeHeader extends React.Component {
           ];
         } else if (currentUser.authorities[0].authority == "ROLE_ADMIN") {
           menuItems = [
-            <Menu.Item as={NavLink} to="/admin">
+            <Menu.Item key="1" as={NavLink} to="/admin">
               <StarIcon className="star-icon" />
               AdminDashboard
             </Menu.Item>,
-            <Menu.Item className="myAccount">
+            <Menu.Item key="6" className="myAccount">
               <Avatar fullname={currentUser.username} status="online" />
               <Dropdown item>
                 <Dropdown.Menu>
@@ -214,6 +213,7 @@ class HomeHeader extends React.Component {
     } else {
       menuItems = [
         <Button
+          key="1"
           as="a"
           href="/user/LoginAndSignUp"
           className="investBtnStyle login-btn"
@@ -256,7 +256,10 @@ class HomeHeader extends React.Component {
                 <Menu.Item position="right" style={style.noPaddingStyle}>
                   {menuItems}
                 </Menu.Item>
-                <SearchBar clickSearch={this.clickSearch} handleSearchTag={this.props.handleSearchTag} />
+                <SearchBar
+                  clickSearch={this.clickSearch}
+                  handleSearchTag={this.props.handleSearchTag}
+                />
               </Menu>
             </Grid.Column>
           </Grid.Row>
@@ -300,7 +303,10 @@ class HomeHeader extends React.Component {
                   </Menu.Item>
                 </Menu.Item>
               </Menu>
-              <SearchBar clickSearch={this.clickSearch} handleSearchTag={this.props.handleSearchTag} />
+              <SearchBar
+                clickSearch={this.clickSearch}
+                handleSearchTag={this.props.handleSearchTag}
+              />
             </Grid.Column>
             {mobileMenuOpen && (
               <Grid.Column
@@ -313,7 +319,6 @@ class HomeHeader extends React.Component {
               </Grid.Column>
             )}
           </Grid.Row>
-          
         </Grid>
       </div>
     );

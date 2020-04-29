@@ -16,7 +16,7 @@ const colorSchema = {
 }
 
 const AnimateButton = ({ content, link, color, IconName }) => (
-    <a class="animateButton_demo1" href={link}>
+    <a className="animateButton_demo1" href={link}>
         {content}
         <Icon name={IconName}/>
     </a>

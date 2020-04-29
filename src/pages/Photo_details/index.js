@@ -500,10 +500,8 @@ class Photo_details extends Component {
     if (selImage && selImage.tags) {
       for (let i = 0; i < selImage.tags.length; i++) {
         keywords.push(
-          // <button onClick={this.sameTagPhotos} id={selImage.tags[i].value}>
-          //   {selImage.tags[i].value}
-          // </button>
           <Label
+            key={i}
             as="a"
             className="value"
             onClick={this.sameTagPhotos}
@@ -535,7 +533,7 @@ class Photo_details extends Component {
             clickSearch={this.clickSearch}
             handleSearchTag={this.handleSearchTag}
           />
-          <Grid className="photo_details" verticalAlign="">
+          <Grid className="photo_details">
             <Grid.Row only="computer" className="photo_details_row">
               <Grid.Column width={8}>
                 {/* <Button content='Back to List' icon='arrow left' labelPosition='left' color='green' className="BackToList"/> */}
@@ -607,7 +605,7 @@ class Photo_details extends Component {
                     <Button color="grey">
                       <Icon name="eye" />
                     </Button>
-                    <Label as="a" basic color="gray" pointing="left">
+                    <Label as="a" basic color="grey" pointing="left">
                       {this.state.views}
                     </Label>
                   </Button>
@@ -678,7 +676,7 @@ class Photo_details extends Component {
                     </a>
                     <a>
                       <span className="social">
-                        <Icon name="instagram official" />
+                        <Icon name="instagram" />
                       </span>
                     </a>
                   </p>
@@ -774,13 +772,13 @@ class Photo_details extends Component {
                           </Table.Cell>
                           <Table.Cell>
                             <span className="social">
-                              <Icon name="youtube official" />
+                              <Icon name="youtube" />
                             </span>
                             <span className="social">
                               <Icon name="facebook official" />
                             </span>
                             <span className="social">
-                              <Icon name="instagram official" />
+                              <Icon name="instagram" />
                             </span>
                           </Table.Cell>
                           <Table.Cell>1.000 $</Table.Cell>
@@ -803,13 +801,13 @@ class Photo_details extends Component {
                           </Table.Cell>
                           <Table.Cell>
                             <span className="social">
-                              <Icon name="youtube official" />
+                              <Icon name="youtube" />
                             </span>
                             <span className="social">
                               <Icon name="facebook official" />
                             </span>
                             <span className="social">
-                              <Icon name="instagram official" />
+                              <Icon name="instagram" />
                             </span>
                           </Table.Cell>
                           <Table.Cell>500 $</Table.Cell>
@@ -936,7 +934,7 @@ class Photo_details extends Component {
                   <Button color="grey">
                     <Icon name="eye" />
                   </Button>
-                  <Label as="a" basic color="gray" pointing="left">
+                  <Label as="a" basic color="grey" pointing="left">
                     {this.state.views}
                   </Label>
                 </Button>
@@ -1042,13 +1040,13 @@ class Photo_details extends Component {
                           </Table.Cell>
                           <Table.Cell>
                             <span className="social">
-                              <Icon name="youtube official" />
+                              <Icon name="youtube" />
                             </span>
                             <span className="social">
                               <Icon name="facebook official" />
                             </span>
                             <span className="social">
-                              <Icon name="instagram official" />
+                              <Icon name="instagram" />
                             </span>
                           </Table.Cell>
                           <Table.Cell>1.000 $</Table.Cell>
@@ -1071,13 +1069,13 @@ class Photo_details extends Component {
                           </Table.Cell>
                           <Table.Cell>
                             <span className="social">
-                              <Icon name="youtube official" />
+                              <Icon name="youtube" />
                             </span>
                             <span className="social">
                               <Icon name="facebook official" />
                             </span>
                             <span className="social">
-                              <Icon name="instagram official" />
+                              <Icon name="instagram" />
                             </span>
                           </Table.Cell>
                           <Table.Cell>500 $</Table.Cell>

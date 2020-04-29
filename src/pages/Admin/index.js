@@ -128,9 +128,9 @@ class Admin extends Component {
             {/* <Sidebar.Pushable as={Segment}> */}
             <Grid.Column width="3">
               <VerticalSidebar
-                animation=""
+                animation="overlay"
                 direction="left"
-                visible="true"
+                visible={true}
                 handleMenuClick={this.handleMenuClick}
               />
             </Grid.Column>

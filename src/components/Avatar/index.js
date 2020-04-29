@@ -26,10 +26,15 @@ const AvartarBadge = ({ status }) => (
   </div>
 );
 
-const Avartar = ({ fullname, status }) => (
+const Avartar = ({ fullname, status, avartarUrl }) => (
   <div className="avatar">
     <div className="avatar-main">
-      <div className="short-username">{fullname[0].toUpperCase()}</div>
+      {avartarUrl ? (
+        <img src="https://picktur.s3.eu-central-1.amazonaws.com/AV_1583980643306-images_(3).jpg" />
+      ) : (
+        <div className="short-username">{fullname[0].toUpperCase()}</div>
+      )}
+
       <AvartarBadge status={status || "online"} />
     </div>
   </div>
@@ -38,6 +43,7 @@ const Avartar = ({ fullname, status }) => (
 Avartar.propTypes = {
   fullname: PropTypes.string.isRequired,
   status: PropTypes.string,
+  avartarUrl: PropTypes.string
 };
 
 AvartarBadge.propTypes = {

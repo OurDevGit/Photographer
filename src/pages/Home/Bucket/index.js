@@ -7,16 +7,14 @@ import {
   Modal,
   Dropdown,
 } from "semantic-ui-react";
-import {
-  CloseIcon
-} from "../../../assets/icons";
+import { CloseIcon } from "../../../assets/icons";
 import {
   getListOfBaskets,
   addNewBasketForUser,
   addToBasketForPhoto,
 } from "../../../util/APIUtils";
 import "./style.less";
-import {notification} from 'antd'
+import { notification } from "antd";
 
 class Bucket extends Component {
   buckets = [
@@ -105,8 +103,8 @@ class Bucket extends Component {
   };
 
   handleMultiSelectChange = (e, { value }) => {
-    console.log("value", value)
-    console.log("baskets", this.state.currentBucketValues)
+    console.log("value", value);
+    console.log("baskets", this.state.currentBucketValues);
     if (value.length > this.state.currentBucketValues.length) {
       let i = 0;
       for (i = 0; i < this.state.baskets.length; i++) {
@@ -129,17 +127,16 @@ class Bucket extends Component {
       photoId: this.props.photo.id,
       baskets: this.state.currentBucketValues,
     };
-    console.log(Request)
+    console.log(Request);
     addToBasketForPhoto(Request)
       .then((response) => {
-        if(response.ok)
-        {
+        if (response.ok) {
           notification.success({
             message: "Openshoots",
             description: "Successfully added photo to selected baskets!",
           });
           this.handleClose();
-        }else{
+        } else {
           notification.error({
             message: "Openshoots",
             description: "Something went wrong. Please try again.",
@@ -158,7 +155,7 @@ class Bucket extends Component {
     const { show, photo } = this.props;
     const keywords = [];
     this.buckets.forEach((bucket, bucketIndex) => {
-      keywords.push(<button>{bucket.value}</button>);
+      keywords.push(<button key={bucketIndex}>{bucket.value}</button>);
     });
     return (
       <Modal open={show} className="Bucket">

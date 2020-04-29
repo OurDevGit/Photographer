@@ -310,6 +310,7 @@ class CategoriesAndTags extends Component {
       // keywords.push(<button className="value">{tag.value}</button>);
       keywords.push(
         <Label
+          key={tagIndex}
           as="a"
           className="value"
           id={tagIndex}
@@ -325,6 +326,7 @@ class CategoriesAndTags extends Component {
     this.state.categories.forEach((category, categoryIndex) => {
       categories.push(
         <Label
+          key={categoryIndex}
           as="a"
           className="value"
           id={categoryIndex}

@@ -67,8 +67,9 @@ export default class MultipleImageUploadComponent extends Component {
       );
     }
     const formData = new FormData();
-
-    formData.append("collection", this.state.Collection);
+    if (this.state.Collection !== "") {
+      formData.append("collection", this.state.Collection);
+    }
     formData.append("files", this.state.files[fileNo]);
 
     var requestOptions = {

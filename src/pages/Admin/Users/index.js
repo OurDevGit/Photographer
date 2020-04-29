@@ -38,13 +38,13 @@ class Users extends Component {
     if (this.state.users.length > 0) {
       this.state.users.forEach((user, userIndex) => {
         arr_users.push(
-          <Table.Row>
+          <Table.Row key={userIndex} onClick={this.handleGoUserProfile}>
             <Table.Cell>
               <Label ribbon>{userIndex + 1}</Label>
             </Table.Cell>
             <Table.Cell>
               <Image avatar src={user.avatar ? user.avatar : AvatarDefault} />
-              {user.name}
+              <a href={"/user/profile/" + user.id}>{user.name}</a>
             </Table.Cell>
             <Table.Cell>{user.username}</Table.Cell>
             <Table.Cell>{user.email}</Table.Cell>

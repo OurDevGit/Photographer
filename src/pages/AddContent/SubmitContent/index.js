@@ -98,6 +98,7 @@ class SubmitContent extends Component {
       ReleaseScore: [],
       deleteAction: false,
       isButtonLoading: false,
+      collection: []
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -463,11 +464,16 @@ class SubmitContent extends Component {
   //Multiple Image click event
 
   handleImageClick(e, flag) {
+    console.log("photo", e)
     this.setState({
       containTags: e.photo.containedTags,
       currentContainTags: e.photo.containedTags,
-      collection: e.photo.collection,
     });
+    if(e.photo.collection){
+      this.setState({
+        collection: e.photo.collection
+      })
+    }
     if (!this.state.selImage[e.photo.id]) {
       this.state.selImage[e.photo.id] = e.photo;
       this.setState({
@@ -1176,7 +1182,7 @@ class SubmitContent extends Component {
                 <Grid.Row>
                   <Form>
                     <Grid.Column className="image_option" width={3}>
-                      <div class="column avatarImage">
+                      <div className="column avatarImage">
                         <AvatarImage
                           url={this.state.DisplayImageUrl}
                           name="Image.jpg"
@@ -1189,7 +1195,7 @@ class SubmitContent extends Component {
                           />
                         </a>
                       </div>
-                      <div class="column">
+                      <div className="column">
                         <Form.Field>
                           <label>
                             Image type
@@ -1236,7 +1242,7 @@ class SubmitContent extends Component {
                           </Button>
                         </Form.Field>
                       </div>
-                      {/* <div class="column">
+                      {/* <div className="column">
                       <Form.Field>
                         <label>Usage 
                           <Popup
@@ -1250,9 +1256,9 @@ class SubmitContent extends Component {
 
                       </Form.Field>
                     </div> */}
-                      <div class="column">
+                      <div className="column">
                         <Form.Field>
-                          <div class="label">Title</div>
+                          <div className="label">Title</div>
                           <Input
                             placeholder="please put title of photo"
                             name="title"
@@ -1263,14 +1269,14 @@ class SubmitContent extends Component {
                               this.state.activeMenuItem != "TO_BE_SUBMITTED"
                             }
                           />
-                          <div class="label error">
+                          <div className="label error">
                             {this.state.errorMessage["Description"]}
                           </div>
                         </Form.Field>
                       </div>
-                      <div class="column">
+                      <div className="column">
                         <Form.Field>
-                          <div class="label">Description</div>
+                          <div className="label">Description</div>
                           <TextArea
                             rows={1}
                             placeholder="Descriptions"
@@ -1282,14 +1288,14 @@ class SubmitContent extends Component {
                               this.state.activeMenuItem != "TO_BE_SUBMITTED"
                             }
                           />
-                          <div class="label error">
+                          <div className="label error">
                             {this.state.errorMessage["Description"]}
                           </div>
                         </Form.Field>
                       </div>
-                      <div class="column">
+                      <div className="column">
                         <Form.Field>
-                          <div class="label">Follow Instagram link</div>
+                          <div className="label">Follow Instagram link</div>
                           <Input
                             placeholder="Follow Instagram link"
                             name="FollowIGLink"
@@ -1300,14 +1306,14 @@ class SubmitContent extends Component {
                               this.state.activeMenuItem != "TO_BE_SUBMITTED"
                             }
                           />
-                          <div class="label error">
+                          <div className="label error">
                             {this.state.errorMessage["Description"]}
                           </div>
                         </Form.Field>
                       </div>
-                      <div class="column">
+                      <div className="column">
                         <Form.Field>
-                          <div class="label">Collection</div>
+                          <div className="label">Collection</div>
                           <Select
                             placeholder="Collection"
                             options={this.state.collection}
@@ -1318,14 +1324,14 @@ class SubmitContent extends Component {
                               this.state.activeMenuItem != "TO_BE_SUBMITTED"
                             }
                           />
-                          <div class="label error">
+                          <div className="label error">
                             {this.state.errorMessage["Collection"]}
                           </div>
                         </Form.Field>
                       </div>
-                      <div class="column">
+                      <div className="column">
                         <Form.Field>
-                          <div class="label">Category 1</div>
+                          <div className="label">Category 1</div>
                           <Select
                             placeholder="Category 1"
                             options={this.state.categories1}
@@ -1336,14 +1342,14 @@ class SubmitContent extends Component {
                               this.state.activeMenuItem != "TO_BE_SUBMITTED"
                             }
                           />
-                          <div class="label error">
+                          <div className="label error">
                             {this.state.errorMessage["Category1"]}
                           </div>
                         </Form.Field>
                       </div>
-                      <div class="column">
+                      <div className="column">
                         <Form.Field>
-                          <div class="label">Category 2(optional)</div>
+                          <div className="label">Category 2(optional)</div>
                           <Select
                             placeholder="Category 2(optional)"
                             options={this.state.categories2}
@@ -1359,9 +1365,9 @@ class SubmitContent extends Component {
                           />
                         </Form.Field>
                       </div>
-                      <div class="column">
+                      <div className="column">
                         <Form.Field>
-                          <div class="label">Location(optional)</div>
+                          <div className="label">Location(optional)</div>
                           <Input
                             type="text"
                             placeholder="Location(optional)"
@@ -1395,7 +1401,7 @@ class SubmitContent extends Component {
                           />
                         </Form.Field>
                       </div>
-                      <div class="column">
+                      <div className="column">
                         <Form.Field>
                           <Accordion fluid styled>
                             <Accordion.Title
@@ -1420,8 +1426,9 @@ class SubmitContent extends Component {
                                 disabled={
                                   this.state.activeMenuItem != "TO_BE_SUBMITTED"
                                 }
+                                options={[]}
                               />
-                              <div class="check">
+                              <div className="check">
                                 <Checkbox
                                   className="black left fullwidth"
                                   label="Mature content"
@@ -1451,9 +1458,9 @@ class SubmitContent extends Component {
                           </Accordion>
                         </Form.Field>
                       </div>
-                      <div class="column">
+                      <div className="column">
                         <Form.Field>
-                          <div class="Releases left">
+                          <div className="Releases left">
                             <h5>
                               Releases
                               <Modal
@@ -1477,9 +1484,9 @@ class SubmitContent extends Component {
                                       onClick={this.onCloseModal}
                                     />
                                     <Header>Attach releases</Header>
-                                    <div class="column">
+                                    <div className="column">
                                       <Form.Field>
-                                        <div class="label">Release Type</div>
+                                        <div className="label">Release Type</div>
                                         <Select
                                           fluid
                                           placeholder="Release Type"
@@ -1492,9 +1499,9 @@ class SubmitContent extends Component {
                                         />
                                       </Form.Field>
                                     </div>
-                                    <div class="column">
+                                    <div className="column">
                                       <Form.Field>
-                                        <div class="label">Sort order</div>
+                                        <div className="label">Sort order</div>
                                         <Select
                                           fluid
                                           placeholder="Sort Order"
@@ -1503,7 +1510,7 @@ class SubmitContent extends Component {
                                         />
                                       </Form.Field>
                                     </div>
-                                    <div class="column">
+                                    <div className="column">
                                       <Form.Field>
                                         <Input
                                           fluid
@@ -1516,10 +1523,10 @@ class SubmitContent extends Component {
                                         />
                                       </Form.Field>
                                     </div>
-                                    {/* <div class="releases column">
+                                    {/* <div className="releases column">
                                     You don't have any active releases
                                   </div> */}
-                                    <div class="column">
+                                    <div className="column">
                                       <ListComponent
                                         type={this.state.ReleaseType}
                                         searchKey={this.state.searchReleaseKey}
@@ -1545,7 +1552,7 @@ class SubmitContent extends Component {
                                       <input
                                         accept="image/*"
                                         type="file"
-                                        class="hide_file"
+                                        className="hide_file"
                                         onChange={this.onChangeFIle}
                                       />
                                       <Button type="submit" className="" fluid>
@@ -1571,11 +1578,11 @@ class SubmitContent extends Component {
                                       <input
                                         accept="image/*"
                                         type="file"
-                                        class="hide_file"
+                                        className="hide_file"
                                         onChange={this.onChangeFIle}
                                       />
                                     </div>
-                                    <div class="column">
+                                    <div className="column">
                                       <Form.Field>
                                         <label>Releasse name</label>
                                         <Input
@@ -1588,7 +1595,7 @@ class SubmitContent extends Component {
                                         />
                                       </Form.Field>
                                     </div>
-                                    <div class="column">
+                                    <div className="column">
                                       <Form.Field>
                                         <Radio
                                           label="Model release"
@@ -1616,18 +1623,18 @@ class SubmitContent extends Component {
                                     </div>
                                     <div
                                       id="ReleaseDetail"
-                                      class={this.state.ReleaseTypevalue}
+                                      className={this.state.ReleaseTypevalue}
                                     >
-                                      <div class="column">
+                                      <div className="column">
                                         <h3>Model details(optional)</h3>
                                         <label>
                                           Add model dtails to help customers
                                           discover your work
                                         </label>
                                       </div>
-                                      <div class="column">
+                                      <div className="column">
                                         <Form.Field>
-                                          <div class="label">
+                                          <div className="label">
                                             Model echnicity
                                           </div>
                                           <Select
@@ -1638,9 +1645,9 @@ class SubmitContent extends Component {
                                           />
                                         </Form.Field>
                                       </div>
-                                      <div class="column">
+                                      <div className="column">
                                         <Form.Field>
-                                          <div class="label">Model age</div>
+                                          <div className="label">Model age</div>
                                           <Select
                                             fluid
                                             placeholder="Model age"
@@ -1649,9 +1656,9 @@ class SubmitContent extends Component {
                                           />
                                         </Form.Field>
                                       </div>
-                                      <div class="column">
+                                      <div className="column">
                                         <Form.Field>
-                                          <div class="label">Model gender</div>
+                                          <div className="label">Model gender</div>
                                           <Select
                                             fluid
                                             placeholder="Model gender"
@@ -1694,7 +1701,7 @@ class SubmitContent extends Component {
                     </Grid.Column>
                     <Grid.Column className="image_option" width={3}>
                       <Form.Field>
-                        <div class="label">Keywords</div>
+                        <div className="label">Keywords</div>
                         <div>
                           <Dropdown
                             options={this.state.tags}
@@ -1713,15 +1720,15 @@ class SubmitContent extends Component {
                             }
                             ref={this.tagDropbox}
                           />
-                          <div class="column">
-                            <div class="label error">
+                          <div className="column">
+                            <div className="label error">
                               {this.state.errorMessage["tags"]}
                             </div>
                           </div>
                         </div>
                       </Form.Field>
                       <Form.Field>
-                        <div class="label">
+                        <div className="label">
                           Keyword Suggestions
                           <Popup
                             trigger={

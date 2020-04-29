@@ -228,6 +228,7 @@ class SearchBar extends Component {
     this.state.trendingTags.forEach((tag, tagIndex) => {
       Trendingkeywords.push(
         <Label
+          key={tagIndex}
           as="a"
           className="value"
           id={tag.value}
@@ -244,6 +245,7 @@ class SearchBar extends Component {
     this.state.recentTags.forEach((tag, tagIndex) => {
       Recentkeywords.push(
         <Label
+          key={tagIndex}
           as="a"
           className="value"
           id={tag.value}

@@ -158,10 +158,11 @@ class PhotoList extends Component {
               hasMore: false,
             });
           }
+          console.log("content", response)
           this.setState({
             photos: photos.concat(response.content),
             photo_list: photos.concat(response.content),
-            // page: response.page,
+            page: response.number,
             size: response.size,
             totalElements: response.totalElements,
             totalPages: response.totalPages,
@@ -377,7 +378,7 @@ class PhotoList extends Component {
 
   ImageRender = ({ index, left, top, key, photo }) => (
     <PhotoBox
-      // key= {photo.id}
+      key= {photo.id}
       margin={"2px"}
       index={index}
       photo={photo}
@@ -388,10 +389,12 @@ class PhotoList extends Component {
     />
   );
   render() {
+    console.log("page", this.state.page)
     const photoViews = [];
     this.state.photo_list.forEach((photo, photoIndex) => {
       photoViews.push(
         <Photo
+          key={photoIndex}
           index={photoIndex}
           photo={photo}
           onClick={this.props.onClickImage}
@@ -439,7 +442,8 @@ class PhotoList extends Component {
               pageStart={-1}
               loadMore={this.loadFunc}
               hasMore={this.state.hasMore}
-              loader={<LoadingIndicator />}
+              loader={<LoadingIndicator key={this.state.page} />}
+              
             >
               <Gallery photos={samphotosq} renderImage={this.ImageRender} />
             </InfiniteScroll>
