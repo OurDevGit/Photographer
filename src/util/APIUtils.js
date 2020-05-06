@@ -779,9 +779,9 @@ export function get_banners_for_admin() {
 }
 
 export function deactivate_banner(Request) {
-  return request1({
+  return request_text({
     url: API_BASE_URL + "/banners/deactivate_banner",
     method: "DELETE",
-    body: JSON.stringify(Request),
+    body: Request,
   });
 }

@@ -17,6 +17,7 @@ import PersonalInfo from "./PersonalInfo";
 import Security from "./Security";
 import Collections from "./Collections";
 import Baskets from "./Baskets";
+import ProductPlacement from "./ProductPlacement";
 import { notification } from "antd";
 class Profile extends Component {
   constructor(props) {
@@ -243,6 +244,18 @@ class Profile extends Component {
             <Baskets
               user={this.state.user}
               handleImageClick={this.handleImageClick}
+            />
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: "Product Placement",
+        render: () => (
+          <Tab.Pane>
+            <ProductPlacement
+              user={this.state.user}
+              isUpdateLoading={this.state.isUpdateLoading}
+              update_userData={this.update_userData}
             />
           </Tab.Pane>
         ),

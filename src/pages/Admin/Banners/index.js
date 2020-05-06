@@ -45,7 +45,7 @@ class Banners extends Component {
     this.handleChangebannerData = this.handleChangebannerData.bind(this);
     this.showEditModal = this.showEditModal.bind(this);
     this.loadBanners = this.loadBanners.bind(this);
-    this.removeBanner = this.removeBanner.bind(this);
+    this.activeBannerAction = this.activeBannerAction.bind(this);
   }
   componentDidMount() {
     this.loadBanners();
@@ -96,6 +96,7 @@ class Banners extends Component {
     this.state.bannerData["homepage"] = this.state.banners[
       e.target.id
     ].homepage;
+    this.state.bannerData["active"] = this.state.banners[e.target.id].active;
     this.setState({
       open: true,
       type: "Edit",
@@ -319,21 +320,32 @@ class Banners extends Component {
     }
   }
 
-  removeBanner() {
+  activeBannerAction() {
     console.log(this.state.selectedBannerID);
     deactivate_banner(this.state.selectedBannerID)
       .then((response) => {
-        this.setState({
-          open: false,
-          bannerData: [],
-          error: [],
-          ImageFile: null,
-          ImageUrl: "",
-        });
-        this.loadBanners();
+        if (response.ok) {
+          this.setState({
+            open: false,
+            bannerData: [],
+            error: [],
+            ImageFile: null,
+            ImageUrl: "",
+          });
+          this.loadBanners();
+        } else {
+          notification.error({
+            message: "openshoots",
+            description: "Something went wrong. Please try again.",
+          });
+        }
       })
       .catch((error) => {
         console.log(error);
+        notification.error({
+          message: "openshoots",
+          description: "Something went wrong. Please try again.",
+        });
       });
   }
 
@@ -495,8 +507,8 @@ class Banners extends Component {
               Cancel
             </Button>
             {this.state.type === "Add" ? null : (
-              <Button onClick={this.removeBanner} negative>
-                Remove
+              <Button onClick={this.activeBannerAction} negative>
+                {this.state.bannerData['active'] ? "Remove" : "Active"}
               </Button>
             )}
 
