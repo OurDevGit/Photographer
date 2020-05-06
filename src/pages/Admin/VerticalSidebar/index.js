@@ -1,9 +1,5 @@
 import React, { Component } from "react";
-import {
-  Icon,
-  Menu,
-  Sidebar,
-} from "semantic-ui-react";
+import { Icon, Menu, Sidebar } from "semantic-ui-react";
 import "./style.less";
 export default class VerticalSidebar extends Component {
   constructor(props) {
@@ -31,7 +27,6 @@ export default class VerticalSidebar extends Component {
         animation={animation}
         direction={direction}
         icon="labeled"
-        
         vertical
         visible={visible}
         // width='thin'
@@ -41,7 +36,9 @@ export default class VerticalSidebar extends Component {
           as="a"
           value="list_submitted_photos"
           className={
-            this.state.activeMentItem === "list_submitted_photos" ? "active" : ""
+            this.state.activeMentItem === "list_submitted_photos"
+              ? "active"
+              : ""
           }
           onClick={this.handleMenuClick}
         >
@@ -85,6 +82,17 @@ export default class VerticalSidebar extends Component {
                 <Icon name='id card' />
                 Authorizations
                 </Menu.Item> */}
+        <Menu.Item
+          as="a"
+          value="banners"
+          className={
+            this.state.activeMentItem === "banners" ? "active" : ""
+          }
+          onClick={this.handleMenuClick}
+        >
+          <Icon name="images" />
+          Banners
+        </Menu.Item>
         <Menu.Item
           as="a"
           value="CategoriesAndTags"

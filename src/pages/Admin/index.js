@@ -9,6 +9,7 @@ import VerticalSidebar from "./VerticalSidebar";
 import PhotoContent from "./PhotoContent";
 import OrderingPhotoForHome from "./OrderingPhotoForHome";
 import CategoriesAndTags from "./CategoriesAndTags";
+import Banners from "./Banners";
 import Users from "./Users";
 import { notification } from "antd";
 class Admin extends Component {
@@ -152,6 +153,11 @@ class Admin extends Component {
                 {this.state.visible == "order_photo_home" ? (
                   <OrderingPhotoForHome
                     visible={this.state.visible == "order_photo_home"}
+                  />
+                ) : null}
+                {this.state.visible == "banners" ? (
+                  <Banners
+                    visible={this.state.visible == "banners"}
                   />
                 ) : null}
                 {this.state.visible == "CategoriesAndTags" ? (

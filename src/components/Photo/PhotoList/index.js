@@ -12,6 +12,7 @@ import {
   getListBasketsContent,
   getUserPhotos,
   getPhotosInCollection,
+  get_banners_for_homepage,
 } from "../../../util/APIUtils";
 import Photo from "../Photo";
 import { castVote } from "../../../util/APIUtils";
@@ -158,20 +159,60 @@ class PhotoList extends Component {
               hasMore: false,
             });
           }
-          console.log("content", response)
-          this.setState({
-            photos: photos.concat(response.content),
-            photo_list: photos.concat(response.content),
-            page: response.number,
-            size: response.size,
-            totalElements: response.totalElements,
-            totalPages: response.totalPages,
-            last: response.last,
-            currentVotes: currentVotes.concat(
-              Array(response.content.length).fill(null)
-            ),
-            isLoading: false,
-          });
+
+          if (!this.state.banners) {
+            get_banners_for_homepage()
+              .then((res) => {
+                console.log("banners", res);
+                res.forEach((banner, bannerIndex) => {
+                  console.log(bannerIndex, banner);
+                  response.content.push({
+                    type: "banner",
+                    lr_width: 1900,
+                    lr_heigh: 600,
+                    url_lr: banner.address,
+                    newTab: banner.newTab,
+                    redirect: banner.redirect
+                  });
+                });
+                this.setState({
+                  photos: photos.concat(response.content),
+                  photo_list: photos.concat(response.content),
+                  page: response.number,
+                  size: response.size,
+                  totalElements: response.totalElements,
+                  totalPages: response.totalPages,
+                  last: response.last,
+                  banners: res,
+                  isLoading: false,
+                });
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          } else {
+            this.state.banners.forEach((banner, bannerIndex) => {
+              console.log(bannerIndex, banner);
+              response.content.push({
+                type: "banner",
+                lr_width: 1900,
+                lr_heigh: 600,
+                url_lr: banner.address,
+                newTab: banner.newTab,
+                redirect: banner.redirect
+              });
+            });
+            this.setState({
+              photos: photos.concat(response.content),
+              photo_list: photos.concat(response.content),
+              page: response.number,
+              size: response.size,
+              totalElements: response.totalElements,
+              totalPages: response.totalPages,
+              last: response.last,
+              isLoading: false,
+            });
+          }
         })
         .catch((error) => {
           this.setState({
@@ -378,7 +419,7 @@ class PhotoList extends Component {
 
   ImageRender = ({ index, left, top, key, photo }) => (
     <PhotoBox
-      key= {photo.id}
+      key={photo.id}
       margin={"2px"}
       index={index}
       photo={photo}
@@ -389,7 +430,7 @@ class PhotoList extends Component {
     />
   );
   render() {
-    console.log("page", this.state.page)
+    console.log("page", this.state.page);
     const photoViews = [];
     this.state.photo_list.forEach((photo, photoIndex) => {
       photoViews.push(
@@ -419,6 +460,7 @@ class PhotoList extends Component {
         samphotosq[k].width = this.state.photo_list[k].lr_width;
         samphotosq[k].height = this.state.photo_list[k].lr_heigh;
       }
+      console.log("sam", samphotosq);
     }
     if (this.state.isLoading) {
       return <LoadingIndicator />;
@@ -443,9 +485,9 @@ class PhotoList extends Component {
               loadMore={this.loadFunc}
               hasMore={this.state.hasMore}
               loader={<LoadingIndicator key={this.state.page} />}
-              
             >
               <Gallery photos={samphotosq} renderImage={this.ImageRender} />
+              {/* <img src={banner} /> */}
             </InfiniteScroll>
           </div>
         ) : this.props.type === "downloaded_photolist" ||

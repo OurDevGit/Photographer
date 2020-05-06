@@ -12,32 +12,19 @@ import {
   getListOfBaskets,
   addNewBasketForUser,
   addToBasketForPhoto,
+  getBasketsForPhoto,
+  removePhotoFromBasket,
 } from "../../../util/APIUtils";
 import "./style.less";
 import { notification } from "antd";
 
 class Bucket extends Component {
-  buckets = [
-    { key: "af", value: "African", text: "African" },
-    { key: "afam", value: "African American", text: "African American" },
-    { key: "bl", value: "Black", text: "Black" },
-    { key: "br", value: "Brazilian", text: "Brazilian" },
-    { key: "ch", value: "Chinese", text: "Chinese" },
-    { key: "ca", value: "Caucasian", text: "Caucasian" },
-    { key: "es", value: "East Asian", text: "East Asian" },
-    { key: "hi", value: "Hispanic(Latin)", text: "Hispanic(Latin)" },
-    { key: "jp", value: "Japanese", text: "Japanese" },
-    { key: "me", value: "Middle Eastern", text: "Middle Eastern" },
-    { key: "na", value: "Native American", text: "Native American" },
-    { key: "pi", value: "Pacific Islander", text: "Pacific Islander" },
-    { key: "sa", value: "South Asian", text: "South Asian" },
-    { key: "sea", value: "Southeast Asian", text: "Southeast Asian" },
-  ];
   constructor(props) {
     super(props);
     this.state = {
       rating: 108,
       baskets: [],
+      Existingbasketlist: [],
       currentBucketValues: [],
     };
     this.loadBasketsForUser = this.loadBasketsForUser.bind(this);
@@ -47,13 +34,24 @@ class Bucket extends Component {
     this.handleMultiSelectChange = this.handleMultiSelectChange.bind(this);
     this.addNewBasket = this.addNewBasket.bind(this);
     this.addToBasket = this.addToBasket.bind(this);
+    this.removeFromBasket = this.removeFromBasket.bind(this);
   }
 
   componentDidMount() {
     this.loadBasketsForUser();
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.photo !== prevProps.photo) {
+      this.setState({
+        Existingbasketlist: [],
+      });
+      this.loadBasketsForPhoto(this.props.photo.id);
+    }
+  }
+
   loadBasketsForUser() {
+    var score = [];
     getListOfBaskets()
       .then((response) => {
         let basketlist = response.map((basket) => {
@@ -76,8 +74,39 @@ class Bucket extends Component {
       });
   }
 
+  loadBasketsForPhoto(id) {
+    getBasketsForPhoto(id)
+      .then((response) => {
+        let Existingbasketlist = response.map((basket) => {
+          this.state.baskets = this.state.baskets.filter(
+            (el) => el.key !== basket.id
+          );
+          return {
+            key: basket.id,
+            value: basket.id,
+            text: basket.value,
+          };
+        });
+        this.setState({
+          Existingbasketlist: Existingbasketlist,
+          baskets: this.state.baskets,
+          isLoading: false,
+        });
+      })
+      .catch((error) => {
+        console.log("error", error);
+        this.setState({
+          isLoading: false,
+        });
+      });
+  }
+
   handleClose() {
     this.props.handleClose(false);
+    this.setState({
+      currentBucketValues: [],
+    });
+    this.loadBasketsForUser();
   }
 
   addToPreferred() {
@@ -123,39 +152,74 @@ class Bucket extends Component {
   };
 
   addToBasket() {
-    var Request = {
-      photoId: this.props.photo.id,
-      baskets: this.state.currentBucketValues,
-    };
-    console.log(Request);
-    addToBasketForPhoto(Request)
-      .then((response) => {
-        if (response.ok) {
-          notification.success({
-            message: "Openshoots",
-            description: "Successfully added photo to selected baskets!",
-          });
-          this.handleClose();
-        } else {
+    if (
+      !this.state.currentBucketValues ||
+      this.state.currentBucketValues.length === 0
+    ) {
+      this.handleClose();
+    } else {
+      var Request = {
+        photoId: this.props.photo.id,
+        baskets: this.state.currentBucketValues,
+      };
+      console.log(Request);
+      addToBasketForPhoto(Request)
+        .then((response) => {
+          if (response.ok) {
+            notification.success({
+              message: "Openshoots",
+              description: "Successfully added photo to selected baskets!",
+            });
+            this.handleClose();
+          } else {
+            notification.error({
+              message: "Openshoots",
+              description: "Something went wrong. Please try again.",
+            });
+          }
+        })
+        .catch((error) => {
           notification.error({
             message: "Openshoots",
             description: "Something went wrong. Please try again.",
           });
+        });
+    }
+  }
+
+  removeFromBasket(e, { id }) {
+    console.log(id);
+    var Request = {
+      photoId: this.props.photo.id,
+      baskets: [this.state.Existingbasketlist[id].value],
+    };
+    this.state.Existingbasketlist.splice(id, 1);
+
+    removePhotoFromBasket(Request)
+      .then((response) => {
+        console.log(response);
+        if (response.ok) {
+          this.setState({
+            Existingbasketlist: this.state.Existingbasketlist,
+          });
+        } else {
         }
       })
       .catch((error) => {
-        notification.error({
-          message: "Openshoots",
-          description: "Something went wrong. Please try again.",
-        });
+        console.log(error);
       });
   }
 
   render() {
     const { show, photo } = this.props;
     const keywords = [];
-    this.buckets.forEach((bucket, bucketIndex) => {
-      keywords.push(<button key={bucketIndex}>{bucket.value}</button>);
+    this.state.Existingbasketlist.forEach((bucket, bucketIndex) => {
+      keywords.push(
+        <button key={bucketIndex}>
+          {bucket.text}
+          <Icon name="close" id={bucketIndex} onClick={this.removeFromBasket} />
+        </button>
+      );
     });
     return (
       <Modal open={show} className="Bucket">
@@ -165,7 +229,7 @@ class Bucket extends Component {
             <CloseIcon className="close_icon" />
           </a>
         </Modal.Header>
-        <Modal.Content image className="modal_content">
+        <Modal.Content image scrolling className="modal_content">
           <Image size="medium" src={photo.url_fr} wrapped />
           <Modal.Description>
             <Header></Header>
@@ -191,7 +255,7 @@ class Bucket extends Component {
           </Modal.Description>
         </Modal.Content>
         <Modal.Actions>
-          <Button primary onClick={this.addToBasket}>
+          <Button color="blue" onClick={this.addToBasket}>
             Save <Icon name="chevron right" />
           </Button>
         </Modal.Actions>

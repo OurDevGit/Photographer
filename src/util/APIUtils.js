@@ -250,6 +250,14 @@ export function redeemMultiplePhoto(Request) {
   });
 }
 
+export function deleteMultiplePhoto(Request) {
+  return request1({
+    url: API_BASE_URL + "/photo_submit/deleteMultiplePhoto",
+    method: "DELETE",
+    body: JSON.stringify(Request),
+  });
+}
+
 export function addNewTag(Request) {
   return request1({
     url: API_BASE_URL + "/photo_submit/add_new_tag",
@@ -521,6 +529,16 @@ export function removeBasketForUser(Request) {
   });
 }
 
+export function removePhotoFromBasket(Request) {
+  return request1({
+    url:
+      API_BASE_URL +
+      "/user_actions/photo_actions_controller/remove_photo_from_basket",
+    method: "POST",
+    body: JSON.stringify(Request)
+  });
+}
+
 export function is_liked(Request) {
   return request({
     url:
@@ -727,6 +745,43 @@ export function add_collection(Request) {
   return request({
     url: API_BASE_URL + "/photo_collection_controller/add_collection",
     method: "POST",
+    body: JSON.stringify(Request),
+  });
+}
+
+export function uploadBanner(Request) {
+  return request({
+    url: API_BASE_URL + "/banners/uploadBanner",
+    method: "POST",
+    body: JSON.stringify(Request),
+  });
+}
+
+export function get_banners() {
+  return request({
+    url: API_BASE_URL + "/banners/get_banners",
+    method: "GET"
+  });
+}
+
+export function get_banners_for_homepage() {
+  return request({
+    url: API_BASE_URL + "/banners/get_banners_for_homepage",
+    method: "GET"
+  });
+}
+
+export function get_banners_for_admin() {
+  return request({
+    url: API_BASE_URL + "/banners/get_banners_for_admin",
+    method: "GET"
+  });
+}
+
+export function deactivate_banner(Request) {
+  return request1({
+    url: API_BASE_URL + "/banners/deactivate_banner",
+    method: "DELETE",
     body: JSON.stringify(Request),
   });
 }

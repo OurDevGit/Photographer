@@ -31,6 +31,7 @@ import {
   removeAuthorizationToPhotoIDs,
   addNewTag,
   redeemMultiplePhoto,
+  deleteMultiplePhoto,
 } from "../../../util/APIUtils";
 import {
   API_BASE_URL,
@@ -98,7 +99,7 @@ class SubmitContent extends Component {
       ReleaseScore: [],
       deleteAction: false,
       isButtonLoading: false,
-      collection: []
+      collection: [],
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -262,11 +263,33 @@ class SubmitContent extends Component {
   }
 
   deletePhotos() {
-    getNumberOfPhotos();
-    this.setState({
-      confirmModalShow: false,
-      deleteAction: true,
-    });
+    var len = this.state.selImageIDs.length;
+    deleteMultiplePhoto(this.state.selImageIDs)
+      .then((response) => {
+        if (response.ok) {
+          this.getTotalNumberOfPhotos();
+          this.setState({
+            confirmModalShow: false,
+            deleteAction: true,
+          });
+          notification.success({
+            message: "Openshoots",
+            description: len + "photos are deleted",
+          });
+        } else {
+          notification.error({
+            message: "Openshoots",
+            description: "Something went wrong. Please try again.",
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        notification.error({
+          message: "Openshoots",
+          description: "Something went wrong. Please try again.",
+        });
+      });
   }
 
   deleteFun() {
@@ -464,15 +487,15 @@ class SubmitContent extends Component {
   //Multiple Image click event
 
   handleImageClick(e, flag) {
-    console.log("photo", e)
+    console.log("photo", e);
     this.setState({
       containTags: e.photo.containedTags,
       currentContainTags: e.photo.containedTags,
     });
-    if(e.photo.collection){
+    if (e.photo.collection) {
       this.setState({
-        collection: e.photo.collection
-      })
+        collection: e.photo.collection,
+      });
     }
     if (!this.state.selImage[e.photo.id]) {
       this.state.selImage[e.photo.id] = e.photo;
@@ -539,7 +562,7 @@ class SubmitContent extends Component {
         var common_tags = [];
         var common_category = [null, null];
         var desScore = 0;
-        var titScore =  0;
+        var titScore = 0;
         for (var i = 0; i < this.state.selImageIDs.length; i++) {
           // common descriptions
           if (
@@ -1486,7 +1509,9 @@ class SubmitContent extends Component {
                                     <Header>Attach releases</Header>
                                     <div className="column">
                                       <Form.Field>
-                                        <div className="label">Release Type</div>
+                                        <div className="label">
+                                          Release Type
+                                        </div>
                                         <Select
                                           fluid
                                           placeholder="Release Type"
@@ -1658,7 +1683,9 @@ class SubmitContent extends Component {
                                       </div>
                                       <div className="column">
                                         <Form.Field>
-                                          <div className="label">Model gender</div>
+                                          <div className="label">
+                                            Model gender
+                                          </div>
                                           <Select
                                             fluid
                                             placeholder="Model gender"
