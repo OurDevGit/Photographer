@@ -5,8 +5,9 @@ import {
   getCurrentUser,
   getAllCategories,
   getPhotoLists,
+  add_geo_tag
 } from "../../util/APIUtils";
-import { ACCESS_TOKEN, PHOTO_LIST_SIZE } from "../../constants";
+import { ACCESS_TOKEN, PHOTO_LIST_SIZE, GEOCODING_API_KEY } from "../../constants";
 import { HomeHeader, PhotoList } from "../../components";
 import PhotoDetails from "./PhotoDetails";
 import Bucket from "./Bucket";
@@ -31,6 +32,8 @@ class Home extends Component {
       tagSearch: null,
       photos: [],
       hasMoreItems: false,
+      latitude: "",
+      longitude: ""
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -117,13 +120,55 @@ class Home extends Component {
       });
   }
 
+  position = async () => {
+    await navigator.geolocation.getCurrentPosition(
+      position => {
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          position: position
+        });
+        console.log("Location", position)
+        fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + position.coords.latitude + ',' + position.coords.longitude + '&key=' + GEOCODING_API_KEY)
+          .then((response) => response.json())
+          .then((responseJson) => {
+            console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson));
+            this.setState({
+              locationName: responseJson
+            })
+          })
+          .catch(error=>console.log(error))
+      },
+      err => console.log(err)
+    );
+  }
+
   componentDidMount() {
+
+    this.position();
     this.loadCurrentUser();
     // this.loadAllCategories();
     // this.getTotalpages();
     window.addEventListener("keydown", this.keydown);
     window.addEventListener("keyup", this.keyup);
     console.log(this.props.location.search.split("="));
+  }
+
+  componentDidUpdate() {
+    // if()
+    // var Request = {
+    //     "longitude": this.state.longitude,
+    //     "latitude": this.state.latitude,
+    //     "locationName": "string",
+    //     "userId": this.state.currentUser.id
+    // }
+    // add_geo_tag(Request)
+    // .then(response=>{
+    //   console.log(response)
+    // })
+    // .catch(error=>{
+    //   console.log(error);
+    // })
   }
 
   keydown = (e) => {
@@ -232,6 +277,7 @@ class Home extends Component {
   }
 
   render() {
+    console.log("location", this.state.position)
     console.log("dd", this.state.photos)
     if (this.props.location.search.split("=")[0] === "?tag") {
       var tagSearch = this.props.location.search.split("=")[1];
@@ -259,7 +305,7 @@ class Home extends Component {
         </div>
       );
     });
-    if(this.state.isLoading){
+    if (this.state.isLoading) {
       return <LoadingIndicator />
     }
 
@@ -282,7 +328,7 @@ class Home extends Component {
             </GridColumn> */}
 
             <Grid.Column width={16}>
-              
+
               <PhotoList
                 type="home_list"
                 onClickImage={this.handleImageClick}

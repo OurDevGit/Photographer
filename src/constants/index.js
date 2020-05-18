@@ -3,7 +3,7 @@ export const HOST_URL = window.location.hostname;
 export const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL || "https://api.openshoots.com/api";
 export const ACCESS_TOKEN = "accessToken";
-
+export const GEOCODING_API_KEY = "AIzaSyDCQjq49SSRZWygt6LFMX-Nmd2GMryaD9I"
 export const PHOTO_LIST_SIZE = 30;
 export const MAX_CHOICES = 6;
 export const PHOTO_QUESTION_MAX_LENGTH = 140;

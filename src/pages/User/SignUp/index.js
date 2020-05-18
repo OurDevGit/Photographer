@@ -66,6 +66,11 @@ class SignUp extends Component {
       email: this.state.email.value,
       username: this.state.username.value,
       password: this.state.password.value,
+      // locationDto:{
+      //   "longitude": this.props.position.longitude,
+      //   "latitude": this.props.position.latitude,
+      //   "locationName": this.props.locationName
+      // }
     };
 
     signup(signupRequest)

@@ -12,6 +12,7 @@ import { API_BASE_URL, ACCESS_TOKEN } from "../../../constants";
 import {
   get_banners_for_admin,
   deactivate_banner,
+  activate_banner
 } from "../../../util/APIUtils";
 import "./style.less";
 import { notification } from "antd";
@@ -322,7 +323,9 @@ class Banners extends Component {
 
   activeBannerAction() {
     console.log(this.state.selectedBannerID);
-    deactivate_banner(this.state.selectedBannerID)
+
+    if(this.state.bannerData['active']){
+      deactivate_banner(this.state.selectedBannerID)
       .then((response) => {
         if (response.ok) {
           this.setState({
@@ -347,6 +350,34 @@ class Banners extends Component {
           description: "Something went wrong. Please try again.",
         });
       });
+    }else{
+      activate_banner(this.state.selectedBannerID)
+      .then((response) => {
+        if (response.ok) {
+          this.setState({
+            open: false,
+            bannerData: [],
+            error: [],
+            ImageFile: null,
+            ImageUrl: "",
+          });
+          this.loadBanners();
+        } else {
+          notification.error({
+            message: "openshoots",
+            description: "Something went wrong. Please try again.",
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        notification.error({
+          message: "openshoots",
+          description: "Something went wrong. Please try again.",
+        });
+      });
+    }
+    
   }
 
   render() {

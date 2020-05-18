@@ -785,3 +785,40 @@ export function deactivate_banner(Request) {
     body: Request,
   });
 }
+
+export function activate_banner(Request) {
+  return request_text({
+    url: API_BASE_URL + "/banners/activate_banner",
+    method: "DELETE",
+    body: Request,
+  });
+}
+
+export function add_geo_tag(Request) {
+  return request1({
+    url: API_BASE_URL + "/geolocation/add_geo_tag",
+    method: "POST",
+    body: JSON.stringify(Request),
+  });
+}
+
+export function get_product_items_for_user(userId) {
+  return request({
+    url: API_BASE_URL + "/public/marketplace/get_items_for_user/" + userId,
+    method: "GET"
+  });
+}
+export function get_product_item(itemId) {
+  return request({
+    url: API_BASE_URL + "/public/marketplace/get_item/" + itemId,
+    method: "GET"
+  });
+}
+
+export function remove_product_item(Request) {
+  return request_text({
+    url: API_BASE_URL + "/public/marketplace/remove_item",
+    method: "DELETE",
+    body: Request,
+  });
+}

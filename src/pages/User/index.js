@@ -12,7 +12,7 @@ import {
   Tab,
 } from "semantic-ui-react";
 import { login, FBLogin } from "../../util/APIUtils";
-import { ACCESS_TOKEN } from "../../constants";
+import { ACCESS_TOKEN, GEOCODING_API_KEY } from "../../constants";
 import "./style.less";
 import { notification } from "antd";
 import Login from "./Login";
@@ -31,10 +31,40 @@ class LoginAndSignUp extends Component {
       title: "Login to your account",
       falg: false,
       isLoading: false,
+      latitude: "",
+      longitude: "",
+      position: {},
+      locationName: ""
     };
     this.handleTabChange = this.handleTabChange.bind(this);
     this.OpenLoginTab = this.OpenLoginTab.bind(this);
     this.SocialLogin = this.SocialLogin.bind(this);
+  }
+
+  componentDidMount() {
+    this.position();
+  }
+
+  position = async () => {
+    await navigator.geolocation.getCurrentPosition(
+      position => {
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          position: position.coords
+        })
+        fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + position.coords.latitude + ',' + position.coords.longitude + '&key=' + GEOCODING_API_KEY)
+          .then((response) => response.json())
+          .then((responseJson) => {
+            console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson));
+            this.setState({
+              locationName: responseJson
+            })
+          })
+          .catch(error=>console.log(error))
+      },
+      err => console.log(err)
+    );
   }
 
   OpenLoginTab() {
@@ -70,7 +100,7 @@ class LoginAndSignUp extends Component {
         menuItem: "Login",
         render: () => (
           <Tab.Pane>
-            <Login />
+            <Login position={this.state.position} locationName={this.state.locationName} />
           </Tab.Pane>
         ),
       },
@@ -78,7 +108,7 @@ class LoginAndSignUp extends Component {
         menuItem: "SignUp",
         render: () => (
           <Tab.Pane>
-            <SignUp onSuccess={this.OpenLoginTab} />
+            <SignUp position={this.state.position} locationName={this.state.locationName}  onSuccess={this.OpenLoginTab} />
           </Tab.Pane>
         ),
       },

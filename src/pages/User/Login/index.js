@@ -43,6 +43,11 @@ class Login extends Component {
     const loginRequest = {
       usernameOrEmail: this.state.usernameOrEmail.value,
       password: this.state.password.value,
+      // locationDto:{
+      //   "longitude": this.props.position.longitude,
+      //   "latitude": this.props.position.latitude,
+      //   "locationName": this.props.locationName
+      // }
     };
     this.setState({ isLoading: true });
     login(loginRequest)
