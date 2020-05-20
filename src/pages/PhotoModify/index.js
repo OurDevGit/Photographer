@@ -12,6 +12,12 @@ import {
   Checkbox,
   Popup,
   Input,
+  Modal,
+  Header,
+  Image,
+  Label,
+  Table,
+  Tab
 } from "semantic-ui-react";
 import { Line } from "react-chartjs-2";
 import { Redirect } from "react-router-dom";
@@ -27,6 +33,8 @@ import {
   addNewTag,
   redeemMultiplePhoto,
   get_data_for_foto_diagram,
+  getPhotosInCollection,
+  save_update_photo_links
 } from "../../util/APIUtils";
 import {
   API_BASE_URL,
@@ -49,6 +57,7 @@ import {
 import "./style.less";
 import { notification } from "antd";
 import LoadingIndicator from "../../common/LoadingIndicator";
+import { get } from "animejs";
 
 class PhotoModify extends Component {
   constructor(props) {
@@ -82,6 +91,7 @@ class PhotoModify extends Component {
       DisplayImageUrl: "",
       ReleaseModalOpen: false,
       NewReleaseModalOpen: false,
+      linkModalOpen: false,
       authorization: {},
       releaseFile: {},
       releaseName: "",
@@ -91,6 +101,12 @@ class PhotoModify extends Component {
       activeMode: "DAY",
       data: {},
       today: new Date(),
+      linkOption: {},
+      error: [],
+      activeLinkContent: false,
+      linkContentType: "",
+      photoLinks: [],
+      photoLinksTemp: []
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -129,6 +145,15 @@ class PhotoModify extends Component {
     this.handleChangeMode = this.handleChangeMode.bind(this);
     this.handleSearchTag = this.handleSearchTag.bind(this);
     this.clickSearch = this.clickSearch.bind(this);
+    this.openLinkModal = this.openLinkModal.bind(this);
+    this.linkOptionChange = this.linkOptionChange.bind(this);
+    this.getPos = this.getPos.bind(this);
+    this.setPos = this.setPos.bind(this);
+    this.linkAction = this.linkAction.bind(this);
+    this.handleActiveAdd = this.handleActiveAdd.bind(this);
+    this.handleActiveEdit = this.handleActiveEdit.bind(this);
+    this.handleRemoveLink = this.handleRemoveLink.bind(this);
+    this.updatephotoLinks = this.updatephotoLinks.bind(this);
   }
 
   componentDidMount() {
@@ -543,7 +568,7 @@ class PhotoModify extends Component {
           if (
             i > 0 &&
             this.state.selImage[this.state.selImageIDs[i - 1]].description ===
-              this.state.selImage[this.state.selImageIDs[i]].description
+            this.state.selImage[this.state.selImageIDs[i]].description
           ) {
             desScore++;
           }
@@ -1130,6 +1155,9 @@ class PhotoModify extends Component {
     this.setState({
       ReleaseModalOpen: false,
       NewReleaseModalOpen: false,
+      linkModalOpen: false,
+      linkOption: {},
+      photoLinks: this.state.photoLinksTemp
     });
   }
 
@@ -1162,12 +1190,151 @@ class PhotoModify extends Component {
     this.props.history.push("/?key=" + e);
   }
 
+  openLinkModal() {
+    this.setState({
+      linkModalOpen: true
+    })
+  }
+
+  handleActiveAdd() {
+    this.state.linkOption['icon'] = ""
+    this.setState({
+      activeLinkContent: true,
+      linkContentType: "Add",
+      linkOption: this.state.linkOption,
+      selectedPhotoLink: null
+    })
+  }
+
+  handleActiveEdit(e) {
+    this.setState({
+      activeLinkContent: true,
+      linkContentType: "Edit",
+      linkOption: this.state.photoLinks[e.target.id],
+      selectedPhotoLink: parseInt(e.target.id)
+    })
+  }
+
+  handleRemoveLink(e) {
+    var key = parseInt(e.target.id);
+    var temp = this.state.photoLinks.slice(0, key).concat(this.state.photoLinks.slice(key + 1, this.state.photoLinks.length));
+    this.setState({
+      photoLinks: temp
+    })
+  }
+
+  getPos(e) {
+    console.log(e)
+    console.log(e.currentTarget.getBoundingClientRect())
+    console.log("client", e.clientY)
+    var imagePosInfo = e.currentTarget.getBoundingClientRect();
+    this.setState({
+      posX: Math.floor((e.clientX - imagePosInfo.x) / imagePosInfo.width * 100),
+      posY: Math.floor((e.clientY - imagePosInfo.y) / imagePosInfo.height * 100)
+    })
+  }
+
+  setPos() {
+    this.state.linkOption['x'] = this.state.posX;
+    this.state.linkOption['y'] = this.state.posY;
+    this.setState({
+      linkOption: this.state.linkOption
+    })
+  }
+
+  linkOptionChange(e, { value, name }) {
+    this.state.linkOption[name] = value;
+    if (value !== "") {
+      this.state.error[name] = false;
+    } else {
+      this.state.error[name] = true;
+    }
+    this.setState({
+      linkOptionChange: this.state.linkOption,
+      error: this.state.error
+    })
+
+  }
+
+  linkAction() {
+    if (!this.state.linkOption['x'] || !this.state.linkOption['y']) {
+      notification.error({
+        message: "Openshoots",
+        description: "Please set link position of photo. Try again.",
+      });
+    } else if (!this.state.linkOption['link'] || this.state.linkOption['link'] === "") {
+      this.state.error['link'] = true;
+      this.setState({
+        error: this.state.error
+      })
+      notification.error({
+        message: "Openshoots",
+        description: "Please put link address.",
+      });
+    } else if (!this.state.linkOption['description'] || this.state.linkOption['description'] === "") {
+      this.state.error['description'] = true;
+      this.setState({
+        error: this.state.error
+      })
+      notification.error({
+        message: "Openshoots",
+        description: "Please put description about link.",
+      });
+    } else {
+      if (this.state.linkContentType === "Add") {
+        this.state.photoLinks.push(this.state.linkOption)
+      } else if (this.state.linkContentType === "Edit") {
+        this.state.photoLinks[this.state.selectedPhotoLink] = this.state.linkOption
+      }
+      console.log(this.state.photoLinks);
+      this.setState({
+        activeLinkContent: false,
+        photoLinks: this.state.photoLinks,
+        linkOption: {}
+      })
+    }
+  }
+
+  updatephotoLinks() {
+    console.log(this.state.selImageIDs[0])
+    var Request = {
+      "photoId": this.state.selImageIDs[0],
+      "hotSpots": this.state.photoLinks
+    }
+    save_update_photo_links(Request)
+      .then(response=>{
+        if(response.ok){
+          this.setState({
+            linkModalOpen: false,
+            linkOption: {},
+            photoLinksTemp: this.state.photoLinks
+          })
+          notification.success({
+            message: "Openshoots",
+            description: "Successfully updated photo links.",
+          });
+        }else{
+          notification.error({
+            message: "Openshoots",
+            description: "Something went wrong. Please try again.",
+          });
+        }
+      })
+      .catch(error=>{
+        console.log(error)
+        notification.error({
+          message: "Openshoots",
+          description: "Something went wrong. Please try again.",
+        });
+      })
+  }
+
   render() {
     console.log("Selected Photo", this.state.selImage);
     const { activeIndex, activeItem } = this.state;
     const keywords = [];
     const commonReleases = [];
-
+    const photoLinksArray = [];
     const ViewMode = [
       { key: "day", value: "DAY", text: "Daily" },
       // { key: 'week', value: 'WEEK', text: 'Weekly' },
@@ -1201,6 +1368,21 @@ class PhotoModify extends Component {
       );
     });
 
+    this.state.photoLinks.forEach((photoLink, index) => {
+      photoLinksArray.push(
+        <Table.Row>
+          <Table.Cell>{index + 1}</Table.Cell>
+          <Table.Cell>{photoLink.x}</Table.Cell>
+          <Table.Cell>{photoLink.y}</Table.Cell>
+          <Table.Cell><a href={photoLink.link}>{photoLink.link}</a></Table.Cell>
+          <Table.Cell>
+            <Icon id={index} name='edit' onClick={this.handleActiveEdit} />
+            <Icon id={index} name="trash" onClick={this.handleRemoveLink} />
+          </Table.Cell>
+        </Table.Row>
+      )
+    })
+
     if (this.state.isLoading) {
       return <LoadingIndicator />;
     } else {
@@ -1208,7 +1390,6 @@ class PhotoModify extends Component {
         return <Redirect to="/" />;
       }
     }
-    console.log("***************************", this.state.data);
     return (
       <>
         <MetaTags>
@@ -1227,21 +1408,21 @@ class PhotoModify extends Component {
               <h2>My Published Photos</h2>
             </Grid.Column>
             {this.state.selImageIDs.length > 0 &&
-            this.state.activeMenuItem !== "ACCEPTED" ? (
-              <Grid.Column className="selectedShowContent right" width="8">
-                <span>{this.state.selImageIDs.length} selected files</span>
-                <Button negative onClick={this.confirmModalShow}>
-                  DELETE
+              this.state.activeMenuItem !== "ACCEPTED" ? (
+                <Grid.Column className="selectedShowContent right" width="8">
+                  <span>{this.state.selImageIDs.length} selected files</span>
+                  <Button negative onClick={this.confirmModalShow}>
+                    DELETE
                 </Button>
-                <ConfirmModal
-                  modalHeader="Delete Files"
-                  modalContent="Do you really delete selected files?"
-                  modalOpen={this.state.confirmModalShow}
-                  modalClose={this.confirmModalClose}
-                  handleOK={this.deletePhotos}
-                />
-              </Grid.Column>
-            ) : null}
+                  <ConfirmModal
+                    modalHeader="Delete Files"
+                    modalContent="Do you really delete selected files?"
+                    modalOpen={this.state.confirmModalShow}
+                    modalClose={this.confirmModalClose}
+                    handleOK={this.deletePhotos}
+                  />
+                </Grid.Column>
+              ) : null}
           </Grid.Row>
           <Grid.Row>
             <Grid.Column width={10} className="image_section">
@@ -1355,7 +1536,7 @@ class PhotoModify extends Component {
                           <Button
                             id={
                               this.state.photoOptions["ImageType"] ===
-                              "Illustration"
+                                "Illustration"
                                 ? "activate"
                                 : ""
                             }
@@ -1533,6 +1714,9 @@ class PhotoModify extends Component {
                           toggle
                         />
                       </div>
+                      <div className="column">
+                        <Button color="blue" type="button" onClick={this.openLinkModal}>Add Links</Button>
+                      </div>
                     </Grid.Column>
                     <Grid.Column className="image_option" width={3}>
                       <Form.Field>
@@ -1614,16 +1798,16 @@ class PhotoModify extends Component {
                   {this.state.isDiagramLoading ? (
                     <LoadingIndicator />
                   ) : (
-                    <Line
-                      className={
-                        this.state.selImageIDs.length === 1
-                          ? "visible"
-                          : "invisible"
-                      }
-                      ref="chart"
-                      data={this.state.data}
-                    />
-                  )}
+                      <Line
+                        className={
+                          this.state.selImageIDs.length === 1
+                            ? "visible"
+                            : "invisible"
+                        }
+                        ref="chart"
+                        data={this.state.data}
+                      />
+                    )}
                 </Grid.Row>
                 <Grid.Row className="imageOption_Blank">
                   <Button
@@ -1642,6 +1826,79 @@ class PhotoModify extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
+        <Modal open={this.state.linkModalOpen} className="LinkModal">
+          <Modal.Header>ADD Link to Photo</Modal.Header>
+          <div className="ListofLinks">
+            <p style={{ textAlign: "right" }}>
+              <Button
+                positive
+                labelPosition='right'
+                icon='add circle'
+                content='Add'
+                onClick={this.handleActiveAdd}
+              />
+            </p>
+            <Table celled>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>No</Table.HeaderCell>
+                  <Table.HeaderCell>X(%)</Table.HeaderCell>
+                  <Table.HeaderCell>Y(%)</Table.HeaderCell>
+                  <Table.HeaderCell>Link</Table.HeaderCell>
+                  <Table.HeaderCell>Action</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+
+              <Table.Body>
+                {photoLinksArray}
+              </Table.Body>
+            </Table>
+          </div>
+          <Modal.Content className={!this.state.activeLinkContent ? "unvisible" : ""} image>
+            <div className="ImageForLinks">
+              <Image wrapped size='medium' src={this.state.DisplayImageUrl} onMouseMove={this.getPos} onClick={this.setPos} />
+            </div>
+            <Modal.Description className="Description">
+              <Form className="addLinkForm">
+                <p>
+                  <Input labelPosition='right' type='text' placeholder='Amount' disabled value={this.state.linkOption['x'] ? this.state.linkOption['x'] : ""}>
+                    <Label basic>X:</Label>
+                    <input />
+                    <Label>%</Label>
+                  </Input>
+                </p>
+                <p>
+                  <Input labelPosition='right' type='text' placeholder='Amount' disabled value={this.state.linkOption['y'] ? this.state.linkOption['y'] : ""}>
+                    <Label basic>Y:</Label>
+                    <input />
+                    <Label>%</Label>
+                  </Input>
+                </p>
+                <p>
+                  <span>Link Address </span><Input error={this.state.error['link']} fluid placeholder='link address' name="link" value={this.state.linkOption['link'] ? this.state.linkOption['link'] : ""} onChange={this.linkOptionChange} />
+                </p>
+                <p>
+                  <span>Description: </span><Form.TextArea error={this.state.error['description']} placeholder='description' style={{ minHeight: 100 }} name="description" value={this.state.linkOption['description'] ? this.state.linkOption['description'] : ""} onChange={this.linkOptionChange} />
+                </p>
+                <span>Icon: </span> <input type="file" />
+                <p style={{ textAlign: "right" }}><Button type="button" color="blue" onClick={this.linkAction} > {this.state.linkContentType} </Button></p>
+              </Form>
+            </Modal.Description>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button onClick={this.onCloseModal} negative>
+              No
+            </Button>
+            <Button
+              onClick={this.close}
+              positive
+              labelPosition='right'
+              icon='checkmark'
+              content='Yes'
+              onClick={this.updatephotoLinks}
+            />
+          </Modal.Actions>
+        </Modal>
       </>
     );
   }

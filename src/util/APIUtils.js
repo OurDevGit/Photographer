@@ -482,6 +482,21 @@ export function getViewsAmount(id) {
   });
 }
 
+export function get_photo_links(id){
+  return request({
+    url: API_BASE_URL + "/photo_details_controller/get_photo_links",
+    method: "GET"
+  })
+}
+
+export function save_update_photo_links(Request){
+  return request1({
+    url: API_BASE_URL + "/photo_details_controller/save_update_photo_links",
+    method: "POST",
+    body: JSON.stringify(Request)
+  })
+}
+
 export function getListOfBaskets() {
   return request({
     url:
@@ -819,6 +834,51 @@ export function remove_product_item(Request) {
   return request_text({
     url: API_BASE_URL + "/public/marketplace/remove_item",
     method: "DELETE",
+    body: Request,
+  });
+}
+
+export function get_keywords_for_marketpalce() {
+  return request({
+    url: API_BASE_URL + "/public/marketplace/get_keywords",
+    method: "GET"
+  });
+}
+
+export function get_serviceType_for_marketpalce() {
+  return request({
+    url: API_BASE_URL + "/public/marketplace/get_service_type",
+    method: "GET"
+  });
+}
+
+export function get_platform_for_marketpalce() {
+  return request({
+    url: API_BASE_URL + "/public/marketplace/get_platform",
+    method: "GET"
+  });
+}
+
+export function add_keyword_for_marketplace(Request) {
+  return request1({
+    url: API_BASE_URL + "/public/marketplace/add_keyword",
+    method: "POST",
+    body: Request,
+  });
+}
+
+export function add_platform_for_marketplace(Request) {
+  return request1({
+    url: API_BASE_URL + "/public/marketplace/add_platform",
+    method: "POST",
+    body: Request,
+  });
+}
+
+export function add_serviceType_for_marketplace(Request) {
+  return request1({
+    url: API_BASE_URL + "/public/marketplace/add_service_type",
+    method: "POST",
     body: Request,
   });
 }
