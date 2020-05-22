@@ -461,7 +461,7 @@ export function getLikeAmount(id) {
 }
 
 export function photo_update(Request) {
-  return request({
+  return request1({
     url: API_BASE_URL + "/photo_details_controller/photo_update",
     method: "POST",
     body: JSON.stringify(Request),
@@ -484,7 +484,7 @@ export function getViewsAmount(id) {
 
 export function get_photo_links(id){
   return request({
-    url: API_BASE_URL + "/photo_details_controller/get_photo_links",
+    url: API_BASE_URL + "/photo_details_controller/get_photo_links/" + id,
     method: "GET"
   })
 }

@@ -34,7 +34,8 @@ import {
   redeemMultiplePhoto,
   get_data_for_foto_diagram,
   getPhotosInCollection,
-  save_update_photo_links
+  save_update_photo_links,
+  get_photo_links
 } from "../../util/APIUtils";
 import {
   API_BASE_URL,
@@ -526,9 +527,20 @@ class PhotoModify extends Component {
         photoId: e.photo.id,
       };
       this.loadDataForPhotoDiagram(Request);
+      get_photo_links(this.state.selImageIDs[0])
+        .then(response => {
+          console.log("photoLinks", response);
+          this.setState({
+            photoLinks: response
+          })
+        })
+        .catch(error => {
+          console.log(error)
+        })
     } else if (this.state.selImageIDs.length > 1) {
       this.setState({
         DisplayImageUrl: this.state.selImage[this.state.selImageIDs[0]].url_fr,
+        photoLinks: []
       });
     }
 
@@ -694,6 +706,7 @@ class PhotoModify extends Component {
         showOptions: ["unvisible", "visible"],
         photoSelectedFlag: false,
         modifyAvailability: false,
+        photoLinks: []
       });
     }
   }
@@ -947,6 +960,7 @@ class PhotoModify extends Component {
         photoDto: this.state.selImage[this.state.selImageIDs[i]],
       });
     }
+    console.log("!!!!!!!!!!!!!!!!!",updateRequest)
     photo_update(updateRequest)
       .then((response) => {
         console.log(response);
@@ -1301,31 +1315,41 @@ class PhotoModify extends Component {
       "photoId": this.state.selImageIDs[0],
       "hotSpots": this.state.photoLinks
     }
+    this.setState({
+      isButtonLoading: true
+    })
     save_update_photo_links(Request)
-      .then(response=>{
-        if(response.ok){
+      .then(response => {
+        if (response.ok) {
           this.setState({
             linkModalOpen: false,
             linkOption: {},
-            photoLinksTemp: this.state.photoLinks
+            photoLinksTemp: this.state.photoLinks,
+            isButtonLoading: false
           })
           notification.success({
             message: "Openshoots",
             description: "Successfully updated photo links.",
           });
-        }else{
+        } else {
           notification.error({
             message: "Openshoots",
             description: "Something went wrong. Please try again.",
           });
+          this.setState({
+            isButtonLoading: false
+          })
         }
       })
-      .catch(error=>{
+      .catch(error => {
         console.log(error)
         notification.error({
           message: "Openshoots",
           description: "Something went wrong. Please try again.",
         });
+        this.setState({
+          isButtonLoading: false
+        })
       })
   }
 
@@ -1714,9 +1738,13 @@ class PhotoModify extends Component {
                           toggle
                         />
                       </div>
-                      <div className="column">
-                        <Button color="blue" type="button" onClick={this.openLinkModal}>Add Links</Button>
-                      </div>
+                      {
+                        this.state.selImageIDs.length === 1 ?
+                          <div className="column">
+                            <Button color="blue" type="button" onClick={this.openLinkModal}>Links</Button>
+                          </div>
+                          : null
+                      }
                     </Grid.Column>
                     <Grid.Column className="image_option" width={3}>
                       <Form.Field>
@@ -1894,8 +1922,9 @@ class PhotoModify extends Component {
               positive
               labelPosition='right'
               icon='checkmark'
-              content='Yes'
+              content='Update'
               onClick={this.updatephotoLinks}
+              loading={this.state.isButtonLoading}
             />
           </Modal.Actions>
         </Modal>

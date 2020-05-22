@@ -10,6 +10,7 @@ import {
   Table,
   Header,
   Image,
+  Popup
 } from "semantic-ui-react";
 import MetaTags from "react-meta-tags";
 import {
@@ -25,6 +26,7 @@ import {
   getSameCollection,
   download,
   getPhotoAuthDownload,
+  get_photo_links
 } from "../../util/APIUtils";
 import { ACCESS_TOKEN } from "../../constants";
 import {
@@ -65,12 +67,16 @@ class Photo_details extends Component {
       sameCollectionPhotos: [],
       opne: false,
       modalImageDetail: {},
+      posX: 0,
+      posY: 0,
+      photoLinks: []
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
     this.loadAllCategories = this.loadAllCategories.bind(this);
     this.is_like_photo = this.is_like_photo.bind(this);
     this.loadPhotoDetail = this.loadPhotoDetail.bind(this);
+    this.loadPhotoLinks = this.loadPhotoLinks.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
     this.CloseImageModal = this.CloseImageModal.bind(this);
     this.CloseBucketModal = this.CloseBucketModal.bind(this);
@@ -91,6 +97,8 @@ class Photo_details extends Component {
     this.handleSearchTag = this.handleSearchTag.bind(this);
     this.clickSearch = this.clickSearch.bind(this);
     this.showUserServiceDetail = this.showUserServiceDetail.bind(this);
+    this.getPos = this.getPos.bind(this);
+    this.GotoPhotoLink = this.GotoPhotoLink.bind(this);
   }
 
   loadCurrentUser() {
@@ -148,6 +156,18 @@ class Photo_details extends Component {
           isLoading: false,
         });
       });
+  }
+
+  loadPhotoLinks(id) {
+    get_photo_links(id)
+      .then(response => {
+        this.setState({
+          photoLinks: response
+        })
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
 
   loadSameCollectionPhotos(id) {
@@ -219,6 +239,7 @@ class Photo_details extends Component {
     this.loadAllCategories();
     // this.is_like_photo(this.props.match.params.id);
     this.loadPhotoDetail(this.props.match.params.id);
+    this.loadPhotoLinks(this.props.match.params.id);
     window.addEventListener("keydown", this.keydown);
     window.addEventListener("keyup", this.keyup);
   }
@@ -491,6 +512,54 @@ class Photo_details extends Component {
     this.props.history.push("/product_detail/1302804");
   }
 
+  getPos(e) {
+    console.log(e)
+    console.log(e.currentTarget.getBoundingClientRect())
+    console.log("client", e.clientY)
+    var imagePosInfo = e.currentTarget.getBoundingClientRect();
+    this.state.photoLinks.forEach((photoLink, index) => {
+      var minX = imagePosInfo.width * photoLink.x / 100 - 10;
+      var maxX = imagePosInfo.width * photoLink.x / 100 + 10;
+      var minY = imagePosInfo.height * photoLink.y / 100 - 10;
+      var maxY = imagePosInfo.height * photoLink.y / 100 + 10;
+      var posX = e.clientX - imagePosInfo.x;
+      var posY = e.clientY - imagePosInfo.y;
+      this.setState({
+
+      })
+      if (posX > minX && posX < maxX && posY > minY && posY < maxY) {
+        if(!this.state.Link){
+          this.setState({
+            Link: photoLink.link,
+            posX: posX,
+            posY: posY
+          })
+        }
+      } else {
+        if(this.state.Link){
+          this.setState({
+            Link: null,
+            posX: 10000,
+            posY: 10000
+          })
+        }
+      }
+    });
+  }
+
+  GotoPhotoLink() {
+    if (this.state.Link) {
+    var element = document.createElement("a");
+    element.setAttribute("href", this.state.Link);
+    element.setAttribute("target", "blank");
+    element.style.display = "none";
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+    }
+
+  }
+
   render() {
     const { selImage, similarPhotos } = this.state;
     console.log("~~~~~~~~~~~~~~~~~~~", selImage);
@@ -612,7 +681,12 @@ class Photo_details extends Component {
                   {/* <a>Zoom : Shift + scroll</a> */}
                   {/* <PanAndZoomImage src={downloadUrl} /> */}
                   <h3>{selImage.title}</h3>
-                  <img src={downloadUrl} />
+                  <Popup
+                    trigger={<img src={downloadUrl} onMouseMove={this.getPos} onClick={this.GotoPhotoLink} />}
+                    content={this.state.Link}
+                    offset={this.state.posX + "," + (-this.state.posY)}
+                    position='bottom left'
+                  />
                 </div>
                 <div className="CommentBox">
                   <Comments
@@ -640,15 +714,15 @@ class Photo_details extends Component {
                         {this.state.isSendCommentLoading ? (
                           <Icon name="spinner" className="sending" />
                         ) : (
-                          <Icon
-                            name="send"
-                            className="sending"
-                            disabled={
-                              this.state.commentContent === "" ? true : false
-                            }
-                            onClick={this.addComment}
-                          />
-                        )}
+                            <Icon
+                              name="send"
+                              className="sending"
+                              disabled={
+                                this.state.commentContent === "" ? true : false
+                              }
+                              onClick={this.addComment}
+                            />
+                          )}
                       </Comment.Content>
                     </Comment>
                   </Comment.Group>
@@ -872,15 +946,15 @@ class Photo_details extends Component {
                         {this.state.isSendCommentLoading ? (
                           <Icon name="spinner" className="sending" />
                         ) : (
-                          <Icon
-                            name="send"
-                            className="sending"
-                            disabled={
-                              this.state.commentContent === "" ? true : false
-                            }
-                            onClick={this.addComment}
-                          />
-                        )}
+                            <Icon
+                              name="send"
+                              className="sending"
+                              disabled={
+                                this.state.commentContent === "" ? true : false
+                              }
+                              onClick={this.addComment}
+                            />
+                          )}
                       </Comment.Content>
                     </Comment>
                   </Comment.Group>
