@@ -58,8 +58,7 @@ import {
 import "./style.less";
 import { notification } from "antd";
 import LoadingIndicator from "../../common/LoadingIndicator";
-import { get } from "animejs";
-
+import anchor from "../../assets/images/anchor.gif";
 class PhotoModify extends Component {
   constructor(props) {
     super(props);
@@ -1393,11 +1392,12 @@ class PhotoModify extends Component {
     });
 
     this.state.photoLinks.forEach((photoLink, index) => {
+      console.log(photoLink)
       photoLinksArray.push(
         <Table.Row>
           <Table.Cell>{index + 1}</Table.Cell>
-          <Table.Cell>{photoLink.x}</Table.Cell>
-          <Table.Cell>{photoLink.y}</Table.Cell>
+          <Table.Cell><img width="30px" height="30px" src={anchor} /></Table.Cell>
+          <Table.Cell>{photoLink.description}</Table.Cell>
           <Table.Cell><a href={photoLink.link}>{photoLink.link}</a></Table.Cell>
           <Table.Cell>
             <Icon id={index} name='edit' onClick={this.handleActiveEdit} />
@@ -1870,8 +1870,8 @@ class PhotoModify extends Component {
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>No</Table.HeaderCell>
-                  <Table.HeaderCell>X(%)</Table.HeaderCell>
-                  <Table.HeaderCell>Y(%)</Table.HeaderCell>
+                  <Table.HeaderCell>Icon</Table.HeaderCell>
+                  <Table.HeaderCell>Description</Table.HeaderCell>
                   <Table.HeaderCell>Link</Table.HeaderCell>
                   <Table.HeaderCell>Action</Table.HeaderCell>
                 </Table.Row>

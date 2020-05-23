@@ -6,6 +6,7 @@ import { AvatarDefault } from "../../../assets/images/homepage";
 import { addToLike, is_liked } from "../../../util/APIUtils";
 import { notification } from "antd";
 import banner from "../../../assets/images/banner_Certificate.jpg";
+import anchor from "../../../assets/images/anchor.gif"
 class PhotoBox extends Component {
   constructor(props) {
     super(props);
@@ -21,6 +22,8 @@ class PhotoBox extends Component {
       hasMore: true,
       isLoading: false,
       islike: 0,
+      posX: 1000000,
+      posY: 1000000
     };
     this.handleImageClick = this.handleImageClick.bind(this);
     this.quickView = this.quickView.bind(this);
@@ -29,10 +32,22 @@ class PhotoBox extends Component {
     this.onMouseOut = this.onMouseOut.bind(this);
     this.handleViewOwner = this.handleViewOwner.bind(this);
     this.addLike = this.addLike.bind(this);
+    this.getPos = this.getPos.bind(this);
   }
 
   handleImageClick(e) {
-    this.props.onClickImage(e);
+    if (this.state.Link) {
+      var element = document.createElement("a");
+      element.setAttribute("href", this.state.Link);
+      element.setAttribute("target", "blank");
+      element.style.display = "none";
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    } else {
+      this.props.onClickImage(e);
+    }
+
   }
 
   handleViewOwner() {
@@ -91,6 +106,44 @@ class PhotoBox extends Component {
       });
   }
 
+  getPos(e) {
+    console.log(e)
+    console.log(e.currentTarget.getBoundingClientRect())
+    console.log("client", e.clientY)
+    var imagePosInfo = e.currentTarget.getBoundingClientRect();
+    if (this.props.photo.hotspots) {
+      this.props.photo.hotspots.forEach((photoLink, index) => {
+        var minX = imagePosInfo.width * photoLink.x / 100 - 10;
+        var maxX = imagePosInfo.width * photoLink.x / 100 + 10;
+        var minY = imagePosInfo.height * photoLink.y / 100 - 10;
+        var maxY = imagePosInfo.height * photoLink.y / 100 + 10;
+        var posX = e.clientX - imagePosInfo.x;
+        var posY = e.clientY - imagePosInfo.y;
+        this.setState({
+
+        })
+        if (posX > minX && posX < maxX && posY > minY && posY < maxY) {
+          if (!this.state.Link) {
+            this.setState({
+              Link: photoLink.link,
+              posX: posX,
+              posY: posY
+            })
+          }
+        } else {
+          if (this.state.Link) {
+            this.setState({
+              Link: null,
+              posX: 10000,
+              posY: 10000
+            })
+          }
+        }
+      });
+    }
+
+  }
+
   render() {
     var releaseNum = this.props.photo.authorizations
       ? this.props.photo.authorizations.length
@@ -102,35 +155,45 @@ class PhotoBox extends Component {
             <a href={this.props.photo.redirect} target={this.props.photo.newTab ? "blank" : ""}><img src={this.props.photo.src} width="100%" /></a>
           </div>
         ) : (
-          <div className="PhotoBox">
-            <a target="blank" onClick={this.quickView}>
-              <Zoom_Icon className="detail_Icon Zoom-icon" />
-            </a>
-            <a onClick={this.addLike}>
-              <Heart_Icon className="detail_Icon Heart-icon" />
-            </a>
-            <a onClick={this.addToBucket}>
-              <Plus_Icon className="detail_Icon Plus-icon" />
-            </a>
-            <div className="owner_content" onClick={this.handleViewOwner}>
-              <AvatarImage
-                url={
-                  this.props.photo.ownerIcon
-                    ? this.props.photo.ownerIcon
-                    : AvatarDefault
-                }
-                name={this.props.photo.owner}
-              />
-            </div>
-            <img
-              id={this.props.photo.id}
-              src={this.props.photo.url_mr || this.props.photo.url_lr}
-              width={this.props.photo.width}
-              height={this.props.photo.height}
-              // {...this.props.photo}
-              onClick={this.handleImageClick}
-            />
-            {/* <Popup
+            <div className="PhotoBox">
+              <a target="blank" onClick={this.quickView}>
+                <Zoom_Icon className="detail_Icon Zoom-icon" />
+              </a>
+              <a onClick={this.addLike}>
+                <Heart_Icon className="detail_Icon Heart-icon" />
+              </a>
+              <a onClick={this.addToBucket}>
+                <Plus_Icon className="detail_Icon Plus-icon" />
+              </a>
+              <div className="owner_content" onClick={this.handleViewOwner}>
+                <AvatarImage
+                  url={
+                    this.props.photo.ownerIcon
+                      ? this.props.photo.ownerIcon
+                      : AvatarDefault
+                  }
+                  name={this.props.photo.owner}
+                />
+              </div>
+              <Popup
+                trigger={<img
+                  id={this.props.photo.id}
+                  src={this.props.photo.url_mr || this.props.photo.url_lr}
+                  width={this.props.photo.width}
+                  height={this.props.photo.height}
+                  // {...this.props.photo}
+                  onClick={this.handleImageClick}
+                  onMouseMove={this.getPos}
+                />}
+                // content={this.state.Link}
+                offset={this.state.posX + "," + (-this.state.posY)}
+                position='bottom left'
+              >
+                <img width="30px" height="30px" src={anchor} />
+                {this.state.Link}
+              </Popup>
+
+              {/* <Popup
         mouseEnterDelay={500}
         on="hover"
         position="right center"
@@ -185,8 +248,8 @@ class PhotoBox extends Component {
           </Button>
         </div>
       </Popup> */}
-          </div>
-        )}
+            </div>
+          )}
       </>
     );
   }

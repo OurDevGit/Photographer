@@ -44,6 +44,7 @@ import "./style.less";
 import { notification } from "antd";
 import LoadingIndicator from "../../common/LoadingIndicator";
 import PhotoDetails from "./PhotoDetails";
+import anchor from "../../assets/images/anchor.gif";
 class Photo_details extends Component {
   constructor(props) {
     super(props);
@@ -528,7 +529,7 @@ class Photo_details extends Component {
 
       })
       if (posX > minX && posX < maxX && posY > minY && posY < maxY) {
-        if(!this.state.Link){
+        if (!this.state.Link) {
           this.setState({
             Link: photoLink.link,
             posX: posX,
@@ -536,7 +537,7 @@ class Photo_details extends Component {
           })
         }
       } else {
-        if(this.state.Link){
+        if (this.state.Link) {
           this.setState({
             Link: null,
             posX: 10000,
@@ -549,13 +550,13 @@ class Photo_details extends Component {
 
   GotoPhotoLink() {
     if (this.state.Link) {
-    var element = document.createElement("a");
-    element.setAttribute("href", this.state.Link);
-    element.setAttribute("target", "blank");
-    element.style.display = "none";
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
+      var element = document.createElement("a");
+      element.setAttribute("href", this.state.Link);
+      element.setAttribute("target", "blank");
+      element.style.display = "none";
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
     }
 
   }
@@ -683,10 +684,13 @@ class Photo_details extends Component {
                   <h3>{selImage.title}</h3>
                   <Popup
                     trigger={<img src={downloadUrl} onMouseMove={this.getPos} onClick={this.GotoPhotoLink} />}
-                    content={this.state.Link}
+                    // content={this.state.Link}
                     offset={this.state.posX + "," + (-this.state.posY)}
                     position='bottom left'
-                  />
+                  >
+                    <img width="30px" height="30px" src={anchor} />
+                    {this.state.Link}
+                  </Popup>
                 </div>
                 <div className="CommentBox">
                   <Comments
