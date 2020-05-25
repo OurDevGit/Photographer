@@ -68,8 +68,8 @@ class Photo_details extends Component {
       sameCollectionPhotos: [],
       opne: false,
       modalImageDetail: {},
-      posX: 0,
-      posY: 0,
+      posX: 100000000,
+      posY: 100000000,
       photoLinks: []
     };
     this.handleLogout = this.handleLogout.bind(this);
@@ -514,9 +514,6 @@ class Photo_details extends Component {
   }
 
   getPos(e) {
-    console.log(e)
-    console.log(e.currentTarget.getBoundingClientRect())
-    console.log("client", e.clientY)
     var imagePosInfo = e.currentTarget.getBoundingClientRect();
     this.state.photoLinks.forEach((photoLink, index) => {
       var minX = imagePosInfo.width * photoLink.x / 100 - 10;
@@ -683,7 +680,9 @@ class Photo_details extends Component {
                   {/* <PanAndZoomImage src={downloadUrl} /> */}
                   <h3>{selImage.title}</h3>
                   <Popup
-                    trigger={<img src={downloadUrl} onMouseMove={this.getPos} onClick={this.GotoPhotoLink} />}
+                    trigger={
+                        <img src={downloadUrl} onMouseMove={this.getPos} onClick={this.GotoPhotoLink} />
+                    }
                     // content={this.state.Link}
                     offset={this.state.posX + "," + (-this.state.posY)}
                     position='bottom left'
@@ -922,7 +921,17 @@ class Photo_details extends Component {
 
                   {/* <PanAndZoomImage src={downloadUrl}></PanAndZoomImage> */}
                   <h3>{selImage.title}</h3>
-                  <img src={downloadUrl} />
+                  <Popup
+                    trigger={
+                        <img src={downloadUrl} onMouseMove={this.getPos} onClick={this.GotoPhotoLink} />
+                    }
+                    // content={this.state.Link}
+                    offset={this.state.posX + "," + (-this.state.posY)}
+                    position='bottom left'
+                  >
+                    <img width="30px" height="30px" src={anchor} />
+                    {this.state.Link}
+                  </Popup>
                 </div>
                 <div className="CommentBox">
                   <Comments

@@ -107,11 +107,8 @@ class PhotoBox extends Component {
   }
 
   getPos(e) {
-    console.log(e)
-    console.log(e.currentTarget.getBoundingClientRect())
-    console.log("client", e.clientY)
-    var imagePosInfo = e.currentTarget.getBoundingClientRect();
     if (this.props.photo.hotspots) {
+      var imagePosInfo = e.currentTarget.getBoundingClientRect();
       this.props.photo.hotspots.forEach((photoLink, index) => {
         var minX = imagePosInfo.width * photoLink.x / 100 - 10;
         var maxX = imagePosInfo.width * photoLink.x / 100 + 10;
@@ -176,15 +173,17 @@ class PhotoBox extends Component {
                 />
               </div>
               <Popup
-                trigger={<img
-                  id={this.props.photo.id}
-                  src={this.props.photo.url_mr || this.props.photo.url_lr}
-                  width={this.props.photo.width}
-                  height={this.props.photo.height}
-                  // {...this.props.photo}
-                  onClick={this.handleImageClick}
-                  onMouseMove={this.getPos}
-                />}
+                trigger={
+                  <img
+                    id={this.props.photo.id}
+                    src={this.props.photo.url_mr || this.props.photo.url_lr}
+                    width={this.props.photo.width}
+                    height={this.props.photo.height}
+                    // {...this.props.photo}
+                    onClick={this.handleImageClick}
+                    onMouseMove={this.getPos}
+                  />
+                }
                 // content={this.state.Link}
                 offset={this.state.posX + "," + (-this.state.posY)}
                 position='bottom left'
