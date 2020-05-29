@@ -23,7 +23,8 @@ class PhotoBox extends Component {
       isLoading: false,
       islike: 0,
       posX: 1000000,
-      posY: 1000000
+      posY: 1000000,
+      link_Icons: []
     };
     this.handleImageClick = this.handleImageClick.bind(this);
     this.quickView = this.quickView.bind(this);
@@ -33,21 +34,11 @@ class PhotoBox extends Component {
     this.handleViewOwner = this.handleViewOwner.bind(this);
     this.addLike = this.addLike.bind(this);
     this.getPos = this.getPos.bind(this);
+    this.GotoPhotoLink = this.GotoPhotoLink.bind(this)
   }
 
   handleImageClick(e) {
-    if (this.state.Link) {
-      var element = document.createElement("a");
-      element.setAttribute("href", this.state.Link);
-      element.setAttribute("target", "blank");
-      element.style.display = "none";
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
-    } else {
-      this.props.onClickImage(e);
-    }
-
+    this.props.onClickImage(e);
   }
 
   handleViewOwner() {
@@ -108,36 +99,37 @@ class PhotoBox extends Component {
 
   getPos(e) {
     if (this.props.photo.hotspots) {
+      console.log("ddd")
+      var items = [];
       var imagePosInfo = e.currentTarget.getBoundingClientRect();
       this.props.photo.hotspots.forEach((photoLink, index) => {
-        var minX = imagePosInfo.width * photoLink.x / 100 - 10;
-        var maxX = imagePosInfo.width * photoLink.x / 100 + 10;
-        var minY = imagePosInfo.height * photoLink.y / 100 - 10;
-        var maxY = imagePosInfo.height * photoLink.y / 100 + 10;
-        var posX = e.clientX - imagePosInfo.x;
-        var posY = e.clientY - imagePosInfo.y;
-        this.setState({
-
-        })
-        if (posX > minX && posX < maxX && posY > minY && posY < maxY) {
-          if (!this.state.Link) {
-            this.setState({
-              Link: photoLink.link,
-              posX: posX,
-              posY: posY
-            })
-          }
-        } else {
-          if (this.state.Link) {
-            this.setState({
-              Link: null,
-              posX: 10000,
-              posY: 10000
-            })
-          }
-        }
+        var minX = (imagePosInfo.width - 20) * photoLink.x / 100;
+        var minY = (imagePosInfo.height - 20) * photoLink.y / 100;
+        items.push(
+          <Popup
+            trigger={
+              <img id={index} className="linkIcon" style={{ left: minX, top: minY }} width="20px" height="20px" src={anchor} onClick={this.GotoPhotoLink} />
+            }
+            content={photoLink.link}
+            position='bottom left'
+          />
+        )
       });
+      this.setState({
+        link_Icons: items
+      })
     }
+
+  }
+
+  GotoPhotoLink(e) {
+    var element = document.createElement("a");
+    element.setAttribute("href", this.props.photo.hotspots[e.target.id].link);
+    element.setAttribute("target", "blank");
+    element.style.display = "none";
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
 
   }
 
@@ -172,25 +164,30 @@ class PhotoBox extends Component {
                   name={this.props.photo.owner}
                 />
               </div>
-              <Popup
+              <div style={{ position: "relative" }}>
+                <img
+                  className="mainPhoto"
+                  id={this.props.photo.id}
+                  src={this.props.photo.url_mr || this.props.photo.url_lr}
+                  width={this.props.photo.width}
+                  height={this.props.photo.height}
+                  // {...this.props.photo}
+                  onClick={this.handleImageClick}
+                  onMouseOver={this.getPos}
+                />
+                {this.state.link_Icons}
+              </div>
+              {/* <Popup
                 trigger={
-                  <img
-                    id={this.props.photo.id}
-                    src={this.props.photo.url_mr || this.props.photo.url_lr}
-                    width={this.props.photo.width}
-                    height={this.props.photo.height}
-                    // {...this.props.photo}
-                    onClick={this.handleImageClick}
-                    onMouseMove={this.getPos}
-                  />
+                  <img width="30px" height="30px" src={anchor} />
                 }
                 // content={this.state.Link}
                 offset={this.state.posX + "," + (-this.state.posY)}
                 position='bottom left'
               >
-                <img width="30px" height="30px" src={anchor} />
+
                 {this.state.Link}
-              </Popup>
+              </Popup> */}
 
               {/* <Popup
         mouseEnterDelay={500}

@@ -70,7 +70,11 @@ class Photo_details extends Component {
       modalImageDetail: {},
       posX: 100000000,
       posY: 100000000,
-      photoLinks: []
+      photoLinks: [],
+      photoWidth: 0,
+      photoHeight: 0,
+      DivWidth: 0,
+      DivHeight: 0
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -100,6 +104,8 @@ class Photo_details extends Component {
     this.showUserServiceDetail = this.showUserServiceDetail.bind(this);
     this.getPos = this.getPos.bind(this);
     this.GotoPhotoLink = this.GotoPhotoLink.bind(this);
+    this.getSizeOfImageDiv = this.getSizeOfImageDiv.bind(this)
+    this.getSizeOfImage =  this.getSizeOfImage.bind(this)
   }
 
   loadCurrentUser() {
@@ -513,8 +519,30 @@ class Photo_details extends Component {
     this.props.history.push("/product_detail/1302804");
   }
 
+  getSizeOfImageDiv(e) {
+    var info = e.currentTarget.getBoundingClientRect();
+    this.setState({
+      DivWidth: info.width,
+      DivHeight: info.height
+    });
+  }
+
+  getSizeOfImage(e){
+    var info = e.currentTarget.getBoundingClientRect();
+    this.setState({
+      photoWidth: info.width,
+      photoHeight: info.height
+    });
+  }
+
   getPos(e) {
+    console.log("dfd")
     var imagePosInfo = e.currentTarget.getBoundingClientRect();
+    this.setState({
+      photoWidth: imagePosInfo.width,
+      photoHeight: imagePosInfo.height
+    });
+    var items =[];
     this.state.photoLinks.forEach((photoLink, index) => {
       var minX = imagePosInfo.width * photoLink.x / 100 - 10;
       var maxX = imagePosInfo.width * photoLink.x / 100 + 10;
@@ -522,41 +550,31 @@ class Photo_details extends Component {
       var maxY = imagePosInfo.height * photoLink.y / 100 + 10;
       var posX = e.clientX - imagePosInfo.x;
       var posY = e.clientY - imagePosInfo.y;
-      this.setState({
-
-      })
-      if (posX > minX && posX < maxX && posY > minY && posY < maxY) {
-        if (!this.state.Link) {
-          this.setState({
-            Link: photoLink.link,
-            posX: posX,
-            posY: posY
-          })
-        }
-      } else {
-        if (this.state.Link) {
-          this.setState({
-            Link: null,
-            posX: 10000,
-            posY: 10000
-          })
-        }
-      }
+      items.push(
+        <Popup
+          trigger={
+            <img id={index} className="linkIcon" style={{ left: minX, top: minY }} width="20px" height="20px" src={anchor} onClick={this.GotoPhotoLink} />
+          }
+          content={photoLink.link}
+          position='bottom left'
+        />
+      )
     });
+    this.setState({
+      Link_Icons: items
+    })
   }
 
-  GotoPhotoLink() {
-    if (this.state.Link) {
-      var element = document.createElement("a");
-      element.setAttribute("href", this.state.Link);
-      element.setAttribute("target", "blank");
-      element.style.display = "none";
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
-    }
-
+  GotoPhotoLink(e) {
+    var element = document.createElement("a");
+    element.setAttribute("href", this.state.photoLinks[e.target.id].link);
+    element.setAttribute("target", "blank");
+    element.style.display = "none";
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
   }
+
 
   render() {
     const { selImage, similarPhotos } = this.state;
@@ -604,7 +622,19 @@ class Photo_details extends Component {
             <Grid.Row only="computer" className="photo_details_row">
               <Grid.Column width={8}>
                 {/* <Button content='Back to List' icon='arrow left' labelPosition='left' color='green' className="BackToList"/> */}
-                <div className="zoomImage">
+                <div className="zoomImage" onMouseOver={this.getSizeOfImageDiv}>
+                  <div
+                    className="PhotoLinksDiv"
+                    style={{
+                      width: this.state.photoWidth,
+                      height: "500px",
+                      // left: (this.state.DivWidth - this.state.photoWidth) / 2,
+                      // top: (this.state.DivHeight - this.state.photoHeight) / 2,
+                    }}
+                    onMouseOver={this.getPos}
+                  >
+                    {this.state.Link_Icons}
+                  </div>
                   {/* <a target="blank" href={url}>
                     <Zoom_Icon className="detail_Icon Zoom-icon" />
                   </a> */}
@@ -678,18 +708,8 @@ class Photo_details extends Component {
                   </Button>
                   {/* <a>Zoom : Shift + scroll</a> */}
                   {/* <PanAndZoomImage src={downloadUrl} /> */}
-                  <h3>{selImage.title}</h3>
-                  <Popup
-                    trigger={
-                        <img src={downloadUrl} onMouseMove={this.getPos} onClick={this.GotoPhotoLink} />
-                    }
-                    // content={this.state.Link}
-                    offset={this.state.posX + "," + (-this.state.posY)}
-                    position='bottom left'
-                  >
-                    <img width="30px" height="30px" src={anchor} />
-                    {this.state.Link}
-                  </Popup>
+                  {/* <h3>{selImage.title}</h3> */}
+                  <img className="mainPhoto" src={downloadUrl} onMouseOver={this.getSizeOfImage} />
                 </div>
                 <div className="CommentBox">
                   <Comments
@@ -923,7 +943,7 @@ class Photo_details extends Component {
                   <h3>{selImage.title}</h3>
                   <Popup
                     trigger={
-                        <img src={downloadUrl} onMouseMove={this.getPos} onClick={this.GotoPhotoLink} />
+                      <img src={downloadUrl} onMouseMove={this.getPos} onClick={this.GotoPhotoLink} />
                     }
                     // content={this.state.Link}
                     offset={this.state.posX + "," + (-this.state.posY)}

@@ -163,18 +163,27 @@ class PhotoList extends Component {
           if (!this.state.banners) {
             get_banners_for_homepage()
               .then((res) => {
-                console.log("banners", res);
-                res.forEach((banner, bannerIndex) => {
-                  console.log(bannerIndex, banner);
+                if(res[response.number]){
                   response.content.push({
                     type: "banner",
                     lr_width: 1900,
                     lr_heigh: 600,
-                    url_lr: banner.address,
-                    newTab: banner.newTab,
-                    redirect: banner.redirect
+                    url_lr: res[response.number].address,
+                    newTab: res[response.number].newTab,
+                    redirect: res[response.number].redirect
                   });
-                });
+                }
+                // res.forEach((banner, bannerIndex) => {
+                //   console.log(bannerIndex, banner);
+                //   response.content.push({
+                //     type: "banner",
+                //     lr_width: 1900,
+                //     lr_heigh: 600,
+                //     url_lr: banner.address,
+                //     newTab: banner.newTab,
+                //     redirect: banner.redirect
+                //   });
+                // });
                 this.setState({
                   photos: photos.concat(response.content),
                   photo_list: photos.concat(response.content),
@@ -191,17 +200,27 @@ class PhotoList extends Component {
                 console.log(error);
               });
           } else {
-            this.state.banners.forEach((banner, bannerIndex) => {
-              console.log(bannerIndex, banner);
+            if(this.state.banners[response.number]){
               response.content.push({
                 type: "banner",
                 lr_width: 1900,
                 lr_heigh: 600,
-                url_lr: banner.address,
-                newTab: banner.newTab,
-                redirect: banner.redirect
+                url_lr: this.state.banners[response.number].address,
+                newTab: this.state.banners[response.number].newTab,
+                redirect: this.state.banners[response.number].redirect
               });
-            });
+            }
+            // this.state.banners.forEach((banner, bannerIndex) => {
+            //   console.log(bannerIndex, banner);
+            //   response.content.push({
+            //     type: "banner",
+            //     lr_width: 1900,
+            //     lr_heigh: 600,
+            //     url_lr: banner.address,
+            //     newTab: banner.newTab,
+            //     redirect: banner.redirect
+            //   });
+            // });
             this.setState({
               photos: photos.concat(response.content),
               photo_list: photos.concat(response.content),

@@ -24,11 +24,28 @@
       border-radius: 10px;
       padding: 10px;
       text-align: center;
-      img {
+      height: 520px;
+      img.mainPhoto {
+        position: relative;
+        top: -500px;
         max-height: 500px;
         min-width: 0px !important;
         max-width: 100%;
         border-radius: 20px;
+      }
+      .PhotoLinksDiv{
+        position: relative;
+        margin: 0 auto;
+        z-index: 100;
+        img.linkIcon{
+          opacity: 0;
+          position: absolute;
+        }
+      }
+      .PhotoLinksDiv:hover{
+        img.linkIcon{
+          opacity: 1;
+        }
       }
     }
     .zoomImage {
