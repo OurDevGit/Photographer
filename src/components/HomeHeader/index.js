@@ -95,7 +95,8 @@ class HomeHeader extends React.Component {
             <PaperPlaneIcon className="paper-plane-icon" />
             <Dropdown text="My Community" icon="">
               <Dropdown.Menu>
-                <Dropdown.Item text="My Follows" as={NavLink} to="/" />
+                <Dropdown.Item text="My Follows" as={NavLink} to="/follows" />
+                <Dropdown.Item text="Messages" as={NavLink} to="/messages" />
               </Dropdown.Menu>
             </Dropdown>
           </Menu.Item>,
@@ -161,7 +162,8 @@ class HomeHeader extends React.Component {
               <PaperPlaneIcon className="paper-plane-icon" />
               <Dropdown text="My Community" icon="">
                 <Dropdown.Menu>
-                  <Dropdown.Item text="My Follows" as={NavLink} to="/" />
+                  <Dropdown.Item text="My Follows" as={NavLink} to="/follows" />
+                  <Dropdown.Item text="Messages" as={NavLink} to="/messages" />
                 </Dropdown.Menu>
               </Dropdown>
             </Menu.Item>,

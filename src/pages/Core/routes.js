@@ -16,6 +16,7 @@ import LoginAndSignUp from "../User";
 import ForgotPass from "../User/ForgotPassword";
 import ResetPassword from "../User/ResetPassword";
 import FBLogin from "../User/FBLogin";
+import Messages from "../Community/Messages"
 const routes = (
   <Switch>
     <Route path="/" exact component={Home} />
@@ -29,6 +30,7 @@ const routes = (
     <Route path="/product_detail/:id" exact component={product_detail} />
     <Route path="/photomodify" exact component={PhotoModify} />
     <Route path="/follows" exact component={Follows} />
+    <Route path="/messages" exact component={Messages} />
     <Route path="/downloadedPhotos" exact component={DownloadedPhotos} />
     <Route path="/user/ForgotPass" exact component={ForgotPass} />
     <Route path="/confirm_new_password" exact component={ResetPassword} />
