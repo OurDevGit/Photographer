@@ -19,6 +19,7 @@ import Collections from "./Collections";
 import Baskets from "./Baskets";
 import ProductPlacement from "./ProductPlacement";
 import { notification } from "antd";
+import ChatSocketServer from '../../../util/chatSocketServer'
 class Profile extends Component {
   constructor(props) {
     super(props);
@@ -39,6 +40,8 @@ class Profile extends Component {
     this.handleImageClick = this.handleImageClick.bind(this);
     this.handleSearchTag = this.handleSearchTag.bind(this);
     this.clickSearch = this.clickSearch.bind(this);
+    this.sendMessage = this.sendMessage.bind(this);
+    this.sendAndUpdateMessages = this.sendAndUpdateMessages.bind(this)
   }
 
   loadCurrentUser(userId) {
@@ -54,6 +57,7 @@ class Profile extends Component {
           isAuthenticated: true,
           // isLoading: false
         });
+        ChatSocketServer.establishSocketConnection(response.id);
       })
       .catch((error) => {
         this.setState({
@@ -203,6 +207,31 @@ class Profile extends Component {
 
   clickSearch(e) {
     this.props.history.push("/?key=" + e);
+  }
+
+  sendMessage(){
+    const message = "Hi";
+    console.log("current", this.state.currentUser)
+    console.log("user", this.state.user)
+    // const { userId, newSelectedUser } = this.props;
+    if (message === '' || message === undefined || message === null) {
+      alert(`Message can't be empty.`);
+    } else {
+      this.sendAndUpdateMessages({
+        fromUserId: this.state.currentUser.id,
+        message: (message).trim(),
+        toUserId: this.state.user.id,
+        date: new Date()
+      });
+    }
+  }
+
+  sendAndUpdateMessages(message) {
+    try {
+      ChatSocketServer.sendMessage(message);
+    } catch (error) {
+      alert(`Can't send your message`);
+    }
   }
 
   render() {
@@ -394,6 +423,10 @@ class Profile extends Component {
                       <Button icon labelPosition="left" color="black">
                         <Icon name="user plus" />
                         Follow
+                      </Button>
+                      <Button icon labelPosition="left" color="black" onClick={this.sendMessage}>
+                        <Icon name="chat" />
+                        Send
                       </Button>
                     </div>
                   </Grid.Column>

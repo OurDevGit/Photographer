@@ -1,5 +1,14 @@
 .MessagePage {
   margin: 20px !important;
+  .agentBar{
+    .avatarsect{
+      color: black;
+    }
+    .rateButtons{
+      position: absolute;
+      right: 30px;
+    }
+  }
   .MessageList {
     height: 600px;
   }
@@ -11,16 +20,39 @@
       color: black;
     }
   }
-  .sendingText{
+  .sendingText {
     border: 0 !important;
     width: 100%;
     height: 35px;
     resize: none;
   }
-  .sendingText:focus{
+  .sendingText:focus {
     outline: none;
   }
-  .sendButton.active *{
-    fill: #6D5BBA
+  .sendButton.active * {
+    fill: #6d5bba;
+  }
+  .nocontact{
+    text-align: center;
+    font-size: 30px;
+    margin-top: 100px;
+  }
+}
+.ChatList {
+  min-height: 700px;
+  max-height: 700px;
+  border: 1px solid #6d5bba;
+  border-radius: 10px;
+  p{
+    background: #6d5bba;
+    color: white;
+    text-align: center;
+    margin: 0px;
+    padding: 10px;
+    border-radius: 10px 10px 0 0;
+    border-bottom: 1px solid white;
+  }
+  .UserInfo {
+    width: 100%;
   }
 }

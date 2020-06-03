@@ -130,3 +130,9 @@ export function nextMonth(date) {
   d.setMonth(newMonth);
   return d;
 }
+
+export function FormatTime(date){
+  var d = new Date(date);
+  var time = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+  return time
+}

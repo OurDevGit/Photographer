@@ -7,6 +7,7 @@ import {
   getPhotoLists,
   add_geo_tag
 } from "../../util/APIUtils";
+import ChatHttpServer from '../../util/chatHttpServer'
 import { ACCESS_TOKEN, PHOTO_LIST_SIZE, GEOCODING_API_KEY } from "../../constants";
 import { HomeHeader, PhotoList } from "../../components";
 import PhotoDetails from "./PhotoDetails";
@@ -51,19 +52,33 @@ class Home extends Component {
     this.LoadPhotos = this.LoadPhotos.bind(this);
   }
 
-  loadCurrentUser() {
+  async loadCurrentUser() {
     this.setState({
       isLoading: true,
     });
     getCurrentUser()
       .then((response) => {
         console.log(response)
-        this.setState({
-          currentUser: response,
-          // isAuthenticated: true,
-          isLoading: false,
-          hasMoreItems: true
-        });
+        const data = {
+          username: response.username,
+          uid: response.id
+        }
+        ChatHttpServer.login(data)
+          .then(res => {
+            if (res.error) {
+              alert('Invalid login details')
+            } else {
+              this.setState({
+                currentUser: response,
+                // isAuthenticated: true,
+                isLoading: false,
+                hasMoreItems: true
+              });
+            }
+          })
+          .catch(error => {
+            alert('Invalid login details')
+          })
       })
       .catch((error) => {
         this.setState({
@@ -137,7 +152,7 @@ class Home extends Component {
               locationName: responseJson
             })
           })
-          .catch(error=>console.log(error))
+          .catch(error => console.log(error))
       },
       err => console.log(err)
     );

@@ -1,36 +1,16 @@
 import React, { Component } from "react";
+import io from 'socket.io-client';
 import { UserCard, HomeHeader } from "../../../components";
 import { getPublicUsers, getCurrentUser } from "../../../util/APIUtils";
 import LoadingIndicator from "../../../common/LoadingIndicator";
 import { Grid, Form, TextArea, Popup } from "semantic-ui-react";
 import TextareaAutosize from 'react-textarea-autosize'
+import ChatListComponent from './ChatListComponent'
+import Conversation from './Conversation'
+import ChatSocketServer from '../../../util/chatSocketServer';
+import ChatHttpServer from '../../../util/chatHttpServer';
 import {
   ThemeProvider,
-  Row,
-  Column,
-  Avatar,
-  Title,
-  Subtitle,
-  ChatList,
-  ChatListItem,
-  AgentBar,
-  IconButton,
-  RateBadIcon,
-  RateGoodIcon,
-  MessageList,
-  MessageGroup,
-  Message,
-  MessageMedia,
-  MessageText,
-  MessageTitle,
-  MessageButton,
-  MessageButtons,
-  QuickReplies,
-  TextComposer,
-  AddIcon,
-  SendButton,
-  EmojiIcon,
-  TextInput,
   FixedWrapper, darkTheme, elegantTheme, purpleTheme, defaultTheme
 } from '@livechat/ui-kit'
 import "./style.less";
@@ -160,7 +140,8 @@ class Messages extends Component {
       EmojiShow: false,
       message_text: "",
       isShiftKey: false,
-      activeChat: 0
+      activeChat: -1,
+      toUser: null
     };
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
     this.handleSearchTag = this.handleSearchTag.bind(this);
@@ -207,6 +188,7 @@ class Messages extends Component {
           isAuthenticated: true,
           isLoading: false,
         });
+        ChatSocketServer.establishSocketConnection(response.id);
       })
       .catch((error) => {
         this.setState({
@@ -231,9 +213,11 @@ class Messages extends Component {
     })
   }
 
-  selectChat(e){
+  selectChat(id, toUser) {
+    console.log(toUser)
     this.setState({
-      activeChat: e.currentTarget.id
+      activeChat: id,
+      toUser: toUser
     })
   }
 
@@ -281,6 +265,9 @@ class Messages extends Component {
   }
 
   render() {
+    if (this.state.isLoading) {
+      return <LoadingIndicator />
+    }
     return (
       <>
         <Grid>
@@ -297,130 +284,16 @@ class Messages extends Component {
                 <Grid className="MessagePage">
                   <Grid.Row>
                     <Grid.Column width="4">
-                      <ChatList style={{ minWidth: 300 }}>
-                        <ChatListItem id="1" active={this.state.activeChat === "1" ? true : false} onClick={this.selectChat}>
-                          <Avatar letter="K" />
-                          <Column fill>
-                            <Row justify>
-                              <Title ellipsis>{'Konrad'}</Title>
-                              <Subtitle nowrap>{'14:31 PM'}</Subtitle>
-                            </Row>
-                            <Subtitle ellipsis>
-                              {'Hello, how can I help you? We have a lot to talk about'}
-                            </Subtitle>
-                          </Column>
-                        </ChatListItem>
-                        <ChatListItem id="4" active={this.state.activeChat === "4" ? true : false} onClick={this.selectChat}>
-                          <Avatar letter="J" />
-                          <Column fill>
-                            <Row justify>
-                              <Title ellipsis>{'Andrew'}</Title>
-                              <Subtitle nowrap>{'14:31 PM'}</Subtitle>
-                            </Row>
-                            <Subtitle ellipsis>{'actually I just emailed you back'}</Subtitle>
-                          </Column>
-                        </ChatListItem>
-                        <ChatListItem id="3" active={this.state.activeChat === "3" ? true : false} onClick={this.selectChat}>
-                          <Avatar imgUrl="https://livechat.s3.amazonaws.com/default/avatars/male_8.jpg" />
-                          <Column fill>
-                            <Row justify>
-                              <Title ellipsis>{'Michael'}</Title>
-                              <Subtitle nowrap>{'14:31 PM'}</Subtitle>
-                            </Row>
-                            <Subtitle ellipsis>
-                              {"Ok, thanks for the details, I'll get back to you tomorrow."}
-                            </Subtitle>
-                          </Column>
-                        </ChatListItem>
-                      </ChatList>
+                      <ChatListComponent currentUser={this.state.currentUser} selectChat={this.selectChat} />
                     </Grid.Column>
                     <Grid.Column width="12">
-                      <AgentBar>
-                        <Avatar imgUrl="https://livechat.s3.amazonaws.com/default/avatars/male_8.jpg" />
-                        <Column fill>
-                          <Title>{'Jon Snow'}</Title>
-                          <Subtitle>{'Support hero'}</Subtitle>
-                        </Column>
-                        <Row>
-                          <Column>
-                            <IconButton>
-                              <RateBadIcon />
-                            </IconButton>
-                          </Column>
-                          <Column>
-                            <IconButton>
-                              <RateGoodIcon />
-                            </IconButton>
-                          </Column>
-                        </Row>
-                      </AgentBar>
-                      <MessageList className="MessageList" active>
-                        <MessageGroup
-                          avatar="https://livechat.s3.amazonaws.com/default/avatars/male_8.jpg"
-                          onlyFirstWithMeta
-                        >
-                          <Message className="Message" date="21:38" authorName="Jon Smith">
-                            <MessageText className="messageText">Hi! I would like to buy those shoes</MessageText>
-                          </Message>
-                        </MessageGroup>
-                        <MessageGroup onlyFirstWithMeta>
-                          <Message className="Message" date="21:38" isOwn={true}>
-                            <MessageText className="messageText">
-                              I love them
-                              sooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-                              much!
-                            </MessageText>
-                          </Message>
-                          <Message className="Message" date="21:38" isOwn={true}>
-                            <MessageText className="messageText">This helps me a lot</MessageText>
-                          </Message>
-                        </MessageGroup>
-                        <MessageGroup
-                          avatar="https://livechat.s3.amazonaws.com/default/avatars/male_8.jpg"
-                          onlyFirstWithMeta
-                        >
-                          <Message className="Message" authorName="Jon Smith" date="21:37">
-                            <MessageText className="messageText">No problem!</MessageText>
-                          </Message>
-                          <Message
-                            className="Message"
-                            authorName="Jon Smith"
-                            imageUrl="https://static.staging.livechatinc.com/1520/P10B78E30V/dfd1830ebb68b4eefe6432d7ac2be2be/Cat-BusinessSidekick_Wallpapers.png"
-                            date="21:39"
-                          >
-                            <MessageText className="messageText">
-                              The fastest way to help your customers - start chatting with visitors
-                              who need your help using a free 30-day trial.
-                            </MessageText>
-                          </Message>
-                          <Message className="Message" authorName="Jon Smith" date="21:39">
-                            <MessageMedia>
-                              <img src="https://picktur.s3.eu-central-1.amazonaws.com/MR_1584240003940-ballbook878.jpg" />
-                            </MessageMedia>
-                          </Message>
-                        </MessageGroup>
-                      </MessageList>
-                      <TextComposer >
-                        <Row align="center">
-                          <IconButton fit>
-                            <AddIcon />
-                          </IconButton>
-                          {/* <TextInput onChange={this.handleChangeMessageText} fill /> */}
-                          <TextareaAutosize className="sendingText" maxRows="3" minRows="1" value={this.state.message_text} onChange={this.handleChangeMessageText} onKeyDown={this.handleKeyDown} />
-                          <IconButton fit >
-                            <Popup
-                              on='click'
-                              trigger={<EmojiIcon />}
-                              position="top right"
-                            >
-                              <span>
-                                <Picker onSelect={this.addEmoji} />
-                              </span>
-                            </Popup>
-                          </IconButton>
-                          <SendButton className={this.state.message_text === "" ? "sendButton" : "sendButton active"} fit onClick={this.send} />
-                        </Row>
-                      </TextComposer>
+
+                      {
+                        this.state.activeChat !== -1 ?
+                          <Conversation currentUser={this.state.currentUser} selectedChat={this.state.activeChat} toUser={this.state.toUser} />
+                          : <p className="nocontact">Please select Chat on left side bar.</p>
+                      }
+
                     </Grid.Column>
                   </Grid.Row>
                 </Grid>

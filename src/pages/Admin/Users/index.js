@@ -4,6 +4,7 @@ import { getUsers } from "../../../util/APIUtils";
 import "./style.less";
 import { get } from "animejs";
 import { AvatarDefault } from "../../../assets/images/homepage";
+import LoadingIndicator from "../../../common/LoadingIndicator";
 class Users extends Component {
   constructor(props) {
     super(props);
@@ -22,15 +23,22 @@ class Users extends Component {
   }
 
   loadUsers() {
+    this.setState({
+      isLoading: true
+    })
     getUsers(0, 20)
       .then((response) => {
         console.log(response);
         this.setState({
           users: response.content,
+          isLoading:false
         });
       })
       .catch((error) => {
         console.log("error", error);
+        this.setState({
+          isLoading:false
+        })
       });
   }
   render() {
@@ -61,6 +69,9 @@ class Users extends Component {
       });
     }
     const { visible } = this.props;
+    if(this.state.isLoading){
+      return <LoadingIndicator />
+    }
     return (
       <Table className={visible ? "visible" : "disable"} celled>
         <Table.Header>
