@@ -26,11 +26,13 @@ class ChatListComponent extends Component {
     };
 
     this.selectChat = this.selectChat.bind(this);
-    this.loadPublicUsers = this.loadPublicUsers.bind(this)
+    this.loadPublicUsers = this.loadPublicUsers.bind(this);
+    this.receiveSocketMessages =  this.receiveSocketMessages.bind(this)
   }
 
   componentDidMount() {
     this.loadPublicUsers(0, 30);
+
   }
 
   loadPublicUsers(page, size) {
@@ -39,12 +41,13 @@ class ChatListComponent extends Component {
     })
     getUsers(page, size)
       .then(response => {
-        console.log(response)
         this.setState({
           publicUsers: response.content,
         })
         ChatSocketServer.getChatList(this.props.currentUser.id);
         ChatSocketServer.eventEmitter.on('chat-list-response', this.createChatListUsers);
+        ChatSocketServer.receiveMessage();
+        ChatSocketServer.eventEmitter.on('add-message-response', this.receiveSocketMessages);
       })
       .catch(error => {
         console.log(error)
@@ -62,7 +65,6 @@ class ChatListComponent extends Component {
   }
 
   createChatListUsers = (chatListResponse) => {
-    console.log("chatResponse", chatListResponse)
     if (!chatListResponse.error) {
       let chatList = this.state.chatList;
       if (chatListResponse.singleUser) {
@@ -95,12 +97,29 @@ class ChatListComponent extends Component {
     })
   }
 
+  receiveSocketMessages = (socketResponse) => {
+    if(socketResponse){
+      if(socketResponse.chat){
+        this.state.chatList.forEach((chat, chatIndex)=>{
+          if(chat._id === socketResponse.chat.chatId){
+            this.state.chatList[chatIndex].meta={
+              lastmessage: socketResponse.message.message,
+              date: socketResponse.message.date
+            }
+            this.setState({
+              chatList: this.state.chatList
+            })
+          }
+        })
+      }
+    }
+  }
+
   render() {
     const chatListArr = [];
     if (this.state.isLoading) {
       return <LoadingIndicator />
     } else {
-      console.log("red", this.state.chatList)
       this.state.chatList.forEach((chat, chatIndex) => {
         let toUser = {};
         chat.participants.forEach(participant => {
@@ -108,7 +127,6 @@ class ChatListComponent extends Component {
             toUser = this.state.publicUsers.find((obj) => obj.id === participant);
           }
         })
-        console.log("part", toUser)
         let lastDate="";
         if(ISOFormatDate(new Date()) === ISOFormatDate(chat.meta.date)){
           lastDate= FormatTime(chat.meta.date)
@@ -117,7 +135,7 @@ class ChatListComponent extends Component {
         }
         chatListArr.push(
           <ChatListItem id={chat._id} active={this.state.activeChat === chat._id ? true : false} onClick={()=>this.selectChat(chat._id, toUser)}>
-            <Avatar imgUrl={toUser.icon ? toUser.icon : null} letter={toUser.username[0]} />
+            <Avatar imgUrl={toUser.icon ? toUser.icon : null} letter={toUser.name[0]} size="40px" />
             <Column className="UserInfo" fill>
               <Row justify>
                 <Title ellipsis>{toUser.surname ? toUser.name + " " + toUser.surname : toUser.name}</Title>

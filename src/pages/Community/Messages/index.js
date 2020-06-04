@@ -198,7 +198,6 @@ class Messages extends Component {
   }
 
   handleSearchTag(e) {
-    console.log(e);
     this.props.history.push("/?tag=" + e);
   }
 
@@ -207,14 +206,12 @@ class Messages extends Component {
   }
 
   handleThemeChange = ({ target }) => {
-    console.log('target.name', target.name)
     this.setState({
       theme: target.name + 'Theme',
     })
   }
 
   selectChat(id, toUser) {
-    console.log(toUser)
     this.setState({
       activeChat: id,
       toUser: toUser

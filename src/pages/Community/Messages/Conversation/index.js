@@ -42,6 +42,8 @@ class Conversation extends Component {
       message_text: "",
       isShiftKey: false,
     };
+    this.messageContainer = React.createRef();
+
     this.receiveSocketMessages = this.receiveSocketMessages.bind(this);
     this.getMessages = this.getMessages.bind(this);
     this.handleEmoji = this.handleEmoji.bind(this);
@@ -90,7 +92,6 @@ class Conversation extends Component {
       const { selectedChat } = this.props;
       const messageResponse = await ChatHttpServer.getMessages(selectedChat);
       if (!messageResponse.error) {
-        console.log(messageResponse)
         this.setState({
           conversations: messageResponse.messages.messages,
         });
@@ -121,7 +122,7 @@ class Conversation extends Component {
     if (this.messageContainer.current !== null) {
       try {
         setTimeout(() => {
-          this.messageContainer.current.scrollTop = this.messageContainer.current.scrollHeight;
+          this.messageContainer.current.scrollToBottom();
         }, 100);
       } catch (error) {
         console.warn(error);
@@ -170,7 +171,7 @@ class Conversation extends Component {
         send: true
       })
       this.sendAndUpdateMessages({
-        chat:{
+        chat: {
           chatId: selectedChat,
           messages: this.state.conversations,
         },
@@ -185,15 +186,13 @@ class Conversation extends Component {
   }
 
   sendAndUpdateMessages(message) {
-    console.log(message)
     ChatSocketServer.checkSocket();
     try {
-      
       ChatSocketServer.sendMessage(message);
       this.setState({
         conversations: [...this.state.conversations, message.message]
       });
-      // this.scrollMessageContainer();
+      this.scrollMessageContainer();
     } catch (error) {
       alert(`Can't send your message`);
     }
@@ -202,16 +201,63 @@ class Conversation extends Component {
   render() {
     ChatSocketServer.checkSocket();
     const { currentUser, toUser, selectedChat } = this.props
-    const messagelist = [];
+    var conversationList = [];
+    var conversationgroup = [];
     if (this.state.messageLoading) {
       return <LoadingIndicator />
     } else {
-      console.log("conver", this.state.conversations)
-      // this.state.conversations.forEach(conversation => {
-      //   MessageList.push(
+      var groupIndex = 0;
+      conversationgroup.push({
+        index: groupIndex,
+        content: [this.state.conversations[0]]
+      })
+      for (let i = 1; i < this.state.conversations.length; i++) {
+        const t1 = new Date(this.state.conversations[i - 1].date).getTime();
+        const t2 = new Date(this.state.conversations[i].date).getTime();
+        if (this.state.conversations[i - 1].fromUserId !== this.state.conversations[i].fromUserId || (t2 - t1) > 10 * 60 * 1000) {
+          groupIndex++;
+          conversationgroup.push({
+            index: groupIndex,
+            content: [this.state.conversations[i]]
+          })
+        } else {
+          conversationgroup[groupIndex].content.push(this.state.conversations[i]);
+        }
+      }
 
-      //   )
-      // });
+      conversationgroup.forEach(group => {
+        const messageArray = [];
+        let sendTime = "";
+        if (ISOFormatDate(new Date()) === ISOFormatDate(group.content[0].date)) {
+          sendTime = FormatTime(group.content[0].date)
+        } else {
+          sendTime = ISOFormatDate(group.content[0].date) + " " + FormatTime(group.content[0].date)
+        }
+        group.content.forEach(conv => {
+          messageArray.push(
+            <Message
+              className="Message"
+              date={sendTime}
+              authorName={currentUser.id === conv.fromUserId ? "" : (currentUser.id !== conv.fromUserId && toUser.surname) ? toUser.name + " " + toUser.surname : toUser.name}
+              isOwn={currentUser.id === conv.fromUserId}>
+              <MessageText className="messageText">
+                {conv.message}
+              </MessageText>
+            </Message>
+          )
+        })
+        conversationList.push(
+          <MessageGroup
+            avatar={group.content[0].fromUserId !== currentUser.id && toUser.icon ? toUser.icon : null}
+            avatarLetter={group.content[0].fromUserId !== currentUser.id ? toUser.name[0] : null}
+            onlyFirstWithMeta
+          >
+            {messageArray}
+          </MessageGroup>
+        )
+
+      })
+
     }
     return (
       <>
@@ -234,51 +280,8 @@ class Conversation extends Component {
             </Column>
           </Row>
         </AgentBar>
-        <MessageList className="MessageList" active>
-          <MessageGroup
-            avatar="https://livechat.s3.amazonaws.com/default/avatars/male_8.jpg"
-            onlyFirstWithMeta
-          >
-            <Message className="Message" date="21:38" authorName="Jon Smith">
-              <MessageText className="messageText">Hi! I would like to buy those shoes</MessageText>
-            </Message>
-          </MessageGroup>
-          <MessageGroup onlyFirstWithMeta>
-            <Message className="Message" date="21:38" isOwn={true}>
-              <MessageText className="messageText">
-                I love them
-                sooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-                much!
-                            </MessageText>
-            </Message>
-            <Message className="Message" date="21:38" isOwn={true}>
-              <MessageText className="messageText">This helps me a lot</MessageText>
-            </Message>
-          </MessageGroup>
-          <MessageGroup
-            avatar="https://livechat.s3.amazonaws.com/default/avatars/male_8.jpg"
-            onlyFirstWithMeta
-          >
-            <Message className="Message" authorName="Jon Smith" date="21:37">
-              <MessageText className="messageText">No problem!</MessageText>
-            </Message>
-            <Message
-              className="Message"
-              authorName="Jon Smith"
-              imageUrl="https://static.staging.livechatinc.com/1520/P10B78E30V/dfd1830ebb68b4eefe6432d7ac2be2be/Cat-BusinessSidekick_Wallpapers.png"
-              date="21:39"
-            >
-              <MessageText className="messageText">
-                The fastest way to help your customers - start chatting with visitors
-                who need your help using a free 30-day trial.
-                            </MessageText>
-            </Message>
-            <Message className="Message" authorName="Jon Smith" date="21:39">
-              <MessageMedia>
-                <img src="https://picktur.s3.eu-central-1.amazonaws.com/MR_1584240003940-ballbook878.jpg" />
-              </MessageMedia>
-            </Message>
-          </MessageGroup>
+        <MessageList className="MessageList" active ref={this.messageContainer} >
+          {conversationList}
         </MessageList>
         <TextComposer >
           <Row align="center">

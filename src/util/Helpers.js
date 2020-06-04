@@ -133,6 +133,6 @@ export function nextMonth(date) {
 
 export function FormatTime(date){
   var d = new Date(date);
-  var time = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+  var time = d.getHours() + ":" + d.getMinutes();
   return time
 }

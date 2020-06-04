@@ -13,7 +13,6 @@ class ChatSocketServer {
             this.socket = io(`http://localhost:4000`, {
                 query: `userId=${userId}`
             });
-            console.log(this.socket)
         } catch (error) {
             alert(`Something went wrong; Can't connect to socket server`);
         }
@@ -23,7 +22,6 @@ class ChatSocketServer {
     }
 
     getChatList(uid) {
-        console.log("123", this.socket)
         this.socket.emit('chat-list', {
             uid: uid
         });
@@ -33,7 +31,6 @@ class ChatSocketServer {
     }
 
     sendMessage(message) {
-        console.log("send",message)
         this.socket.emit('add-message', message);
     }
 
