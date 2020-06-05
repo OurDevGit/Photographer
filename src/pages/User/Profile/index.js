@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import MetaTags from "react-meta-tags";
-import { Grid, Icon, Button, Image, Tab } from "semantic-ui-react";
+import { Grid, Icon, Button, Image, Tab, Modal, Form, TextArea } from "semantic-ui-react";
 import { API_BASE_URL, ACCESS_TOKEN } from "../../../constants";
 import {
   update_user,
@@ -32,6 +32,7 @@ class Profile extends Component {
       user_avatar_url: AvatarDefault,
       uploadLabel: "Upload your photo",
       isUpdateLoading: false,
+      messageModalOpen: false
     };
     this.loadUserProfile = this.loadUserProfile.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -42,6 +43,10 @@ class Profile extends Component {
     this.clickSearch = this.clickSearch.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
     this.sendAndUpdateMessages = this.sendAndUpdateMessages.bind(this)
+    this.openMessageModal = this.openMessageModal.bind(this);
+    this.close = this.close.bind(this);
+    this.checkNewChat = this.checkNewChat.bind(this)
+    this.handleChangeMessagebox = this.handleChangeMessagebox.bind(this)
   }
 
   loadCurrentUser(userId) {
@@ -209,8 +214,55 @@ class Profile extends Component {
     this.props.history.push("/?key=" + e);
   }
 
+  handleChangeMessagebox(e) {
+    this.setState({
+      newMessage: e.target.value
+    })
+  }
+
+  openMessageModal() {
+    ChatSocketServer.getChatList(this.state.currentUser.id);
+    ChatSocketServer.eventEmitter.on('chat-list-response', this.checkNewChat);
+    // this.setState({
+    //   messageModalOpen: true
+    // })
+  }
+
+  checkNewChat = (chatListResponse) => {
+    if (!chatListResponse.error) {
+      let chatList = [];
+      if (chatListResponse.singleUser) {
+
+      } else {
+        /* Updating entire chat list if user logs in. */
+        chatList = chatListResponse.chatList;
+        var count = 0;
+        chatList.forEach(chat => {
+          if (chat.participants.includes(this.state.user.id)) {
+            this.props.history.push("/messages?id=" + chat._id + "&user=" + this.state.user.id)
+          } else {
+            count++;
+          }
+        });
+        if (count === chatList.length) {
+          this.setState({
+            messageModalOpen: true
+          })
+        }
+      }
+    } else {
+      alert(`Unable to load Chat list, Redirecting to Login.`);
+    }
+  }
+
+  close() {
+    this.setState({
+      messageModalOpen: false
+    })
+  }
+
   sendMessage() {
-    const message = "Hi";
+    var message = this.state.newMessage;
     console.log("current", this.state.currentUser)
     console.log("user", this.state.user)
     // const { userId, newSelectedUser } = this.props;
@@ -233,14 +285,18 @@ class Profile extends Component {
     ChatSocketServer.checkSocket();
     try {
       ChatSocketServer.sendMessage(message);
+      // this.props.history.push("/messages?id=" + null + "&user=" + null)
+      this.close();
+      notification.success({
+        message: "Openshoots",
+        description: "You just sent new message to " +  this.state.user.name + " successfully",
+      });
     } catch (error) {
       alert(`Can't send your message`);
     }
   }
 
   render() {
-    console.log(this.state.currentUser);
-
     const panes_me = [
       {
         menuItem: "Personal Info",
@@ -428,10 +484,28 @@ class Profile extends Component {
                           <Icon name="user plus" />
                         Follow
                       </Button>
-                        <Button icon labelPosition="left" color="black" onClick={this.sendMessage}>
+                        <Button icon labelPosition="left" color="black" onClick={this.openMessageModal}>
                           <Icon name="chat" />
                         Send
                       </Button>
+                        <Modal className="messageModal" size="mini" open={this.state.messageModalOpen} onClose={this.close}>
+                          <Modal.Header>Send new message to {this.state.user.name}</Modal.Header>
+                          <Modal.Content>
+                            <Form>
+                              <TextArea rows={2} placeholder='Tell us more' value={this.state.newMessage} onChange={this.handleChangeMessagebox} />
+                            </Form>
+                          </Modal.Content>
+                          <Modal.Actions>
+                            <Button negative onClick={this.close}>Cancel</Button>
+                            <Button
+                              positive
+                              icon='checkmark'
+                              labelPosition='right'
+                              content='Send'
+                              onClick={this.sendMessage}
+                            />
+                          </Modal.Actions>
+                        </Modal>
                       </div>
                     </Grid.Column>
                     <Grid.Column width={6}>

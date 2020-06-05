@@ -97,7 +97,7 @@ class AddContent extends Component {
           handleSearchTag={this.handleSearchTag}
         />
 
-        <Grid className="pages page-index content_page">
+        <Grid className="pages page-index upload-page">
           <Grid.Row>
             <Grid.Column only="computer" width={16}>
               <div className="page_title">

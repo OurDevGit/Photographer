@@ -154,6 +154,13 @@ class Messages extends Component {
   }
 
   componentDidMount() {
+    if(this.props.location.search){
+      console.log(this.props.location.search.split("=")[1])
+      this.setState({
+        selChatId: this.props.location.search.split("&")[0].split("=")[1],
+        selUserId: this.props.location.search.split("&")[1].split("=")[1]
+      })
+    }
     this.loadCurrentUser();
     window.addEventListener("keydown", this.keydown);
     window.addEventListener("keyup", this.keyup);
@@ -281,7 +288,7 @@ class Messages extends Component {
                 <Grid className="MessagePage">
                   <Grid.Row>
                     <Grid.Column width="4">
-                      <ChatListComponent currentUser={this.state.currentUser} selectChat={this.selectChat} />
+                      <ChatListComponent currentUser={this.state.currentUser} selectChat={this.selectChat} selChatId={this.state.selChatId} selUserId={this.state.selUserId} />
                     </Grid.Column>
                     <Grid.Column width="12">
 

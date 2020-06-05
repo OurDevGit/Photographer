@@ -97,7 +97,6 @@ class Collections extends Component {
   }
 
   render() {
-    console.log(this.props.user);
     const panes_collection = [];
     if (this.props.user.collection) {
       this.props.user.collections.forEach((collection) => {

@@ -24,7 +24,6 @@ class ChatListComponent extends Component {
       activeChat: 0,
       chatList: []
     };
-
     this.selectChat = this.selectChat.bind(this);
     this.loadPublicUsers = this.loadPublicUsers.bind(this);
     this.receiveSocketMessages =  this.receiveSocketMessages.bind(this)
@@ -32,7 +31,6 @@ class ChatListComponent extends Component {
 
   componentDidMount() {
     this.loadPublicUsers(0, 30);
-
   }
 
   loadPublicUsers(page, size) {
@@ -44,6 +42,16 @@ class ChatListComponent extends Component {
         this.setState({
           publicUsers: response.content,
         })
+        console.log(this.props.selChatId, this.props.selUserId)
+        if(this.props.selChatId && this.props.selUserId){
+          var toUser = response.content.find((obj) => obj.id === this.props.selUserId);
+          this.selectChat(this.props.selChatId, toUser)
+          // response.content.forEach(user=>{
+          //   if(user.id === this.props.selUserId){
+          //     this.selectChat(this.props.selChatId, user)
+          //   }
+          // })
+        }
         ChatSocketServer.getChatList(this.props.currentUser.id);
         ChatSocketServer.eventEmitter.on('chat-list-response', this.createChatListUsers);
         ChatSocketServer.receiveMessage();
@@ -68,13 +76,13 @@ class ChatListComponent extends Component {
     if (!chatListResponse.error) {
       let chatList = this.state.chatList;
       if (chatListResponse.singleUser) {
-        if (chatList.length > 0) {
-          chatList = chatList.filter(function (obj) {
-            return obj.id !== chatListResponse.chatList[0].id;
-          });
-        }
-        /* Adding new online user into chat list array */
-        chatList = [...chatList, ...chatListResponse.chatList];
+        // if (chatList.length > 0) {
+        //   chatList = chatList.filter(function (obj) {
+        //     return obj.id !== chatListResponse.chatList[0].id;
+        //   });
+        // }
+        // /* Adding new online user into chat list array */
+        // chatList = [...chatList, ...chatListResponse.chatList];
       } else {
         /* Updating entire chat list if user logs in. */
         chatList = chatListResponse.chatList;
@@ -100,17 +108,18 @@ class ChatListComponent extends Component {
   receiveSocketMessages = (socketResponse) => {
     if(socketResponse){
       if(socketResponse.chat){
-        this.state.chatList.forEach((chat, chatIndex)=>{
-          if(chat._id === socketResponse.chat.chatId){
-            this.state.chatList[chatIndex].meta={
-              lastmessage: socketResponse.message.message,
-              date: socketResponse.message.date
-            }
-            this.setState({
-              chatList: this.state.chatList
-            })
-          }
-        })
+        ChatSocketServer.getChatList(this.props.currentUser.id);
+        // this.state.chatList.forEach((chat, chatIndex)=>{
+        //   if(chat._id === socketResponse.chat.chatId){
+        //     this.state.chatList[chatIndex].meta={
+        //       lastmessage: socketResponse.message.message,
+        //       date: socketResponse.message.date
+        //     }
+        //     this.setState({
+        //       chatList: this.state.chatList
+        //     })
+        //   }
+        // })
       }
     }
   }
