@@ -100,8 +100,8 @@ class HomeHeader extends React.Component {
               </Dropdown.Menu>
             </Dropdown>
           </Menu.Item>,
-          <Menu.Item key="5" as={NavLink} to="/">
-            <Icon name="alarm" />
+          <Menu.Item key="5" as={NavLink} to="/messages">
+            <Icon style={{fontSize: "20px"}} name="alarm" />
           </Menu.Item>,
           <Menu.Item key="6" className="myAccount">
             <Avatar fullname={currentUser.username} avartarUrl={currentUser.avatar} status="online" />
@@ -167,8 +167,8 @@ class HomeHeader extends React.Component {
                 </Dropdown.Menu>
               </Dropdown>
             </Menu.Item>,
-            <Menu.Item key="5" as={NavLink} to="/">
-              <Icon name="alarm" />
+            <Menu.Item key="5" as={NavLink} to="/messages">
+              <Icon style={{fontSize: "20px"}} name="alarm" />
             </Menu.Item>,
             <Menu.Item key="6" className="myAccount">
               <Avatar fullname={currentUser.username} status="online" />

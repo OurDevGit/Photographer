@@ -55,7 +55,6 @@ class Profile extends Component {
     });
     getCurrentUser()
       .then((response) => {
-        console.log("RES~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", response);
         this.loadUserProfile(userId);
         this.setState({
           currentUser: response,
@@ -63,12 +62,16 @@ class Profile extends Component {
           // isLoading: false
         });
         ChatSocketServer.establishSocketConnection(response.id);
+        ChatSocketServer.receiveMessage();
+        ChatSocketServer.eventEmitter.on('add-message-response', this.receiveSocketMessages);
       })
       .catch((error) => {
         this.setState({
           isLoading: false,
         });
       });
+  }
+  receiveSocketMessages(){
   }
 
   loadUserProfile(userId) {
@@ -78,7 +81,6 @@ class Profile extends Component {
 
     getUserDetail(userId)
       .then((response) => {
-        console.log("userdeta", response);
         this.setState({
           user: response,
           isLoading: false,
@@ -133,7 +135,6 @@ class Profile extends Component {
           this.setState({
             isAvatarLoading: false,
           });
-          console.log("uploadAvatar", response);
         }
       })
       .catch((error) => {
@@ -145,7 +146,6 @@ class Profile extends Component {
   }
 
   update_userData(e) {
-    console.log("update", e);
     this.setState({
       isUpdateLoading: true,
     });
@@ -169,7 +169,6 @@ class Profile extends Component {
         this.setState({
           isUpdateLoading: false,
         });
-        console.log(response);
       })
       .catch((error) => {
         this.setState({
@@ -192,7 +191,6 @@ class Profile extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.match.params.id !== prevProps.match.params.id) {
-      console.log("ddd", this.props.match.params.id);
       this.setState({
         user: null,
       });
@@ -201,12 +199,10 @@ class Profile extends Component {
   }
 
   handleImageClick(e) {
-    console.log(e);
     this.props.history.push("/Photo_details/" + e.id);
   }
 
   handleSearchTag(e) {
-    console.log(e);
     this.props.history.push("/?tag=" + e);
   }
 
@@ -223,33 +219,33 @@ class Profile extends Component {
   openMessageModal() {
     ChatSocketServer.getChatList(this.state.currentUser.id);
     ChatSocketServer.eventEmitter.on('chat-list-response', this.checkNewChat);
-    // this.setState({
-    //   messageModalOpen: true
-    // })
   }
 
   checkNewChat = (chatListResponse) => {
     if (!chatListResponse.error) {
       let chatList = [];
-      if (chatListResponse.singleUser) {
+      if(chatListResponse.type === "list"){
+        if (chatListResponse.singleUser) {
 
-      } else {
-        /* Updating entire chat list if user logs in. */
-        chatList = chatListResponse.chatList;
-        var count = 0;
-        chatList.forEach(chat => {
-          if (chat.participants.includes(this.state.user.id)) {
-            this.props.history.push("/messages?id=" + chat._id + "&user=" + this.state.user.id)
-          } else {
-            count++;
+        } else {
+          /* Updating entire chat list if user logs in. */
+          chatList = chatListResponse.chatList;
+          var count = 0;
+          chatList.forEach(chat => {
+            if (chat.participants.find((obj) => obj.id === this.state.user.id)) {
+              this.props.history.push("/messages?id=" + chat._id + "&user=" + this.state.user.id)
+            } else {
+              count++;
+            }
+          });
+          if (count === chatList.length) {
+            this.setState({
+              messageModalOpen: true
+            })
           }
-        });
-        if (count === chatList.length) {
-          this.setState({
-            messageModalOpen: true
-          })
         }
       }
+      
     } else {
       alert(`Unable to load Chat list, Redirecting to Login.`);
     }
@@ -263,8 +259,6 @@ class Profile extends Component {
 
   sendMessage() {
     var message = this.state.newMessage;
-    console.log("current", this.state.currentUser)
-    console.log("user", this.state.user)
     // const { userId, newSelectedUser } = this.props;
     if (message === '' || message === undefined || message === null) {
       alert(`Message can't be empty.`);
@@ -281,8 +275,6 @@ class Profile extends Component {
   }
 
   sendAndUpdateMessages(message) {
-    console.log(message)
-    ChatSocketServer.checkSocket();
     try {
       ChatSocketServer.sendMessage(message);
       // this.props.history.push("/messages?id=" + null + "&user=" + null)

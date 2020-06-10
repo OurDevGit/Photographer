@@ -4,7 +4,9 @@ import {
   Button,
   Input
 } from "semantic-ui-react";
-import { login, FBLogin } from "../../../util/APIUtils";
+import { login, FBLogin, getCurrentUser } from "../../../util/APIUtils";
+import ChatHttpServer from '../../../util/chatHttpServer'
+import ChatSocketServer from '../../../util/chatSocketServer'
 import { ACCESS_TOKEN } from "../../../constants";
 import "./style.less";
 import { notification } from "antd";
@@ -53,7 +55,36 @@ class Login extends Component {
     login(loginRequest)
       .then((response) => {
         localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-        this.setState({ flag: true, isLoading: false });
+        getCurrentUser()
+          .then((response) => {
+            console.log(response)
+            const data = {
+              username: response.username,
+              uid: response.id
+            }
+            ChatHttpServer.login(data)
+              .then(res => {
+                if (res.error) {
+                  alert('Invalid login details')
+                } else {
+                  ChatSocketServer.establishSocketConnection(response.id);
+                  this.setState({
+                    currentUser: response,
+                    isLoading: false,
+                    flag: true
+                  });
+                }
+              })
+              .catch(error => {
+                alert('Invalid login details')
+              })
+          })
+          .catch((error) => {
+            this.setState({
+              isLoading: false,
+            });
+          });
+        // this.setState({ flag: true, isLoading: false });
       })
       .catch((error) => {
         this.setState({ isLoading: false });

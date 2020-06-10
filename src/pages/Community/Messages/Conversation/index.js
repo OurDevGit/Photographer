@@ -41,6 +41,7 @@ class Conversation extends Component {
       EmojiShow: false,
       message_text: "",
       isShiftKey: false,
+      participants: []
     };
     this.messageContainer = React.createRef();
 
@@ -51,15 +52,17 @@ class Conversation extends Component {
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.send = this.send.bind(this);
     this.sendAndUpdateMessages = this.sendAndUpdateMessages.bind(this);
+    this.receiveReadMessage = this.receiveReadMessage.bind(this)
   }
 
   componentDidMount() {
-    ChatSocketServer.checkSocket();
     window.addEventListener("keydown", this.keydown);
     window.addEventListener("keyup", this.keyup);
     this.getMessages();
     ChatSocketServer.receiveMessage();
     ChatSocketServer.eventEmitter.on('add-message-response', this.receiveSocketMessages);
+    ChatSocketServer.receiveReadMessage();
+    ChatSocketServer.eventEmitter.on('read-message-response', this.receiveReadMessage)
   }
 
   componentDidUpdate(prevProps) {
@@ -69,6 +72,8 @@ class Conversation extends Component {
   }
 
   componentWillUnmount() {
+    ChatSocketServer.eventEmitter.removeListener('add-message-response', this.receiveSocketMessages);
+    ChatSocketServer.eventEmitter.removeListener('read-message-response', this.receiveReadMessage);
   }
 
   keydown = (e) => {
@@ -88,13 +93,31 @@ class Conversation extends Component {
   };
 
   getMessages = async () => {
+    this.setState({
+      messageLoading: true
+    })
     try {
-      const { selectedChat } = this.props;
+      const { currentUser, toUser, selectedChat } = this.props
       const messageResponse = await ChatHttpServer.getMessages(selectedChat);
+
       if (!messageResponse.error) {
+        var participants = messageResponse.messages.participants;
+        participants.forEach((p, pIndex) => {
+          if (p.id === currentUser.id) {
+            participants[pIndex].date = new Date();
+          }
+        })
         this.setState({
           conversations: messageResponse.messages.messages,
+          participants: participants
         });
+
+        var chatInfo = {
+          _id: selectedChat,
+          participants: participants,
+          toUserId: toUser.id
+        }
+        ChatSocketServer.readMessage(chatInfo);
         // this.scrollMessageContainer();
       } else {
         alert('Unable to fetch messages');
@@ -109,13 +132,31 @@ class Conversation extends Component {
     }
   }
 
-  receiveSocketMessages = (socketResponse) => {
-    const { toUser } = this.props;
+  receiveSocketMessages = async (socketResponse) => {
+    const { currentUser, toUser, selectedChat } = this.props
     if (toUser !== null && toUser.id === socketResponse.fromUserId) {
+      var chatInfo = {
+        _id: selectedChat,
+        participants: [
+          { id: currentUser.id, date: new Date() },
+          { id: toUser.id, date: new Date() }
+        ],
+        toUserId: toUser.id
+      }
+      ChatSocketServer.readMessage(chatInfo)
       this.setState({
         conversations: [...this.state.conversations, socketResponse]
       });
       // this.scrollMessageContainer();
+    }
+  }
+
+  receiveReadMessage = async (readMessageResponse) => {
+    const { currentUser, toUser, selectedChat } = this.props
+    if (currentUser !== null && selectedChat === readMessageResponse._id) {
+      this.setState({
+        participants: readMessageResponse.participants
+      })
     }
   }
   scrollMessageContainer() {
@@ -170,23 +211,29 @@ class Conversation extends Component {
         message_text: "",
         send: true
       })
+      var now = new Date();
+      this.state.participants.forEach((p, pIndex) => {
+        if (p.id === currentUser.id) {
+          this.state.participants[pIndex].date = now;
+        }
+      })
       this.sendAndUpdateMessages({
         chat: {
           chatId: selectedChat,
           messages: this.state.conversations,
+          participants: this.state.participants
         },
         message: {
           fromUserId: currentUser.id,
           message: (this.state.message_text).trim(),
           toUserId: toUser.id,
-          date: new Date()
+          date: now
         }
       });
     }
   }
 
   sendAndUpdateMessages(message) {
-    ChatSocketServer.checkSocket();
     try {
       ChatSocketServer.sendMessage(message);
       this.setState({
@@ -199,11 +246,12 @@ class Conversation extends Component {
   }
 
   render() {
-    ChatSocketServer.checkSocket();
     const { currentUser, toUser, selectedChat } = this.props
     var conversationList = [];
     var conversationgroup = [];
-    if (this.state.messageLoading) {
+    var readLastmsg = true;
+    const toParticipant = this.state.participants.find((obj) => obj.id === toUser.id);
+    if (this.state.messageLoading || !toParticipant) {
       return <LoadingIndicator />
     } else {
       var groupIndex = 0;
@@ -225,7 +273,7 @@ class Conversation extends Component {
         }
       }
 
-      conversationgroup.forEach(group => {
+      conversationgroup.forEach((group, groupIndex) => {
         const messageArray = [];
         let sendTime = "";
         if (ISOFormatDate(new Date()) === ISOFormatDate(group.content[0].date)) {
@@ -233,9 +281,19 @@ class Conversation extends Component {
         } else {
           sendTime = ISOFormatDate(group.content[0].date) + " " + FormatTime(group.content[0].date)
         }
-        group.content.forEach(conv => {
+        group.content.forEach((conv, convIndex) => {
+          if (readLastmsg && new Date(conv.date) > new Date(toParticipant.date)) {
+            messageArray.push(
+              <>
+                <Avatar className="readAvatar" imgUrl={toUser.icon ? toUser.icon : null} letter={toUser.username[0]} />
+                <p style={{ height: "20px" }}>{" "}</p>
+              </>
+            )
+            readLastmsg = false
+          }
           messageArray.push(
             <Message
+              key={convIndex}
               className="Message"
               date={sendTime}
               authorName={currentUser.id === conv.fromUserId ? "" : (currentUser.id !== conv.fromUserId && toUser.surname) ? toUser.name + " " + toUser.surname : toUser.name}
@@ -246,8 +304,19 @@ class Conversation extends Component {
             </Message>
           )
         })
+        if (groupIndex === conversationgroup.length - 1 && readLastmsg) {
+          messageArray.push(
+            <>
+              <Avatar className="readAvatar" imgUrl={toUser.icon ? toUser.icon : null} letter={toUser.username[0]} />
+              <p style={{ height: "20px" }}>{" "}</p>
+            </>
+          )
+          readLastmsg = false
+        }
         conversationList.push(
           <MessageGroup
+            className="messageGroup"
+            key={groupIndex}
             avatar={group.content[0].fromUserId !== currentUser.id && toUser.icon ? toUser.icon : null}
             avatarLetter={group.content[0].fromUserId !== currentUser.id ? toUser.name[0] : null}
             onlyFirstWithMeta
@@ -257,55 +326,54 @@ class Conversation extends Component {
         )
 
       })
-
+      return (
+        <>
+          <AgentBar className="agentBar">
+            <Avatar className="avatarsect" imgUrl={toUser.icon ? toUser.icon : null} letter={toUser.username[0]} />
+            <Column fill="true">
+              <Title ellipsis>{toUser.surname ? toUser.name + " " + toUser.surname : toUser.name}</Title>
+              <Subtitle>{}</Subtitle>
+            </Column>
+            <Row className="rateButtons">
+              <Column>
+                <IconButton>
+                  <RateBadIcon />
+                </IconButton>
+              </Column>
+              <Column>
+                <IconButton>
+                  <RateGoodIcon />
+                </IconButton>
+              </Column>
+            </Row>
+          </AgentBar>
+          <MessageList className="MessageList" active ref={this.messageContainer} >
+            {conversationList}
+          </MessageList>
+          <TextComposer >
+            <Row align="center">
+              <IconButton fit>
+                <AddIcon />
+              </IconButton>
+              {/* <TextInput onChange={this.handleChangeMessageText} fill /> */}
+              <TextareaAutosize className="sendingText" maxRows={3} minRows={1} value={this.state.message_text} onChange={this.handleChangeMessageText} onKeyDown={this.handleKeyDown} />
+              <IconButton fit >
+                <Popup
+                  on='click'
+                  trigger={<EmojiIcon color="#ff9811" />}
+                  position="top right"
+                >
+                  <span>
+                    <Picker onSelect={this.addEmoji} />
+                  </span>
+                </Popup>
+              </IconButton>
+              <SendButton className={this.state.message_text === "" ? "sendButton" : "sendButton active"} fit onClick={this.send} />
+            </Row>
+          </TextComposer>
+        </>
+      );
     }
-    return (
-      <>
-        <AgentBar className="agentBar">
-          <Avatar className="avatarsect" imgUrl={toUser.icon ? toUser.icon : null} letter={toUser.username[0]} />
-          <Column fill>
-            <Title ellipsis>{toUser.surname ? toUser.name + " " + toUser.surname : toUser.name}</Title>
-            <Subtitle>{}</Subtitle>
-          </Column>
-          <Row className="rateButtons">
-            <Column>
-              <IconButton>
-                <RateBadIcon />
-              </IconButton>
-            </Column>
-            <Column>
-              <IconButton>
-                <RateGoodIcon />
-              </IconButton>
-            </Column>
-          </Row>
-        </AgentBar>
-        <MessageList className="MessageList" active ref={this.messageContainer} >
-          {conversationList}
-        </MessageList>
-        <TextComposer >
-          <Row align="center">
-            <IconButton fit>
-              <AddIcon />
-            </IconButton>
-            {/* <TextInput onChange={this.handleChangeMessageText} fill /> */}
-            <TextareaAutosize className="sendingText" maxRows="3" minRows="1" value={this.state.message_text} onChange={this.handleChangeMessageText} onKeyDown={this.handleKeyDown} />
-            <IconButton fit >
-              <Popup
-                on='click'
-                trigger={<EmojiIcon />}
-                position="top right"
-              >
-                <span>
-                  <Picker onSelect={this.addEmoji} />
-                </span>
-              </Popup>
-            </IconButton>
-            <SendButton className={this.state.message_text === "" ? "sendButton" : "sendButton active"} fit onClick={this.send} />
-          </Row>
-        </TextComposer>
-      </>
-    );
   }
 }
 

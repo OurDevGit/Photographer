@@ -1,4 +1,5 @@
 import * as io from 'socket.io-client';
+import {CHAT_API_URL} from '../constants'
 const events = require('events');
 
 
@@ -10,7 +11,7 @@ class ChatSocketServer {
     // Connecting to Socket Server
     establishSocketConnection(userId) {
         try {
-            this.socket = io(`http://localhost:4000`, {
+            this.socket = io(CHAT_API_URL, {
                 query: `userId=${userId}`
             });
         } catch (error) {
@@ -40,6 +41,15 @@ class ChatSocketServer {
         });
     }
 
+    readMessage(chatInfo){
+        this.socket.emit('read-message', chatInfo)
+    }
+
+    receiveReadMessage(){
+        this.socket.on('read-message-response', (data) => {
+            this.eventEmitter.emit('read-message-response', data);
+        });
+    }
     logout(userId) {
         this.socket.emit('logout', userId);
         this.socket.on('logout-response', (data) => {

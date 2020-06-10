@@ -155,7 +155,6 @@ class Messages extends Component {
 
   componentDidMount() {
     if(this.props.location.search){
-      console.log(this.props.location.search.split("=")[1])
       this.setState({
         selChatId: this.props.location.search.split("&")[0].split("=")[1],
         selUserId: this.props.location.search.split("&")[1].split("=")[1]

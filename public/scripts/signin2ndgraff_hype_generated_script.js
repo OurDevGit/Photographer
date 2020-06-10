@@ -80,7 +80,7 @@ function runAnimation(width, height) {
       Y  : 1440 * kw,
       Z  : 900 * kh,
       L  : [],
-      c  : '#00D1C1',
+      c  : '#FF010102',
       bY : 1,
       d  : 1440 * kw,
       U  : {},

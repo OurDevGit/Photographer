@@ -1,5 +1,5 @@
 import * as axios from 'axios';
- 
+import { CHAT_API_URL } from '../constants'
 class ChatHttpServer {
 
     getUserId() {
@@ -38,7 +38,7 @@ class ChatHttpServer {
     login(userCredential) {
         return new Promise(async (resolve, reject) => {
             try {
-                const response = await axios.post('http://localhost:4000/login', userCredential);
+                const response = await axios.post(CHAT_API_URL + '/login', userCredential);
                 resolve(response.data);
             } catch (error) {
                 reject(error);
@@ -49,7 +49,7 @@ class ChatHttpServer {
     checkUsernameAvailability(username) {
         return new Promise(async (resolve, reject) => {
             try {
-                const response = await axios.post('http://localhost:4000/usernameAvailable', {
+                const response = await axios.post(CHAT_API_URL + '/usernameAvailable', {
                     username: username
                 });
                 resolve(response.data);
@@ -58,11 +58,11 @@ class ChatHttpServer {
             }
         });
     }
-    
+
     register(userCredential) {
         return new Promise(async (resolve, reject) => {
             try {
-                const response = await axios.post('http://localhost:4000/register', userCredential);
+                const response = await axios.post(CHAT_API_URL + '/register', userCredential);
                 resolve(response.data);
             } catch (error) {
                 reject(error);
@@ -73,7 +73,7 @@ class ChatHttpServer {
     userSessionCheck(userId) {
         return new Promise(async (resolve, reject) => {
             try {
-                const response = await axios.post('http://localhost:4000/userSessionCheck', {
+                const response = await axios.post(CHAT_API_URL + '/userSessionCheck', {
                     userId: userId
                 });
                 resolve(response.data);
@@ -86,7 +86,7 @@ class ChatHttpServer {
     // getMessages(userId, toUserId) {
     //     return new Promise(async (resolve, reject) => {
     //         try {
-    //             const response = await axios.post('http://localhost:4000/getMessages', {
+    //             const response = await axios.post(CHAT_API_URL + '/getMessages', {
     //                 userId: userId,
     //                 toUserId: toUserId
     //             });
@@ -100,7 +100,7 @@ class ChatHttpServer {
     getMessages(chatId) {
         return new Promise(async (resolve, reject) => {
             try {
-                const response = await axios.post('http://localhost:4000/getMessages', {
+                const response = await axios.post(CHAT_API_URL + '/getMessages', {
                     id: chatId
                 });
                 resolve(response.data);
@@ -109,7 +109,18 @@ class ChatHttpServer {
             }
         });
     }
-    
+
+    readMessages(chatInfo) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const response = await axios.post(CHAT_API_URL + '/readMessages', chatInfo);
+                resolve(response.data);
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+
 }
 
 export default new ChatHttpServer();
