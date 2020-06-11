@@ -168,7 +168,7 @@ class SearchBar extends Component {
   }
 
   handleClickOption(e) {
-    console.log(e.target);
+
   }
 
   handleChangeSearchKey(e, { value }) {
@@ -197,8 +197,6 @@ class SearchBar extends Component {
   }
 
   handleClickSearch() {
-    console.log(this.state.order, this.state.searchKey);
-
     if (this.state.searchKey != "") {
       var SearchOptions = [
         {
@@ -216,11 +214,9 @@ class SearchBar extends Component {
     this.setState({
       order: value,
     });
-    console.log(value);
   }
 
   onChangeSearchDropdown() {
-    console.log("changed");
   }
 
   render() {

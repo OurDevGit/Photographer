@@ -389,7 +389,6 @@ class PhotoModify extends Component {
       if (TagScore === 0) {
         addNewTag(value[value.length - 1])
           .then((response) => {
-            console.log(response);
             this.state.tags.push({
               key: "",
               value: value[value.length - 1],
@@ -432,7 +431,6 @@ class PhotoModify extends Component {
     } else if (name === "removeAll" || name === "attached") {
       removeAuthorizationToPhotoIDs(Request)
         .then((response) => {
-          console.log(response);
           if (response.ok) {
             this.state.ReleaseScore[value] = null;
             this.setState({
@@ -528,7 +526,6 @@ class PhotoModify extends Component {
       this.loadDataForPhotoDiagram(Request);
       get_photo_links(this.state.selImageIDs[0])
         .then(response => {
-          console.log("photoLinks", response);
           this.setState({
             photoLinks: response
           })
@@ -854,7 +851,6 @@ class PhotoModify extends Component {
         start = nextMonth(start);
       }
     }
-    console.log(data);
     this.setState({ data: data });
   }
 
@@ -928,7 +924,6 @@ class PhotoModify extends Component {
     this.isChecked = !this.isChecked;
     this.state.photoOptions[name] = this.isChecked;
     this.arr_options = this.state.photoOptions;
-    console.log(this.state.photoOptions);
     this.setState({
       photoOptions: this.arr_options,
     });
@@ -959,17 +954,14 @@ class PhotoModify extends Component {
         photoDto: this.state.selImage[this.state.selImageIDs[i]],
       });
     }
-    console.log("!!!!!!!!!!!!!!!!!",updateRequest)
     photo_update(updateRequest)
       .then((response) => {
-        console.log(response);
         notification.success({
           message: "Photoing App",
           description: "Successfully photos updated.",
         });
       })
       .catch((error) => {
-        console.log(error);
         notification.error({
           message: "Photoing App",
           description: "Something went wrong. Please try again!",
@@ -980,7 +972,6 @@ class PhotoModify extends Component {
   handleRedeem() {
     redeemMultiplePhoto(this.state.selImageIDs)
       .then((response) => {
-        console.log(response);
         this.getTotalNumberOfPhotos();
         this.setState({
           activeMenuItem: "TO_BE_SUBMITTED",
@@ -1195,7 +1186,6 @@ class PhotoModify extends Component {
   }
 
   handleSearchTag(e) {
-    console.log(e);
     this.props.history.push("/?tag=" + e);
   }
 
@@ -1237,9 +1227,6 @@ class PhotoModify extends Component {
   }
 
   getPos(e) {
-    console.log(e)
-    console.log(e.currentTarget.getBoundingClientRect())
-    console.log("client", e.clientY)
     var imagePosInfo = e.currentTarget.getBoundingClientRect();
     this.setState({
       posX: Math.floor((e.clientX - imagePosInfo.x) / imagePosInfo.width * 100),
@@ -1299,7 +1286,6 @@ class PhotoModify extends Component {
       } else if (this.state.linkContentType === "Edit") {
         this.state.photoLinks[this.state.selectedPhotoLink] = this.state.linkOption
       }
-      console.log(this.state.photoLinks);
       this.setState({
         activeLinkContent: false,
         photoLinks: this.state.photoLinks,
@@ -1309,7 +1295,6 @@ class PhotoModify extends Component {
   }
 
   updatephotoLinks() {
-    console.log(this.state.selImageIDs[0])
     var Request = {
       "photoId": this.state.selImageIDs[0],
       "hotSpots": this.state.photoLinks
@@ -1353,7 +1338,6 @@ class PhotoModify extends Component {
   }
 
   render() {
-    console.log("Selected Photo", this.state.selImage);
     const { activeIndex, activeItem } = this.state;
     const keywords = [];
     const commonReleases = [];
@@ -1392,7 +1376,6 @@ class PhotoModify extends Component {
     });
 
     this.state.photoLinks.forEach((photoLink, index) => {
-      console.log(photoLink)
       photoLinksArray.push(
         <Table.Row>
           <Table.Cell>{index + 1}</Table.Cell>

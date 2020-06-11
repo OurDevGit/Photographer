@@ -75,15 +75,12 @@ class ResetPassword extends Component {
     });
     var tmpTokenLabel = this.props.location.search.split("=")[0].substr(1);
     var tmpTokenValue = this.props.location.search.split("=")[1];
-    console.log("tmpT", tmpTokenLabel);
     var ResetRequest = {
       newPassword: passwordValue,
       tmpTokenLabel: tmpTokenValue,
     };
-    console.log("rese", ResetRequest);
     update_password_end(ResetRequest)
       .then((response) => {
-        console.log(response);
         this.setState({
           isLoading: false,
         });
@@ -107,7 +104,6 @@ class ResetPassword extends Component {
   }
 
   render() {
-    console.log("param", this.props.location.search);
     var tmpTokenLabel = this.props.location.search.split("=")[0].substr(1);
     if (
       !this.props.location.search ||

@@ -82,7 +82,6 @@ class ForgotPass extends Component {
 
     checkEmailAvailability(emailValue)
       .then((response) => {
-        console.log(response);
         if (response.available) {
           this.setState({
             email: {
@@ -103,7 +102,6 @@ class ForgotPass extends Component {
           });
           request_new_password(emailValue)
             .then((response) => {
-              console.log("request", response);
               this.setState({
                 isLoading: false,
               });

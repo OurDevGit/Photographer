@@ -256,7 +256,6 @@ class UploadPhoto extends Component {
           redirect: true,
           address: response.valueOf("fileName"),
         });
-        console.log(response);
       })
       .catch((err) => {
         this.setState({ error: err });

@@ -100,7 +100,6 @@ class Collections extends Component {
     const panes_collection = [];
     if (this.props.user.collection) {
       this.props.user.collections.forEach((collection) => {
-        console.log("collection", collection);
         panes_collection.push({
           menuItem: collection.name,
           render: () => (

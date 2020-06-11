@@ -20,11 +20,9 @@ class Comments extends Component {
   }
 
   componentDidMount() {
-    console.log("id", this.props.photoId);
     this.getCommentList(this.props.photoId);
   }
   componentDidUpdate(prevProps) {
-    console.log(this.props.flag, prevProps.flag);
     if (this.props.flag !== prevProps.flag) {
       this.getCommentList(this.props.photoId);
     }
@@ -54,7 +52,6 @@ class Comments extends Component {
       activeReply: e.target.id,
       replyComment: "",
     });
-    console.log(e.target.id);
   }
 
   handleChangeReplyComment(e, { value }) {
@@ -68,7 +65,6 @@ class Comments extends Component {
       content: this.state.replyComment,
       parent: this.state.activeReply,
     };
-    console.log(Request);
     this.setState({
       isSendCommentLoading: true,
     });
@@ -86,7 +82,6 @@ class Comments extends Component {
             isSendCommentLoading: false,
           });
         }
-        console.log(response);
       })
       .catch((error) => {
         console.log(error);
@@ -100,7 +95,6 @@ class Comments extends Component {
     const commentslist = [];
 
     this.state.comments.forEach((comment) => {
-      console.log("aaaaaa", comment);
       const replies = [];
       if (comment.replies.length > 0) {
         comment.replies.forEach((reply) => {

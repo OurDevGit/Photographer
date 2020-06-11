@@ -19,11 +19,9 @@ class PersonalInfo extends Component {
   }
 
   componentDidUpdate(nextProps) {
-    console.log("update");
   }
 
   handleInputChange(e, { name, value }) {
-    console.log(name, this.state.user);
     this.state.user[name] = value;
     this.setState({
       user: this.state.user,
@@ -115,8 +113,8 @@ class PersonalInfo extends Component {
                 control={Input}
                 label={
                   <span className="social instalabel">
-                    <Icon name="instagram official" />
-                    Facebook
+                    <Icon name="instagram" />
+                    Instagram
                   </span>
                 }
                 placeholder="Instagram Link"

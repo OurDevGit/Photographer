@@ -28,7 +28,6 @@ class Users extends Component {
     })
     getUsers(0, 20)
       .then((response) => {
-        console.log(response);
         this.setState({
           users: response.content,
           isLoading:false

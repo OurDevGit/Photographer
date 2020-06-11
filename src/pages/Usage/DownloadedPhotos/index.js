@@ -198,7 +198,6 @@ class DownloadedPhotos extends Component {
   }
 
   handleSearchTag(e) {
-    console.log(e);
     this.props.history.push("/?tag=" + e);
   }
 
@@ -212,7 +211,6 @@ class DownloadedPhotos extends Component {
     if (!this.state.isLoading && !this.state.currentUser) {
       return <Redirect to="/" />;
     }
-    console.log(this.state.currentUser);
     return (
       <>
         <MetaTags>

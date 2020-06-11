@@ -56,7 +56,6 @@ class LoginAndSignUp extends Component {
         fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + position.coords.latitude + ',' + position.coords.longitude + '&key=' + GEOCODING_API_KEY)
           .then((response) => response.json())
           .then((responseJson) => {
-            console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson));
             this.setState({
               locationName: responseJson
             })
@@ -74,7 +73,6 @@ class LoginAndSignUp extends Component {
   }
 
   handleTabChange(e, data) {
-    console.log(data.activeIndex);
     if (data.activeIndex == 0) {
       this.setState({
         title: "Login to your account",

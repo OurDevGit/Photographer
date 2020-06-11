@@ -377,7 +377,6 @@ class Photo_details extends Component {
   }
 
   replyComment() {
-    console.log("ddd");
   }
 
   handleChangeComment(e, { value }) {
@@ -426,18 +425,14 @@ class Photo_details extends Component {
   }
 
   sameTagPhotos(e) {
-    console.log(e.target.id);
     this.props.history.push("/?tag=" + e.target.id);
   }
 
   photoDownload() {
     download(this.state.selImage.id)
       .then((response) => {
-        console.log(response);
         response.text().then((text) => {
           if (response.ok) {
-            console.log(text);
-            // window.open(text)
             this.Filedownload(text, "dddd");
             this.setState({
               open: true,
@@ -463,7 +458,6 @@ class Photo_details extends Component {
   downloadPDF() {
     getPhotoAuthDownload(this.state.selImage.id)
       .then((response) => {
-        console.log(response);
         response.blob().then((blob) => {
           let url = window.URL.createObjectURL(blob);
           let a = document.createElement("a");
@@ -497,7 +491,7 @@ class Photo_details extends Component {
       ImageShow: true,
       modalImageDetail: e,
     });
-    console.log(e);
+
   }
 
   CloseImageModal(flag) {
@@ -507,7 +501,6 @@ class Photo_details extends Component {
   }
 
   handleSearchTag(e) {
-    console.log(e);
     this.props.history.push("/?tag=" + e);
   }
 
@@ -536,7 +529,6 @@ class Photo_details extends Component {
   }
 
   getPos(e) {
-    console.log("dfd")
     var imagePosInfo = e.currentTarget.getBoundingClientRect();
     this.setState({
       photoWidth: imagePosInfo.width,
@@ -578,7 +570,6 @@ class Photo_details extends Component {
 
   render() {
     const { selImage, similarPhotos } = this.state;
-    console.log("~~~~~~~~~~~~~~~~~~~", selImage);
     const keywords = [];
     var url = "";
     var downloadUrl = "";

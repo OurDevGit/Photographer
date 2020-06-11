@@ -20,7 +20,6 @@ class FBLogin extends Component {
         .split("(")[1]
         .split(",")[0]
         .split("=")[1];
-      console.log(accessToken);
     }
     if (accessToken) {
       localStorage.setItem(ACCESS_TOKEN, accessToken);

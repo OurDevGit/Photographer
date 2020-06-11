@@ -69,7 +69,6 @@ class AddContent extends Component {
     });
   }
   handleSearchTag(e) {
-    console.log(e);
     this.props.history.push("/?tag=" + e);
   }
   clickSearch(e) {

@@ -65,7 +65,6 @@ class ProductPlacement extends Component {
   }
 
   componentDidUpdate(nextProps) {
-    console.log("update");
   }
 
   loadAllTags() {
@@ -114,7 +113,6 @@ class ProductPlacement extends Component {
   }
 
   handleChangeData(e, { name, value }) {
-    console.log(name, value);
     this.state.productData[name] = value;
     this.setState({
       productData: this.state.productData,
@@ -131,13 +129,11 @@ class ProductPlacement extends Component {
   }
 
   handleChangeDate = (date) => {
-    console.log(date);
     if (date === null) {
       this.state.error["date"] = true;
     } else {
       this.state.error["date"] = false;
     }
-    console.log("date", ISOFormatDate(date));
     this.setState({
       validityDate: date,
       error: this.state.error,
@@ -180,7 +176,6 @@ class ProductPlacement extends Component {
     });
     const myHeaders = new Headers({});
     if (localStorage.getItem(ACCESS_TOKEN)) {
-      console.log("Access", localStorage.getItem(ACCESS_TOKEN));
       myHeaders.append(
         "Authorization",
         "Bearer " + localStorage.getItem(ACCESS_TOKEN)
@@ -206,7 +201,6 @@ class ProductPlacement extends Component {
         : API_BASE_URL + "/public/marketplace/edit_item";
     fetch(url, requestOptions)
       .then((response) => {
-        console.log(response);
         if (response.ok) {
           notification.success({
             message: "openshoots",
@@ -330,7 +324,7 @@ class ProductPlacement extends Component {
                             <Icon name="facebook official" />
                           </span>
                           <span className="social">
-                            <Icon name="instagram official" />
+                            <Icon name="instagram" />
                           </span>
                         </Table.Cell>
                         <Table.Cell>1.000 $</Table.Cell>

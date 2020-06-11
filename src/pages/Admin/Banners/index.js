@@ -58,7 +58,6 @@ class Banners extends Component {
     });
     get_banners_for_admin()
       .then((response) => {
-        console.log("banners", response);
         this.setState({
           banners: response,
           isLoading: false,
@@ -80,7 +79,6 @@ class Banners extends Component {
   }
 
   showEditModal(e) {
-    console.log(this.state.banners[e.target.id]);
     this.state.bannerData["redirect"] = this.state.banners[
       e.target.id
     ].redirect;
@@ -121,13 +119,11 @@ class Banners extends Component {
   }
 
   handleChange = (date) => {
-    console.log(date);
     if (date === null) {
       this.state.error["date"] = true;
     } else {
       this.state.error["date"] = false;
     }
-    console.log("date", ISOFormatDate(date));
     this.setState({
       startDate: date,
       error: this.state.error,
@@ -255,7 +251,6 @@ class Banners extends Component {
       });
       const myHeaders = new Headers({});
       if (localStorage.getItem(ACCESS_TOKEN)) {
-        console.log("Access", localStorage.getItem(ACCESS_TOKEN));
         myHeaders.append(
           "Authorization",
           "Bearer " + localStorage.getItem(ACCESS_TOKEN)
@@ -281,7 +276,6 @@ class Banners extends Component {
           : API_BASE_URL + "/banners/edit_banner";
       fetch(url, requestOptions)
         .then((response) => {
-          console.log(response);
           if (response.ok) {
             notification.success({
               message: "openshoots",
@@ -322,8 +316,6 @@ class Banners extends Component {
   }
 
   activeBannerAction() {
-    console.log(this.state.selectedBannerID);
-
     if(this.state.bannerData['active']){
       deactivate_banner(this.state.selectedBannerID)
       .then((response) => {
@@ -388,6 +380,7 @@ class Banners extends Component {
     this.state.banners.forEach((banner, bannerIndex) => {
       bannerList.push(
         <img
+          key = {bannerIndex}
           className="bannerImage"
           id={bannerIndex}
           src={banner.address}

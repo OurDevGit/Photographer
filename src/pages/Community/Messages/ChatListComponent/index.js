@@ -163,7 +163,7 @@ class ChatListComponent extends Component {
           lastDate = ISOFormatDate(chat.meta.date)
         }
         chatListArr.push(
-          <ChatListItem id={chat._id} active={this.state.activeChat === chat._id ? true : false} onClick={() => this.selectChat(chat._id, toUser)} key={chat._id}>
+          <ChatListItem key={chatIndex} id={chat._id} active={this.state.activeChat === chat._id ? true : false} onClick={() => this.selectChat(chat._id, toUser)} key={chat._id}>
             <Avatar imgUrl={toUser.icon ? toUser.icon : null} letter={toUser.name[0]} size="40px" />
             <Column className="UserInfo" fill="true">
               <Row justify>

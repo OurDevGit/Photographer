@@ -284,10 +284,10 @@ class Conversation extends Component {
         group.content.forEach((conv, convIndex) => {
           if (readLastmsg && new Date(conv.date) > new Date(toParticipant.date)) {
             messageArray.push(
-              <>
+              <div key="read">
                 <Avatar className="readAvatar" imgUrl={toUser.icon ? toUser.icon : null} letter={toUser.username[0]} />
                 <p style={{ height: "20px" }}>{" "}</p>
-              </>
+              </div>
             )
             readLastmsg = false
           }
@@ -306,10 +306,10 @@ class Conversation extends Component {
         })
         if (groupIndex === conversationgroup.length - 1 && readLastmsg) {
           messageArray.push(
-            <>
+            <div key="read">
               <Avatar className="readAvatar" imgUrl={toUser.icon ? toUser.icon : null} letter={toUser.username[0]} />
               <p style={{ height: "20px" }}>{" "}</p>
-            </>
+            </div>
           )
           readLastmsg = false
         }
@@ -329,9 +329,15 @@ class Conversation extends Component {
       return (
         <>
           <AgentBar className="agentBar">
-            <Avatar className="avatarsect" imgUrl={toUser.icon ? toUser.icon : null} letter={toUser.username[0]} />
+            <a href={"/user/profile/" + toUser.id}>
+              <Avatar className="avatarsect" imgUrl={toUser.icon ? toUser.icon : null} letter={toUser.username[0]} />
+            </a>
             <Column fill="true">
-              <Title ellipsis>{toUser.surname ? toUser.name + " " + toUser.surname : toUser.name}</Title>
+              <a href={"/user/profile/" + toUser.id}>
+                <Title ellipsis>
+                  {toUser.surname ? toUser.name + " " + toUser.surname : toUser.name}
+                </Title>
+              </a>
               <Subtitle>{}</Subtitle>
             </Column>
             <Row className="rateButtons">

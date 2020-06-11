@@ -92,7 +92,6 @@ export default class OrderingPhotoForHome extends Component {
   loadNotChoosenForHome(page, size) {
     getNotChoosenForHome(page, size)
       .then((response) => {
-        console.log(response);
         response.content.forEach((photo) => {
           var card = {
             id: photo.id,
@@ -107,34 +106,14 @@ export default class OrderingPhotoForHome extends Component {
           };
           this.imageData.lanes[0].cards.push(card);
         });
-        this.imageData.lanes[0].label = response.totalElements;
+        this.imageData.lanes[0].label = response.totalElements + "";
 
         this.setState({
           NotChoosenForHome: response.content,
         });
-        // if(!this.state.totalPages ){
-        //   this.setState({
-        //     totalPages: response.totalPages
-        //   })
-        //   console.log("b")
-        // }else
-        // {
-        //   console.log("bb")
-        //   if(this.state.totalPages < response.totalPages)
-        //   {
-        //     this.setState({
-        //       totalPages: response.totalPages
-        //     })
-        //   }
-        //   this.setState({
-        //       hasMore: true
-        //   })
-        // }
         if (this.total_page == -1) {
           this.total_page = response.totalPages;
-          console.log("b");
         } else {
-          console.log("bb");
           if (this.total_page < response.totalPages) {
             this.total_page = response.totalPages;
           }
@@ -151,7 +130,6 @@ export default class OrderingPhotoForHome extends Component {
   loadHomeList(page, size) {
     getPhotoLists(page, size)
       .then((response) => {
-        console.log(response);
         response.content.forEach((photo) => {
           var card = {
             id: photo.id,
@@ -171,29 +149,9 @@ export default class OrderingPhotoForHome extends Component {
           photosForHome: response.content,
         });
 
-        // if(!this.state.totalPages ){
-        //   this.setState({
-        //     totalPages: response.totalPages
-        //   })
-        //   console.log("a")
-        // }else
-        // {
-        //   console.log("aa")
-        //   if(this.state.totalPages < response.totalPages)
-        //   {
-        //     this.setState({
-        //       totalPages: response.totalPages
-        //     })
-        //   }
-        //   this.setState({
-        //       hasMore: true
-        //   })
-        // }
         if (this.total_page == -1) {
           this.total_page = response.totalPages;
-          console.log("a");
         } else {
-          console.log("aa");
           if (this.total_page < response.totalPages) {
             this.total_page = response.totalPages;
           }
@@ -208,8 +166,8 @@ export default class OrderingPhotoForHome extends Component {
   }
 
   datachange(newData) {
-    newData.lanes[0].label = newData.lanes[0].cards.length;
-    newData.lanes[1].label = newData.lanes[1].cards.length;
+    newData.lanes[0].label = newData.lanes[0].cards.length + "";
+    newData.lanes[1].label = newData.lanes[1].cards.length + "";
     this.setState({
       presentData: newData,
     });
@@ -233,10 +191,8 @@ export default class OrderingPhotoForHome extends Component {
         }
       }
     }
-    console.log(HomeList);
     updateChoosedForHome(HomeList)
       .then((response) => {
-        console.log(response);
         notification.success({
           message: "Photoing App",
           description: "Success to updates photos for home!",
@@ -259,15 +215,10 @@ export default class OrderingPhotoForHome extends Component {
       this.loadHomeList(page, PHOTO_LIST_SIZE);
       this.loadNotChoosenForHome(page, PHOTO_LIST_SIZE);
     }
-    console.log("page", page);
-
-    // this.loadNotChoosenForHome(page, PHOTO_LIST_SIZE)
   }
 
   render() {
     const { visible } = this.props;
-    console.log("total", this.state.totalPages);
-    console.log("total", this.imageData);
     return (
       <div>
         <div className={visible ? "visible" : "disable"} id="order_list_home">

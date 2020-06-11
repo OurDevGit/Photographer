@@ -54,7 +54,6 @@ class Follows extends Component {
         this.setState({
           followUsers: response.content,
         });
-        console.log("userslist", response);
       })
       .catch((error) => {
         console.log(error);
@@ -62,7 +61,6 @@ class Follows extends Component {
   }
 
   handleSearchTag(e) {
-    console.log(e);
     this.props.history.push("/?tag=" + e);
   }
 

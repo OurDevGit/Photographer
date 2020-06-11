@@ -118,7 +118,6 @@ class Bucket extends Component {
   addNewBasket(newBasket) {
     addNewBasketForUser(newBasket)
       .then((response) => {
-        console.log("ADDBASket", response);
       })
       .catch((error) => {
         console.log("error", error);
@@ -132,8 +131,6 @@ class Bucket extends Component {
   };
 
   handleMultiSelectChange = (e, { value }) => {
-    console.log("value", value);
-    console.log("baskets", this.state.currentBucketValues);
     if (value.length > this.state.currentBucketValues.length) {
       let i = 0;
       for (i = 0; i < this.state.baskets.length; i++) {
@@ -162,7 +159,6 @@ class Bucket extends Component {
         photoId: this.props.photo.id,
         baskets: this.state.currentBucketValues,
       };
-      console.log(Request);
       addToBasketForPhoto(Request)
         .then((response) => {
           if (response.ok) {
@@ -188,7 +184,6 @@ class Bucket extends Component {
   }
 
   removeFromBasket(e, { id }) {
-    console.log(id);
     var Request = {
       photoId: this.props.photo.id,
       baskets: [this.state.Existingbasketlist[id].value],
@@ -197,7 +192,6 @@ class Bucket extends Component {
 
     removePhotoFromBasket(Request)
       .then((response) => {
-        console.log(response);
         if (response.ok) {
           this.setState({
             Existingbasketlist: this.state.Existingbasketlist,

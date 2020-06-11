@@ -6,7 +6,6 @@ const request = (options) => {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
   });
-  console.log("Token", localStorage.getItem(ACCESS_TOKEN));
   if (localStorage.getItem(ACCESS_TOKEN)) {
     headers.append(
       "Authorization",

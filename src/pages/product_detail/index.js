@@ -151,7 +151,6 @@ class product_detail extends Component {
   }
 
   handleSearchTag(e) {
-    console.log(e);
     this.props.history.push("/?tag=" + e);
   }
 

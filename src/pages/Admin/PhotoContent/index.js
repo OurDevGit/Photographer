@@ -93,7 +93,6 @@ class PhotoContent extends Component {
     });
     getRejectingMotives()
       .then((response) => {
-        console.log(response);
         this.setState({
           motives: response,
           isLoading: false,

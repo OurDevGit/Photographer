@@ -57,7 +57,6 @@ class Login extends Component {
         localStorage.setItem(ACCESS_TOKEN, response.accessToken);
         getCurrentUser()
           .then((response) => {
-            console.log(response)
             const data = {
               username: response.username,
               uid: response.id

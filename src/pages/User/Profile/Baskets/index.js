@@ -72,7 +72,6 @@ class Baskets extends Component {
                 description: "Something went worng. Please try again",
               });
             }
-            console.log(json);
             this.state.user.baskets = json;
             this.setState({
               isLoading: false,
@@ -146,11 +145,9 @@ class Baskets extends Component {
   }
 
   render() {
-    console.log(this.props.user)
     const panes_basket = [];
     if (this.state.user) {
       this.props.user.baskets.forEach((basket) => {
-        console.log(basket);
         panes_basket.push({
           menuItem: basket.value,
           render: () => (

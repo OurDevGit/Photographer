@@ -42,7 +42,6 @@ class PhotoBox extends Component {
   }
 
   handleViewOwner() {
-    console.log(this.props.photo.ownerId);
     this.props.viewOwner(this.props.photo.ownerId);
   }
 
@@ -99,7 +98,6 @@ class PhotoBox extends Component {
 
   getPos(e) {
     if (this.props.photo.hotspots) {
-      console.log("ddd")
       var items = [];
       var imagePosInfo = e.currentTarget.getBoundingClientRect();
       this.props.photo.hotspots.forEach((photoLink, index) => {

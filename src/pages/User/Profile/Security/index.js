@@ -46,7 +46,6 @@ class Security extends Component {
       password: this.state.password,
       ValidateFlag: this.state.ValidateFlag,
     });
-    console.log(this.state.password);
   }
 
   handleChangePassword() {
@@ -76,7 +75,6 @@ class Security extends Component {
       });
       update_password(UpdatePassword)
         .then((response) => {
-          console.log("response", response);
           this.setState({
             isLoading: false,
             password: [],

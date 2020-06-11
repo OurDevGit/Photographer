@@ -28,7 +28,6 @@ class Myphotos extends Component {
   }
 
   render() {
-    console.log("dddd", this.props.user);
     return (
       <div className="Myphotos">
         {this.props.type === "basket" ? (

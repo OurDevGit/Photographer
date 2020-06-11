@@ -187,7 +187,6 @@ class Analyse extends Component {
         start = nextMonth(start);
       }
     }
-    console.log(data);
     this.setState({ data: data });
   }
 

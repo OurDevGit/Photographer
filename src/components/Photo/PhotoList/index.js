@@ -299,7 +299,6 @@ class PhotoList extends Component {
       this.loadPhotoList(this.props.activePage - 1, PHOTO_LIST_SIZE);
     }
     if (this.props.searchOptions !== prevProps.searchOptions) {
-      console.log("SearchOPtionsfrsfafwefwef", this.props.searchOptions);
       this.setState({
         photos: [],
         photo_list: [],
@@ -449,7 +448,6 @@ class PhotoList extends Component {
     />
   );
   render() {
-    console.log("page", this.state.page);
     const photoViews = [];
     this.state.photo_list.forEach((photo, photoIndex) => {
       photoViews.push(
@@ -471,7 +469,7 @@ class PhotoList extends Component {
     });
 
     var samphotosq = this.state.photo_list;
-    //
+
     if (this.state.photo_list.length > 0) {
       for (let k = 0; k < this.state.photo_list.length; k++) {
         // samphotosq[k].id = this.state.photo_list[k].id;
@@ -479,7 +477,6 @@ class PhotoList extends Component {
         samphotosq[k].width = this.state.photo_list[k].lr_width;
         samphotosq[k].height = this.state.photo_list[k].lr_heigh;
       }
-      console.log("sam", samphotosq);
     }
     if (this.state.isLoading) {
       return <LoadingIndicator />;

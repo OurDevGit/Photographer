@@ -58,7 +58,6 @@ class Home extends Component {
     });
     getCurrentUser()
       .then((response) => {
-        console.log(response)
         const data = {
           username: response.username,
           uid: response.id
@@ -102,11 +101,9 @@ class Home extends Component {
   }
 
   LoadPhotos(page) {
-    console.log(page);
     getPhotoLists(page, 30)
       .then((response) => {
         const photos = this.state.photos.slice();
-        console.log("res" + page, response);
         if (response.last) {
           this.setState({
             hasMoreItems: false,
@@ -143,11 +140,9 @@ class Home extends Component {
           longitude: position.coords.longitude,
           position: position
         });
-        console.log("Location", position)
         fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + position.coords.latitude + ',' + position.coords.longitude + '&key=' + GEOCODING_API_KEY)
           .then((response) => response.json())
           .then((responseJson) => {
-            console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson));
             this.setState({
               locationName: responseJson
             })
@@ -166,7 +161,6 @@ class Home extends Component {
     // this.getTotalpages();
     window.addEventListener("keydown", this.keydown);
     window.addEventListener("keyup", this.keyup);
-    console.log(this.props.location.search.split("="));
   }
 
   componentDidUpdate() {
@@ -287,16 +281,12 @@ class Home extends Component {
   }
 
   handleSearchTag(e) {
-    console.log(e);
     this.props.history.push("/?tag=" + e);
   }
 
   render() {
-    console.log("location", this.state.position)
-    console.log("dd", this.state.photos)
     if (this.props.location.search.split("=")[0] === "?tag") {
       var tagSearch = this.props.location.search.split("=")[1];
-      console.log("dddd", tagSearch);
     } else if (this.props.location.search.split("=")[0] === "?key") {
       var keySearch = this.props.location.search.split("=")[1];
       var SearchOptions = [
@@ -355,7 +345,6 @@ class Home extends Component {
                 searchOptions={SearchOptions}
                 tagSearch={tagSearch}
               />
-              {/* <Gallery photos={photos}  /> */}
               <PhotoDetails
                 show={this.state.ImageShow}
                 photo={this.state.selImage}
@@ -369,10 +358,6 @@ class Home extends Component {
               />
             </Grid.Column>
             <Grid.Column className="PageNation" width="16">
-              {/* <Pagination_Component 
-                totalPages = {this.state.totalPages}
-                onChangePage = {this.onChangePage}
-              /> */}
             </Grid.Column>
             <Grid.Column width="16">{/* <Footer /> */}</Grid.Column>
           </Grid.Row>

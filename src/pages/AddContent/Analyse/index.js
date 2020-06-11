@@ -45,7 +45,6 @@ class Analyse extends Component {
     });
     getCurrentUser()
       .then((response) => {
-        console.log("currentUser", response);
         var start = ISOFormatDate(
           CalFirstDay(this.state.activeMode, this.state.today)
         );
@@ -212,7 +211,6 @@ class Analyse extends Component {
         start = nextMonth(start);
       }
     }
-    console.log(data);
     this.setState({ data: data });
   }
 
@@ -233,7 +231,6 @@ class Analyse extends Component {
   componentDidUpdate(nextProps) {}
 
   handleSearchTag(e) {
-    console.log(e);
     this.props.history.push("/?tag=" + e);
   }
   clickSearch(e) {

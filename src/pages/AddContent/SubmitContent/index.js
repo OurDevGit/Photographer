@@ -392,7 +392,6 @@ class SubmitContent extends Component {
       if (TagScore == 0) {
         addNewTag(value[value.length - 1])
           .then((response) => {
-            console.log(response);
             this.state.tags.push({
               key: "",
               value: value[value.length - 1],
@@ -434,7 +433,6 @@ class SubmitContent extends Component {
     } else if (name == "removeAll" || name == "attached") {
       removeAuthorizationToPhotoIDs(Request)
         .then((response) => {
-          console.log(response);
           if (response.ok) {
             this.state.ReleaseScore[value] = null;
             this.setState({
@@ -487,7 +485,6 @@ class SubmitContent extends Component {
   //Multiple Image click event
 
   handleImageClick(e, flag) {
-    console.log("photo", e);
     this.setState({
       containTags: e.photo.containedTags,
       currentContainTags: e.photo.containedTags,
@@ -801,7 +798,6 @@ class SubmitContent extends Component {
     });
     submitMultiplePhoto(this.state.selImageIDs)
       .then((response) => {
-        console.log(response);
         this.getTotalNumberOfPhotos();
         this.setState({
           activeMenuItem: "SUBMITTED",
@@ -825,7 +821,6 @@ class SubmitContent extends Component {
     });
     redeemMultiplePhoto(this.state.selImageIDs)
       .then((response) => {
-        console.log(response);
         this.getTotalNumberOfPhotos();
         this.setState({
           activeMenuItem: "TO_BE_SUBMITTED",
@@ -936,7 +931,6 @@ class SubmitContent extends Component {
 
     updateMultiplePhoto(updateRequest)
       .then((response) => {
-        console.log(response);
       })
       .catch((error) => {
         this.setState({
@@ -1034,7 +1028,6 @@ class SubmitContent extends Component {
   }
 
   handleSearchTag(e) {
-    console.log(e);
     this.props.history.push("/?tag=" + e);
   }
 

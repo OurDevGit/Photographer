@@ -30,7 +30,6 @@ class Friends extends Component {
         this.setState({
           followUsers: response.content
         });
-        console.log("userslist", response);
       })
       .catch(error => {
         console.log(error);

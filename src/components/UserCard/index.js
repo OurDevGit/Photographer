@@ -5,10 +5,8 @@ import './style.less'
 
 const cardDetail = (users, status) =>{
   var cards = [];
-  console.log("ff", status)
-  users.forEach(user => {
-    console.log(user)
-    cards.push(<Card>
+  users.forEach((user, userIndex) => {
+    cards.push(<Card key={userIndex}>
                 <Card.Content>
                   <Image
                     floated='right'
