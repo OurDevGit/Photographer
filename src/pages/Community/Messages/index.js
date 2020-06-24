@@ -1,14 +1,11 @@
 import React, { Component } from "react";
-import io from 'socket.io-client';
-import { UserCard, HomeHeader } from "../../../components";
+import { HomeHeader } from "../../../components";
 import { getPublicUsers, getCurrentUser } from "../../../util/APIUtils";
 import LoadingIndicator from "../../../common/LoadingIndicator";
-import { Grid, Form, TextArea, Popup } from "semantic-ui-react";
-import TextareaAutosize from 'react-textarea-autosize'
+import { Grid } from "semantic-ui-react";
 import ChatListComponent from './ChatListComponent'
 import Conversation from './Conversation'
 import ChatSocketServer from '../../../util/chatSocketServer';
-import ChatHttpServer from '../../../util/chatHttpServer';
 import {
   ThemeProvider,
   FixedWrapper, darkTheme, elegantTheme, purpleTheme, defaultTheme

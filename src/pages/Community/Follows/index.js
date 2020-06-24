@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { UserCard, HomeHeader } from "../../../components";
-import { getPublicUsers, getCurrentUser } from "../../../util/APIUtils";
+import { getPublicUsers, getCurrentUser, get_followers, get_suggested_followers } from "../../../util/APIUtils";
 import LoadingIndicator from "../../../common/LoadingIndicator";
 import { Grid } from "semantic-ui-react";
 import "./style.less";
@@ -12,16 +12,19 @@ class Follows extends Component {
       isAuthenticated: false,
       user: null,
       isLoading: true,
-      followUsers: [],
     };
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
+    this.loadFollowers = this.loadFollowers.bind(this);
+    this.loadSuggestedFollowers = this.loadSuggestedFollowers.bind(this);
     this.handleSearchTag = this.handleSearchTag.bind(this);
     this.clickSearch = this.clickSearch.bind(this);
   }
 
   componentDidMount() {
     this.loadCurrentUser();
-    this.loadPublicUsers();
+    // this.loadPublicUsers();
+    this.loadFollowers();
+    // this.loadSuggestedFollowers()
   }
 
   componentDidUpdate(nextProps) {}
@@ -60,6 +63,36 @@ class Follows extends Component {
       });
   }
 
+  loadFollowers() {
+    this.setState({
+      isLoading: true,
+    });
+    get_followers()
+      .then((response) => {
+        this.setState({
+          followUsers: response,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  loadSuggestedFollowers() {
+    this.setState({
+      isLoading: true,
+    });
+    get_suggested_followers()
+      .then((response) => {
+        this.setState({
+          suggestedfollowUsers: response,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   handleSearchTag(e) {
     this.props.history.push("/?tag=" + e);
   }
@@ -87,7 +120,7 @@ class Follows extends Component {
                 <a>
                   <h3>Followed Users</h3>
                 </a>
-                {this.state.followUsers.length > 0 ? (
+                {this.state.followUsers? (
                   <UserCard
                     users={this.state.followUsers}
                     status="followed"
@@ -98,7 +131,7 @@ class Follows extends Component {
                 <a>
                   <h3>Suggest Users</h3>
                 </a>
-                {this.state.followUsers.length > 0 ? (
+                {this.state.followUsers? (
                   <UserCard
                     users={this.state.followUsers}
                     status="unfollowed"

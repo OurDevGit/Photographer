@@ -132,30 +132,30 @@ class Home extends Component {
       });
   }
 
-  position = async () => {
-    await navigator.geolocation.getCurrentPosition(
-      position => {
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          position: position
-        });
-        fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + position.coords.latitude + ',' + position.coords.longitude + '&key=' + GEOCODING_API_KEY)
-          .then((response) => response.json())
-          .then((responseJson) => {
-            this.setState({
-              locationName: responseJson
-            })
-          })
-          .catch(error => console.log(error))
-      },
-      err => console.log(err)
-    );
-  }
+  // position = async () => {
+  //   await navigator.geolocation.getCurrentPosition(
+  //     position => {
+  //       this.setState({
+  //         latitude: position.coords.latitude,
+  //         longitude: position.coords.longitude,
+  //         position: position
+  //       });
+  //       fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + position.coords.latitude + ',' + position.coords.longitude + '&key=' + GEOCODING_API_KEY)
+  //         .then((response) => response.json())
+  //         .then((responseJson) => {
+  //           this.setState({
+  //             locationName: responseJson
+  //           })
+  //         })
+  //         .catch(error => console.log(error))
+  //     },
+  //     err => console.log(err)
+  //   );
+  // }
 
   componentDidMount() {
 
-    this.position();
+    // this.position();
     this.loadCurrentUser();
     // this.loadAllCategories();
     // this.getTotalpages();

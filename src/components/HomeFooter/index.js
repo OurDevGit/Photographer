@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Image, Menu } from 'semantic-ui-react'
+import { Grid, Menu } from 'semantic-ui-react'
 
 import './style.less'
 import { HeartIcon, SunflowerIcon, TwitterIcon, LinkedinIcon, GithubIcon, PaperPlaneIcon, QuestionIcon } from '../../assets/icons'

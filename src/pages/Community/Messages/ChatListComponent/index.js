@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import io from 'socket.io-client';
 import { Label } from "semantic-ui-react";
 import { getPublicUsers, getUsers } from "../../../../util/APIUtils";
 import ChatSocketServer from '../../../../util/chatSocketServer';
@@ -40,7 +39,7 @@ class ChatListComponent extends Component {
     this.setState({
       isLoading: true
     })
-    getUsers(page, size)
+    getPublicUsers(page, size)
       .then(response => {
         this.setState({
           publicUsers: response.content,
@@ -164,7 +163,7 @@ class ChatListComponent extends Component {
         }
         chatListArr.push(
           <ChatListItem key={chatIndex} id={chat._id} active={this.state.activeChat === chat._id ? true : false} onClick={() => this.selectChat(chat._id, toUser)} key={chat._id}>
-            <Avatar imgUrl={toUser.icon ? toUser.icon : null} letter={toUser.name[0]} size="40px" />
+            <Avatar imgUrl={toUser.avatar ? toUser.avatar : null} letter={toUser.name[0]} size="40px" />
             <Column className="UserInfo" fill="true">
               <Row justify>
                 <Title ellipsis>{toUser.surname ? toUser.name + " " + toUser.surname : toUser.name}</Title>

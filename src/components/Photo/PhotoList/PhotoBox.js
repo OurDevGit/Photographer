@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Popup, Button, Icon, Label } from "semantic-ui-react";
+import { Popup} from "semantic-ui-react";
 import { Heart_Icon, Plus_Icon, Zoom_Icon } from "../../../assets/icons";
 import { AvatarImage } from "../../../components";
 import { AvatarDefault } from "../../../assets/images/homepage";

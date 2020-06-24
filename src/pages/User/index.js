@@ -2,16 +2,11 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import {
   Button,
-  Form,
   Grid,
   Header,
-  Image,
-  Message,
-  Segment,
   Icon,
   Tab,
 } from "semantic-ui-react";
-import { login, FBLogin } from "../../util/APIUtils";
 import { ACCESS_TOKEN, GEOCODING_API_KEY } from "../../constants";
 import "./style.less";
 import { notification } from "antd";
@@ -42,29 +37,29 @@ class LoginAndSignUp extends Component {
   }
 
   componentDidMount() {
-    this.position();
+    // this.position();
   }
 
-  position = async () => {
-    await navigator.geolocation.getCurrentPosition(
-      position => {
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          position: position.coords
-        })
-        fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + position.coords.latitude + ',' + position.coords.longitude + '&key=' + GEOCODING_API_KEY)
-          .then((response) => response.json())
-          .then((responseJson) => {
-            this.setState({
-              locationName: responseJson
-            })
-          })
-          .catch(error=>console.log(error))
-      },
-      err => console.log(err)
-    );
-  }
+  // position = async () => {
+  //   await navigator.geolocation.getCurrentPosition(
+  //     position => {
+  //       this.setState({
+  //         latitude: position.coords.latitude,
+  //         longitude: position.coords.longitude,
+  //         position: position.coords
+  //       })
+  //       fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + position.coords.latitude + ',' + position.coords.longitude + '&key=' + GEOCODING_API_KEY)
+  //         .then((response) => response.json())
+  //         .then((responseJson) => {
+  //           this.setState({
+  //             locationName: responseJson
+  //           })
+  //         })
+  //         .catch(error=>console.log(error))
+  //     },
+  //     err => console.log(err)
+  //   );
+  // }
 
   OpenLoginTab() {
     this.setState({

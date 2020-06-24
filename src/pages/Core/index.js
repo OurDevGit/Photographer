@@ -19,6 +19,7 @@ class View extends Component {
   }
 
   componentDidMount() {
+    console.log("~~~~~~~~~~~~Histroy~~~~~~~~~~~~~~~~~~",this.props.history)
     const { pathname } = this.props.history.location;
     ReactGA.set({ page: pathname });
     ReactGA.pageview(pathname);

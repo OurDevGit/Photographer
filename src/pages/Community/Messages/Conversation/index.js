@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import io from 'socket.io-client';
-import { getPublicUsers, getUsers } from "../../../../util/APIUtils";
 import ChatSocketServer from '../../../../util/chatSocketServer';
 import ChatHttpServer from '../../../../util/chatHttpServer';
 import LoadingIndicator from "../../../../common/LoadingIndicator";
@@ -285,7 +283,7 @@ class Conversation extends Component {
           if (readLastmsg && new Date(conv.date) > new Date(toParticipant.date)) {
             messageArray.push(
               <div key="read">
-                <Avatar className="readAvatar" imgUrl={toUser.icon ? toUser.icon : null} letter={toUser.username[0]} />
+                <Avatar className="readAvatar" imgUrl={toUser.avatar ? toUser.avatar : null} letter={toUser.username[0]} />
                 <p style={{ height: "20px" }}>{" "}</p>
               </div>
             )
@@ -307,7 +305,7 @@ class Conversation extends Component {
         if (groupIndex === conversationgroup.length - 1 && readLastmsg) {
           messageArray.push(
             <div key="read">
-              <Avatar className="readAvatar" imgUrl={toUser.icon ? toUser.icon : null} letter={toUser.username[0]} />
+              <Avatar className="readAvatar" imgUrl={toUser.avatar ? toUser.avatar : null} letter={toUser.username[0]} />
               <p style={{ height: "20px" }}>{" "}</p>
             </div>
           )
@@ -317,7 +315,7 @@ class Conversation extends Component {
           <MessageGroup
             className="messageGroup"
             key={groupIndex}
-            avatar={group.content[0].fromUserId !== currentUser.id && toUser.icon ? toUser.icon : null}
+            avatar={group.content[0].fromUserId !== currentUser.id && toUser.avatar ? toUser.avatar : null}
             avatarLetter={group.content[0].fromUserId !== currentUser.id ? toUser.name[0] : null}
             onlyFirstWithMeta
           >
@@ -330,7 +328,7 @@ class Conversation extends Component {
         <>
           <AgentBar className="agentBar">
             <a href={"/user/profile/" + toUser.id}>
-              <Avatar className="avatarsect" imgUrl={toUser.icon ? toUser.icon : null} letter={toUser.username[0]} />
+              <Avatar className="avatarsect" imgUrl={toUser.avatar ? toUser.avatar : null} letter={toUser.username[0]} />
             </a>
             <Column fill="true">
               <a href={"/user/profile/" + toUser.id}>

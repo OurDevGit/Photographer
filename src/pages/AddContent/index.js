@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import { Grid, GridColumn, Image, Divider, Button } from "semantic-ui-react";
+import { Grid } from "semantic-ui-react";
 import MetaTags from "react-meta-tags";
 import { getCurrentUser } from "../../util/APIUtils";
 import { ACCESS_TOKEN } from "../../constants";
 import { HomeHeader } from "../../components";
-import UploadPhoto from "./UploadPhoto";
-import Footer from "./Footer";
 import MultiUploadPhotos from "./MultiUploadPhotos";
 import "./style.less";
 import { notification } from "antd";

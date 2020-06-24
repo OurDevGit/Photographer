@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import {
-  Dropdown,
   Input,
   Button,
   Grid,
@@ -8,7 +7,6 @@ import {
   List,
   Checkbox,
   Rating,
-  Label,
 } from "semantic-ui-react";
 import {
   getCurrentUser,
@@ -18,7 +16,6 @@ import {
   adminRedeemPhoto,
 } from "../../../util/APIUtils";
 import {
-  HomeHeader,
   PhotoList,
   AvatarImage,
   MultiSelect,

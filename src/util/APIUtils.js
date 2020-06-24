@@ -7,6 +7,7 @@ const request = (options) => {
     "Access-Control-Allow-Origin": "*",
   });
   if (localStorage.getItem(ACCESS_TOKEN)) {
+    console.log(localStorage.getItem(ACCESS_TOKEN))
     headers.append(
       "Authorization",
       "Bearer " + localStorage.getItem(ACCESS_TOKEN)

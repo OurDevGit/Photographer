@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom'
 import 'semantic-ui-less/semantic.less'
 
 import App from './App'
-import configureStore, { history } from './redux/configureStore'
+import configureStore, { history, getStoreConfiguration } from './redux/configureStore'
 import sagas from './redux/sagas'
 import './main.scss'
 import './old-styles/PasswordDialog.styles.scss'
@@ -16,7 +16,7 @@ const store = configureStore()
 sagas.forEach(saga => store.runSaga(saga))
 
 const render = () => {
-  ReactDOM.render(
+  ReactDOM.hydrate(
     <AppContainer>
       <Provider store={store}>
         <App history={history} />

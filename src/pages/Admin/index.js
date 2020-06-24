@@ -3,7 +3,7 @@ import { Grid } from "semantic-ui-react";
 import MetaTags from "react-meta-tags";
 import { getCurrentUser, getAllCategories } from "../../util/APIUtils";
 import { ACCESS_TOKEN } from "../../constants";
-import { HomeHeader, SearchBar, PhotoList } from "../../components";
+import { HomeHeader } from "../../components";
 import "./style.less";
 import VerticalSidebar from "./VerticalSidebar";
 import PhotoContent from "./PhotoContent";

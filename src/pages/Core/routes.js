@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect, BrowserRouter } from "react-router-dom";
 
 import Home from "../Home";
 import Profile from "../User/Profile";
@@ -18,25 +18,27 @@ import ResetPassword from "../User/ResetPassword";
 import FBLogin from "../User/FBLogin";
 import Messages from "../Community/Messages"
 const routes = (
-  <Switch>
-    <Route path="/" exact component={Home} />
-    <Route path="/user/LoginAndSignUp" exact component={LoginAndSignUp} />
-    <Route path="/user/Profile/:id" exact component={Profile} />
-    <Route path="/addcontent" exact component={AddContent} />
-    <Route path="/submitcontent" exact component={SubmitContent} />
-    <Route path="/analyse" exact component={Analyse} />
-    <Route path="/admin" exact component={Admin} />
-    <Route path="/Photo_details/:id" exact component={Photo_details} />
-    <Route path="/product_detail/:id" exact component={product_detail} />
-    <Route path="/photomodify" exact component={PhotoModify} />
-    <Route path="/follows" exact component={Follows} />
-    <Route path="/messages" exact component={Messages} />
-    <Route path="/downloadedPhotos" exact component={DownloadedPhotos} />
-    <Route path="/user/ForgotPass" exact component={ForgotPass} />
-    <Route path="/confirm_new_password" exact component={ResetPassword} />
-    <Route path="/fb" exact component={FBLogin} />
-    {/* <Redirect path="*" to="/" /> */}
-  </Switch>
+  // <BrowserRouter>
+    <Switch>
+      <Route path="/" exact component={Home} />
+      <Route path="/user/LoginAndSignUp" exact component={LoginAndSignUp} />
+      <Route path="/user/Profile/:id" exact component={Profile} />
+      <Route path="/addcontent" exact component={AddContent} />
+      <Route path="/submitcontent" exact component={SubmitContent} />
+      <Route path="/analyse" exact component={Analyse} />
+      <Route path="/admin" exact component={Admin} />
+      <Route path="/Photo_details/:id" exact component={Photo_details} />
+      <Route path="/product_detail/:id" exact component={product_detail} />
+      <Route path="/photomodify" exact component={PhotoModify} />
+      <Route path="/follows" exact component={Follows} />
+      <Route path="/messages" exact component={Messages} />
+      <Route path="/downloadedPhotos" exact component={DownloadedPhotos} />
+      <Route path="/user/ForgotPass" exact component={ForgotPass} />
+      <Route path="/confirm_new_password" exact component={ResetPassword} />
+      <Route path="/fb" exact component={FBLogin} />
+      {/* <Redirect path="*" to="/" /> */}
+    </Switch>
+  // </BrowserRouter>
 );
 
 export default routes;

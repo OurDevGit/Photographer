@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Icon, Label, Menu, Table, Image } from "semantic-ui-react";
 import { getUsers } from "../../../util/APIUtils";
 import "./style.less";
-import { get } from "animejs";
 import { AvatarDefault } from "../../../assets/images/homepage";
 import LoadingIndicator from "../../../common/LoadingIndicator";
 class Users extends Component {

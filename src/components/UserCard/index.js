@@ -35,7 +35,7 @@ const cardDetail = (users, status) =>{
 }
 
 const UserCard = ({users, status}) => (
-  <Card.Group>
+  <Card.Group className="CardGroup">
     {cardDetail(users, status)}
   </Card.Group>
 )

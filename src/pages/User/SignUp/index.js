@@ -8,6 +8,7 @@ import {
   checkUsernameAvailability,
   checkEmailAvailability,
 } from "../../../util/APIUtils";
+import ChatHttpServer from '../../../util/chatHttpServer'
 import "./style.less";
 import {
   NAME_MIN_LENGTH,
@@ -19,6 +20,7 @@ import {
   PASSWORD_MAX_LENGTH,
 } from "../../../constants";
 import { notification } from "antd";
+import chatHttpServer from "../../../util/chatHttpServer";
 
 class SignUp extends Component {
   constructor(props) {
@@ -76,15 +78,30 @@ class SignUp extends Component {
     signup(signupRequest)
       .then((response) => {
         notification.success({
-          message: "Photoing App",
+          message: "Openshoots",
           description:
             "Thank you! You're successfully registered. Please Login to continue!",
         });
+        console.log("signupResponse",response)
+        var userCreditional = {
+          username: response.payload.username,
+          uid: response.payload.id
+        }
+        chatHttpServer.register(userCreditional).then(response=>{
+          console.log("Added on MongoDB", response)
+        }).catch(error=>{
+          console.log("error", error)
+          notification.error({
+            message: "Openshoots",
+            description:
+              "Please check your internet connection or server is not running. Please try again",
+          });
+        })
         this.props.onSuccess();
       })
       .catch((error) => {
         notification.error({
-          message: "Photoing App",
+          message: "Openshoots",
           description:
             error.message || "Sorry! Something went wrong. Please try again!",
         });

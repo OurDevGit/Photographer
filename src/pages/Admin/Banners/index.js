@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import {
-  Label,
   Input,
   Button,
   Modal,

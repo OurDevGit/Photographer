@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./style.less";
-import { Image, Grid, Checkbox, List } from "semantic-ui-react";
-import { Radio, Button } from "antd";
+import { Checkbox, List } from "semantic-ui-react";
+import { Radio } from "antd";
 import { Heart_Icon, Plus_Icon, Zoom_Icon } from "../../../assets/icons";
 
 const RadioGroup = Radio.Group;

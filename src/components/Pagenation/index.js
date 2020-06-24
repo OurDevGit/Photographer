@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Grid, Form, Pagination, Segment } from 'semantic-ui-react'
+import { Grid, Pagination } from 'semantic-ui-react'
 import './style.less'
 export default class Pagination_Component extends Component {
     constructor(props){

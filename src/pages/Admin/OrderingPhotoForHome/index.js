@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
 import { Button } from "semantic-ui-react";
 import data from "./data.json";
 import "./style.less";
@@ -13,7 +12,6 @@ import {
 } from "../../../util/APIUtils";
 import { PHOTO_LIST_SIZE } from "../../../constants";
 import { notification } from "antd";
-import { compose } from "redux";
 
 export default class OrderingPhotoForHome extends Component {
   imageData = {
