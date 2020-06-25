@@ -10,7 +10,7 @@ import ChatSocketServer from '../../../util/chatSocketServer'
 import { ACCESS_TOKEN } from "../../../constants";
 import "./style.less";
 import { notification } from "antd";
-
+import 'antd/dist/antd.css';
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -92,6 +92,7 @@ class Login extends Component {
             message: "Photoing App",
             description:
               "Your Username or Password is incorrect. Please try again!",
+            placement: "topRight"
           });
         } else {
           notification.error({

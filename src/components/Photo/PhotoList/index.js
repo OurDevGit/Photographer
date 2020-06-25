@@ -17,6 +17,7 @@ import {
 import Photo from "../Photo";
 import { castVote } from "../../../util/APIUtils";
 import LoadingIndicator from "../../../common/LoadingIndicator";
+import LoadingSpinner from "../../LoadingSpinner"
 import { notification } from "antd";
 import { PHOTO_LIST_SIZE } from "../../../constants";
 import InfiniteScroll from "react-infinite-scroller";

@@ -131,11 +131,12 @@ class Follows extends Component {
                 <a>
                   <h3>Suggest Users</h3>
                 </a>
-                {this.state.followUsers? (
-                  <UserCard
-                    users={this.state.followUsers}
-                    status="unfollowed"
-                  ></UserCard>
+                {!this.state.followUsers? (
+                  // <UserCard
+                  //   users={this.state.followUsers}
+                  //   status="unfollowed"
+                  // ></UserCard>
+                  null
                 ) : (
                   <LoadingIndicator />
                 )}

@@ -16,7 +16,7 @@ const store = configureStore()
 sagas.forEach(saga => store.runSaga(saga))
 
 const render = () => {
-  ReactDOM.hydrate(
+  ReactDOM.render(
     <AppContainer>
       <Provider store={store}>
         <App history={history} />
