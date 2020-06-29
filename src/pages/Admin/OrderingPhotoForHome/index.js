@@ -83,7 +83,7 @@ export default class OrderingPhotoForHome extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.visible == false) {
+    if (this.props.visible === false) {
     }
   }
 
@@ -109,7 +109,7 @@ export default class OrderingPhotoForHome extends Component {
         this.setState({
           NotChoosenForHome: response.content,
         });
-        if (this.total_page == -1) {
+        if (this.total_page === -1) {
           this.total_page = response.totalPages;
         } else {
           if (this.total_page < response.totalPages) {
@@ -147,7 +147,7 @@ export default class OrderingPhotoForHome extends Component {
           photosForHome: response.content,
         });
 
-        if (this.total_page == -1) {
+        if (this.total_page === -1) {
           this.total_page = response.totalPages;
         } else {
           if (this.total_page < response.totalPages) {
@@ -175,7 +175,7 @@ export default class OrderingPhotoForHome extends Component {
     var NotChoosed = [];
     var HomeList = [];
     for (let i = 0; i < 2; i++) {
-      if (this.state.presentData.lanes[i].id == "PLANNED") {
+      if (this.state.presentData.lanes[i].id === "PLANNED") {
         for (let j = 0; j < this.state.presentData.lanes[i].cards.length; j++) {
           NotChoosed.push({
             photoId: this.state.presentData.lanes[i].cards[j].photoid,

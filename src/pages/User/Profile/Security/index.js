@@ -37,7 +37,7 @@ class Security extends Component {
 
   handleChangeInput(e, { name, value }) {
     this.state.password[name] = value;
-    if (value == "") {
+    if (value === "") {
       this.state.ValidateFlag[name] = true;
     } else {
       this.state.ValidateFlag[name] = false;
@@ -51,12 +51,12 @@ class Security extends Component {
   handleChangePassword() {
     if (
       !this.state.password["oldPassword"] ||
-      this.state.password["oldPassword"] == ""
+      this.state.password["oldPassword"] === ""
     ) {
       this.state.ValidateFlag["oldPassword"] = true;
     } else if (
       !this.state.password["newPassword"] ||
-      this.state.password["newPassword"] == ""
+      this.state.password["newPassword"] === ""
     ) {
       this.state.ValidateFlag["newPassword"] = true;
     } else if (

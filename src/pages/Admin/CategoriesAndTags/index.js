@@ -101,7 +101,7 @@ class CategoriesAndTags extends Component {
   handleAddTag(e) {
     if (
       !this.state.inputValue["newTag"] ||
-      this.state.inputValue["newTag"] == ""
+      this.state.inputValue["newTag"] === ""
     ) {
       notification.error({
         message: "Openshoots",
@@ -174,7 +174,7 @@ class CategoriesAndTags extends Component {
   handleAddCategory(e) {
     if (
       !this.state.inputValue["newCategory"] ||
-      this.state.inputValue["newCategory"] == ""
+      this.state.inputValue["newCategory"] === ""
     ) {
       notification.error({
         message: "Openshoots",

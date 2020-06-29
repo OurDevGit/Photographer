@@ -178,7 +178,7 @@ class SearchBar extends Component {
       this.setState({
         open: false,
       });
-      if (this.state.searchText != "") {
+      if (this.state.searchText !== "") {
         var SearchOptions = [
           {
             label: "key",
@@ -193,7 +193,7 @@ class SearchBar extends Component {
   }
 
   handleClickSearch() {
-    if (this.state.searchKey != "") {
+    if (this.state.searchKey !== "") {
       var SearchOptions = [
         {
           label: "key",

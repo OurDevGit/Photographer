@@ -15,6 +15,7 @@ import Bucket from "./Bucket";
 import "./style.less";
 import { notification } from "antd";
 import LoadingIndicator from "../../common/LoadingIndicator";
+
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -331,7 +332,6 @@ class Home extends Component {
             {/* <GridColumn only='computer' width={16}>
               <CategoryCarousel categories={this.state.categories} />
             </GridColumn> */}
-
             <Grid.Column width={16}>
 
               <PhotoList

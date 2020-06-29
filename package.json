@@ -55,7 +55,8 @@
     "slick-carousel": "^1.8.1",
     "socket.io-client": "^2.3.0",
     "svg-arc-corners": "^1.0.4",
-    "svg-react-loader": "^0.4.6"
+    "svg-react-loader": "^0.4.6",
+    "video-react": "^0.14.1"
   },
   "resolutions": {
     "moment": "2.24.0"

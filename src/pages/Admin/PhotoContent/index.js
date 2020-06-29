@@ -135,7 +135,7 @@ class PhotoContent extends Component {
       this.state.selMotives.push(value);
     } else {
       this.state.selMotives = this.state.selMotives.filter(
-        (item) => item != value
+        (item) => item !== value
       );
     }
     this.setState({
@@ -173,7 +173,7 @@ class PhotoContent extends Component {
   }
 
   handleRejectClick() {
-    if (this.state.selMotives.length == 0) {
+    if (this.state.selMotives.length === 0) {
       alert("select some rejecting motives");
     } else {
       var rejectRequest = {
@@ -223,12 +223,12 @@ class PhotoContent extends Component {
       this.state.motives.forEach((motive, motiveIndex) => {
         list_motives.push(
           <List.Item key={motiveIndex}>
-            {this.props.status == "list_rejected_photos" ? (
+            {this.props.status === "list_rejected_photos" ? (
               <Checkbox
                 label={motive.value}
                 value={motive.id}
                 onClick={this.handleMotiveCheck}
-                checked={motiveFlag[motive.id] == 1}
+                checked={motiveFlag[motive.id] === 1}
                 disabled
               />
             ) : (
@@ -242,7 +242,7 @@ class PhotoContent extends Component {
         );
       });
     }
-    if (this.props.status == "list_submitted_photos") {
+    if (this.props.status === "list_submitted_photos") {
       buttonGroup = [
         <Button.Group>
           <Button positive onClick={this.handleAcceptClick}>
@@ -254,7 +254,7 @@ class PhotoContent extends Component {
           </Button>
         </Button.Group>,
       ];
-    } else if (this.props.status == "list_accepted_photos") {
+    } else if (this.props.status === "list_accepted_photos") {
       buttonGroup = [
         <Button.Group>
           <Button negative onClick={this.handleRejectClick}>
@@ -262,7 +262,7 @@ class PhotoContent extends Component {
           </Button>
         </Button.Group>,
       ];
-    } else if (this.props.status == "list_rejected_photos") {
+    } else if (this.props.status === "list_rejected_photos") {
       buttonGroup = [
         <Button.Group>
           <Button positive onClick={this.handleAcceptClick}>
@@ -437,7 +437,7 @@ class PhotoContent extends Component {
                         icon="left arrow"
                         labelPosition="left"
                         onClick={this.handlePrevPhoto}
-                        disabled={this.state.photoActive == 0}
+                        disabled={this.state.photoActive === 0}
                       />
                       <Button
                         content="Next"
@@ -445,7 +445,7 @@ class PhotoContent extends Component {
                         labelPosition="right"
                         onClick={this.handleNextPhoto}
                         disabled={
-                          this.state.total == this.state.photoActive + 1
+                          this.state.total === this.state.photoActive + 1
                         }
                       />
                     </Grid.Column>

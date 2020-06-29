@@ -60,13 +60,13 @@ const PanAndZoomImage = ({ src }) => {
     };
 
     const keydown = (e) => {
-      if(e.keyCode == 16){
+      if(e.keyCode === 16){
         setKey(true);
       }
     }
 
     const keyup = (e) => {
-      if(e.keyCode == 16){
+      if(e.keyCode === 16){
         setKey(false);
       }
     }

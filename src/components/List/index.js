@@ -45,7 +45,7 @@ class ListComponent extends Component {
 
     getCommonRelease(images, IDs){
       var ReleaseScore = [];
-      if(IDs.length == 1){
+      if(IDs.length === 1){
         var authorizations = images[IDs[0]].authorizations;
           for(let j=0; j<authorizations.length; j++)
           {
@@ -57,7 +57,7 @@ class ListComponent extends Component {
           var authorizations = images[IDs[i]].authorizations;
           for(let j=0; j<authorizations.length; j++)
           {
-            if(ReleaseScore[authorizations[j].id] == i-1)
+            if(ReleaseScore[authorizations[j].id] === i-1)
             {
               ReleaseScore[authorizations[j].id] = i;
             }else{
@@ -76,13 +76,13 @@ class ListComponent extends Component {
       const ReleaseView = [];
       var searchReleases = [];
       var resultRelease = [];
-      if(!type || type == 'all')
+      if(!type || type === 'all')
         {
           searchReleases = this.state.Releases
         }else{
           for(let i=0; i<this.state.Releases.length; i++)
           {
-            if(this.state.Releases[i].authorizationKind == type)
+            if(this.state.Releases[i].authorizationKind === type)
             {
               searchReleases.push(this.state.Releases[i])
             }
@@ -113,7 +113,7 @@ class ListComponent extends Component {
                   : null
                 }
                 {
-                  ReleaseScore[Release.id] == 0 ? 
+                  ReleaseScore[Release.id] === 0 ? 
                   <div className='attachButtons'>
                     <Button name='attachAll' value={Release.id} onClick={this.handleClickAttach}>Attach to ALL</Button>
                     <Button name='removeAll' value={Release.id} onClick={this.handleClickAttach}>Remove from ALL</Button>
@@ -121,7 +121,7 @@ class ListComponent extends Component {
                   : null
                 }
                 {
-                  !ReleaseScore[Release.id] && ReleaseScore[Release.id] != 0 ?
+                  !ReleaseScore[Release.id] && ReleaseScore[Release.id] !== 0 ?
                   <div className='attachButtons'>
                     <Button name='attach' value={Release.id} onClick={this.handleClickAttach}>Attach</Button>
                   </div>

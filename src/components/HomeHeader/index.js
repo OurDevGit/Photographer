@@ -50,7 +50,7 @@ class HomeHeader extends React.Component {
     const { currentUser } = this.props;
     let menuItems;
     if (currentUser) {
-      if (currentUser.authorities.length == 2) {
+      if (currentUser.authorities.length === 2) {
         menuItems = [
           <Menu.Item key="1" as={NavLink} to="/admin">
             <StarIcon className="star-icon" />
@@ -121,7 +121,7 @@ class HomeHeader extends React.Component {
           </Menu.Item>,
         ];
       } else {
-        if (currentUser.authorities[0].authority == "ROLE_USER") {
+        if (currentUser.authorities[0].authority === "ROLE_USER") {
           menuItems = [
             <Menu.Item key="2">
               <StarIcon className="star-icon" />
@@ -187,7 +187,7 @@ class HomeHeader extends React.Component {
               </Dropdown>
             </Menu.Item>,
           ];
-        } else if (currentUser.authorities[0].authority == "ROLE_ADMIN") {
+        } else if (currentUser.authorities[0].authority === "ROLE_ADMIN") {
           menuItems = [
             <Menu.Item key="1" as={NavLink} to="/admin">
               <StarIcon className="star-icon" />

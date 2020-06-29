@@ -54,7 +54,7 @@ class PhotoList extends Component {
         promise = getUserCreatedPhotos(this.props.username, page, size);
       } else if (this.props.type === "USER_VOTED_PHOTOS") {
         promise = getUserVotedPhotos(this.props.username, page, size);
-      } else if (this.props.type == "Submit_operation") {
+      } else if (this.props.type === "Submit_operation") {
         promise = getSubmitPhotos();
       } else if (this.props.type === "admin_photolist") {
         promise = getAdminPublicationPhotoList(this.props.status);
@@ -115,7 +115,7 @@ class PhotoList extends Component {
         .then((response) => {
           const photos = this.state.photos.slice();
           for (let i = 0; i < response.photos.length; i++) {
-            if (response.photos[i].submitStatus == this.props.status) {
+            if (response.photos[i].submitStatus === this.props.status) {
               photos.push(response.photos[i]);
             }
           }

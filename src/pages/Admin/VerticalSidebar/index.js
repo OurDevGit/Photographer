@@ -49,7 +49,7 @@ export default class VerticalSidebar extends Component {
           as="a"
           value="list_accepted_photos"
           className={
-            this.state.activeMentItem == "list_accepted_photos" ? "active" : ""
+            this.state.activeMentItem === "list_accepted_photos" ? "active" : ""
           }
           onClick={this.handleMenuClick}
         >
@@ -78,7 +78,7 @@ export default class VerticalSidebar extends Component {
           <Icon name="ordered list" />
           Ordering Photo For Home
         </Menu.Item>
-        {/* <Menu.Item as='a' value='Authorizations' className={this.state.activeMentItem == 'Authorizations' ? 'active' : ''} onClick={this.handleMenuClick}>
+        {/* <Menu.Item as='a' value='Authorizations' className={this.state.activeMentItem === 'Authorizations' ? 'active' : ''} onClick={this.handleMenuClick}>
                 <Icon name='id card' />
                 Authorizations
                 </Menu.Item> */}

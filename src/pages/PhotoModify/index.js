@@ -689,7 +689,7 @@ class PhotoModify extends Component {
       // for (let t = 0; t < this.state.currentTagValues.length; t++) {
       //   if (e.photo.containedTags.includes(this.state.currentTagValues[t])) {
       //     e.photo.containedTags = e.photo.containedTags.filter(
-      //       (item) => item != this.state.currentTagValues[t]
+      //       (item) => item !== this.state.currentTagValues[t]
       //     );
       //   }
       // }
@@ -904,10 +904,10 @@ class PhotoModify extends Component {
       categories1: this.state.categories1,
       categories2: this.state.categories2,
     });
-    // if(name == 'Category1' || name == 'Category2'){
+    // if(name === 'Category1' || name === 'Category2'){
     //   for(let i=0; i< this.state.categories.length; i++)
     //   {
-    //     if(this.state.categories[i].value == this.arr_options[name])
+    //     if(this.state.categories[i].value === this.arr_options[name])
     //     {
     //       this.state.categories.splice(i,1);
     //       i=this.state.categories.length;
@@ -1565,8 +1565,8 @@ class PhotoModify extends Component {
                             position='bottom center'
                           />
                         </label>
-                        <Button id={this.state.photoOptions['Usage'] == 'Commercial' ? 'activate' : ''} type='button' name='Usage' value="Commercial" onClick={this.handleSetPhotoOption} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'} >Commercial</Button>
-                        <Button id={this.state.photoOptions['Usage'] == 'Editorial' ? 'activate' : ''} type='button' name='Usage' value='Editorial' onClick={this.handleSetPhotoOption} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'}>Editorial</Button>
+                        <Button id={this.state.photoOptions['Usage'] === 'Commercial' ? 'activate' : ''} type='button' name='Usage' value="Commercial" onClick={this.handleSetPhotoOption} disabled={this.state.activeMenuItem !== 'TO_BE_SUBMITTED'} >Commercial</Button>
+                        <Button id={this.state.photoOptions['Usage'] === 'Editorial' ? 'activate' : ''} type='button' name='Usage' value='Editorial' onClick={this.handleSetPhotoOption} disabled={this.state.activeMenuItem !== 'TO_BE_SUBMITTED'}>Editorial</Button>
 
                       </Form.Field>
                     </div> */}
@@ -1619,14 +1619,14 @@ class PhotoModify extends Component {
                       {/* <div class="column">
                       <Form.Field>
                       <div class="label">Category 1</div>
-                        <Select placeholder='Category 1' options={this.state.categories1} name="Category1" value={this.state.photoOptions['Category1']} onChange={this.handleSetPhotoOption} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'}/>
+                        <Select placeholder='Category 1' options={this.state.categories1} name="Category1" value={this.state.photoOptions['Category1']} onChange={this.handleSetPhotoOption} disabled={this.state.activeMenuItem !== 'TO_BE_SUBMITTED'}/>
                         <div class='label error'>{this.state.errorMessage['Category1']}</div>
                       </Form.Field>
                     </div>
                     <div class="column">
                       <Form.Field>
                       <div class="label">Category 2(optional)</div>
-                        <Select placeholder='Category 2(optional)' options={this.state.categories2} name="Category2" value={this.state.photoOptions['Category2']} onChange={this.handleSetPhotoOption} disabled={(this.state.photoOptions['Category1'] &&  this.state.activeMenuItem == 'TO_BE_SUBMITTED') ? false : true}/>
+                        <Select placeholder='Category 2(optional)' options={this.state.categories2} name="Category2" value={this.state.photoOptions['Category2']} onChange={this.handleSetPhotoOption} disabled={(this.state.photoOptions['Category1'] &&  this.state.activeMenuItem === 'TO_BE_SUBMITTED') ? false : true}/>
                       </Form.Field>
                     </div> */}
                       <div class="column">

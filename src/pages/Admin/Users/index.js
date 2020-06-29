@@ -55,9 +55,9 @@ class Users extends Component {
             <Table.Cell>{user.username}</Table.Cell>
             <Table.Cell>{user.email}</Table.Cell>
             <Table.Cell>
-              {user.roles.length == 2
+              {user.roles.length === 2
                 ? "Admin & User"
-                : user.roles.length == 1 && user.roles[0].name == "ROLE_ADMIN"
+                : user.roles.length === 1 && user.roles[0].name === "ROLE_ADMIN"
                 ? "Admin"
                 : "User"}
             </Table.Cell>

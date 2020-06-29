@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Popup} from "semantic-ui-react";
+import { Popup } from "semantic-ui-react";
 import { Heart_Icon, Plus_Icon, Zoom_Icon } from "../../../assets/icons";
 import { AvatarImage } from "../../../components";
 import { AvatarDefault } from "../../../assets/images/homepage";
@@ -7,6 +7,8 @@ import { addToLike, is_liked } from "../../../util/APIUtils";
 import { notification } from "antd";
 import banner from "../../../assets/images/banner_Certificate.jpg";
 import anchor from "../../../assets/images/anchor.gif"
+import '../../../../node_modules/video-react/dist/video-react.css';
+import { Player } from 'video-react';
 class PhotoBox extends Component {
   constructor(props) {
     super(props);
@@ -163,16 +165,33 @@ class PhotoBox extends Component {
                 />
               </div>
               <div style={{ position: "relative" }}>
-                <img
-                  className="mainPhoto"
-                  id={this.props.photo.id}
-                  src={this.props.photo.url_mr || this.props.photo.url_lr}
-                  width={this.props.photo.width}
-                  height={this.props.photo.height}
-                  // {...this.props.photo}
-                  onClick={this.handleImageClick}
-                  onMouseOver={this.getPos}
-                />
+                {
+                  this.props.photo.id % 2 === 0 ?
+                    <img
+                      className="mainPhoto"
+                      id={this.props.photo.id}
+                      src={this.props.photo.url_mr || this.props.photo.url_lr}
+                      width={this.props.photo.width}
+                      height={this.props.photo.height}
+                      // {...this.props.photo}
+                      onClick={this.handleImageClick}
+                      onMouseOver={this.getPos}
+                    />
+                    : <Player
+                      className="videoPlayer"
+                      fluid={false}
+                      // width={500}
+                      // height={300}
+                      width={this.props.photo.width}
+                      height={this.props.photo.height}
+                      muted={true}
+                      autoPlay={true}
+                    >
+                      <source src="http://media.w3.org/2010/05/bunny/movie.mp4" />
+                    </Player>
+                }
+
+
                 {this.state.link_Icons}
               </div>
               {/* <Popup

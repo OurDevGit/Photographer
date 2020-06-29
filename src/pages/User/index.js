@@ -68,12 +68,12 @@ class LoginAndSignUp extends Component {
   }
 
   handleTabChange(e, data) {
-    if (data.activeIndex == 0) {
+    if (data.activeIndex === 0) {
       this.setState({
         title: "Login to your account",
         activeIndex: 0,
       });
-    } else if (data.activeIndex == 1) {
+    } else if (data.activeIndex === 1) {
       this.setState({
         title: "SignUp with your account",
         activeIndex: 1,

@@ -18,16 +18,16 @@ class Photo extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.action != prevProps.action) {
-      if (this.props.active == this.props.index) {
+    if (this.props.action !== prevProps.action) {
+      if (this.props.active === this.props.index) {
         this.props.onClick(this.props, this.props.index, this.props.total);
       }
     }
-    if (this.props.publish != prevProps.publish) {
-      if (this.props.active + 1 == this.props.index) {
+    if (this.props.publish !== prevProps.publish) {
+      if (this.props.active + 1 === this.props.index) {
         this.props.onClick(this.props, this.props.active, this.props.total - 1);
       }
-      if (this.props.total == this.props.active + 1 && this.props.index == 0) {
+      if (this.props.total === this.props.active + 1 && this.props.index === 0) {
         this.props.onClick(this.props, this.props.index, this.props.total - 1);
       }
     }
@@ -47,9 +47,9 @@ class Photo extends Component {
         isChecked: this.state.isChecked,
       });
       this.props.onClick(this.props, this.state.isChecked);
-    } else if (this.props.type == "home_list") {
+    } else if (this.props.type === "home_list") {
       this.props.onClick(this.props.photo);
-    } else if (this.props.type == "admin_photolist") {
+    } else if (this.props.type === "admin_photolist") {
       this.props.onClick(this.props, this.props.index, this.props.total);
     }
   }
@@ -68,15 +68,15 @@ class Photo extends Component {
     }
 
     return (
-      <div className={status == "REJECTED" ? "rejectedPhoto" : "photo_div"}>
+      <div className={status === "REJECTED" ? "rejectedPhoto" : "photo_div"}>
         <div
           className={
             this.state.isChecked ? "photo-content active" : "photo-content"
           }
-          id={index == active ? "active" : ""}
+          id={index === active ? "active" : ""}
         >
           {/* <div className="photo-header"> */}
-          {(type == "Submit_operation" || type == 'userPhoto') ? (
+          {(type === "Submit_operation" || type === 'userPhoto') ? (
             <Checkbox
               value={this.state.isChecked}
               className="ddd"
@@ -84,7 +84,7 @@ class Photo extends Component {
               checked={this.state.isChecked}
             />
           ) : null}
-          {type == "home_list" ? (
+          {type === "home_list" ? (
             <div>
               <a target="blank" onClick={this.quickView}>
                 <Zoom_Icon className="detail_Icon Zoom-icon" />

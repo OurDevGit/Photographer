@@ -88,7 +88,7 @@ export default class MultipleImageUploadComponent extends Component {
           this.state.uploadingProgress = Math.floor(
             (this.state.uploadedFileNumber * 100) / len
           );
-          if (this.state.uploadedFileNumber == len) {
+          if (this.state.uploadedFileNumber === len) {
             this.setState({
               isLoading: false,
               uploadStatus: true,
@@ -104,9 +104,9 @@ export default class MultipleImageUploadComponent extends Component {
           this.state.uploadingProgress = Math.floor(
             (this.state.uploadedFileNumber * 100) / len
           );
-          if (this.state.uploadedFileNumber == len) {
+          if (this.state.uploadedFileNumber === len) {
             if (
-              this.state.uploadFailedNumber == this.state.uploadedFileNumber
+              this.state.uploadFailedNumber === this.state.uploadedFileNumber
             ) {
               this.setState({
                 isLoading: false,
@@ -139,7 +139,7 @@ export default class MultipleImageUploadComponent extends Component {
         this.state.uploadingProgress = Math.floor(
           (this.state.uploadedFileNumber * 100) / len
         );
-        if (this.state.uploadedFileNumber == len) {
+        if (this.state.uploadedFileNumber === len) {
           this.setState({
             isLoading: false,
             uploadStatus: true,
@@ -180,7 +180,7 @@ export default class MultipleImageUploadComponent extends Component {
       );
     } else {
       if (this.state.uploadStatus) {
-        if (this.state.uploadFailedNumber == 0) {
+        if (this.state.uploadFailedNumber === 0) {
           notification.success({
             message: "Photoing App",
             description:

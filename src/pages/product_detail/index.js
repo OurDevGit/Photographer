@@ -92,7 +92,7 @@ class product_detail extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.id != prevProps.match.params.id) {
+    if (this.props.match.params.id !== prevProps.match.params.id) {
       this.is_like_photo(this.props.match.params.id);
       this.loadPhotoDetail(this.props.match.params.id);
       this.setState({
@@ -103,7 +103,7 @@ class product_detail extends Component {
   }
 
   keydown = (e) => {
-    if (e.keyCode == 17) {
+    if (e.keyCode === 17) {
       this.setState({
         isCtrlKey: true,
       });
@@ -111,7 +111,7 @@ class product_detail extends Component {
   };
 
   keyup = (e) => {
-    if (e.keyCode == 17) {
+    if (e.keyCode === 17) {
       this.setState({
         isCtrlKey: false,
       });

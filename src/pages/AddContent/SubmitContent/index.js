@@ -315,12 +315,12 @@ class SubmitContent extends Component {
   };
 
   addFromContainedTags(e, { content }) {
-    if (this.state.currentTagValues == null) {
+    if (this.state.currentTagValues === null) {
       this.state.currentTagValues = [];
     }
     this.state.currentTagValues.push(content);
     this.state.currentContainTags = this.state.currentContainTags.filter(
-      (item) => item != content
+      (item) => item !== content
     );
     this.setState({
       currentTagValues: this.state.currentTagValues,
@@ -334,7 +334,7 @@ class SubmitContent extends Component {
   }
 
   addAllContainTags() {
-    if (this.state.currentTagValues == null) {
+    if (this.state.currentTagValues === null) {
       this.state.currentTagValues = [];
     }
     this.state.currentTagValues = this.state.currentTagValues.concat(
@@ -357,16 +357,16 @@ class SubmitContent extends Component {
     } else {
       this.state.errorMessage["tags"] = "";
     }
-    if (this.state.currentTagValues == null) {
+    if (this.state.currentTagValues === null) {
       this.state.currentTagValues = [];
     }
     if (this.state.currentTagValues.length > value.length) {
       var RemoveItem = this.state.currentTagValues;
       for (let i = 0; i < value.length; i++) {
-        RemoveItem = RemoveItem.filter((item) => item != value[i]);
+        RemoveItem = RemoveItem.filter((item) => item !== value[i]);
       }
       for (let j = 0; j < this.state.containTags.length; j++) {
-        if (RemoveItem[0] == this.state.containTags[j]) {
+        if (RemoveItem[0] === this.state.containTags[j]) {
           this.state.currentContainTags.push(RemoveItem);
           this.setState({
             currentContainTags: this.state.currentContainTags,
@@ -376,19 +376,19 @@ class SubmitContent extends Component {
       }
     } else {
       for (let k = 0; k < this.state.currentContainTags.length; k++) {
-        if (this.state.currentContainTags[k] == value[value.length - 1]) {
+        if (this.state.currentContainTags[k] === value[value.length - 1]) {
           this.state.currentContainTags = this.state.currentContainTags.filter(
-            (item) => item != value[value.length - 1]
+            (item) => item !== value[value.length - 1]
           );
         }
       }
       var TagScore = 0;
       this.state.tags.forEach((tag, tagindex) => {
-        if (tag.value == value[value.length - 1]) {
+        if (tag.value === value[value.length - 1]) {
           TagScore = 1;
         }
       });
-      if (TagScore == 0) {
+      if (TagScore === 0) {
         addNewTag(value[value.length - 1])
           .then((response) => {
             this.state.tags.push({
@@ -418,7 +418,7 @@ class SubmitContent extends Component {
     };
     this.state.categories2 = this.state.categories;
     this.state.categories1 = this.state.categories;
-    if (name == "attachAll" || name == "attach") {
+    if (name === "attachAll" || name === "attach") {
       addAuthorizationToPhotoIDs(Request)
         .then((response) => {
           this.state.ReleaseScore[value] = 1;
@@ -429,7 +429,7 @@ class SubmitContent extends Component {
         .catch((error) => {
           console.log("error", error);
         });
-    } else if (name == "removeAll" || name == "attached") {
+    } else if (name === "removeAll" || name === "attached") {
       removeAuthorizationToPhotoIDs(Request)
         .then((response) => {
           if (response.ok) {
@@ -448,7 +448,7 @@ class SubmitContent extends Component {
   getCommonRelease(images, IDs) {
     var ReleaseScore = [];
     var ReleaseNameArray = [];
-    if (IDs.length == 1) {
+    if (IDs.length === 1) {
       var authorizations = images[IDs[0]].authorizations;
       for (let j = 0; j < authorizations.length; j++) {
         ReleaseScore[authorizations[j].id] = 1;
@@ -457,15 +457,15 @@ class SubmitContent extends Component {
     } else {
       for (let i = 0; i < IDs.length; i++) {
         var authorizations = images[IDs[i]].authorizations;
-        if (authorizations.length == 0) {
+        if (authorizations.length === 0) {
           for (let k = 0; k < ReleaseScore.length; k++) {
-            if (ReleaseScore[k] == i - 1) {
+            if (ReleaseScore[k] === i - 1) {
               ReleaseScore[k] = 0;
             }
           }
         }
         for (let j = 0; j < authorizations.length; j++) {
-          if (ReleaseScore[authorizations[j].id] == i - 1) {
+          if (ReleaseScore[authorizations[j].id] === i - 1) {
             ReleaseScore[authorizations[j].id] = i;
             ReleaseNameArray[authorizations[j].id] = authorizations[j].caption;
           } else {
@@ -507,7 +507,7 @@ class SubmitContent extends Component {
       });
     } else {
       this.state.selImageIDs = this.state.selImageIDs.filter(
-        (item) => item != e.photo.id
+        (item) => item !== e.photo.id
       );
       this.setState({
         selImageIDs: this.state.selImageIDs,
@@ -515,7 +515,7 @@ class SubmitContent extends Component {
     }
 
     // DisplayImageurl when click Image
-    if (this.state.selImageIDs.length == 1) {
+    if (this.state.selImageIDs.length === 1) {
       this.setState({
         DisplayImageUrl: this.state.selImage[this.state.selImageIDs[0]].url_fr,
       });
@@ -531,7 +531,7 @@ class SubmitContent extends Component {
       this.setState({
         showOptions: ["visible", "unvisible"],
       });
-      if (this.state.selImageIDs.length == 1) {
+      if (this.state.selImageIDs.length === 1) {
         var temp_image = this.state.selImage[this.state.selImageIDs[0]];
 
         this.state.photoOptions["Description"] = temp_image.description
@@ -580,12 +580,12 @@ class SubmitContent extends Component {
           var temp_tag = this.state.selImage[this.state.selImageIDs[i]].tags;
           if (temp_tag) {
             for (var j = 0; j < temp_tag.length; j++) {
-              if (tag_flag[temp_tag[j]] == i - 1) {
+              if (tag_flag[temp_tag[j]] === i - 1) {
                 tag_flag[temp_tag[j]] = i;
               } else {
                 tag_flag[temp_tag[j]] = 0;
               }
-              if (tag_flag[temp_tag[j]] == this.state.selImageIDs.length - 1) {
+              if (tag_flag[temp_tag[j]] === this.state.selImageIDs.length - 1) {
                 common_tags.push(temp_tag[j]);
               }
             }
@@ -595,7 +595,7 @@ class SubmitContent extends Component {
             .categories;
           if (temp_category) {
             if (temp_category[0]) {
-              if (category_flag1[temp_category[0]] == i - 1) {
+              if (category_flag1[temp_category[0]] === i - 1) {
                 category_flag1[temp_category[0]] = i;
               } else {
                 category_flag1[temp_category[0]] = 0;
@@ -609,7 +609,7 @@ class SubmitContent extends Component {
             }
 
             if (temp_category[1]) {
-              if (category_flag2[temp_category[1]] == i - 1) {
+              if (category_flag2[temp_category[1]] === i - 1) {
                 category_flag2[temp_category[1]] = i;
               } else {
                 category_flag2[temp_category[1]] = 0;
@@ -623,24 +623,24 @@ class SubmitContent extends Component {
             }
           }
         }
-        if (common_category.length == 2) {
+        if (common_category.length === 2) {
           this.state.photoOptions["Category1"] = common_category[0];
           this.state.photoOptions["Category2"] = common_category[1];
-        } else if (common_category.length == 1) {
+        } else if (common_category.length === 1) {
           this.state.photoOptions["Category1"] = common_category[0];
           this.state.photoOptions["Category2"] = null;
         } else {
           this.state.photoOptions["Category1"] = null;
           this.state.photoOptions["Category2"] = null;
         }
-        if (desScore == this.state.selImageIDs.length - 1) {
+        if (desScore === this.state.selImageIDs.length - 1) {
           this.state.photoOptions["Description"] = this.state.selImage[
             this.state.selImageIDs[0]
           ].description;
         } else {
           this.state.photoOptions["Description"] = "";
         }
-        if (titScore == this.state.selImageIDs.length - 1) {
+        if (titScore === this.state.selImageIDs.length - 1) {
           this.state.photoOptions["title"] = this.state.selImage[
             this.state.selImageIDs[0]
           ].title;
@@ -692,7 +692,7 @@ class SubmitContent extends Component {
       for (let t = 0; t < this.state.currentTagValues.length; t++) {
         if (e.photo.containedTags.includes(this.state.currentTagValues[t])) {
           e.photo.containedTags = e.photo.containedTags.filter(
-            (item) => item != this.state.currentTagValues[t]
+            (item) => item !== this.state.currentTagValues[t]
           );
         }
       }
@@ -726,7 +726,7 @@ class SubmitContent extends Component {
     this.arr_options[name] = value;
     this.state.errorMessage[name] = "";
 
-    if (name == "Category1") {
+    if (name === "Category1") {
       this.state.categories2 = this.state.categories;
       var Categories2 = [];
       var pos = this.state.categories2.findIndex((v) => v.value === value);
@@ -737,7 +737,7 @@ class SubmitContent extends Component {
         );
       this.state.categories2 = Categories2;
     }
-    if (name == "Category2") {
+    if (name === "Category2") {
       this.state.categories1 = this.state.categories;
       var Categories1 = [];
       var pos = this.state.categories1.findIndex((v) => v.value === value);
@@ -755,10 +755,10 @@ class SubmitContent extends Component {
       categories1: this.state.categories1,
       categories2: this.state.categories2,
     });
-    // if(name == 'Category1' || name == 'Category2'){
+    // if(name === 'Category1' || name === 'Category2'){
     //   for(let i=0; i< this.state.categories.length; i++)
     //   {
-    //     if(this.state.categories[i].value == this.arr_options[name])
+    //     if(this.state.categories[i].value === this.arr_options[name])
     //     {
     //       this.state.categories.splice(i,1);
     //       i=this.state.categories.length;
@@ -847,13 +847,13 @@ class SubmitContent extends Component {
     const updateRequest = { photos: [] };
     for (let i = 0; i < this.state.selImageIDs.length; i++) {
       var temp_options = this.state.selImage[this.state.selImageIDs[i]];
-      if (name == "Description") {
+      if (name === "Description") {
         temp_options.description = this.state.photoOptions["Description"];
       } else if (name === "title") {
         temp_options.title = this.state.photoOptions["title"];
       }
       // update categories
-      else if (name == "Category1" || name == "Category2") {
+      else if (name === "Category1" || name === "Category2") {
         if (!temp_options.categories) {
           temp_options.categories = [];
           temp_options.categories.push(this.state.photoOptions["Category1"]);
@@ -871,12 +871,12 @@ class SubmitContent extends Component {
         }
 
         temp_options.categories = temp_options.categories.filter(
-          (item) => item != null
+          (item) => item !== null
         );
       }
 
       //update tags
-      else if (name == "Tag") {
+      else if (name === "Tag") {
         var temp_flags = [];
         var tem_tag = this.state.common_tag;
         if (!tem_tag) {
@@ -888,17 +888,17 @@ class SubmitContent extends Component {
             }
 
             for (let k = 0; k < this.state.currentTagValues.length; k++) {
-              if (temp_flags[this.state.currentTagValues[k]] != 1) {
+              if (temp_flags[this.state.currentTagValues[k]] !== 1) {
                 temp_options.tags.push(this.state.currentTagValues[k]);
               } else {
                 tem_tag = tem_tag.filter(
-                  (item) => item != this.state.currentTagValues[k]
+                  (item) => item !== this.state.currentTagValues[k]
                 );
               }
             }
             for (let h = 0; h < tem_tag.length; h++) {
               temp_options.tags = temp_options.tags.filter(
-                (item) => item != tem_tag[h]
+                (item) => item !== tem_tag[h]
               );
             }
           } else {
@@ -908,7 +908,7 @@ class SubmitContent extends Component {
             if (!this.state.currentTagValues) {
               this.state.currentTagValues = [];
             }
-            if (this.state.selImageIDs.length == 1) {
+            if (this.state.selImageIDs.length === 1) {
               temp_options.tags = [];
             }
             for (
@@ -939,7 +939,7 @@ class SubmitContent extends Component {
   }
 
   newReleaseUpload() {
-    if (this.state.releaseName == "") {
+    if (this.state.releaseName === "") {
       alert("Put Release caption");
     } else if (!this.state.ReleaseTypevalue) {
       alert("select Release Type");
@@ -1091,7 +1091,7 @@ class SubmitContent extends Component {
               <h2>Submit Content</h2>
             </Grid.Column>
             {this.state.selImageIDs.length > 0 &&
-            this.state.activeMenuItem != "ACCEPTED" ? (
+            this.state.activeMenuItem !== "ACCEPTED" ? (
               <Grid.Column className="selectedShowContent right" width="8">
                 <span>{this.state.selImageIDs.length} selected files</span>
                 <Button negative onClick={this.confirmModalShow}>
@@ -1170,7 +1170,7 @@ class SubmitContent extends Component {
                 </Grid.Column>
               </Grid.Row>
               <Grid.Row>
-                {this.state.activeMenuItem == "TO_BE_SUBMITTED" ? (
+                {this.state.activeMenuItem === "TO_BE_SUBMITTED" ? (
                   <Message attached="top" className="welcomeMessage" positive>
                     <Icon name="check circle" />
                     Welcome! Let's get your content approved. Select an item to
@@ -1224,7 +1224,7 @@ class SubmitContent extends Component {
                           </label>
                           <Button
                             id={
-                              this.state.photoOptions["ImageType"] == "Photo"
+                              this.state.photoOptions["ImageType"] === "Photo"
                                 ? "activate"
                                 : ""
                             }
@@ -1233,7 +1233,7 @@ class SubmitContent extends Component {
                             value="Photo"
                             onClick={this.handleSetPhotoOption}
                             disabled={
-                              this.state.activeMenuItem != "TO_BE_SUBMITTED"
+                              this.state.activeMenuItem !== "TO_BE_SUBMITTED"
                             }
                           >
                             Photo
@@ -1250,7 +1250,7 @@ class SubmitContent extends Component {
                             value="Illustration"
                             onClick={this.handleSetPhotoOption}
                             disabled={
-                              this.state.activeMenuItem != "TO_BE_SUBMITTED"
+                              this.state.activeMenuItem !== "TO_BE_SUBMITTED"
                             }
                           >
                             Illustration
@@ -1266,8 +1266,8 @@ class SubmitContent extends Component {
                             position='bottom center'
                           />
                         </label>
-                        <Button id={this.state.photoOptions['Usage'] == 'Commercial' ? 'activate' : ''} type='button' name='Usage' value="Commercial" onClick={this.handleSetPhotoOption} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'} >Commercial</Button>
-                        <Button id={this.state.photoOptions['Usage'] == 'Editorial' ? 'activate' : ''} type='button' name='Usage' value='Editorial' onClick={this.handleSetPhotoOption} disabled={this.state.activeMenuItem != 'TO_BE_SUBMITTED'}>Editorial</Button>
+                        <Button id={this.state.photoOptions['Usage'] === 'Commercial' ? 'activate' : ''} type='button' name='Usage' value="Commercial" onClick={this.handleSetPhotoOption} disabled={this.state.activeMenuItem !== 'TO_BE_SUBMITTED'} >Commercial</Button>
+                        <Button id={this.state.photoOptions['Usage'] === 'Editorial' ? 'activate' : ''} type='button' name='Usage' value='Editorial' onClick={this.handleSetPhotoOption} disabled={this.state.activeMenuItem !== 'TO_BE_SUBMITTED'}>Editorial</Button>
 
                       </Form.Field>
                     </div> */}
@@ -1281,7 +1281,7 @@ class SubmitContent extends Component {
                             required
                             onChange={this.handleSetPhotoOption}
                             disabled={
-                              this.state.activeMenuItem != "TO_BE_SUBMITTED"
+                              this.state.activeMenuItem !== "TO_BE_SUBMITTED"
                             }
                           />
                           <div className="label error">
@@ -1300,7 +1300,7 @@ class SubmitContent extends Component {
                             required
                             onChange={this.handleSetPhotoOption}
                             disabled={
-                              this.state.activeMenuItem != "TO_BE_SUBMITTED"
+                              this.state.activeMenuItem !== "TO_BE_SUBMITTED"
                             }
                           />
                           <div className="label error">
@@ -1318,7 +1318,7 @@ class SubmitContent extends Component {
                             required
                             onChange={this.handleSetPhotoOption}
                             disabled={
-                              this.state.activeMenuItem != "TO_BE_SUBMITTED"
+                              this.state.activeMenuItem !== "TO_BE_SUBMITTED"
                             }
                           />
                           <div className="label error">
@@ -1336,7 +1336,7 @@ class SubmitContent extends Component {
                             value={this.state.photoOptions["Collection"]}
                             onChange={this.handleSetPhotoOption}
                             disabled={
-                              this.state.activeMenuItem != "TO_BE_SUBMITTED"
+                              this.state.activeMenuItem !== "TO_BE_SUBMITTED"
                             }
                           />
                           <div className="label error">
@@ -1354,7 +1354,7 @@ class SubmitContent extends Component {
                             value={this.state.photoOptions["Category1"]}
                             onChange={this.handleSetPhotoOption}
                             disabled={
-                              this.state.activeMenuItem != "TO_BE_SUBMITTED"
+                              this.state.activeMenuItem !== "TO_BE_SUBMITTED"
                             }
                           />
                           <div className="label error">
@@ -1373,7 +1373,7 @@ class SubmitContent extends Component {
                             onChange={this.handleSetPhotoOption}
                             disabled={
                               this.state.photoOptions["Category1"] &&
-                              this.state.activeMenuItem == "TO_BE_SUBMITTED"
+                              this.state.activeMenuItem === "TO_BE_SUBMITTED"
                                 ? false
                                 : true
                             }
@@ -1390,7 +1390,7 @@ class SubmitContent extends Component {
                             value={this.state.photoOptions["Location"]}
                             onChange={this.handleSetPhotoOption}
                             disabled={
-                              this.state.activeMenuItem != "TO_BE_SUBMITTED"
+                              this.state.activeMenuItem !== "TO_BE_SUBMITTED"
                             }
                           />
                           <Popup
@@ -1439,7 +1439,7 @@ class SubmitContent extends Component {
                                 }
                                 onChange={this.handleSetPhotoOption}
                                 disabled={
-                                  this.state.activeMenuItem != "TO_BE_SUBMITTED"
+                                  this.state.activeMenuItem !== "TO_BE_SUBMITTED"
                                 }
                                 options={[]}
                               />
@@ -1735,7 +1735,7 @@ class SubmitContent extends Component {
                             onAddItem={this.handleMultiSelectAddition}
                             onChange={this.handleMultiSelectChange}
                             disabled={
-                              this.state.activeMenuItem != "TO_BE_SUBMITTED"
+                              this.state.activeMenuItem !== "TO_BE_SUBMITTED"
                             }
                             ref={this.tagDropbox}
                           />
@@ -1756,7 +1756,7 @@ class SubmitContent extends Component {
                                 size="large"
                                 onClick={this.addAllContainTags}
                                 disabled={
-                                  this.state.activeMenuItem != "TO_BE_SUBMITTED"
+                                  this.state.activeMenuItem !== "TO_BE_SUBMITTED"
                                 }
                               />
                             }
@@ -1765,7 +1765,7 @@ class SubmitContent extends Component {
                           />
                         </div>
                         <div className="suggestKeywords">
-                          {this.state.activeMenuItem == "TO_BE_SUBMITTED"
+                          {this.state.activeMenuItem === "TO_BE_SUBMITTED"
                             ? keywords
                             : null}
                         </div>
@@ -1774,7 +1774,7 @@ class SubmitContent extends Component {
                   </Form>
                 </Grid.Row>
                 <Grid.Column>
-                  {this.state.activeMenuItem == "TO_BE_SUBMITTED" ? (
+                  {this.state.activeMenuItem === "TO_BE_SUBMITTED" ? (
                     <Button
                       className="submitButton"
                       onClick={this.handleSubmit}
@@ -1785,8 +1785,8 @@ class SubmitContent extends Component {
                       Submit
                     </Button>
                   ) : null}
-                  {this.state.activeMenuItem == "REJECTED" ||
-                  this.state.activeMenuItem == "SUBMITTED" ? (
+                  {this.state.activeMenuItem === "REJECTED" ||
+                  this.state.activeMenuItem === "SUBMITTED" ? (
                     <Button
                       className="submitButton"
                       onClick={this.handleRedeem}

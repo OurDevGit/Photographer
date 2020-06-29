@@ -225,7 +225,7 @@ class Analyse extends Component {
           onChange={this.handleChangeMode}
         />
         <div>
-          {/* <Chart data={this.state.activeMode ==  "day" ? Daydata : Monthdata} axes={axes} tooltip/>
+          {/* <Chart data={this.state.activeMode ===  "day" ? Daydata : Monthdata} axes={axes} tooltip/>
            */}
           <Line ref="chart" data={this.state.data} />
         </div>

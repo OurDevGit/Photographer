@@ -107,8 +107,8 @@ class ResetPassword extends Component {
     var tmpTokenLabel = this.props.location.search.split("=")[0].substr(1);
     if (
       !this.props.location.search ||
-      this.props.location.search == "" ||
-      tmpTokenLabel != "tmpToken"
+      this.props.location.search === "" ||
+      tmpTokenLabel !== "tmpToken"
     ) {
       return <></>;
     }
