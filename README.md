@@ -1,11 +1,3 @@
-Hello?
-Do u use skype or hangouts?
-If you use these app , how to chat there.
-I think that these will be more comfortable than here.
-My skype is ari9411530@outlook.com
-
-Hi. I can1t find you in skype. My ID is nuspy74.
-eventually on Whatsapp or Viber my telephone number is +36202122101
 
 # README #
 
