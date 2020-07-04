@@ -8,7 +8,7 @@ import { notification } from "antd";
 import banner from "../../../assets/images/banner_Certificate.jpg";
 import anchor from "../../../assets/images/anchor.gif"
 import '../../../../node_modules/video-react/dist/video-react.css';
-import { Player } from 'video-react';
+import { Player, ControlBar } from 'video-react';
 class PhotoBox extends Component {
   constructor(props) {
     super(props);
@@ -37,6 +37,8 @@ class PhotoBox extends Component {
     this.addLike = this.addLike.bind(this);
     this.getPos = this.getPos.bind(this);
     this.GotoPhotoLink = this.GotoPhotoLink.bind(this)
+    this.play = this.play.bind(this)
+    this.pause = this.pause.bind(this)
   }
 
   handleImageClick(e) {
@@ -133,6 +135,14 @@ class PhotoBox extends Component {
 
   }
 
+  play() {
+    this.player.play()
+  }
+
+  pause() {
+    this.player.pause()
+  }
+
   render() {
     var releaseNum = this.props.photo.authorizations
       ? this.props.photo.authorizations.length
@@ -166,7 +176,7 @@ class PhotoBox extends Component {
               </div>
               <div style={{ position: "relative" }}>
                 {
-                  this.props.photo.id % 2 === 0 ?
+                  this.props.photo.url_lr.split(".")[this.props.photo.url_lr.split(".").length - 1] === "jpg" || this.props.photo.url_lr.split(".")[this.props.photo.url_lr.split(".").length - 1] === "JPG"?
                     <img
                       className="mainPhoto"
                       id={this.props.photo.id}
@@ -174,21 +184,31 @@ class PhotoBox extends Component {
                       width={this.props.photo.width}
                       height={this.props.photo.height}
                       // {...this.props.photo}
-                      onClick={this.handleImageClick}
+                      onClick={() => this.handleImageClick(this.props.photo.id)}
                       onMouseOver={this.getPos}
                     />
-                    : <Player
-                      className="videoPlayer"
-                      fluid={false}
-                      // width={500}
-                      // height={300}
-                      width={this.props.photo.width}
-                      height={this.props.photo.height}
-                      muted={true}
-                      autoPlay={true}
+                    : <div
+                      onMouseOver={this.play}
+                      onMouseOut={this.pause}
+                      onClick={() => this.handleImageClick(this.props.photo.id)}
                     >
-                      <source src="http://media.w3.org/2010/05/bunny/movie.mp4" />
-                    </Player>
+                      <Player
+                        ref={player => {
+                          this.player = player;
+                        }}
+                        className="videoPlayer"
+                        id={this.props.photo.id}
+                        fluid={false}
+                        // width={500}
+                        // height={300}
+                        width={this.props.photo.width}
+                        height={this.props.photo.height}
+                        muted={true}
+                      // autoPlay={true}
+                      >
+                        <source src={this.props.photo.url_mr || this.props.photo.url_lr} id={this.props.photo.id} />
+                        <ControlBar disableCompletely={true} />
+                      </Player></div>
                 }
 
 

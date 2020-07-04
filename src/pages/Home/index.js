@@ -232,13 +232,13 @@ class Home extends Component {
         description: "Please login with your account.",
       });
     }
-    this.setState({
-      selImage: e,
-    });
+    // this.setState({
+    //   selImage: e,
+    // });
     if (this.state.isCtrlKey) {
-      window.open("/Photo_details/" + e.id, "_blank");
+      window.open("/Photo_details/" + e, "_blank");
     } else {
-      this.props.history.push("/Photo_details/" + e.id);
+      this.props.history.push("/Photo_details/" + e);
     }
   }
 

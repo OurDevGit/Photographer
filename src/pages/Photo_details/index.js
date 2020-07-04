@@ -45,6 +45,8 @@ import { notification } from "antd";
 import LoadingIndicator from "../../common/LoadingIndicator";
 import PhotoDetails from "./PhotoDetails";
 import anchor from "../../assets/images/anchor.gif";
+import '../../../node_modules/video-react/dist/video-react.css';
+import { Player, ControlBar } from 'video-react';
 class Photo_details extends Component {
   constructor(props) {
     super(props);
@@ -105,7 +107,7 @@ class Photo_details extends Component {
     this.getPos = this.getPos.bind(this);
     this.GotoPhotoLink = this.GotoPhotoLink.bind(this);
     this.getSizeOfImageDiv = this.getSizeOfImageDiv.bind(this)
-    this.getSizeOfImage =  this.getSizeOfImage.bind(this)
+    this.getSizeOfImage = this.getSizeOfImage.bind(this)
   }
 
   loadCurrentUser() {
@@ -370,9 +372,9 @@ class Photo_details extends Component {
       selImage: e,
     });
     if (this.state.isCtrlKey) {
-      window.open(e.id, "_blank");
+      window.open(e, "_blank");
     } else {
-      this.props.history.push("/Photo_details/" + e.id);
+      this.props.history.push("/Photo_details/" + e);
     }
   }
 
@@ -520,7 +522,7 @@ class Photo_details extends Component {
     });
   }
 
-  getSizeOfImage(e){
+  getSizeOfImage(e) {
     var info = e.currentTarget.getBoundingClientRect();
     this.setState({
       photoWidth: info.width,
@@ -534,7 +536,7 @@ class Photo_details extends Component {
       photoWidth: imagePosInfo.width,
       photoHeight: imagePosInfo.height
     });
-    var items =[];
+    var items = [];
     this.state.photoLinks.forEach((photoLink, index) => {
       var minX = imagePosInfo.width * photoLink.x / 100 - 10;
       var maxX = imagePosInfo.width * photoLink.x / 100 + 10;
@@ -700,7 +702,23 @@ class Photo_details extends Component {
                   {/* <a>Zoom : Shift + scroll</a> */}
                   {/* <PanAndZoomImage src={downloadUrl} /> */}
                   {/* <h3>{selImage.title}</h3> */}
-                  <img className="mainPhoto" src={downloadUrl} onMouseOver={this.getSizeOfImage} />
+                  {
+                    downloadUrl.split(".")[downloadUrl.split(".").length - 1] === "jpg" ?
+                      <img className="mainPhoto" src={downloadUrl} onMouseOver={this.getSizeOfImage} />
+                      : <Player
+                        ref={player => {
+                          this.player = player;
+                        }}
+                        className="mainPhoto"
+                        fluid={false}
+                        muted={true}
+                      // autoPlay={true}
+                      >
+                        <source src={downloadUrl} />
+                        <ControlBar autoHide={false} />
+                      </Player>
+                  }
+
                 </div>
                 <div className="CommentBox">
                   <Comments

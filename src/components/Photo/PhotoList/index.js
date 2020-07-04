@@ -427,7 +427,7 @@ class PhotoList extends Component {
   }
 
   photoClick(e) {
-    this.props.onClickImage(e.target);
+    this.props.onClickImage(e);
   }
 
   viewOwner(e) {

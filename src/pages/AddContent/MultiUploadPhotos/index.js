@@ -7,7 +7,7 @@ import LoadingIndicator from "../../../common/LoadingIndicator";
 import { AnimateButton } from "../../../components";
 import { Progress } from "semantic-ui-react";
 import { notification } from "antd";
-
+import { Player, ControlBar } from 'video-react';
 export default class MultipleImageUploadComponent extends Component {
   fileObj = [];
   fileArray = [];
@@ -28,6 +28,8 @@ export default class MultipleImageUploadComponent extends Component {
     this.goSubmitContent = this.goSubmitContent.bind(this);
     this.handleSetCollection = this.handleSetCollection.bind(this);
     this.handleClickUpload = this.handleClickUpload.bind(this);
+    this.play = this.play.bind(this)
+    this.pause = this.pause.bind(this)
   }
 
   getBase64 = (file) => {
@@ -39,7 +41,7 @@ export default class MultipleImageUploadComponent extends Component {
     });
   };
 
-  onDrop(e) {}
+  onDrop(e) { }
 
   handleSetCollection(e) {
     this.setState({
@@ -49,7 +51,7 @@ export default class MultipleImageUploadComponent extends Component {
   uploadMultipleFiles(e) {
     this.fileObj = e.target.files;
     for (let i = 0; i < this.fileObj.length; i++) {
-      this.fileArray.push(URL.createObjectURL(this.fileObj[i]));
+      this.fileArray.push({ url: URL.createObjectURL(this.fileObj[i]), type: this.fileObj[i].type });
       this.file.push(this.fileObj[i]);
     }
     this.setState({
@@ -172,6 +174,14 @@ export default class MultipleImageUploadComponent extends Component {
     });
   }
 
+  play() {
+    this.player.play()
+  }
+
+  pause() {
+    this.player.pause()
+  }
+
   render() {
     if (this.state.isLoading) {
       return (
@@ -200,8 +210,27 @@ export default class MultipleImageUploadComponent extends Component {
         return (
           <form encType="multipart/form-data">
             <div className="form-group multi-preview">
-              {(this.fileArray || []).map((url) => (
-                <img src={url} alt="..." />
+              {(this.fileArray || []).map((file) => (
+                file.type.split('/')[0] === "image" ?
+                  <img src={file.url} alt="..." />
+                  : <div
+                    onMouseOver={this.play}
+                    onMouseOut={this.pause}
+                  >
+                    <Player
+                      ref={player => {
+                        this.player = player;
+                      }}
+                      className="videoPlayer"
+                      fluid={false}
+                      width={200}
+                      height={100}
+                      muted={true}
+                    // autoPlay={true}
+                    >
+                      <source src={file.url} />
+                      <ControlBar disableCompletely={true} />
+                    </Player></div>
               ))}
             </div>
             {/* <ReactDropzone
@@ -211,7 +240,7 @@ export default class MultipleImageUploadComponent extends Component {
                         </ReactDropzone> */}
             <input
               type="file"
-              accept="image/*"
+              accept="image/*, .mp4, .mpg"
               className="dragImage"
               name="file"
               onChange={this.uploadMultipleFiles}
