@@ -712,7 +712,7 @@ class Photo_details extends Component {
                         className="mainPhoto"
                         fluid={false}
                         muted={true}
-                      // autoPlay={true}
+                        autoPlay={true}
                       >
                         <source src={downloadUrl} />
                         <ControlBar autoHide={false} />
@@ -950,7 +950,7 @@ class Photo_details extends Component {
 
                   {/* <PanAndZoomImage src={downloadUrl}></PanAndZoomImage> */}
                   <h3>{selImage.title}</h3>
-                  <Popup
+                  {/* <Popup
                     trigger={
                       <img src={downloadUrl} onMouseMove={this.getPos} onClick={this.GotoPhotoLink} />
                     }
@@ -960,7 +960,23 @@ class Photo_details extends Component {
                   >
                     <img width="30px" height="30px" src={anchor} />
                     {this.state.Link}
-                  </Popup>
+                  </Popup> */}
+                  {
+                    downloadUrl.split(".")[downloadUrl.split(".").length - 1] === "jpg" ?
+                      <img className="mainPhoto" src={downloadUrl} onMouseOver={this.getSizeOfImage} />
+                      : <Player
+                        ref={player => {
+                          this.player = player;
+                        }}
+                        className="mainPhoto"
+                        fluid={false}
+                        muted={true}
+                        autoPlay={true}
+                      >
+                        <source src={downloadUrl} />
+                        <ControlBar autoHide={false} />
+                      </Player>
+                  }
                 </div>
                 <div className="CommentBox">
                   <Comments
