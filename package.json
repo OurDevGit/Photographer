@@ -11,7 +11,7 @@
     "@livechat/ui-kit": "^0.4.0-10",
     "animejs": "^3.1.0",
     "antd": "^4.3.5",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "chart.js": "^2.9.3",
     "connected-react-router": "^6.5.2",
     "emoji-mart": "^3.0.0",
