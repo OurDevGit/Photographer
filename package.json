@@ -22,7 +22,7 @@
     "jsqr": "^1.2.0",
     "location": "^0.0.1",
     "lodash": "^4.17.15",
-    "moment": "2.24.0",
+    "moment": "2.29.4",
     "node-sass": "^4.12.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
@@ -59,7 +59,7 @@
     "video-react": "^0.14.1"
   },
   "resolutions": {
-    "moment": "2.24.0"
+    "moment": "2.29.4"
   },
   "scripts": {
     "start": "craco start",
